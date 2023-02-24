@@ -1,3 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\SpartanFitness.Application\SpartanFitness.Application.csproj" />
+  </ItemGroup>
+  
 </Project>

@@ -4,4 +4,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SpartanFitness.Contracts\SpartanFitness.Contracts.csproj" />
+    <ProjectReference Include="..\SpartanFitness.Application\SpartanFitness.Application.csproj" />
+    <ProjectReference Include="..\SpartanFitness.Infrastructure\SpartanFitness.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
