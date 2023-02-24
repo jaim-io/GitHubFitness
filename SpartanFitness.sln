@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpartanFitness.Api", "SpartanFitness.Api\SpartanFitness.Api.csproj", "{0ADB69B2-0122-4189-B5EC-8811D192129A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpartanFitness.Application", "SpartanFitness.Application\SpartanFitness.Application.csproj", "{9208596B-BDE2-460F-8B36-B0310BF4CCB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpartanFitness.Contracts", "SpartanFitness.Contracts\SpartanFitness.Contracts.csproj", "{BDEAF494-A633-451B-812F-E48AC8E3CD3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpartanFitness.Domain", "SpartanFitness.Domain\SpartanFitness.Domain.csproj", "{8FC2219B-F852-45D5-B18C-B8F8AC2CF5E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpartanFitness.Infrastructure", "SpartanFitness.Infrastructure\SpartanFitness.Infrastructure.csproj", "{17CCFB1A-2D72-4B70-9CB1-452AF4F753A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ADB69B2-0122-4189-B5EC-8811D192129A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADB69B2-0122-4189-B5EC-8811D192129A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADB69B2-0122-4189-B5EC-8811D192129A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADB69B2-0122-4189-B5EC-8811D192129A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9208596B-BDE2-460F-8B36-B0310BF4CCB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9208596B-BDE2-460F-8B36-B0310BF4CCB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9208596B-BDE2-460F-8B36-B0310BF4CCB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9208596B-BDE2-460F-8B36-B0310BF4CCB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEAF494-A633-451B-812F-E48AC8E3CD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEAF494-A633-451B-812F-E48AC8E3CD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEAF494-A633-451B-812F-E48AC8E3CD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEAF494-A633-451B-812F-E48AC8E3CD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC2219B-F852-45D5-B18C-B8F8AC2CF5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC2219B-F852-45D5-B18C-B8F8AC2CF5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC2219B-F852-45D5-B18C-B8F8AC2CF5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC2219B-F852-45D5-B18C-B8F8AC2CF5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17CCFB1A-2D72-4B70-9CB1-452AF4F753A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17CCFB1A-2D72-4B70-9CB1-452AF4F753A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17CCFB1A-2D72-4B70-9CB1-452AF4F753A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17CCFB1A-2D72-4B70-9CB1-452AF4F753A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
