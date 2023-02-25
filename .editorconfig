@@ -413,3 +413,7 @@ dotnet_diagnostic.SA1611.severity = none
 
 # SA1615: Element return value should be documented
 dotnet_diagnostic.SA1615.severity = none
+
+[*cshtml*]
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none
