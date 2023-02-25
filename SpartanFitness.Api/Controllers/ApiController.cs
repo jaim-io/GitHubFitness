@@ -15,7 +15,7 @@ namespace SpartanFitness.Api.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
-    public IActionResult Problem(List<Error> errors)
+    protected IActionResult Problem(List<Error> errors)
     {
         if (errors.Count is 0)
         {
@@ -32,7 +32,7 @@ public class ApiController : ControllerBase
         return Problem(errors[0]);
     }
 
-    public IActionResult Problem(Error error)
+    private IActionResult Problem(Error error)
     {
         var statusCode = error.Type switch
         {
@@ -40,13 +40,13 @@ public class ApiController : ControllerBase
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Conflict => StatusCodes.Status409Conflict,
             ErrorType.Unexpected => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status500InternalServerError
+            _ => StatusCodes.Status500InternalServerError,
         };
 
-        return Problem();
+        return Problem(statusCode: statusCode, title: error.Description);
     }
 
-    public IActionResult ValidationProblem(List<Error> errors)
+    private IActionResult ValidationProblem(List<Error> errors)
     {
         var modelStateDictionary = new ModelStateDictionary();
 
