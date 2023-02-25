@@ -11,11 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseExceptionHandler("/error");
-    // if (app.Environment.IsDevelopment())
-    // {
-    //     app.UseSwagger();
-    //     app.UseSwaggerUI();
-    // }
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spartan Fitness' API V1");
+        });
+    }
 
     app.UseHttpsRedirection();
     app.UseAuthentication();

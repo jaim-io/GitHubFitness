@@ -15,6 +15,7 @@ namespace SpartanFitness.Api.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     protected IActionResult Problem(List<Error> errors)
     {
         if (errors.Count is 0)
@@ -32,6 +33,7 @@ public class ApiController : ControllerBase
         return Problem(errors[0]);
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     private IActionResult Problem(Error error)
     {
         var statusCode = error.Type switch

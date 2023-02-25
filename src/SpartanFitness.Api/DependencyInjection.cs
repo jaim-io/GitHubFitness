@@ -1,6 +1,7 @@
 using BuberDinner.Api.Common.Errors;
 
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 using SpartanFitness.Api.Common.Mappings;
 
@@ -21,7 +22,15 @@ public static class DependencyInjection
         services.AddMappings();
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo 
+            {
+                Version = "v1",
+                Title = "Swagger API",
+                Description = "Spartan Fitness' Swagger API",
+            });
+        });
 
         services.AddSingleton<ProblemDetailsFactory, SpartanFitnessProblemDetailsFactory>();
 

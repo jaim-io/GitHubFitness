@@ -28,7 +28,15 @@ public class AuthenticationController : ApiController
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Registers a new user.
+    /// </summary>
+    /// <param name="request">Contains a user's information following the RegisterRequest contract.</param>
+    /// <returns>The given user object and a JWT token.</returns>
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
         var command = _mapper.Map<RegisterCommand>(request);
