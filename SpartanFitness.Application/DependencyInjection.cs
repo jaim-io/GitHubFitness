@@ -1,4 +1,12 @@
+using System.Reflection;
+
+using FluentValidation;
+
+using MediatR;
+
 using Microsoft.Extensions.DependencyInjection;
+
+using SpartanFitness.Application.Common.Behaviours;
 
 namespace SpartanFitness.Api;
 
@@ -12,6 +20,14 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddMediatR(typeof(DependencyInjection).Assembly);
+
+        services.AddScoped(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>));
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
         return services;
     }
 }

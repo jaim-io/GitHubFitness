@@ -366,5 +366,50 @@ dotnet_naming_style.s_camelcase.capitalization = camel_case
 generated_code = true
 
 [*.cs]
+# SA1028: Code should not contain trailing whitespace
+dotnet_diagnostic.SA1028.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1201: A constructor should not follow a property
+dotnet_diagnostic.SA1201.severity = none
+
+# SA1300: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.SA1300.severity = none
+
+# SA1309: Field should not begin with an under
+dotnet_diagnostic.SA1309.severity = none
+
+# SA1500: Braces for multi-line statements should not shae line
+dotnet_diagnostic.SA1500.severity = none
+
+# SA1512: Single-line comments should not be followed by blank line
+dotnet_diagnostic.SA1512.severity = none
+
+# SA1515: Single-line comment should be preceded by blank line
+dotnet_diagnostic.SA1515.severity = none
+
+# SA1516: Elements should be separated by blank line 
+dotnet_diagnostic.SA1516.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
 # SA1633: The file header is missing or not located at the top of the file
 dotnet_diagnostic.SA1633.severity = none
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+
+[Errors.*.cs]
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
+
+[DependencyInjection.cs]
+# SA1611: The documentation for parameter is missing
+dotnet_diagnostic.SA1611.severity = none
+
+# SA1615: Element return value should be documented
+dotnet_diagnostic.SA1615.severity = none

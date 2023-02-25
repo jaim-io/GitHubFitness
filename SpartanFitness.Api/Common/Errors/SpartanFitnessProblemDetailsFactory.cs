@@ -98,7 +98,6 @@ public class SpartanFitnessProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions["traceId"] = traceId;
         }
 
-
         var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
         if (errors is not null)
         {
