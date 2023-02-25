@@ -3,5 +3,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SpartanFitness.Application\SpartanFitness.Application.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.14" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+  </ItemGroup>
   
 </Project>

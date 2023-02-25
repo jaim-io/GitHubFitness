@@ -2,8 +2,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
+using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Infrastructure.Authentication;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
+using SpartanFitness.Infrastructure.Services;
 
 namespace SpartanFitness.Api;
 
@@ -19,8 +21,11 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services
-            .AddPersistence();
+            .AddPersistence()
+            .AddAuth();
             
+        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+
         return services;
     }
 
@@ -28,7 +33,15 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuth(
+        this IServiceCollection services)
+    {
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        
         return services;
     }
 }
