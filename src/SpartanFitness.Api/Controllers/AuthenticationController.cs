@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Authentication.Commands;
 using SpartanFitness.Application.Authentication.Common;
+using SpartanFitness.Application.Authentication.Queries;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -32,7 +33,7 @@ public class AuthenticationController : ApiController
     /// Registers a new user.
     /// </summary>
     /// <param name="request">Contains a user's information following the RegisterRequest contract.</param>
-    /// <returns>The given user object and a JWT token.</returns>
+    /// <returns>The user's information and a JWT token, following the AuthenticationResponse contract.</returns>
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,6 +42,25 @@ public class AuthenticationController : ApiController
     {
         var command = _mapper.Map<RegisterCommand>(request);
         ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+
+        return authResult.Match(
+            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+            errors => Problem(errors));
+    }
+
+    /// <summary>
+    /// Login a user given their email and password.
+    /// </summary>
+    /// <param name="request">Contains a user's email and password following the LoginRequest contract.</param>
+    /// <returns>The user's information and a JWT token, following the AuthenticationResponse contract.</returns>
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var query = _mapper.Map<LoginQuery>(request);
+        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
 
         return authResult.Match(
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
