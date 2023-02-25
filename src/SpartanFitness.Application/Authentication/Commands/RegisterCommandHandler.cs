@@ -5,6 +5,7 @@ using MediatR;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 
 namespace SpartanFitness.Application.Authentication.Commands;
