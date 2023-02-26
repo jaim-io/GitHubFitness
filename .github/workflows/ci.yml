@@ -1,0 +1,38 @@
+name: Continuous Integration 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet publish --no-restore
+      
+    - name: Application layer unit tests
+      run: dotnet test --no-build --verbosity normal
+      working-directory: src/SpartanFitness.Application.UnitTests
+      
+    - name: Domain layer unit tests
+      run: dotnet test --no-build --verbosity normal
+      working-directory: src/SpartanFitness.Domain.UnitTests
+      
+    - name: Application layer integration tests
+      run: dotnet test --no-build --verbosity normal
+      working-directory: src/SpartanFitness.Application.IntegrationTests
