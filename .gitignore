@@ -4,3 +4,7 @@
 **/.vscode
 **/node_modules
 **/.angular/cache
+/src/SpartanFitness.Infrastructure/MSSQL/Data/*
+/src/SpartanFitness.Infrastructure/MSSQL/Log/*
+/src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
+.env

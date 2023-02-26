@@ -11,9 +11,9 @@ public class UserId : ValueObject
         Value = value;
     }
 
-    public static UserId Create(string id)
+    public static UserId Create(Guid value)
     {
-        return new(Guid.Parse(id));
+        return new(value);
     }
 
     public static UserId CreateUnique()
@@ -23,6 +23,6 @@ public class UserId : ValueObject
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }

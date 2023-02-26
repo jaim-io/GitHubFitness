@@ -28,9 +28,7 @@ public class LoginQueryHandler
         LoginQuery query,
         CancellationToken cancellationToken)
     {
-        await Task.CompletedTask;
-
-        if (_userRepository.GetByEmail(query.Email) is not User user)
+        if (await _userRepository.GetByEmail(query.Email) is not User user)
         {
             return Errors.Authentication.InvalidCredentials;
         }

@@ -30,7 +30,7 @@ public class RegisterCommandHandler
     {
         await Task.CompletedTask;
 
-        if (_userRepository.GetByEmail(command.Email) is not null)
+        if (await _userRepository.GetByEmail(command.Email) is not null)
         {
             return Errors.User.DuplicateEmail;
         }

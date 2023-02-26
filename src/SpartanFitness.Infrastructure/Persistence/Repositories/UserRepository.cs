@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 
@@ -5,14 +7,22 @@ namespace SpartanFitness.Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private static List<User> _users = new();
-    public void Add(User user)
+    private readonly SpartanFitnessDbContext _dbContext;
+
+    public UserRepository(SpartanFitnessDbContext dbContext)
     {
-        _users.Add(user);
+        _dbContext = dbContext;
     }
 
-    public User? GetByEmail(string email)
+    public void Add(User user)
     {
-        return _users.SingleOrDefault(u => u.Email == email);
+        _dbContext.AddAsync(user);
+
+        _dbContext.SaveChangesAsync();
+    }
+
+    public Task<User?> GetByEmail(string email)
+    {
+        return _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 }

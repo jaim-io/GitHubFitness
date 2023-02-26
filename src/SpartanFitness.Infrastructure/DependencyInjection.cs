@@ -1,6 +1,7 @@
 using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,7 @@ using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Infrastructure.Authentication;
+using SpartanFitness.Infrastructure.Persistence;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
 using SpartanFitness.Infrastructure.Services;
 
@@ -39,6 +41,9 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(
         this IServiceCollection services)
     {
+        services.AddDbContext<SpartanFitnessDbContext>(options => 
+            options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         return services;

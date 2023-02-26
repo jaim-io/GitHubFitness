@@ -1,0 +1,15 @@
+version: '1.0.0'
+services:
+  mssql:
+    container_name: SpartanFitness-MSSQL
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Data:/var/opt/mssql/data:rw
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Log:/var/opt/mssql/log:rw
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Secrets:/var/opt/mssql/secrets:rw
+    env_file:
+      - ./.env
+    ports:
+      - 1433:1433
+    expose: 
+      - 1433
