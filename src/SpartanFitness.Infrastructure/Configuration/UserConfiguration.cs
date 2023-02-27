@@ -32,5 +32,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.ProfileImage)
             .HasMaxLength(250);
+
+        builder.Property(u => u.Salt)
+            .ValueGeneratedNever();
     }
 }

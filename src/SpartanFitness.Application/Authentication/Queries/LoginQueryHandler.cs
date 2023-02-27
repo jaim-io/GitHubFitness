@@ -15,13 +15,16 @@ public class LoginQueryHandler
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IPasswordHasher _passwordHasher;
 
     public LoginQueryHandler(
         IUserRepository userRepository,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IJwtTokenGenerator jwtTokenGenerator,
+        IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(
@@ -33,7 +36,7 @@ public class LoginQueryHandler
             return Errors.Authentication.InvalidCredentials;
         }
 
-        if (user.Password != query.Password)
+        if (!_passwordHasher.VerifyPassword(query.Password, user.Password, user.Salt))
         {
             return Errors.Authentication.InvalidCredentials;
         }
