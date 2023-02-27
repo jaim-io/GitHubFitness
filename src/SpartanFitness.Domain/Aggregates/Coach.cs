@@ -3,22 +3,20 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
-public sealed class User : Entity<UserId>
+public sealed class Coach : Entity<CoachId>
 {
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string ProfileImage { get; private set; }
-    public string Email { get; private set; }
-    public string Password { get; private set; }
+    public UserId UserId { get; private set; }
     public DateTime CreatedDateTime { get; private set; }
     public DateTime UpdatedDateTime { get; private set; }
-    private User(
-        UserId id,
+    private Coach(
+        CoachId id,
         string firstName,
         string lastName,
         string profileImage,
-        string email,
-        string password,
+        UserId userId,
         DateTime createdDateTime,
         DateTime updatedDateTime)
         : base(id)
@@ -26,32 +24,29 @@ public sealed class User : Entity<UserId>
         FirstName = firstName;
         LastName = lastName;
         ProfileImage = profileImage;
-        Email = email;
-        Password = password;
+        UserId = userId;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
     }
 
 #pragma warning disable CS8618
-    private User()
+    private Coach()
     {
     }
 #pragma warning restore CS8618
 
-    public static User Create(
+    public static Coach Create(
         string firstName,
         string lastName,
         string profileImage,
-        string email,
-        string password)
+        UserId userId)
     {
         return new(
-            UserId.CreateUnique(),
+            CoachId.CreateUnique(),
             firstName,
             lastName,
             profileImage,
-            email,
-            password,
+            userId,
             DateTime.UtcNow,
             DateTime.UtcNow);
     }
