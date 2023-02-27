@@ -1,35 +1,28 @@
 version: '1.0.0'
 services:
   db:
-    container_name: spartanfitness-MSSQL
+    container_name: spartanfitness-db
     image: mcr.microsoft.com/mssql/server:2022-latest
     volumes:
       - ./src/SpartanFitness.Infrastructure/MSSQL/Data:/var/opt/mssql/data:rw
       - ./src/SpartanFitness.Infrastructure/MSSQL/Log:/var/opt/mssql/log:rw
       - ./src/SpartanFitness.Infrastructure/MSSQL/Secrets:/var/opt/mssql/secrets:rw
     env_file:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=jaim123!
+      - ./.db.env
     ports:
       - 1433:1433
     # expose: 
     #   - 1433
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'jaim123!' -Q 'SELECT 1' || exit 1"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
 
-  api:
-    depends_on:
-      - db
-    container_name: spartanfitness-api
-    image: spartanfitness:latest
-    build: 
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - 80:80
-    links:
-      - db:mssql
+  # api:
+  #   depends_on:
+  #     - db
+  #   container_name: spartanfitness-api
+  #   image: spartanfitness:latest
+  #   build: 
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 80:80
+  #   links:
+  #     - db:mssql

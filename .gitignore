@@ -2,7 +2,7 @@
 **/obj
 **/node_modules
 **/.angular/cache
-**/.env
+**/*.env
 
 **/.vs
 **/.vscode
@@ -10,3 +10,4 @@
 /src/SpartanFitness.Infrastructure/MSSQL/Data/*
 /src/SpartanFitness.Infrastructure/MSSQL/Log/*
 /src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
+**/appsettings.Production.json
