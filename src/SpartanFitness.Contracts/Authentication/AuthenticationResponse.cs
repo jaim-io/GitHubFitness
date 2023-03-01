@@ -1,3 +1,5 @@
+namespace SpartanFitness.Contracts.Authentication;
+
 public record AuthenticationResponse(
     Guid Id,
     string FirstName,

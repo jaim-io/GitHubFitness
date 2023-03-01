@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.Authentication.Commands;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Authentication.Queries;
+using SpartanFitness.Contracts.Authentication;
 
 namespace SpartanFitness.Api.Controllers;
 
