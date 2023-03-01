@@ -37,6 +37,7 @@ public static class DependencyInjection
             .AddPersistence();
             
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddScoped<IRoleManager, Rolemanager>();
 
         return services;
     }
@@ -48,6 +49,7 @@ public static class DependencyInjection
             options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICoachRepository, CoachRepository>();
 
         return services;
     }

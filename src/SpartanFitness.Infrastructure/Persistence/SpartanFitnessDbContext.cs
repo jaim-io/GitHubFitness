@@ -8,6 +8,7 @@ namespace SpartanFitness.Infrastructure.Persistence;
 public class SpartanFitnessDbContext : DbContext
 {
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Coach> Coaches { get; set; } = null!;
     public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options)
         : base(options)
     {

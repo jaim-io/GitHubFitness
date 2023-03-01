@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.ValueObjects;
@@ -11,5 +13,10 @@ public class CoachRepository : ICoachRepository
     public CoachRepository(SpartanFitnessDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public Task<Coach?> GetByUserId(UserId id)
+    {
+        return _dbContext.Coaches.FirstOrDefaultAsync(c => c.UserId == id);
     }
 }
