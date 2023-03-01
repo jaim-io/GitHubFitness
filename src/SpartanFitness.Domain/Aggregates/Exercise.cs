@@ -3,7 +3,7 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
-public sealed class Exercise : Entity<ExerciseId>
+public sealed class Exercise : AggregateRoot<ExerciseId>
 {
     private List<MuscleGroupId> _muscleGroupIds;
     public string Name { get; private set; }
