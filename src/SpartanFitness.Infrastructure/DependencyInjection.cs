@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
@@ -14,6 +15,8 @@ using SpartanFitness.Infrastructure.Authentication;
 using SpartanFitness.Infrastructure.Persistence;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
 using SpartanFitness.Infrastructure.Services;
+
+using Swashbuckle.AspNetCore.Filters;
 
 namespace SpartanFitness.Api;
 
@@ -71,6 +74,18 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtSettings.Secret)),
             });
+
+        services.ConfigureSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme { 
+                Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+            });
+
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+        });
         
         return services;
     }

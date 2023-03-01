@@ -22,9 +22,9 @@ public static class DependencyInjection
         services.AddMappings();
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(c =>
+        services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo 
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
                 Title = "Swagger API",
