@@ -8,6 +8,7 @@ using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.Authentication.Commands;
 
@@ -17,18 +18,18 @@ public class RegisterCommandHandler
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IRoleManager _roleManager;
+    private readonly IRoleRepository _roleRepository;
 
     public RegisterCommandHandler(
         IUserRepository userRepository,
         IJwtTokenGenerator jwtTokenGenerator,
         IPasswordHasher passwordHasher,
-        IRoleManager roleManager)
+        IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
         _passwordHasher = passwordHasher;
-        _roleManager = roleManager;
+        _roleRepository = roleRepository;
     }
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(
@@ -45,19 +46,22 @@ public class RegisterCommandHandler
         byte[] salt;
         var hashedPassword = _passwordHasher.HashPassword(command.Password, out salt);
 
+        var role = await _roleRepository.GetByName(RoleName.User);
+
         var user = User.Create(
             command.FirstName,
             command.LastName,
             command.ProfileImage,
             command.Email,
             hashedPassword,
-            salt);
+            salt,
+            new() {
+                role.Id,
+            });
 
         _userRepository.Add(user);
 
-        var roles = await _roleManager.GetByUserIdAsync(user.Id);
-
-        var token = _jwtTokenGenerator.GenerateToken(user, roles);
+        var token = _jwtTokenGenerator.GenerateToken(user, new() { role });
 
         return new AuthenticationResult(
             user,

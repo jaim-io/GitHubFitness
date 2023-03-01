@@ -17,18 +17,18 @@ public class LoginQueryHandler
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IRoleManager _roleManager;
+    private readonly IRoleRepository _roleRepository;
 
     public LoginQueryHandler(
         IUserRepository userRepository,
         IJwtTokenGenerator jwtTokenGenerator,
         IPasswordHasher passwordHasher,
-        IRoleManager roleManager)
+        IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
         _passwordHasher = passwordHasher;
-        _roleManager = roleManager;
+        _roleRepository = roleRepository;
     }
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(
@@ -45,7 +45,7 @@ public class LoginQueryHandler
             return Errors.Authentication.InvalidCredentials;
         }
 
-        var roles = await _roleManager.GetByUserIdAsync(user.Id);
+        var roles = await _roleRepository.GetByUserId(user.RoleIds);
 
         var token = _jwtTokenGenerator.GenerateToken(user, roles);
 

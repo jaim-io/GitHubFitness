@@ -37,7 +37,6 @@ public static class DependencyInjection
             .AddPersistence();
             
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-        services.AddScoped<IRoleManager, Rolemanager>();
 
         return services;
     }
@@ -50,6 +49,7 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICoachRepository, CoachRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
 
         return services;
     }

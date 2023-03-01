@@ -22,7 +22,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(User user, string[] roles)
+    public string GenerateToken(User user, List<Role> roles)
     {
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
@@ -38,7 +38,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
         }
 
         var securityToken = new JwtSecurityToken(
