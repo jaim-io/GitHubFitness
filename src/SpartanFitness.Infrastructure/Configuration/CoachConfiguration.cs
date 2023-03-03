@@ -24,15 +24,6 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
                 id => id.Value,
                 value => CoachId.Create(value));
 
-        builder.Property(c => c.FirstName)
-            .HasMaxLength(100);
-
-        builder.Property(c => c.LastName)
-            .HasMaxLength(100);
-
-        builder.Property(c => c.ProfileImage)
-            .HasMaxLength(250);
-
         builder.Property(c => c.UserId)
             .HasConversion(
                 id => id.Value,

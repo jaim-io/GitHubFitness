@@ -15,8 +15,15 @@ public class CoachRepository : ICoachRepository
         _dbContext = dbContext;
     }
 
-    public Task<Coach?> GetByUserId(UserId id)
+    public async Task AddAsync(Coach coach)
     {
-        return _dbContext.Coaches.FirstOrDefaultAsync(c => c.UserId == id);
+        _dbContext.Add(coach);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<Coach?> GetByUserIdAsync(UserId id)
+    {
+        return await _dbContext.Coaches.FirstOrDefaultAsync(c => c.UserId == id);
     }
 }
