@@ -2,26 +2,21 @@ using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Domain.ValueObjects;
 
-public sealed class UserId : ValueObject
+public sealed class AdministratorId : ValueObject
 {
     public Guid Value { get; private set; }
 
-    public UserId(Guid value)
+    public AdministratorId(Guid value)
     {
         Value = value;
     }
 
-    public static UserId Create(Guid value)
+    public static AdministratorId Create(Guid value)
     {
         return new(value);
     }
 
-    public static UserId Create(string value)
-    {
-        return new(Guid.Parse(value));
-    }
-
-    public static UserId CreateUnique()
+    public static AdministratorId CreateUnique()
     {
         return new(Guid.NewGuid());
     }

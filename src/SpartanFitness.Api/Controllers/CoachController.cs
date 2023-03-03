@@ -43,7 +43,10 @@ public class CoachController : ApiController
         ErrorOr<CoachResult> coachResult = await _mediator.Send(command);
 
         return coachResult.Match(
-            coachResult => CreatedAtAction(nameof(GetCoach), new { id = coachResult.Coach.Id }, _mapper.Map<CoachReponse>(coachResult)),
+            coachResult => CreatedAtAction(
+                nameof(GetCoach), 
+                new { id = coachResult.Coach.Id }, 
+                _mapper.Map<CoachReponse>(coachResult)),
             errors => Problem(errors));
     }
 }

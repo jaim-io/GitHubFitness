@@ -1,0 +1,9 @@
+@host=http://localhost:5193
+
+POST {{host}}/api/v1/admin
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyYzMzYmMxNS1jZjczLTQ0YWYtOWNmMC04ZmEyNTVlYWZmZGMiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjIzNjY3Yjk0LWQ5MmMtNDQ5Mi1hZTVkLWI4ZjczYjlkNjFmMCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE2Nzc4NzU1NzksImlzcyI6IlNwYXJ0YW5GaXRuZXNzIiwiYXVkIjoiU3BhcnRhbkZpdG5lc3MifQ.MeTEQLzr8-cVMME58xeX-Ly0eE3WnUUGSabiDRqPPpE
+
+{
+    "userId": "2c33bc15-cf73-44af-9cf0-8fa255eaffdc"
+}

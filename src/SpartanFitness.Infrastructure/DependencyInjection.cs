@@ -50,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICoachRepository, CoachRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IAdministratorRepository, AdministratorRepository>();
 
         return services;
     }

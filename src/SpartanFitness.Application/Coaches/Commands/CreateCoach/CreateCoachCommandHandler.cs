@@ -32,8 +32,7 @@ public class CreateCoachCommandHandler
         CreateCoachCommand request,
         CancellationToken cancellationToken)
     {
-        var userId = UserId.Create(
-            Guid.Parse(request.UserId));
+        var userId = UserId.Create(request.UserId);
 
         if (!await _userResponsitory.CheckIfExistsAsync(userId))
         {
