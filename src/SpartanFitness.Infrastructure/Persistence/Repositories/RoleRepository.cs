@@ -15,13 +15,11 @@ public class RoleRepository : IRoleRepository
         _dbContext = dbContext;
     }
 
-    public Task<Role> GetByName(RoleName name)
+    public async Task<Roles> GetRolesByUserIdAsync(UserId userId)
     {
-        return _dbContext.Roles.FirstAsync(r => r.Name == name.ToString());
-    }
-
-    public Task<List<Role>> GetByUserId(IReadOnlyList<RoleId> ids)
-    {
-        return _dbContext.Roles.Where(r => ids.Contains(r.Id)).ToListAsync();
+        Roles.Create();
+        return Roles.Create(
+            Roles.User,
+            await _dbContext.Coaches.AnyAsync(c => c.UserId == userId) ? Roles.Coach : Roles.User);
     }
 }

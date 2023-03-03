@@ -5,7 +5,6 @@ using MediatR;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
-using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 
@@ -35,7 +34,7 @@ public class LoginQueryHandler
         LoginQuery query,
         CancellationToken cancellationToken)
     {
-        if (await _userRepository.GetByEmail(query.Email) is not User user)
+        if (await _userRepository.GetByEmailAsync(query.Email) is not User user)
         {
             return Errors.Authentication.InvalidCredentials;
         }
@@ -45,7 +44,7 @@ public class LoginQueryHandler
             return Errors.Authentication.InvalidCredentials;
         }
 
-        var roles = await _roleRepository.GetByUserId(user.RoleIds);
+        var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
 
         var token = _jwtTokenGenerator.GenerateToken(user, roles);
 

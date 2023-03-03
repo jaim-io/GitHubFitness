@@ -36,9 +36,7 @@ public class RegisterCommandHandler
         RegisterCommand command,
         CancellationToken cancellationToken)
     {
-        await Task.CompletedTask;
-
-        if (await _userRepository.GetByEmail(command.Email) is not null)
+        if (await _userRepository.GetByEmailAsync(command.Email) is not null)
         {
             return Errors.User.DuplicateEmail;
         }
@@ -46,22 +44,19 @@ public class RegisterCommandHandler
         byte[] salt;
         var hashedPassword = _passwordHasher.HashPassword(command.Password, out salt);
 
-        var role = await _roleRepository.GetByName(RoleName.User);
-
         var user = User.Create(
             command.FirstName,
             command.LastName,
             command.ProfileImage,
             command.Email,
             hashedPassword,
-            salt,
-            new() {
-                role.Id,
-            });
+            salt);
 
-        _userRepository.Add(user);
+        var roles = Roles.Create(Roles.User);
 
-        var token = _jwtTokenGenerator.GenerateToken(user, new() { role });
+        await _userRepository.AddAsync(user);
+
+        var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
         return new AuthenticationResult(
             user,

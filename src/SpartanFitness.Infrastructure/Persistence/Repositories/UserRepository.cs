@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Persistence.Repositories;
 
@@ -14,15 +15,20 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public void Add(User user)
+    public async Task AddAsync(User user)
     {
-        _dbContext.AddAsync(user);
+        _dbContext.Add(user);
 
-        _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<User?> GetByEmail(string email)
+    public async Task<User?> GetByEmailAsync(string email)
     {
-        return _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<bool> CheckIfExistsAsync(UserId id)
+    {
+        return await _dbContext.Users.AnyAsync(u => u.Id == id);
     }
 }
