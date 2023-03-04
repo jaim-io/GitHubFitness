@@ -15,13 +15,13 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Api.Controllers;
 
-[Route("api/v1/coach")]
-public class CoachController : ApiController
+[Route("api/v1/coaches")]
+public class CoachesController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
 
-    public CoachController(
+    public CoachesController(
         ISender mediator,
         IMapper mapper)
     {

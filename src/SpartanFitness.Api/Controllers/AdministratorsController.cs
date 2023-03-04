@@ -14,13 +14,13 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Api.Controllers;
 
-[Route("api/v1/admin")]
-public class AdministratorController : ApiController
+[Route("api/v1/admins")]
+public class AdministratorsController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
 
-    public AdministratorController(
+    public AdministratorsController(
         ISender mediator,
         IMapper mapper)
     {

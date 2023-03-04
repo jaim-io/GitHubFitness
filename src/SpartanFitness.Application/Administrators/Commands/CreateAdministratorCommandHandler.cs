@@ -23,9 +23,11 @@ public class CreateAdministratorCommandHandler
         _administratorRepository = administratorRepository;
     }
 
-    public async Task<ErrorOr<AdministratorResult>> Handle(CreateAdministratorCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<AdministratorResult>> Handle(
+        CreateAdministratorCommand command,
+        CancellationToken cancellationToken)
     {
-        var userId = UserId.Create(request.UserId);
+        var userId = UserId.Create(command.UserId);
 
         if (!await _userRepository.CheckIfExistsAsync(userId))
         {

@@ -17,8 +17,6 @@ COPY --from=build-env /App/scripts/docker .
 # For added security, you can opt out of the diagnostic pipeline. When you opt-out this allows the container to run as read-only.
 ENV DOTNET_EnableDiagnostics=0
 
-ENV ASPNETCORE_ENVIRONMENT=Production
-
 RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
