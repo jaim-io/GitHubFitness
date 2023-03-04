@@ -1,0 +1,11 @@
+@host=http://localhost:5193
+@userId=747908ca-cf25-46f2-95e4-e553c14a270c
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NDc5MDhjYS1jZjI1LTQ2ZjItOTVlNC1lNTUzYzE0YTI3MGMiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjE2MGU4YWRkLTQwYmMtNDg4YS04MWE3LTc0MzdjMzVmM2QxMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE2Nzc5NjM5NzEsImlzcyI6IlNwYXJ0YW5GaXRuZXNzIiwiYXVkIjoiU3BhcnRhbkZpdG5lc3MifQ.EhBR45zSwF9vqAj6DkoYUsjla28OSRLozjn8xStOGIM
+
+POST {{host}}/api/v1/users/{{userId}}/coach-applications/apply
+Content-Type: application/json
+Authorization: bearer {{token}}
+
+{
+    "motivation": "I have 7 years of experience in bodybuilding."
+}

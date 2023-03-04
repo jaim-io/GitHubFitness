@@ -35,7 +35,7 @@ public static class DependencyInjection
         services
             .AddAuth(configuration)
             .AddPersistence();
-            
+
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;
@@ -44,13 +44,14 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(
         this IServiceCollection services)
     {
-        services.AddDbContext<SpartanFitnessDbContext>(options => 
+        services.AddDbContext<SpartanFitnessDbContext>(options =>
             options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICoachRepository, CoachRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
+        services.AddScoped<ICoachApplicationRepository, CoachApplicationRepository>();
 
         return services;
     }
@@ -67,7 +68,8 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters {
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+            {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
@@ -80,7 +82,8 @@ public static class DependencyInjection
 
         services.ConfigureSwaggerGen(options =>
         {
-            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme { 
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            {
                 Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
                 In = ParameterLocation.Header,
                 Name = "Authorization",
@@ -89,7 +92,7 @@ public static class DependencyInjection
 
             options.OperationFilter<SecurityRequirementsOperationFilter>();
         });
-        
+
         return services;
     }
 }

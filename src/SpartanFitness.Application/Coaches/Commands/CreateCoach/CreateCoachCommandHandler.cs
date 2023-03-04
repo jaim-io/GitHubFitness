@@ -29,10 +29,10 @@ public class CreateCoachCommandHandler
     }
 
     public async Task<ErrorOr<CoachResult>> Handle(
-        CreateCoachCommand request,
+        CreateCoachCommand command,
         CancellationToken cancellationToken)
     {
-        var userId = UserId.Create(request.UserId);
+        var userId = UserId.Create(command.UserId);
 
         if (!await _userResponsitory.CheckIfExistsAsync(userId))
         {
