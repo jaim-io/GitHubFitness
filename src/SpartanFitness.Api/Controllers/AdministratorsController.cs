@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.Administrators.Commands;
 using SpartanFitness.Application.Administrators.Common;
 using SpartanFitness.Contracts.Administrators;
-using SpartanFitness.Domain.ValueObjects;
+using SpartanFitness.Domain.Common.Authentication;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -29,14 +29,14 @@ public class AdministratorsController : ApiController
     }
 
     [HttpGet]
-    [Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = RoleTypes.Administrator)]
     public IActionResult GetAdministrator()
     {
         return Ok();
     }
 
     [HttpPost]
-    // [Authorize(Roles = Roles.Administrator)]
+    // [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateAdministrator(
         CreateAdministratorRequest request)
     {

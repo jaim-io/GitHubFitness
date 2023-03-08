@@ -4,13 +4,11 @@ using MapsterMapper;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
 using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Contracts.Coaches;
-using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -35,7 +33,7 @@ public class CoachesController : ApiController
     }
 
     [HttpPost]
-    // [Authorize(Roles = Roles.Administrator)]
+    // [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateCoach(CreateCoachRequest request)
     {
         var command = _mapper.Map<CreateCoachCommand>(request);

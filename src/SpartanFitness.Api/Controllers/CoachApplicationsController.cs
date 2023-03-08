@@ -12,7 +12,7 @@ using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplicati
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Contracts.CoachApplications;
-using SpartanFitness.Domain.ValueObjects;
+using SpartanFitness.Domain.Common.Authentication;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -53,7 +53,7 @@ public class CoachApplicationsController : ApiController
     }
 
     [HttpPut("{applicationId}/approve")]
-    [Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = RoleTypes.User)]
     public async Task<IActionResult> ApproveCoachApplication(
         ApproveCoachApplicationRequest request,
         string userId,
@@ -68,7 +68,7 @@ public class CoachApplicationsController : ApiController
     }
 
     [HttpPut("{applicationId}/deny")]
-    [Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> DenyCoachApplication(
         DenyCoachApplicationRequest request,
         string userId,

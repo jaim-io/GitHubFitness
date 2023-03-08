@@ -5,10 +5,9 @@ using MediatR;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
-using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Authentication;
 using SpartanFitness.Domain.Common.Errors;
-using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.Authentication.Commands;
 
@@ -52,7 +51,7 @@ public class RegisterCommandHandler
             hashedPassword,
             salt);
 
-        var roles = Roles.Create(Roles.User);
+        var roles = new HashSet<Role> { Role.User };
 
         await _userRepository.AddAsync(user);
 

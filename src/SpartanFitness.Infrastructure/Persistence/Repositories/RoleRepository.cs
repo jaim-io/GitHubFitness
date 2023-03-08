@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
+using SpartanFitness.Domain.Common.Authentication;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Persistence.Repositories;
@@ -14,12 +15,13 @@ public class RoleRepository : IRoleRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Roles> GetRolesByUserIdAsync(UserId userId)
+    public async Task<HashSet<Role>> GetRolesByUserIdAsync(UserId userId)
     {
-        Roles.Create();
-        return Roles.Create(
-            Roles.User,
-            await _dbContext.Coaches.AnyAsync(c => c.UserId == userId) ? Roles.Coach : Roles.User,
-            await _dbContext.Administrators.AnyAsync(a => a.UserId == userId) ? Roles.Administrator : Roles.User);
+        return new HashSet<Role>
+        {
+            Role.User,
+            await _dbContext.Coaches.AnyAsync(c => c.UserId == userId) ? Role.Coach : Role.User,
+            await _dbContext.Administrators.AnyAsync(a => a.UserId == userId) ? Role.Administrator : Role.User,
+        };
     }
 }

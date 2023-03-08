@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Authentication;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Authentication;
@@ -23,7 +24,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(User user, Roles roles)
+    public string GenerateToken(User user, HashSet<Role> roles)
     {
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
@@ -37,9 +38,9 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
-        foreach (var role in roles.Value)
+        foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
         }
 
         var securityToken = new JwtSecurityToken(
