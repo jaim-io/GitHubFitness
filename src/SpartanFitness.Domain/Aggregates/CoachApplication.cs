@@ -54,10 +54,35 @@ public class CoachApplication : Entity<CoachApplicationId>
         return new(
             CoachApplicationId.CreateUnique(),
             motivation,
-            string.Empty,
+            remarks,
             status,
             userId,
             DateTime.UtcNow,
             DateTime.UtcNow);
+    }
+
+    public void SetRemarks(string remarks)
+    {
+        Remarks = remarks ?? throw new ArgumentNullException(nameof(remarks));
+    }
+
+    public void SetStatus(Status status, DateTime closedDateTime = default)
+    {
+        if (status == Status.Pending)
+        {
+            Status = closedDateTime == default
+                ? status
+                : throw new ArgumentException($"{nameof(closedDateTime)} should be default when the value of {nameof(status)} is equal to Status.Pending");
+        }
+        else
+        {
+            Status = closedDateTime != default
+                ? status
+                : throw new ArgumentException($"{nameof(closedDateTime)} should not be default when the value of {nameof(status)} is equal to Status.Approved or Status.Denied");
+
+            ClosedDateTime = closedDateTime > CreatedDateTime
+                ? closedDateTime
+                : throw new ArgumentException($"{nameof(closedDateTime)} should occur after {nameof(CreatedDateTime)}");
+        }
     }
 }

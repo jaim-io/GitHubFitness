@@ -16,6 +16,11 @@ public sealed class CoachApplicationId : ValueObject
         return new(value);
     }
 
+    public static CoachApplicationId Create(string value)
+    {
+        return new(Guid.Parse(value));
+    }
+
     public static CoachApplicationId CreateUnique()
     {
         return new(Guid.NewGuid());

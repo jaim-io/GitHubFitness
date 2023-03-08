@@ -1,6 +1,8 @@
 using Mapster;
 
+using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
+using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Contracts.CoachApplications;
 
@@ -11,6 +13,16 @@ public class CoachApplicationMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<(CreateCoachApplicationRequest Request, string UserId), CreateCoachApplicationCommand>()
+            .Map(dest => dest.UserId, src => src.UserId)
+            .Map(dest => dest, src => src.Request);
+
+        config.NewConfig<(ApproveCoachApplicationRequest Request, string UserId, string ApplicationId), ApproveCoachApplicationCommand>()
+            .Map(dest => dest.Id, src => src.ApplicationId)
+            .Map(dest => dest.UserId, src => src.UserId)
+            .Map(dest => dest, src => src.Request);
+
+        config.NewConfig<(DenyCoachApplicationRequest Request, string UserId, string ApplicationId), DenyCoachApplicationCommand>()
+            .Map(dest => dest.Id, src => src.ApplicationId)
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
 

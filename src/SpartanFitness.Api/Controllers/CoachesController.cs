@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
 using SpartanFitness.Application.Coaches.Common;
-using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Contracts.Coaches;
 using SpartanFitness.Domain.ValueObjects;
 

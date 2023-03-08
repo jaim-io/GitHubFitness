@@ -4,11 +4,15 @@ using MapsterMapper;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
+using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Contracts.CoachApplications;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -45,6 +49,36 @@ public class CoachApplicationsController : ApiController
                 nameof(GetCoachApplication),
                 new { applicationId = applicationResult.CoachApplication.Id, userId = applicationResult.CoachApplication.UserId },
                 _mapper.Map<CoachApplicationResponse>(applicationResult)),
+            errors => Problem(errors));
+    }
+
+    [HttpPut("{applicationId}/approve")]
+    [Authorize(Roles = Roles.Administrator)]
+    public async Task<IActionResult> ApproveCoachApplication(
+        ApproveCoachApplicationRequest request,
+        string userId,
+        string applicationId)
+    {
+        var command = _mapper.Map<ApproveCoachApplicationCommand>((request, userId, applicationId));
+        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(command);
+
+        return applicationResult.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
+
+    [HttpPut("{applicationId}/deny")]
+    [Authorize(Roles = Roles.Administrator)]
+    public async Task<IActionResult> DenyCoachApplication(
+        DenyCoachApplicationRequest request,
+        string userId,
+        string applicationId)
+    {
+        var command = _mapper.Map<DenyCoachApplicationCommand>((request, userId, applicationId));
+        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(command);
+
+        return applicationResult.Match(
+            _ => NoContent(),
             errors => Problem(errors));
     }
 }
