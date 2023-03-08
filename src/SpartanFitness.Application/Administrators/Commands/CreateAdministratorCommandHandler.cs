@@ -29,7 +29,7 @@ public class CreateAdministratorCommandHandler
     {
         var userId = UserId.Create(command.UserId);
 
-        if (!await _userRepository.CheckIfExistsAsync(userId))
+        if (!await _userRepository.ExistsAsync(userId))
         {
             return Errors.User.NotFound;
         }

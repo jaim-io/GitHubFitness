@@ -5,6 +5,6 @@ namespace SpartanFitness.Application.Common.Interfaces.Persistence;
 
 public interface IUserRepository {
     Task<User?> GetByEmailAsync(string email);
-    Task<bool> CheckIfExistsAsync(UserId id);
+    Task<bool> ExistsAsync(UserId id);
     Task AddAsync(User user);
 }

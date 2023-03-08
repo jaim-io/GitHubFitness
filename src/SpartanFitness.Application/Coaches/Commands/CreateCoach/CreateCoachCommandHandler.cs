@@ -34,7 +34,7 @@ public class CreateCoachCommandHandler
     {
         var userId = UserId.Create(command.UserId);
 
-        if (!await _userResponsitory.CheckIfExistsAsync(userId))
+        if (!await _userResponsitory.ExistsAsync(userId))
         {
             return Errors.User.NotFound;
         }

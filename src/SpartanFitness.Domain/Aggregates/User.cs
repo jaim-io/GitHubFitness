@@ -60,25 +60,4 @@ public sealed class User : AggregateRoot<UserId>
             DateTime.UtcNow,
             salt);
     }
-
-    public static User Create(
-        User user,
-        string? firstName = null,
-        string? lastName = null,
-        string? profileImage = null,
-        string? email = null,
-        string? password = null,
-        byte[]? salt = null)
-    {
-        return new(
-            user.Id,
-            firstName ?? user.FirstName,
-            lastName ?? user.LastName,
-            profileImage ?? user.ProfileImage,
-            email ?? user.Email,
-            password ?? user.Password,
-            DateTime.UtcNow,
-            DateTime.UtcNow,
-            salt ?? user.Salt);
-    }
 }
