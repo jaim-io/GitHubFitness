@@ -11,6 +11,7 @@ using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplicat
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 using SpartanFitness.Application.CoachApplications.Common;
+using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
 using SpartanFitness.Domain.Common.Authentication;
 
@@ -31,9 +32,23 @@ public class CoachApplicationsController : ApiController
     }
 
     [HttpGet("{applicationId}")]
-    public IActionResult GetCoachApplication(string userId, string applicationId)
+    public async Task<IActionResult> GetCoachApplication(string userId, string applicationId)
     {
-        return Ok();
+        var matchesClaim = Authorization.UserIdMatchesClaim(HttpContext, userId);
+        var isAdmin = Authorization.IsAdmin(HttpContext);
+
+        if (!matchesClaim && !isAdmin)
+        {
+            return Unauthorized();
+        }
+
+        var request = new GetCoachApplicationByIdRequest(applicationId);
+        var query = _mapper.Map<GetCoachApplicationByIdQuery>(request);
+        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(query);
+
+        return applicationResult.Match(
+            applicationResult => Ok(_mapper.Map<CoachApplicationResponse>(applicationResult)),
+            errors => Problem(errors));
     }
 
     [HttpPost("apply")]

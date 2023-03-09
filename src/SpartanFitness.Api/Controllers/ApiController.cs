@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 using ErrorOr;
 
 using Microsoft.AspNetCore.Authorization;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using SpartanFitness.Api.Common.Http;
+using SpartanFitness.Domain.Common.Authentication;
 
 namespace SpartanFitness.Api.Controllers;
 
@@ -60,5 +63,13 @@ public class ApiController : ControllerBase
         }
 
         return ValidationProblem(modelStateDictionary);
+    }
+
+    protected static class Authorization
+    {
+        public static bool IsAdmin(HttpContext context)
+            => context.User.IsInRole(RoleTypes.Administrator);
+        public static bool UserIdMatchesClaim(HttpContext context, string userId)
+            => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == userId;
     }
 }

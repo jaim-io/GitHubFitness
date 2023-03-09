@@ -32,6 +32,11 @@ public class CoachApplicationRepository : ICoachApplicationRepository
         return await _dbContext.CoachApplications.AnyAsync(ca => ca.Id == id);
     }
 
+    public async Task<CoachApplication?> GetByIdAsync(CoachApplicationId id)
+    {
+        return await _dbContext.CoachApplications.FirstOrDefaultAsync(ca => ca.Id == id);
+    }
+
     public async Task<bool> IsOpenAsync(CoachApplicationId id)
     {
         return await _dbContext.CoachApplications.AnyAsync(ca => ca.Id == id && ca.Status == Status.Pending);

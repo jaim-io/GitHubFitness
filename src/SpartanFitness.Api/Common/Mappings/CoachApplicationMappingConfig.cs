@@ -4,6 +4,7 @@ using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplicat
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 using SpartanFitness.Application.CoachApplications.Common;
+using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
 
 namespace SpartanFitness.Api.Common.Mappings;
@@ -25,6 +26,8 @@ public class CoachApplicationMappingConfig : IRegister
             .Map(dest => dest.Id, src => src.ApplicationId)
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
+
+        config.NewConfig<GetCoachApplicationByIdRequest, GetCoachApplicationByIdQuery>();
 
         config.NewConfig<CoachApplicationResult, CoachApplicationResponse>()
             .Map(dest => dest.Id, src => src.CoachApplication.Id.Value)
