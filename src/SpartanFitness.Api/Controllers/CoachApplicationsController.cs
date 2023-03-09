@@ -53,7 +53,7 @@ public class CoachApplicationsController : ApiController
     }
 
     [HttpPut("{applicationId}/approve")]
-    [Authorize(Roles = RoleTypes.User)]
+    [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> ApproveCoachApplication(
         ApproveCoachApplicationRequest request,
         string userId,
