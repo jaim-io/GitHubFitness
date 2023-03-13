@@ -11,3 +11,5 @@
 /src/SpartanFitness.Infrastructure/MSSQL/Log/*
 /src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
 **/appsettings.Production.json
+
+/scripts/setup-db.ps1

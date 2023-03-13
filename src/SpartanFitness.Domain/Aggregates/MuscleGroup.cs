@@ -7,7 +7,7 @@ public sealed class MuscleGroup : AggregateRoot<MuscleGroupId>
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public CoachId Creator { get; private set; }
+    public CoachId CreatorId { get; private set; }
     public string Image { get; private set; }
     public DateTime CreatedDateTime { get; private set; }
     public DateTime UpdatedDateTime { get; private set; }
@@ -23,7 +23,7 @@ public sealed class MuscleGroup : AggregateRoot<MuscleGroupId>
     {
         Name = name;
         Description = description;
-        Creator = creator;
+        CreatorId = creator;
         Image = image;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;

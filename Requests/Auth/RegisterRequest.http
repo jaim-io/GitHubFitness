@@ -7,6 +7,6 @@ Content-Type: application/json
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://google.com",
-    "email": "jameyschaap@spartanfitness.com",
+    "email": "jameyschaap1@spartanfitness.com",
     "password": "jamey123!"
 }

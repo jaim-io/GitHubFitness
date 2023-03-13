@@ -1,0 +1,12 @@
+@host=http://localhost:5193
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTgzMWQ0YS01YzUyLTQwNGItYTAxZi1mMGMxNjNjZWY2YjkiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6ImEwMmQ5ZjM2LTY4Y2UtNGI3ZC05MTNlLWI5YWQ1YjQ3ZmZjOCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giXSwiZXhwIjoxNjc4NzQ1MDU5LCJpc3MiOiJTcGFydGFuRml0bmVzcyIsImF1ZCI6IlNwYXJ0YW5GaXRuZXNzIn0.jUvQQmT2f2vcihhWkZomIcB8LejluU5XGGmb4bqHynw
+
+POST {{host}}/api/v1/muscle-groups
+Content-Type: application/json
+Authorization: bearer {{token}}
+
+{
+    "name": "Tricep",
+    "description": "Big arm muscle",
+    "image": "https://google.com"
+}

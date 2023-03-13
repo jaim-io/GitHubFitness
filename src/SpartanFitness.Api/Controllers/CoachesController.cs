@@ -12,7 +12,7 @@ using SpartanFitness.Contracts.Coaches;
 
 namespace SpartanFitness.Api.Controllers;
 
-[Route("api/v1/coaches")]
+[Route("api/v1/[controller]")]
 public class CoachesController : ApiController
 {
     private readonly ISender _mediator;
