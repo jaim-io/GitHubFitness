@@ -8,6 +8,6 @@ public class CreateCoachCommandValidator : AbstractValidator<CreateCoachCommand>
     {
         RuleFor(x => x.UserId)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The coach ID must be a valid GUID");
     }
 }

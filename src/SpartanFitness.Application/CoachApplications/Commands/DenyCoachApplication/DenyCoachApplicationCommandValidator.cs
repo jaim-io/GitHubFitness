@@ -8,11 +8,11 @@ public class DenyCoachApplicationCommandValidator :
     public DenyCoachApplicationCommandValidator() {
         RuleFor(x => x.Id)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The coach-application ID must be a valid GUID");
 
         RuleFor(x => x.UserId)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The user ID must be a valid GUID");
 
         RuleFor(x => x.Remarks)
             .NotEmpty();

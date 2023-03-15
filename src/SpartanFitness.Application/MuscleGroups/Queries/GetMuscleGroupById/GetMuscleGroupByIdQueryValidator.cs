@@ -9,6 +9,6 @@ public class GetMuscleGroupByIdQueryValidator
     {
         RuleFor(x => x.Id)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The muscle group ID must be a valid GUID");
     }
 }

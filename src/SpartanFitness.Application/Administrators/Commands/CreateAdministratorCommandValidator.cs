@@ -9,6 +9,6 @@ public class CreateAdministratorCommandValidator
     {
         RuleFor(x => x.UserId)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The administrator ID must be a valid GUID");
     }
 }

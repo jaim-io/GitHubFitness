@@ -8,11 +8,11 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
     {
         RuleFor(x => x.UserId)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The user ID must be a valid GUID");
 
         RuleForEach(x => x.MuscleGroupIds)
             .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The string must contain a valid GUID");
+            .WithMessage("The muscle group ID must be a valid GUID");
 
         RuleFor(x => x.Name)
             .NotEmpty();

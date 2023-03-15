@@ -24,7 +24,7 @@ public class GetAdministratorByIdQueryHandler
         GetAdministratorByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var adminId = AdministratorId.Create(query.AdminId);
+        var adminId = AdministratorId.Create(query.Id);
 
         if (await _administratorRepository.GetByIdAsync(adminId) is not Administrator admin)
         {

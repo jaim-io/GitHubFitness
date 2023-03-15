@@ -7,8 +7,8 @@ public class GetCoachByIdQueryValidator
 {
     public GetCoachByIdQueryValidator()
     {
-        RuleFor(x => x.CoachId)
+        RuleFor(x => x.Id)
            .Must(x => Guid.TryParse(x, out _))
-           .WithMessage("The string must contain a valid GUID");
+           .WithMessage("The coach ID must be a valid GUID");
     }
 }

@@ -24,7 +24,7 @@ public class GetCoachByIdQueryHandler
         GetCoachByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var coachId = CoachId.Create(query.CoachId);
+        var coachId = CoachId.Create(query.Id);
 
         if (await _coachRepository.GetByIdAsync(coachId) is not Coach coach)
         {
