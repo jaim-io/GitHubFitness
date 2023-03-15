@@ -28,13 +28,13 @@ public class MuscleGroupsController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet]
-    public IActionResult GetMuscleGroup()
+    [HttpGet("{muscleGroupId}")]
+    public IActionResult GetMuscleGroup(string muscleGroupId)
     {
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
     public async Task<IActionResult> CreateMuscleGroup(
       CreateMuscleGroupRequest request)
@@ -47,7 +47,7 @@ public class MuscleGroupsController : ApiController
             muscleGroupResult => CreatedAtAction(
                 nameof(GetMuscleGroup),
                 new { muscleGroupId = muscleGroupResult.MuscleGroup.Id },
-                _mapper.Map<CreateMuscleGroupResponse>(muscleGroupResult)),
+                _mapper.Map<MuscleGroupResponse>(muscleGroupResult)),
             errors => Problem(errors));
     }
 }

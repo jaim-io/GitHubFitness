@@ -14,7 +14,7 @@ public class MuscleGroupMappingConfig : IRegister
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<MuscleGroupResult, CreateMuscleGroupResponse>()
+        config.NewConfig<MuscleGroupResult, MuscleGroupResponse>()
             .Map(dest => dest.Id, src => src.MuscleGroup.Id.Value)
             .Map(dest => dest.CoachId, src => src.MuscleGroup.CreatorId.Value)
             .Map(dest => dest, src => src.MuscleGroup);

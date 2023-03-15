@@ -1,6 +1,6 @@
 namespace SpartanFitness.Contracts.MuscleGroups;
 
-public record CreateMuscleGroupResponse(
+public record MuscleGroupResponse(
     string Id,
     string Name,
     string Description,

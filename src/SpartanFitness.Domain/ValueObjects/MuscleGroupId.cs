@@ -16,6 +16,11 @@ public sealed class MuscleGroupId : ValueObject
         return new(value);
     }
 
+    public static MuscleGroupId Create(string value)
+    {
+        return new(Guid.Parse(value));
+    }
+
     public static MuscleGroupId CreateUnique()
     {
         return new(Guid.NewGuid());

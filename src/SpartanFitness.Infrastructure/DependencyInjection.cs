@@ -53,6 +53,7 @@ public static class DependencyInjection
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
         services.AddScoped<ICoachApplicationRepository, CoachApplicationRepository>();
         services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
+        services.AddScoped<IExerciseRepository, ExerciseRepository>();
 
         return services;
     }

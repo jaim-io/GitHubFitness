@@ -8,7 +8,7 @@ public sealed class Exercise : AggregateRoot<ExerciseId>
     private List<MuscleGroupId> _muscleGroupIds;
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public CoachId CoachId { get; private set; }
+    public CoachId CreatorId { get; private set; }
     public string Image { get; private set; }
     public string Video { get; private set; }
     public IReadOnlyList<MuscleGroupId> MuscleGroupIds => _muscleGroupIds.AsReadOnly();
@@ -31,7 +31,7 @@ public sealed class Exercise : AggregateRoot<ExerciseId>
         _muscleGroupIds = muscleGroupIds;
         Name = name;
         Description = description;
-        CoachId = coachId;
+        CreatorId = coachId;
         Image = image;
         Video = video;
         CreatedDateTime = createdDateTime;
@@ -44,7 +44,7 @@ public sealed class Exercise : AggregateRoot<ExerciseId>
     }
 #pragma warning restore CS8618
 
-    public Exercise Create(
+    public static Exercise Create(
         List<MuscleGroupId> muscleGroupIds,
         string name,
         string description,
