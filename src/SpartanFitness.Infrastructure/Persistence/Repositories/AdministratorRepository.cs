@@ -22,7 +22,7 @@ public class AdministratorRepository : IAdministratorRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<Administrator?> GetByAdminIdAsync(AdministratorId id)
+    public async Task<Administrator?> GetByIdAsync(AdministratorId id)
     {
         return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.Id == id);
     }

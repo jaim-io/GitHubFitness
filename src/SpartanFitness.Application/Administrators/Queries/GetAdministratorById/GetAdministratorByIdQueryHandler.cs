@@ -26,7 +26,7 @@ public class GetAdministratorByIdQueryHandler
     {
         var adminId = AdministratorId.Create(query.AdminId);
 
-        if (await _administratorRepository.GetByAdminIdAsync(adminId) is not Administrator admin)
+        if (await _administratorRepository.GetByIdAsync(adminId) is not Administrator admin)
         {
             return Errors.Administrator.NotFound;
         }

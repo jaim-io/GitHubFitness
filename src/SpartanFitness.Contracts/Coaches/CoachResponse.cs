@@ -1,6 +1,6 @@
 namespace SpartanFitness.Contracts.Coaches;
 
-public record CoachReponse(
+public record CoachResponse(
     string Id,
     string UserId,
     DateTime CreatedDateTime,

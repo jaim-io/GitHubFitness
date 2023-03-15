@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
 using SpartanFitness.Application.Coaches.Common;
+using SpartanFitness.Application.Coaches.Queries.GetCoachById;
 using SpartanFitness.Contracts.Coaches;
 
 namespace SpartanFitness.Api.Controllers;
@@ -26,10 +27,16 @@ public class CoachesController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet]
-    public IActionResult GetCoach()
+    [HttpGet("{coachId}")]
+    public async Task<IActionResult> GetCoach(string coachId)
     {
-        return Ok();
+        var request = new GetCoachRequest(coachId);
+        var query = _mapper.Map<GetCoachByIdQuery>(request);
+        ErrorOr<CoachResult> adminResult = await _mediator.Send(query);
+
+        return adminResult.Match(
+            adminResult => Ok(_mapper.Map<CoachResponse>(adminResult)),
+            errors => Problem(errors));
     }
 
     [HttpPost]
@@ -41,9 +48,9 @@ public class CoachesController : ApiController
 
         return coachResult.Match(
             coachResult => CreatedAtAction(
-                nameof(GetCoach), 
-                new { id = coachResult.Coach.Id }, 
-                _mapper.Map<CoachReponse>(coachResult)),
+                nameof(GetCoach),
+                new { coachId = coachResult.Coach.Id },
+                _mapper.Map<CoachResponse>(coachResult)),
             errors => Problem(errors));
     }
 }
