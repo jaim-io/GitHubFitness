@@ -10,21 +10,23 @@ public class CoachApplicationConfiguration : IEntityTypeConfiguration<CoachAppli
 {
     public void Configure(EntityTypeBuilder<CoachApplication> builder)
     {
-        ConfigureCoachApplicationTable(builder);
+        ConfigureCoachApplicationsTable(builder);
     }
 
-    private void ConfigureCoachApplicationTable(EntityTypeBuilder<CoachApplication> builder)
+    private void ConfigureCoachApplicationsTable(EntityTypeBuilder<CoachApplication> builder)
     {
         builder.ToTable("CoachApplications");
 
         builder.HasKey(ca => ca.Id);
 
         builder.Property(ca => ca.Id)
+            .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
                 value => CoachApplicationId.Create(value));
         
         builder.Property(ca => ca.UserId)
+            .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
                 value => UserId.Create(value));

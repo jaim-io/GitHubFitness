@@ -12,6 +12,7 @@ public class SpartanFitnessDbContext : DbContext
     public DbSet<Administrator> Administrators { get; set; } = null!;
     public DbSet<CoachApplication> CoachApplications { get; set; } = null!;
     public DbSet<MuscleGroup> MuscleGroups { get; set; } = null!;
+    public DbSet<Exercise> Exercises { get; set; } = null!;
     
     public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options)
         : base(options)
@@ -22,12 +23,6 @@ public class SpartanFitnessDbContext : DbContext
     {
         modelBuilder
             .ApplyConfigurationsFromAssembly(typeof(SpartanFitnessDbContext).Assembly);
-
-        modelBuilder.Model.GetEntityTypes()
-            .SelectMany(e => e.GetProperties())
-            .Where(p => p.IsPrimaryKey())
-            .ToList()
-            .ForEach(p => p.ValueGenerated = ValueGenerated.Never);
 
         base.OnModelCreating(modelBuilder);
     }

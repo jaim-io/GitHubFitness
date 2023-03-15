@@ -92,6 +92,45 @@ namespace SpartanFitness.Infrastructure.Migrations
                     b.ToTable("CoachApplications", (string)null);
                 });
 
+            modelBuilder.Entity("SpartanFitness.Domain.Aggregates.Exercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Video")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exercises", (string)null);
+                });
+
             modelBuilder.Entity("SpartanFitness.Domain.Aggregates.MuscleGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -164,6 +203,36 @@ namespace SpartanFitness.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("SpartanFitness.Domain.Aggregates.Exercise", b =>
+                {
+                    b.OwnsMany("SpartanFitness.Domain.ValueObjects.MuscleGroupId", "MuscleGroupIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<Guid>("ExerciseId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uniqueidentifier")
+                                .HasColumnName("MuscleGroupId");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("ExerciseId");
+
+                            b1.ToTable("ExerciseMuscleGroupIds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ExerciseId");
+                        });
+
+                    b.Navigation("MuscleGroupIds");
                 });
 #pragma warning restore 612, 618
         }

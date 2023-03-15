@@ -10,16 +10,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        ConfigureUserTable(builder);
+        ConfigureUsersTable(builder);
     }
 
-    private void ConfigureUserTable(EntityTypeBuilder<User> builder)
+    private void ConfigureUsersTable(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("Users");
 
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
+            .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
                 value => UserId.Create(value));
