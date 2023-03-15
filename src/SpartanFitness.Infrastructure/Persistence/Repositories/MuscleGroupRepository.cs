@@ -26,4 +26,9 @@ public class MuscleGroupRepository : IMuscleGroupRepository
     {
         return await _dbContext.MuscleGroups.AnyAsync(mg => mg.Id == id);
     }
+
+    public async Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id)
+    {
+        return await _dbContext.MuscleGroups.FirstOrDefaultAsync(mg => mg.Id == id);
+    }
 }
