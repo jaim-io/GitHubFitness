@@ -16,6 +16,11 @@ public sealed class AdministratorId : ValueObject
         return new(value);
     }
 
+    public static AdministratorId Create(string value)
+    {
+        return new(Guid.Parse(value));
+    }
+
     public static AdministratorId CreateUnique()
     {
         return new(Guid.NewGuid());

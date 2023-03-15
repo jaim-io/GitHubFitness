@@ -22,6 +22,11 @@ public class AdministratorRepository : IAdministratorRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<Administrator?> GetByAdminIdAsync(AdministratorId id)
+    {
+        return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.Id == id);
+    }
+
     public async Task<Administrator?> GetByUserIdAsync(UserId id)
     {
         return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.UserId == id);

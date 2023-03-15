@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Administrators.Commands;
 using SpartanFitness.Application.Administrators.Common;
+using SpartanFitness.Application.Administrators.Queries.GetAdministratorById;
 using SpartanFitness.Contracts.Administrators;
 using SpartanFitness.Domain.Common.Authentication;
 
@@ -28,15 +29,21 @@ public class AdministratorsController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet]
+    [HttpGet("{adminId}")]
     [Authorize(Roles = RoleTypes.Administrator)]
-    public IActionResult GetAdministrator()
+    public async Task<IActionResult> GetAdministrator(string adminId)
     {
-        return Ok();
+        var request = new GetAdministratorRequest(adminId);
+        var query = _mapper.Map<GetAdministratorByIdQuery>(request);
+        ErrorOr<AdministratorResult> adminResult = await _mediator.Send(query);
+
+        return adminResult.Match(
+            adminResult => Ok(_mapper.Map<AdministratorResponse>(adminResult)),
+            errors => Problem(errors));
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleTypes.Administrator)]
+    // [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateAdministrator(
         CreateAdministratorRequest request)
     {
@@ -46,7 +53,7 @@ public class AdministratorsController : ApiController
         return adminResult.Match(
             adminResult => CreatedAtAction(
                 nameof(GetAdministrator), 
-                new { id = adminResult.Administrator.Id }, 
+                new { adminId = adminResult.Administrator.Id }, 
                 _mapper.Map<AdministratorResponse>(adminResult)),
             errors => Problem(errors));
     }
