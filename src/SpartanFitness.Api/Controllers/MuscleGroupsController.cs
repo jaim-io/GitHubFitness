@@ -34,9 +34,9 @@ public class MuscleGroupsController : ApiController
     {
         var request = new GetMuscleGroupRequest(muscleGroupId);
         var query = _mapper.Map<GetMuscleGroupByIdQuery>(request);
-        ErrorOr<MuscleGroupResult> muscleGroupResponse = await _mediator.Send(query);
+        ErrorOr<MuscleGroupResult> muscleGroupResult = await _mediator.Send(query);
 
-        return muscleGroupResponse.Match(
+        return muscleGroupResult.Match(
             muscleGroupResponse => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroupResponse)),
             errors => Problem(errors));
     }

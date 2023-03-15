@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Exercises.Common;
 using SpartanFitness.Application.Exercises.CreateExercise;
+using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Contracts.Exercises;
 using SpartanFitness.Domain.Common.Authentication;
 
@@ -29,9 +30,15 @@ public class ExercisesController : ApiController
     }
 
     [HttpGet("{exerciseId}")]
-    public IActionResult GetExercise(string exerciseId)
+    public async Task<IActionResult> GetExercise(string exerciseId)
     {
-        return Ok();
+        var request = new GetExerciseRequest(exerciseId);
+        var query = _mapper.Map<GetExerciseByIdQuery>(request);
+        ErrorOr<ExerciseResult> exerciseResult = await _mediator.Send(query);
+
+        return exerciseResult.Match(
+            adminResult => Ok(_mapper.Map<ExerciseResponse>(adminResult)),
+            errors => Problem(errors));
     }
 
     [HttpPost("create")]
