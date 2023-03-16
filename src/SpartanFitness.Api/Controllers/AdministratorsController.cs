@@ -43,7 +43,7 @@ public class AdministratorsController : ApiController
     }
 
     [HttpPost]
-    // [Authorize(Roles = RoleTypes.Administrator)]
+    [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateAdministrator(
         CreateAdministratorRequest request)
     {
