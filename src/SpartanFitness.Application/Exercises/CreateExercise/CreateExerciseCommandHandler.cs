@@ -49,12 +49,9 @@ public class CreateExerciseCommandHandler
             return Errors.Coach.NotFound;
         }
 
-        foreach (var id in muscleGroupIds)
+        if (!await _muscleGroupRepository.ExistsAsync(muscleGroupIds))
         {
-            if (!await _muscleGroupRepository.ExistsAsync(id))
-            {
-                return Errors.MuscleGroup.NotFound;
-            }
+            return Errors.MuscleGroup.NotFound;
         }
 
         var exercise = Exercise.Create(

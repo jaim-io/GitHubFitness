@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using SpartanFitness.Api.Common.Http;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
 

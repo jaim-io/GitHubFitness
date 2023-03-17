@@ -1,4 +1,4 @@
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.Common.Interfaces.Persistence;

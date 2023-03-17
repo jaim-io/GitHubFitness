@@ -27,8 +27,8 @@ The API was created with `.NET 6` in combination with `ASP.NET Core`, `Entity Fr
 The client app was created with `React 18`, `Typescript`, `SWS` and `Vite`. 
 
 ## 3. DevOps
-Version Control System: `Git`
-Source Code Mangement: `GitHub`
-CI/CD: `GitHub Actions`
-Deployment: `Docker` and `Kubernetes`
-Scripting: `Bash` and `Powershell Core 7`
+Version Control System: `Git`<br/>
+Source Code Mangement: `GitHub`<br/>
+CI/CD: `GitHub Actions`<br/>
+Deployment: `Docker` and `Kubernetes`<br/>
+Scripting: `Bash` and `Powershell Core 7`<br/>

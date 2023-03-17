@@ -13,7 +13,7 @@ using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication
 using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
 

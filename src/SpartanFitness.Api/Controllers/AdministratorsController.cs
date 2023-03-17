@@ -11,7 +11,7 @@ using SpartanFitness.Application.Administrators.Commands;
 using SpartanFitness.Application.Administrators.Common;
 using SpartanFitness.Application.Administrators.Queries.GetAdministratorById;
 using SpartanFitness.Contracts.Administrators;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
 

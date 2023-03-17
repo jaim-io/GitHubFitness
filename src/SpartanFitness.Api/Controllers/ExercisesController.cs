@@ -11,7 +11,7 @@ using SpartanFitness.Application.Exercises.Common;
 using SpartanFitness.Application.Exercises.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Contracts.Exercises;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
 

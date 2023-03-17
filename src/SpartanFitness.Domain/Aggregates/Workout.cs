@@ -19,22 +19,22 @@ public sealed class Workout : AggregateRoot<WorkoutId>
 
     private Workout(
         WorkoutId id,
-        List<MuscleGroupId> muscleGroupIds,
-        List<WorkoutExercise> workoutExercises,
         string name,
         string description,
         CoachId coachId,
         string image,
+        List<MuscleGroupId> muscleGroupIds,
+        List<WorkoutExercise> workoutExercises,
         DateTime createdDateTime,
         DateTime updatedDateTime)
         : base(id)
     {
-        _muscleGroupIds = muscleGroupIds;
-        _workoutExercises = workoutExercises;
         Name = name;
         Description = description;
         CoachId = coachId;
         Image = image;
+        _muscleGroupIds = muscleGroupIds;
+        _workoutExercises = workoutExercises;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
     }
@@ -46,21 +46,21 @@ public sealed class Workout : AggregateRoot<WorkoutId>
 #pragma warning restore CS8618
 
     public static Workout Create(
-        List<MuscleGroupId> muscleGroupIds,
-        List<WorkoutExercise> workoutExercises,
         string name,
         string description,
         CoachId coachId,
-        string image)
+        string image,
+        List<MuscleGroupId> muscleGroupIds,
+        List<WorkoutExercise> workoutExercises)
     {
         return new(
             WorkoutId.CreateUnique(),
-            muscleGroupIds,
-            workoutExercises,
             name,
             description,
             coachId,
             image,
+            muscleGroupIds,
+            workoutExercises,
             DateTime.UtcNow,
             DateTime.UtcNow);
     }

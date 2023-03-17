@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Infrastructure.Authentication;
 

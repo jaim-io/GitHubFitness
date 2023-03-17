@@ -11,7 +11,7 @@ using SpartanFitness.Application.Coaches.Commands.CreateCoach;
 using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Application.Coaches.Queries.GetCoachById;
 using SpartanFitness.Contracts.Coaches;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
 

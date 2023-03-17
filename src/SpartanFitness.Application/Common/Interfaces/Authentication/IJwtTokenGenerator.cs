@@ -1,5 +1,5 @@
 using SpartanFitness.Domain.Aggregates;
-using SpartanFitness.Domain.Common.Authentication;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Application.Common.Interfaces.Authentication;
 

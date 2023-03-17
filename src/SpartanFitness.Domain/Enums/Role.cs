@@ -1,8 +1,9 @@
 using SpartanFitness.Domain.Common.Models;
 
-namespace SpartanFitness.Domain.Common.Authentication;
+namespace SpartanFitness.Domain.Enums;
 
-public class Role : Enumeration
+public class Role 
+  : Enumeration
 {
     public static Role User = new(0, RoleTypes.User);
     public static Role Coach = new(1, RoleTypes.Coach);
@@ -12,4 +13,11 @@ public class Role : Enumeration
         : base(id, name)
     {
     }
+}
+
+public static class RoleTypes
+{
+    public const string User = "User";
+    public const string Coach = "Coach";
+    public const string Administrator = "Administrator";
 }
