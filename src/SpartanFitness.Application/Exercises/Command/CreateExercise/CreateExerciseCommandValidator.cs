@@ -14,6 +14,10 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
             .Must(x => Guid.TryParse(x, out _))
             .WithMessage("The muscle group ID must be a valid GUID");
 
+        RuleFor(x => x.MuscleGroupIds)
+          .Must(x => x != null ? x.Distinct().Count() == x.Count() : true)
+          .WithMessage("The list of muscle group IDs has to contain unique values");
+
         RuleFor(x => x.Name)
             .NotEmpty();
 

@@ -13,6 +13,24 @@ public class ExerciseType
     : base(id, name)
   {
   }
+
+  public static explicit operator ExerciseType(int id)
+  {
+    var type = typeof(ExerciseType);
+
+    var fieldInfos = type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+
+    foreach (var fieldInfo in fieldInfos)
+    {
+      var staticField = (ExerciseType)(fieldInfo.GetValue(null)!);
+      if (staticField.Id == id)
+      {
+        return staticField;
+      }
+    }
+
+    throw new InvalidCastException("Cast from Int to ExerciseType is not valid: Invalid id-integer");
+  }
 }
 
 public static class ExerciseTypes

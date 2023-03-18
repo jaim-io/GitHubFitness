@@ -42,7 +42,7 @@ public class CoachesController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleTypes.Administrator)]
+    // [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateCoach(CreateCoachRequest request)
     {
         var command = _mapper.Map<CreateCoachCommand>(request);

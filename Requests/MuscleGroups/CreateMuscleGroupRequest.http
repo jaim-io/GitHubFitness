@@ -1,12 +1,12 @@
 @host=http://localhost:5193
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyOWJjYzRiNS00NTgyLTRlMWEtOWI5Zi1jNThhNjYzMDYxYzQiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6ImMwMGM3Njk5LWY5ZjctNGY0MS05ZmM1LWU2YzczMDQzZGNlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giXSwiZXhwIjoxNjc4ODkzMTMyLCJpc3MiOiJTcGFydGFuRml0bmVzcyIsImF1ZCI6IlNwYXJ0YW5GaXRuZXNzIn0.1-ZPpLJQw3LUGwTVzqvWf-qvjdZDu1ZEVjMYOTeru2o
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyODk2NmY3MC03OGI0LTQxNjQtYTk1ZS1lYjVjOGMxZTdmYTYiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjAxOTBmMDkwLTU5Y2YtNDUyNy04YTIyLTlkMTdmZTMwNDkwYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giXSwiZXhwIjoxNjc5MTY3MjI4LCJpc3MiOiJTcGFydGFuRml0bmVzcyIsImF1ZCI6IlNwYXJ0YW5GaXRuZXNzIn0.eTSJNbDqsTQz3SSJRCo0NEcRepswShKsxQ5oKUC0ctc
 
 POST {{host}}/api/v1/muscle-groups/create
 Content-Type: application/json
 Authorization: bearer {{token}}
 
 {
-    "name": "Bicep",
+    "name": "Tricep",
     "description": "Big arm muscle",
     "image": "https://google.com"
 }

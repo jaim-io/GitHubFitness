@@ -1,14 +1,8 @@
 using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Domain.Enums;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Entities;
-
-public enum ExerciseType
-{
-    Default,
-    Dropset,
-    Superset,
-}
 
 public sealed class WorkoutExercise : Entity<WorkoutExerciseId>
 {

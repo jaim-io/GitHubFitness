@@ -54,6 +54,7 @@ public static class DependencyInjection
         services.AddScoped<ICoachApplicationRepository, CoachApplicationRepository>();
         services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
+        services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 
         return services;
     }

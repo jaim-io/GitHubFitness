@@ -11,6 +11,7 @@ public abstract class Enumeration : IComparable
                             BindingFlags.DeclaredOnly)
                  .Select(f => f.GetValue(null))
                  .Cast<T>();
+
     public int Id { get; private set; }
     public string Name { get; private set; }
 
@@ -25,10 +26,11 @@ public abstract class Enumeration : IComparable
             return false;
         }
 
-        var typeMatches = GetType().Equals(obj.GetType());
+        // var typeMatches = GetType().Equals(obj.GetType());
         var valueMatches = Id.Equals(otherValue.Id);
 
-        return typeMatches && valueMatches;
+        // return typeMatches && valueMatches;
+        return valueMatches;
     }
 
     public int CompareTo(object? obj) =>

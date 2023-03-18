@@ -13,6 +13,7 @@ public class SpartanFitnessDbContext : DbContext
     public DbSet<CoachApplication> CoachApplications { get; set; } = null!;
     public DbSet<MuscleGroup> MuscleGroups { get; set; } = null!;
     public DbSet<Exercise> Exercises { get; set; } = null!;
+    public DbSet<Workout> Workouts { get; set; } = null!;
     
     public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options)
         : base(options)
