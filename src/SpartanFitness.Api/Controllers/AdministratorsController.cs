@@ -33,8 +33,7 @@ public class AdministratorsController : ApiController
     [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> GetAdministrator(string adminId)
     {
-        var request = new GetAdministratorRequest(adminId);
-        var query = _mapper.Map<GetAdministratorByIdQuery>(request);
+        var query = new GetAdministratorByIdQuery(adminId);
         ErrorOr<Administrator> adminResult = await _mediator.Send(query);
 
         return adminResult.Match(

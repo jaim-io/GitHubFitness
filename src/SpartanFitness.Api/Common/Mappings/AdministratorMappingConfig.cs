@@ -13,8 +13,6 @@ public class AdministratorMappingConfig : IRegister
     {
         config.NewConfig<CreateAdministratorRequest, CreateAdministratorCommand>();
 
-        config.NewConfig<GetAdministratorRequest, GetAdministratorByIdQuery>();
-
         config.NewConfig<Administrator, AdministratorResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.UserId, src => src.UserId.Value)

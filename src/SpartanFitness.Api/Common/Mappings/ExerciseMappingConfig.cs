@@ -15,8 +15,6 @@ public class ExerciseMappingConfig : IRegister
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<GetExerciseRequest, GetExerciseByIdQuery>();
-
         config.NewConfig<Exercise, ExerciseResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.CreatorId, src => src.CreatorId.Value)

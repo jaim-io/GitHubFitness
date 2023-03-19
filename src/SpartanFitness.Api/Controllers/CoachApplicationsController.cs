@@ -42,8 +42,7 @@ public class CoachApplicationsController : ApiController
             return Unauthorized();
         }
 
-        var request = new GetCoachApplicationByIdRequest(applicationId);
-        var query = _mapper.Map<GetCoachApplicationByIdQuery>(request);
+        var query = new GetCoachApplicationByIdQuery(applicationId);
         ErrorOr<CoachApplication> applicationResult = await _mediator.Send(query);
 
         return applicationResult.Match(

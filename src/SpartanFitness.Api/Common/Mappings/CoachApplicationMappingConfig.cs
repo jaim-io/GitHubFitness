@@ -27,8 +27,6 @@ public class CoachApplicationMappingConfig : IRegister
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<GetCoachApplicationByIdRequest, GetCoachApplicationByIdQuery>();
-
         config.NewConfig<CoachApplication, CoachApplicationResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.UserId, src => src.UserId.Value)

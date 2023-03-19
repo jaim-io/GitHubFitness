@@ -13,8 +13,6 @@ public class CoachMappingConfig : IRegister
     {
         config.NewConfig<CreateCoachRequest, CreateCoachCommand>();
 
-        config.NewConfig<GetCoachRequest, GetCoachByIdQuery>();
-
         config.NewConfig<Coach, CoachResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.UserId, src => src.UserId.Value)

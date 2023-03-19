@@ -32,8 +32,7 @@ public class CoachesController : ApiController
     [HttpGet("{coachId}")]
     public async Task<IActionResult> GetCoach(string coachId)
     {
-        var request = new GetCoachRequest(coachId);
-        var query = _mapper.Map<GetCoachByIdQuery>(request);
+        var query = new GetCoachByIdQuery(coachId);
         ErrorOr<Coach> coachResult = await _mediator.Send(query);
 
         return coachResult.Match(

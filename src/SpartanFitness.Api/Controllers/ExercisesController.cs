@@ -32,8 +32,7 @@ public class ExercisesController : ApiController
     [HttpGet("{exerciseId}")]
     public async Task<IActionResult> GetExercise(string exerciseId)
     {
-        var request = new GetExerciseRequest(exerciseId);
-        var query = _mapper.Map<GetExerciseByIdQuery>(request);
+        var query = new GetExerciseByIdQuery(exerciseId);
         ErrorOr<Exercise> exerciseResult = await _mediator.Send(query);
 
         return exerciseResult.Match(

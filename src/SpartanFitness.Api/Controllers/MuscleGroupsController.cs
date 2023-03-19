@@ -32,8 +32,7 @@ public class MuscleGroupsController : ApiController
     [HttpGet("{muscleGroupId}")]
     public async Task<IActionResult> GetMuscleGroup(string muscleGroupId)
     {
-        var request = new GetMuscleGroupRequest(muscleGroupId);
-        var query = _mapper.Map<GetMuscleGroupByIdQuery>(request);
+        var query = new GetMuscleGroupByIdQuery(muscleGroupId);
         ErrorOr<MuscleGroup> muscleGroupResult = await _mediator.Send(query);
 
         return muscleGroupResult.Match(
