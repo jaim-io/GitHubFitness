@@ -2,9 +2,9 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.Administrators.Common;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Application.Administrators.Queries.GetAdministratorById;
 
 public record GetAdministratorByIdQuery(
-    string Id) : IRequest<ErrorOr<AdministratorResult>>;
+    string Id) : IRequest<ErrorOr<Administrator>>;

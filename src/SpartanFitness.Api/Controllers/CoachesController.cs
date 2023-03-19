@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
-using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Application.Coaches.Queries.GetCoachById;
 using SpartanFitness.Contracts.Coaches;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -34,25 +34,25 @@ public class CoachesController : ApiController
     {
         var request = new GetCoachRequest(coachId);
         var query = _mapper.Map<GetCoachByIdQuery>(request);
-        ErrorOr<CoachResult> adminResult = await _mediator.Send(query);
+        ErrorOr<Coach> coachResult = await _mediator.Send(query);
 
-        return adminResult.Match(
-            adminResult => Ok(_mapper.Map<CoachResponse>(adminResult)),
+        return coachResult.Match(
+            coach => Ok(_mapper.Map<CoachResponse>(coach)),
             errors => Problem(errors));
     }
 
     [HttpPost]
-    // [Authorize(Roles = RoleTypes.Administrator)]
+    [Authorize(Roles = RoleTypes.Administrator)]
     public async Task<IActionResult> CreateCoach(CreateCoachRequest request)
     {
         var command = _mapper.Map<CreateCoachCommand>(request);
-        ErrorOr<CoachResult> coachResult = await _mediator.Send(command);
+        ErrorOr<Coach> createdCoachResult = await _mediator.Send(command);
 
-        return coachResult.Match(
-            coachResult => CreatedAtAction(
+        return createdCoachResult.Match(
+            coach => CreatedAtAction(
                 nameof(GetCoach),
-                new { coachId = coachResult.Coach.Id },
-                _mapper.Map<CoachResponse>(coachResult)),
+                new { coachId = coach.Id },
+                _mapper.Map<CoachResponse>(coach)),
             errors => Problem(errors));
     }
 }

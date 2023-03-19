@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
-using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -44,10 +44,10 @@ public class CoachApplicationsController : ApiController
 
         var request = new GetCoachApplicationByIdRequest(applicationId);
         var query = _mapper.Map<GetCoachApplicationByIdQuery>(request);
-        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(query);
+        ErrorOr<CoachApplication> applicationResult = await _mediator.Send(query);
 
         return applicationResult.Match(
-            applicationResult => Ok(_mapper.Map<CoachApplicationResponse>(applicationResult)),
+            application => Ok(_mapper.Map<CoachApplicationResponse>(application)),
             errors => Problem(errors));
     }
 
@@ -57,13 +57,13 @@ public class CoachApplicationsController : ApiController
         string userId)
     {
         var command = _mapper.Map<CreateCoachApplicationCommand>((request, userId));
-        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(command);
+        ErrorOr<CoachApplication> createdApplicationResult = await _mediator.Send(command);
 
-        return applicationResult.Match(
-            applicationResult => CreatedAtAction(
+        return createdApplicationResult.Match(
+            application => CreatedAtAction(
                 nameof(GetCoachApplication),
-                new { applicationId = applicationResult.CoachApplication.Id, userId = applicationResult.CoachApplication.UserId },
-                _mapper.Map<CoachApplicationResponse>(applicationResult)),
+                new { applicationId = application.Id, userId = application.UserId },
+                _mapper.Map<CoachApplicationResponse>(application)),
             errors => Problem(errors));
     }
 
@@ -75,7 +75,7 @@ public class CoachApplicationsController : ApiController
         string applicationId)
     {
         var command = _mapper.Map<ApproveCoachApplicationCommand>((request, userId, applicationId));
-        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(command);
+        ErrorOr<CoachApplication> applicationResult = await _mediator.Send(command);
 
         return applicationResult.Match(
             _ => NoContent(),
@@ -90,7 +90,7 @@ public class CoachApplicationsController : ApiController
         string applicationId)
     {
         var command = _mapper.Map<DenyCoachApplicationCommand>((request, userId, applicationId));
-        ErrorOr<CoachApplicationResult> applicationResult = await _mediator.Send(command);
+        ErrorOr<CoachApplication> applicationResult = await _mediator.Send(command);
 
         return applicationResult.Match(
             _ => NoContent(),

@@ -3,9 +3,9 @@ using Mapster;
 using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
-using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Api.Common.Mappings;
 
@@ -29,9 +29,9 @@ public class CoachApplicationMappingConfig : IRegister
 
         config.NewConfig<GetCoachApplicationByIdRequest, GetCoachApplicationByIdQuery>();
 
-        config.NewConfig<CoachApplicationResult, CoachApplicationResponse>()
-            .Map(dest => dest.Id, src => src.CoachApplication.Id.Value)
-            .Map(dest => dest.UserId, src => src.CoachApplication.UserId.Value)
-            .Map(dest => dest, src => src.CoachApplication);
+        config.NewConfig<CoachApplication, CoachApplicationResponse>()
+            .Map(dest => dest.Id, src => src.Id.Value)
+            .Map(dest => dest.UserId, src => src.UserId.Value)
+            .Map(dest => dest, src => src);
     }
 }

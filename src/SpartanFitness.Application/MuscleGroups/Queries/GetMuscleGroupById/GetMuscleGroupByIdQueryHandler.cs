@@ -3,7 +3,6 @@ using ErrorOr;
 using MediatR;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
-using SpartanFitness.Application.MuscleGroups.Common;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
@@ -11,7 +10,7 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 
 public class GetMuscleGroupByIdQueryHandler 
-    : IRequestHandler<GetMuscleGroupByIdQuery, ErrorOr<MuscleGroupResult>>
+    : IRequestHandler<GetMuscleGroupByIdQuery, ErrorOr<MuscleGroup>>
 {
     private readonly IMuscleGroupRepository _muscleGroupRepository;
 
@@ -20,7 +19,7 @@ public class GetMuscleGroupByIdQueryHandler
         _muscleGroupRepository = muscleGroupRepository;
     }
 
-    public async Task<ErrorOr<MuscleGroupResult>> Handle(
+    public async Task<ErrorOr<MuscleGroup>> Handle(
         GetMuscleGroupByIdQuery request,
         CancellationToken cancellationToken)
     {
@@ -31,6 +30,6 @@ public class GetMuscleGroupByIdQueryHandler
             return Errors.MuscleGroup.NotFound;
         }
 
-        return new MuscleGroupResult(muscleGroup);
+        return muscleGroup;
     }
 }

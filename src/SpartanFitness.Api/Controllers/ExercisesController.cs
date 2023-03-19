@@ -7,10 +7,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Exercises.Common;
 using SpartanFitness.Application.Exercises.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Contracts.Exercises;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -34,7 +34,7 @@ public class ExercisesController : ApiController
     {
         var request = new GetExerciseRequest(exerciseId);
         var query = _mapper.Map<GetExerciseByIdQuery>(request);
-        ErrorOr<ExerciseResult> exerciseResult = await _mediator.Send(query);
+        ErrorOr<Exercise> exerciseResult = await _mediator.Send(query);
 
         return exerciseResult.Match(
             adminResult => Ok(_mapper.Map<ExerciseResponse>(adminResult)),
@@ -47,13 +47,13 @@ public class ExercisesController : ApiController
     {
         var userId = Authorization.GetUserIdFromClaims(HttpContext);
         var command = _mapper.Map<CreateExerciseCommand>((request, userId));
-        ErrorOr<ExerciseResult> exerciseResult = await _mediator.Send(command);
+        ErrorOr<Exercise> createdExerciseResult = await _mediator.Send(command);
 
-        return exerciseResult.Match(
-            exerciseResult => CreatedAtAction(
+        return createdExerciseResult.Match(
+            exercise => CreatedAtAction(
                 nameof(GetExercise),
-                new { exerciseId = exerciseResult.Exercise.Id },
-                _mapper.Map<ExerciseResponse>(exerciseResult)),
+                new { exerciseId = exercise.Id },
+                _mapper.Map<ExerciseResponse>(exercise)),
             errors => Problem(errors));
     }
 }

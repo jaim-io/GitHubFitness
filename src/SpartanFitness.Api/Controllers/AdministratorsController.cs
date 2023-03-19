@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Administrators.Commands;
-using SpartanFitness.Application.Administrators.Common;
 using SpartanFitness.Application.Administrators.Queries.GetAdministratorById;
 using SpartanFitness.Contracts.Administrators;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -35,10 +35,10 @@ public class AdministratorsController : ApiController
     {
         var request = new GetAdministratorRequest(adminId);
         var query = _mapper.Map<GetAdministratorByIdQuery>(request);
-        ErrorOr<AdministratorResult> adminResult = await _mediator.Send(query);
+        ErrorOr<Administrator> adminResult = await _mediator.Send(query);
 
         return adminResult.Match(
-            adminResult => Ok(_mapper.Map<AdministratorResponse>(adminResult)),
+            admin => Ok(_mapper.Map<AdministratorResponse>(admin)),
             errors => Problem(errors));
     }
 
@@ -48,13 +48,13 @@ public class AdministratorsController : ApiController
         CreateAdministratorRequest request)
     {
         var command = _mapper.Map<CreateAdministratorCommand>(request);
-        ErrorOr<AdministratorResult> adminResult = await _mediator.Send(command);
+        ErrorOr<Administrator> createdAdminResult = await _mediator.Send(command);
 
-        return adminResult.Match(
-            adminResult => CreatedAtAction(
+        return createdAdminResult.Match(
+            admin => CreatedAtAction(
                 nameof(GetAdministrator), 
-                new { adminId = adminResult.Administrator.Id }, 
-                _mapper.Map<AdministratorResponse>(adminResult)),
+                new { adminId = admin.Id }, 
+                _mapper.Map<AdministratorResponse>(admin)),
             errors => Problem(errors));
     }
 }

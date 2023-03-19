@@ -2,7 +2,6 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.Administrators.Common;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
@@ -11,7 +10,7 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.Administrators.Commands;
 
 public class CreateAdministratorCommandHandler
-    : IRequestHandler<CreateAdministratorCommand, ErrorOr<AdministratorResult>>
+    : IRequestHandler<CreateAdministratorCommand, ErrorOr<Administrator>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IAdministratorRepository _administratorRepository;
@@ -23,7 +22,7 @@ public class CreateAdministratorCommandHandler
         _administratorRepository = administratorRepository;
     }
 
-    public async Task<ErrorOr<AdministratorResult>> Handle(
+    public async Task<ErrorOr<Administrator>> Handle(
         CreateAdministratorCommand command,
         CancellationToken cancellationToken)
     {
@@ -44,6 +43,6 @@ public class CreateAdministratorCommandHandler
 
         await _administratorRepository.AddAsync(admin);
 
-        return new AdministratorResult(admin);
+        return admin;
     }
 }

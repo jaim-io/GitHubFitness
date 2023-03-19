@@ -2,9 +2,9 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.CoachApplications.Common;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 
 public record GetCoachApplicationByIdQuery(
-    string Id) : IRequest<ErrorOr<CoachApplicationResult>>;
+    string Id) : IRequest<ErrorOr<CoachApplication>>;

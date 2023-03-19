@@ -3,7 +3,6 @@ using ErrorOr;
 using MediatR;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
-using SpartanFitness.Application.MuscleGroups.Common;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
@@ -11,7 +10,7 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
 
 public class CreateMuscleGroupCommandHandler
-    : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroupResult>>
+    : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroup>>
 {
     private readonly IUserRepository _userRepository;
     private readonly ICoachRepository _coachRepository;
@@ -27,7 +26,7 @@ public class CreateMuscleGroupCommandHandler
         _muscleGroupRepository = muscleGroupRepository;
     }
 
-    public async Task<ErrorOr<MuscleGroupResult>> Handle(
+    public async Task<ErrorOr<MuscleGroup>> Handle(
         CreateMuscleGroupCommand command,
         CancellationToken cancellationToken)
     {
@@ -51,6 +50,6 @@ public class CreateMuscleGroupCommandHandler
 
         await _muscleGroupRepository.AddAsync(muscleGroup);
 
-        return new MuscleGroupResult(muscleGroup);
+        return muscleGroup;
     }
 }

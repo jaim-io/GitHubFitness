@@ -2,9 +2,9 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.Exercises.Common;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 
 public record GetExerciseByIdQuery(
-    string Id) : IRequest<ErrorOr<ExerciseResult>>;
+    string Id) : IRequest<ErrorOr<Exercise>>;

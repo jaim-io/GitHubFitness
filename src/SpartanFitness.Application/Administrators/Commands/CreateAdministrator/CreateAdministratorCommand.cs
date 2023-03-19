@@ -2,9 +2,9 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.Administrators.Common;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Application.Administrators.Commands;
 
 public record CreateAdministratorCommand(
-    string UserId) : IRequest<ErrorOr<AdministratorResult>>;
+    string UserId) : IRequest<ErrorOr<Administrator>>;

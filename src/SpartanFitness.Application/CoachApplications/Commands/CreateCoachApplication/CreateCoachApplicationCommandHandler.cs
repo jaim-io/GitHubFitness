@@ -2,7 +2,6 @@ using ErrorOr;
 
 using MediatR;
 
-using SpartanFitness.Application.CoachApplications.Common;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
@@ -11,7 +10,7 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 
 public class CreateCoachApplicationCommandHandler
-    : IRequestHandler<CreateCoachApplicationCommand, ErrorOr<CoachApplicationResult>>
+    : IRequestHandler<CreateCoachApplicationCommand, ErrorOr<CoachApplication>>
 {
     private readonly IUserRepository _userRepository;
     private readonly ICoachRepository _coachRepository;
@@ -27,7 +26,7 @@ public class CreateCoachApplicationCommandHandler
         _coachApplicationRepository = coachApplicationRepository;
     }
 
-    public async Task<ErrorOr<CoachApplicationResult>> Handle(
+    public async Task<ErrorOr<CoachApplication>> Handle(
         CreateCoachApplicationCommand command,
         CancellationToken cancellationToken)
     {
@@ -50,6 +49,6 @@ public class CreateCoachApplicationCommandHandler
 
         await _coachApplicationRepository.AddAsync(coachApplication);
 
-        return new CoachApplicationResult(coachApplication);
+        return coachApplication;
     }
 }

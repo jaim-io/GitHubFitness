@@ -7,10 +7,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.MuscleGroups.Common;
 using SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 using SpartanFitness.Contracts.MuscleGroups;
+using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -34,10 +34,10 @@ public class MuscleGroupsController : ApiController
     {
         var request = new GetMuscleGroupRequest(muscleGroupId);
         var query = _mapper.Map<GetMuscleGroupByIdQuery>(request);
-        ErrorOr<MuscleGroupResult> muscleGroupResult = await _mediator.Send(query);
+        ErrorOr<MuscleGroup> muscleGroupResult = await _mediator.Send(query);
 
         return muscleGroupResult.Match(
-            muscleGroupResponse => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroupResponse)),
+            muscleGroupResult => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroupResult)),
             errors => Problem(errors));
     }
 
@@ -48,13 +48,13 @@ public class MuscleGroupsController : ApiController
     {
         var userId = Authorization.GetUserIdFromClaims(HttpContext);
         var command = _mapper.Map<CreateMuscleGroupCommand>((request, userId));
-        ErrorOr<MuscleGroupResult> muscleGroupResult = await _mediator.Send(command);
+        ErrorOr<MuscleGroup> createdMuscleGroupResult = await _mediator.Send(command);
 
-        return muscleGroupResult.Match(
-            muscleGroupResult => CreatedAtAction(
+        return createdMuscleGroupResult.Match(
+            muscleGroup => CreatedAtAction(
                 nameof(GetMuscleGroup),
-                new { muscleGroupId = muscleGroupResult.MuscleGroup.Id },
-                _mapper.Map<MuscleGroupResponse>(muscleGroupResult)),
+                new { muscleGroupId = muscleGroup.Id },
+                _mapper.Map<MuscleGroupResponse>(muscleGroup)),
             errors => Problem(errors));
     }
 }

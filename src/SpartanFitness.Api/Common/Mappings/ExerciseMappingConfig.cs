@@ -1,9 +1,9 @@
 using Mapster;
 
-using SpartanFitness.Application.Exercises.Common;
 using SpartanFitness.Application.Exercises.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Contracts.Exercises;
+using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Api.Common.Mappings;
 
@@ -17,10 +17,10 @@ public class ExerciseMappingConfig : IRegister
 
         config.NewConfig<GetExerciseRequest, GetExerciseByIdQuery>();
 
-        config.NewConfig<ExerciseResult, ExerciseResponse>()
-            .Map(dest => dest.Id, src => src.Exercise.Id.Value)
-            .Map(dest => dest.CreatorId, src => src.Exercise.CreatorId.Value)
-            .Map(dest => dest.MuscleGroupIds, src => src.Exercise.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value))
-            .Map(dest => dest, src => src.Exercise);
+        config.NewConfig<Exercise, ExerciseResponse>()
+            .Map(dest => dest.Id, src => src.Id.Value)
+            .Map(dest => dest.CreatorId, src => src.CreatorId.Value)
+            .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value))
+            .Map(dest => dest, src => src);
     }
 }
