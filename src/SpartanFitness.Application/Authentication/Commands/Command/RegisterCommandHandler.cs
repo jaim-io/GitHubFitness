@@ -7,18 +7,19 @@ using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
+using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Application.Authentication.Queries;
+namespace SpartanFitness.Application.Authentication.Commands.Register;
 
-public class LoginQueryHandler
-    : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
+public class RegisterCommandHandler
+    : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IRoleRepository _roleRepository;
 
-    public LoginQueryHandler(
+    public RegisterCommandHandler(
         IUserRepository userRepository,
         IJwtTokenGenerator jwtTokenGenerator,
         IPasswordHasher passwordHasher,
@@ -31,20 +32,28 @@ public class LoginQueryHandler
     }
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(
-        LoginQuery query,
+        RegisterCommand command,
         CancellationToken cancellationToken)
     {
-        if (await _userRepository.GetByEmailAsync(query.Email) is not User user)
+        if (await _userRepository.GetByEmailAsync(command.Email) is not null)
         {
-            return Errors.Authentication.InvalidCredentials;
+            return Errors.User.DuplicateEmail;
         }
 
-        if (!_passwordHasher.VerifyPassword(query.Password, user.Password, user.Salt))
-        {
-            return Errors.Authentication.InvalidCredentials;
-        }
+        byte[] salt;
+        var hashedPassword = _passwordHasher.HashPassword(command.Password, out salt);
 
-        var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
+        var user = User.Create(
+            command.FirstName,
+            command.LastName,
+            command.ProfileImage,
+            command.Email,
+            hashedPassword,
+            salt);
+
+        var roles = new HashSet<Role> { Role.User };
+
+        await _userRepository.AddAsync(user);
 
         var token = _jwtTokenGenerator.GenerateToken(user, roles);
 

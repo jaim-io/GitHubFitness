@@ -37,8 +37,7 @@ public class WorkoutsController : ApiController
 
     return workoutResult.Match(
       workout => Ok(_mapper.Map<WorkoutResponse>(workout)),
-      errors => Problem(errors)
-    );
+      errors => Problem(errors));
   }
 
   [HttpPost("create")]
@@ -46,6 +45,7 @@ public class WorkoutsController : ApiController
   public async Task<IActionResult> CreateWorkout(CreateWorkoutRequest request, string coachId)
   {
     // Verify if user is coach with given CoachId: Func<string, string, bool>(string userId, string coachId) => bool 
+    // VerifyUserIsCoachQuery
     var command = _mapper.Map<CreateWorkoutCommand>((request, coachId));
     ErrorOr<Workout> workout = await _mediator.Send(command);
 

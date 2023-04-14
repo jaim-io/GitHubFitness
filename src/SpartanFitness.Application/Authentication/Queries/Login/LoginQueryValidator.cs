@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace SpartanFitness.Application.Authentication.Queries;
+namespace SpartanFitness.Application.Authentication.Queries.Login;
 
 public class LoginQueryValidator : AbstractValidator<LoginQuery>
 {

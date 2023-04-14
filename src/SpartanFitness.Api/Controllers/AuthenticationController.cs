@@ -7,9 +7,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Authentication.Commands;
+using SpartanFitness.Application.Authentication.Commands.Register;
 using SpartanFitness.Application.Authentication.Common;
-using SpartanFitness.Application.Authentication.Queries;
+using SpartanFitness.Application.Authentication.Queries.Login;
 using SpartanFitness.Contracts.Authentication;
 
 namespace SpartanFitness.Api.Controllers;

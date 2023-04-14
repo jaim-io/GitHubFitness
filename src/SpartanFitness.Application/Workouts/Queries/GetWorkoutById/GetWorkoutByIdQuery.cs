@@ -8,4 +8,4 @@ namespace SpartanFitness.Application.Workouts.Queries.GetWorkoutById;
 
 public record GetWorkoutByIdQuery(
   string CoachId,
-  string WorkoutId): IRequest<ErrorOr<Workout>>;
+  string WorkoutId) : IRequest<ErrorOr<Workout>>;

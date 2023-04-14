@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace SpartanFitness.Application.Authentication.Commands;
+namespace SpartanFitness.Application.Authentication.Commands.Register;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

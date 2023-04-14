@@ -4,11 +4,8 @@ using MediatR;
 
 using SpartanFitness.Application.Authentication.Common;
 
-namespace SpartanFitness.Application.Authentication.Commands;
+namespace SpartanFitness.Application.Authentication.Queries.Login;
 
-public record RegisterCommand(
-    string FirstName,
-    string LastName,
-    string ProfileImage,
+public record LoginQuery(
     string Email,
     string Password) : IRequest<ErrorOr<AuthenticationResult>>;
