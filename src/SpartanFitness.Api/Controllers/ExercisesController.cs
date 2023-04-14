@@ -36,7 +36,7 @@ public class ExercisesController : ApiController
         ErrorOr<Exercise> exerciseResult = await _mediator.Send(query);
 
         return exerciseResult.Match(
-            adminResult => Ok(_mapper.Map<ExerciseResponse>(adminResult)),
+            exerciseResult => Ok(_mapper.Map<ExerciseResponse>(exerciseResult)),
             errors => Problem(errors));
     }
 

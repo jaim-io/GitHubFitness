@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Persistence.Repositories;
 
@@ -18,5 +21,10 @@ public class WorkoutRepository
     _dbContext.Add(workout);
 
     await _dbContext.SaveChangesAsync();
+  }
+
+  public Task<Workout?> GetByIdAsync(WorkoutId id)
+  {
+    return _dbContext.Workouts.FirstOrDefaultAsync(w => w.Id == id);
   }
 }

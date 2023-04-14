@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
+using SpartanFitness.Application.Workouts.Queries.GetWorkoutById;
 using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
@@ -29,9 +30,15 @@ public class WorkoutsController : ApiController
   }
 
   [HttpGet("{workoutId}")]
-  public IActionResult GetWorkout(string coachId, string workoutId)
+  public async Task<IActionResult> GetWorkout(string coachId, string workoutId)
   {
-    return Ok(workoutId);
+    var query = new GetWorkoutByIdQuery(coachId, workoutId);
+    ErrorOr<Workout> workoutResult = await _mediator.Send(query);
+
+    return workoutResult.Match(
+      workout => Ok(_mapper.Map<WorkoutResponse>(workout)),
+      errors => Problem(errors)
+    );
   }
 
   [HttpPost("create")]
