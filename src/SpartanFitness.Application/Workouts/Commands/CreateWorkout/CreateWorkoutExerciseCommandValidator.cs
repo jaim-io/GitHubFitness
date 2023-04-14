@@ -3,7 +3,7 @@ using FluentValidation;
 using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Application.Workouts.CreateWorkout;
+namespace SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 
 public class CreateWorkoutExerciseCommandValidator
   : AbstractValidator<CreateWorkoutExerciseCommand>

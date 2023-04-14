@@ -3,7 +3,6 @@ using Mapster;
 using SpartanFitness.Application.CoachApplications.Commands.ApproveCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.CreateCoachApplication;
 using SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
-using SpartanFitness.Application.CoachApplications.Queries.GetCoachApplicationById;
 using SpartanFitness.Contracts.CoachApplications;
 using SpartanFitness.Domain.Aggregates;
 

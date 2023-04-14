@@ -1,7 +1,6 @@
 using Mapster;
 
 using SpartanFitness.Application.Exercises.CreateExercise;
-using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Contracts.Exercises;
 using SpartanFitness.Domain.Aggregates;
 

@@ -7,7 +7,7 @@ using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
 
-namespace SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
+namespace SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 
 public class CreateMuscleGroupCommandHandler
     : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroup>>

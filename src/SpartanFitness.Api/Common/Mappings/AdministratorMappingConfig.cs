@@ -1,7 +1,6 @@
 using Mapster;
 
 using SpartanFitness.Application.Administrators.Commands;
-using SpartanFitness.Application.Administrators.Queries.GetAdministratorById;
 using SpartanFitness.Contracts.Administrators;
 using SpartanFitness.Domain.Aggregates;
 

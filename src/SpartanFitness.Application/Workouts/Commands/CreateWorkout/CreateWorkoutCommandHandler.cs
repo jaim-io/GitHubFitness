@@ -9,7 +9,7 @@ using SpartanFitness.Domain.Entities;
 using SpartanFitness.Domain.Enums;
 using SpartanFitness.Domain.ValueObjects;
 
-namespace SpartanFitness.Application.Workouts.CreateWorkout;
+namespace SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 
 public class CreateWorkoutCommandHandler
   : IRequestHandler<CreateWorkoutCommand, ErrorOr<Workout>>

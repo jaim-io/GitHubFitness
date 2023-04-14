@@ -1,6 +1,6 @@
 using Mapster;
 
-using SpartanFitness.Application.Workouts.CreateWorkout;
+using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Entities;

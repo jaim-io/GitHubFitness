@@ -1,7 +1,6 @@
 using Mapster;
 
-using SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
-using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
+using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 using SpartanFitness.Contracts.MuscleGroups;
 using SpartanFitness.Domain.Aggregates;
 

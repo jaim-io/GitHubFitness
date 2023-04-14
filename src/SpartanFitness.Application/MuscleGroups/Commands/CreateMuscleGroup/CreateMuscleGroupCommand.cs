@@ -4,7 +4,7 @@ using MediatR;
 
 using SpartanFitness.Domain.Aggregates;
 
-namespace SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
+namespace SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 
 public record CreateMuscleGroupCommand(
     string UserId,

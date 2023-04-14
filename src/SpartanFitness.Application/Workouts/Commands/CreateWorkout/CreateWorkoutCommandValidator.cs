@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace SpartanFitness.Application.Workouts.CreateWorkout;
+namespace SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 
 public class CreateWorkoutCommandValidator
  : AbstractValidator<CreateWorkoutCommand>

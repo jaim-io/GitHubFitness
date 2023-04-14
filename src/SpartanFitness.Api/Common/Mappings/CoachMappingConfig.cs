@@ -1,7 +1,6 @@
 using Mapster;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
-using SpartanFitness.Application.Coaches.Queries.GetCoachById;
 using SpartanFitness.Contracts.Coaches;
 using SpartanFitness.Domain.Aggregates;
 

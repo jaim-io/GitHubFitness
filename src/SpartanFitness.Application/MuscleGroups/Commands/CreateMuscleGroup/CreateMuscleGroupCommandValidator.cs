@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
+namespace SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 
 public class CreateMuscleGroupCommandValidator 
     : AbstractValidator<CreateMuscleGroupCommand>

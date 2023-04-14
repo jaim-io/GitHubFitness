@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.MuscleGroups.CreateMuscleGroup;
+using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 using SpartanFitness.Contracts.MuscleGroups;
 using SpartanFitness.Domain.Aggregates;

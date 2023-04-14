@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Workouts.CreateWorkout;
+using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
