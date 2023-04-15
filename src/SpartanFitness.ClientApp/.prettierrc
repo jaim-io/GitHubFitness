@@ -4,4 +4,4 @@ bracketSpacing: true
 endOfLine: "lf"
 semi: true
 tabWidth: 2
-trailingComma: true
+trailingComma: all
