@@ -1,38 +1,38 @@
-**/bin
-**/obj
-**/node_modules
-**/.angular/cache
-**/*.env
-
 **/.vs
 **/.vscode
 
-/src/SpartanFitness.Infrastructure/MSSQL/Data/*
-/src/SpartanFitness.Infrastructure/MSSQL/Log/*
-/src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
+**/bin
+**/obj
+**/*.env
+**/node_modules
 **/appsettings.Production.json
 
-/scripts/setup-db.ps1
+scripts/setup-db.ps1
 
-## SpartanFitness.ClientApp ##
+## [SpartanFitness.Infrastructure] ##
+src/SpartanFitness.Infrastructure/MSSQL/Data/*
+src/SpartanFitness.Infrastructure/MSSQL/Log/*
+src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
+
+## [SpartanFitness.ClientApp] ##
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+src/SpartanFitness.ClientApp/node_modules
+src/SpartanFitness.ClientApp/.pnp
+src/SpartanFitness.ClientApp/.pnp.js
 
 # testing
-/coverage
+src/SpartanFitness.ClientApp/coverage
 
 # production
-/build
+src/SpartanFitness.ClientApp/build
 
 # misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+src/SpartanFitness.ClientApp/.DS_Store
+src/SpartanFitness.ClientApp/.env.local
+src/SpartanFitness.ClientApp/.env.development.local
+src/SpartanFitness.ClientApp/.env.test.local
+src/SpartanFitness.ClientApp/.env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+src/SpartanFitness.ClientApp/npm-debug.log*
+src/SpartanFitness.ClientApp/yarn-debug.log*
+src/SpartanFitness.ClientApp/yarn-error.log*

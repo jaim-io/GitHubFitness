@@ -11,18 +11,27 @@ services:
       - ./.db.env
     ports:
       - 1433:1433
-    # expose: 
-    #   - 1433
 
   # api:
   #   depends_on:
   #     - db
   #   container_name: spartanfitness-api
-  #   image: spartanfitness:latest
+  #   image: spartanfitness-api:latest
   #   build: 
   #     context: ./
   #     dockerfile: Dockerfile
   #   ports:
-  #     - 80:80
+  #     - 8001:80
   #   links:
   #     - db:mssql
+
+  web:
+    container_name: spartanfitness-web
+    image: spartanfitness-web:latest
+    build: 
+      context: ./src/SpartanFitness.ClientApp/
+      dockerfile: Dockerfile
+    env_file:
+      - ./src/SpartanFitness.ClientApp/.env
+    ports:
+      - 8000:80
