@@ -12,18 +12,18 @@ services:
     ports:
       - 1433:1433
 
-  # api:
-  #   depends_on:
-  #     - db
-  #   container_name: spartanfitness-api
-  #   image: spartanfitness-api:latest
-  #   build: 
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 8001:80
-  #   links:
-  #     - db:mssql
+  api:
+    depends_on:
+      - db
+    container_name: spartanfitness-api
+    image: spartanfitness-api:latest
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8001:80
+    links:
+      - db:mssql
 
   web:
     container_name: spartanfitness-web
