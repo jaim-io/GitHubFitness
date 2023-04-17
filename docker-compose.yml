@@ -34,4 +34,5 @@ services:
     env_file:
       - ./src/SpartanFitness.ClientApp/.env
     ports:
-      - 8000:80
+    #   - 80:80
+      - 8000:8000

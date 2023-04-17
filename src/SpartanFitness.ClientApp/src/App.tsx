@@ -8,6 +8,7 @@ import ExerciseDetailPage from "./pages/ExerciseDetail";
 import NewExercisePage from "./pages/NewExercise";
 import EditExercisePage from "./pages/EditExercise";
 import ExerciseLayout from "./layouts/ExerciseLayout";
+import LoginPage from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: "login", element: <LoginPage /> },
       {
         path: "exercises",
         element: <ExerciseLayout />,
