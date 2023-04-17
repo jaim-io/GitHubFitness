@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: spartanfitness
+    tier: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: spartanfitness
+    tier: backend
+  ports:
+    - port: 8001
+      targetPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: spartanfitness
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: spartanfitness
+        tier: backend
+    spec:
+      containers:
+        - name: aspnetcore
+          image: jamey010/spartanfitness:backend-latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          ports:
+            - containerPort: 8001
+  replicas: 1
