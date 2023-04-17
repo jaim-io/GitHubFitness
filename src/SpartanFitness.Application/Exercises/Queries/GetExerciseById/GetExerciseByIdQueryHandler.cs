@@ -20,10 +20,10 @@ public record GetExerciseByIdQueryHandler
     }
 
     public async Task<ErrorOr<Exercise>> Handle(
-        GetExerciseByIdQuery request,
+        GetExerciseByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var id = ExerciseId.Create(request.Id);
+        var id = ExerciseId.Create(query.Id);
 
         if (await _exerciseRepository.GetByIdAsync(id) is not Exercise exercise)
         {
