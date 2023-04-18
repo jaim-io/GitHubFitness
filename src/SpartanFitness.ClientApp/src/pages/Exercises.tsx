@@ -23,7 +23,7 @@ const ExercisesPage = () => {
           }
           return res.json();
         })
-        .then((res) => setExercises(res));
+        .then((res: Exercise[]) => setExercises(res));
 
       setIsLoading(false);
     };
