@@ -10,35 +10,42 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.CoachApplications.Commands.DenyCoachApplication;
 
 public class DenyCoachApplicationCommandHandler
-    : IRequestHandler<DenyCoachApplicationCommand, ErrorOr<CoachApplication>>
+  : IRequestHandler<DenyCoachApplicationCommand, ErrorOr<CoachApplication>>
 {
-    private readonly ICoachApplicationRepository _coachapplicationRepository;
+  private readonly ICoachApplicationRepository _coachapplicationRepository;
 
-    public DenyCoachApplicationCommandHandler(
-        ICoachApplicationRepository coachapplicationRepository)
+  public DenyCoachApplicationCommandHandler(
+    ICoachApplicationRepository coachapplicationRepository)
+  {
+    _coachapplicationRepository = coachapplicationRepository;
+  }
+
+  public async Task<ErrorOr<CoachApplication>> Handle(
+    DenyCoachApplicationCommand command,
+    CancellationToken cancellationToken)
+  {
+    var id = CoachApplicationId.Create(command.Id);
+    var userId = UserId.Create(command.UserId);
+
+    if (!await _coachapplicationRepository.AreRelatedAsync(id, userId))
     {
-        _coachapplicationRepository = coachapplicationRepository;
+      return Errors.CoachApplication.NotRelated;
     }
 
-    public async Task<ErrorOr<CoachApplication>> Handle(
-        DenyCoachApplicationCommand command,
-        CancellationToken cancellationToken)
+    if (!await _coachapplicationRepository.IsOpenAsync(id))
     {
-        var id = CoachApplicationId.Create(command.Id);
-        var userId = UserId.Create(command.UserId);
-
-        if (!await _coachapplicationRepository.AreRelatedAsync(id, userId))
-        {
-            return Errors.CoachApplication.NotRelated;
-        }
-
-        if (!await _coachapplicationRepository.IsOpenAsync(id))
-        {
-            return Errors.CoachApplication.IsClosed;
-        }
-
-        await _coachapplicationRepository.UpdateStatusAsync(id, Status.Denied, command.Remarks);
-
-        return default;
+      return Errors.CoachApplication.IsClosed;
     }
+
+    if (await _coachapplicationRepository.GetByIdAsync(id) is not CoachApplication application)
+    {
+      return Errors.CoachApplication.NotFound;
+    }
+
+    application.Deny(command.Remarks);
+
+    await _coachapplicationRepository.UpdateAsync(application);
+
+    return application;
+  }
 }
