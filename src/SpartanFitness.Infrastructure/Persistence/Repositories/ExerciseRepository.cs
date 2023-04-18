@@ -20,7 +20,7 @@ public class ExerciseRepository
   {
     _dbContext.Add(exercise);
 
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveEntitiesAsync<ExerciseId>();
   }
 
   public async Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids)
@@ -53,8 +53,8 @@ public class ExerciseRepository
     foreach (var exerciseId in exerciseIds)
     {
       if (await _dbContext.Exercises
-                  .AsNoTrackingWithIdentityResolution()
-                  .FirstOrDefaultAsync(e => e.Id == exerciseId) is Exercise exercise)
+        .AsNoTrackingWithIdentityResolution()
+        .FirstOrDefaultAsync(e => e.Id == exerciseId) is Exercise exercise)
       {
         muscleGroupIds.AddRange(exercise.MuscleGroupIds.ToList());
       }

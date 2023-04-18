@@ -1,11 +1,13 @@
 using SpartanFitness.Api;
+using SpartanFitness.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 {
   builder.Services
-      .AddPresentation()
-      .AddApplication()
-      .AddInfrastructure(builder.Configuration);
+    .AddPresentation()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddDomain();
 }
 
 var app = builder.Build();

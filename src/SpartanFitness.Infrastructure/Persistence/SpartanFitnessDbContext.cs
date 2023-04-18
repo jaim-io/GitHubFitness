@@ -1,38 +1,54 @@
+using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Infrastructure.Persistence;
 
-public class SpartanFitnessDbContext : DbContext
+public class SpartanFitnessDbContext : DbContext, IUnitOfWork
 {
-    public DbSet<User> Users { get; set; } = null!;
-    public DbSet<Coach> Coaches { get; set; } = null!;
-    public DbSet<Administrator> Administrators { get; set; } = null!;
-    public DbSet<CoachApplication> CoachApplications { get; set; } = null!;
-    public DbSet<MuscleGroup> MuscleGroups { get; set; } = null!;
-    public DbSet<Exercise> Exercises { get; set; } = null!;
-    public DbSet<Workout> Workouts { get; set; } = null!;
-    
-    public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options)
-        : base(options)
-    {
-    }
+  private IMediator _mediator;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder
-            .ApplyConfigurationsFromAssembly(typeof(SpartanFitnessDbContext).Assembly);
+  public DbSet<User> Users { get; set; } = null!;
+  public DbSet<Coach> Coaches { get; set; } = null!;
+  public DbSet<Administrator> Administrators { get; set; } = null!;
+  public DbSet<CoachApplication> CoachApplications { get; set; } = null!;
+  public DbSet<MuscleGroup> MuscleGroups { get; set; } = null!;
+  public DbSet<Exercise> Exercises { get; set; } = null!;
+  public DbSet<Workout> Workouts { get; set; } = null!;
 
-        base.OnModelCreating(modelBuilder);
-    }
+  public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options, IMediator mediator)
+    : base(options)
+  {
+    _mediator = mediator;
+  }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  public async Task<bool> SaveEntitiesAsync<TId>(CancellationToken cancellationToken = default(CancellationToken))
+    where TId : ValueObject
+  {
+    await _mediator.DispatchDomainEventsAsync<TId>(this);
+
+    var result = await SaveChangesAsync(cancellationToken);
+
+    return true;
+  }
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder
+      .ApplyConfigurationsFromAssembly(typeof(SpartanFitnessDbContext).Assembly);
+
+    base.OnModelCreating(modelBuilder);
+  }
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+    if (!optionsBuilder.IsConfigured)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=ConnectionStrings:SpartanFitness");
-        }
+      optionsBuilder.UseSqlServer("Name=ConnectionStrings:SpartanFitness");
     }
+  }
 }

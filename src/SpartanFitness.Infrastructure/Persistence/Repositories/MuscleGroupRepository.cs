@@ -19,7 +19,7 @@ public class MuscleGroupRepository : IMuscleGroupRepository
   {
     _dbContext.Add(muscleGroup);
 
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveEntitiesAsync<MuscleGroupId>();
   }
 
   public async Task<bool> ExistsAsync(MuscleGroupId id)
@@ -36,8 +36,8 @@ public class MuscleGroupRepository : IMuscleGroupRepository
     }
 
     return results.Contains(false)
-        ? false
-        : true;
+      ? false
+      : true;
   }
 
   public async Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id)

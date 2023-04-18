@@ -5,10 +5,10 @@ namespace SpartanFitness.Application.Common.Interfaces.Persistence;
 
 public interface ICoachApplicationRepository
 {
-    Task AddAsync(CoachApplication coachApplication);
-    Task<CoachApplication?> GetByIdAsync(CoachApplicationId id);
-    Task<bool> AreRelatedAsync(CoachApplicationId id, UserId userId);
-    Task<bool> ExistsAsync(CoachApplicationId id);
-    Task<bool> IsOpenAsync(CoachApplicationId id);
-    Task UpdateStatusAsync(CoachApplicationId id, Status status, string remarks);
+  Task AddAsync(CoachApplication coachApplication);
+  Task<CoachApplication?> GetByIdAsync(CoachApplicationId id);
+  Task<bool> AreRelatedAsync(CoachApplicationId id, UserId userId);
+  Task<bool> ExistsAsync(CoachApplicationId id);
+  Task<bool> IsOpenAsync(CoachApplicationId id);
+  Task UpdateAsync(CoachApplication coachApplication);
 }

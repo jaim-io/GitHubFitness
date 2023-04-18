@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
   {
     _dbContext.Add(user);
 
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveEntitiesAsync<UserId>();
   }
 
   public async Task<User?> GetByEmailAsync(string email)

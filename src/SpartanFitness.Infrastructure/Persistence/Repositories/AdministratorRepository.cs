@@ -8,27 +8,27 @@ namespace SpartanFitness.Infrastructure.Persistence.Repositories;
 
 public class AdministratorRepository : IAdministratorRepository
 {
-    private readonly SpartanFitnessDbContext _dbContext;
+  private readonly SpartanFitnessDbContext _dbContext;
 
-    public AdministratorRepository(SpartanFitnessDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+  public AdministratorRepository(SpartanFitnessDbContext dbContext)
+  {
+    _dbContext = dbContext;
+  }
 
-    public async Task AddAsync(Administrator admin)
-    {
-        _dbContext.Add(admin);
+  public async Task AddAsync(Administrator admin)
+  {
+    _dbContext.Add(admin);
 
-        await _dbContext.SaveChangesAsync();
-    }
+    await _dbContext.SaveEntitiesAsync<AdministratorId>();
+  }
 
-    public async Task<Administrator?> GetByIdAsync(AdministratorId id)
-    {
-        return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.Id == id);
-    }
+  public async Task<Administrator?> GetByIdAsync(AdministratorId id)
+  {
+    return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.Id == id);
+  }
 
-    public async Task<Administrator?> GetByUserIdAsync(UserId id)
-    {
-        return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.UserId == id);
-    }
+  public async Task<Administrator?> GetByUserIdAsync(UserId id)
+  {
+    return await _dbContext.Administrators.FirstOrDefaultAsync(a => a.UserId == id);
+  }
 }
