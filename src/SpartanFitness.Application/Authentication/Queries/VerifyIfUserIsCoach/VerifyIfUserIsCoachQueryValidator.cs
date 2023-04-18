@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace SpartanFitness.Application.Authentication.Queries.VerifyUserIsCoach;
+namespace SpartanFitness.Application.Authentication.Queries.VerifyIfUserIsCoach;
 
-public class VerifyUserIsCoachQueryValidator : AbstractValidator<VerifyUserIsCoachQuery>
+public class VerifyIfUserIsCoachQueryValidator : AbstractValidator<VerifyIfUserIsCoachQuery>
 {
-  public VerifyUserIsCoachQueryValidator()
+  public VerifyIfUserIsCoachQueryValidator()
   {
     RuleFor(x => x.UserId)
       .Must(x => Guid.TryParse(x, out _))

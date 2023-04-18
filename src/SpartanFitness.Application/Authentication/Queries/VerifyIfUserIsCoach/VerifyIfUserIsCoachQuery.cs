@@ -4,8 +4,8 @@ using MediatR;
 
 using SpartanFitness.Domain.Aggregates;
 
-namespace SpartanFitness.Application.Authentication.Queries.VerifyUserIsCoach;
+namespace SpartanFitness.Application.Authentication.Queries.VerifyIfUserIsCoach;
 
-public record VerifyUserIsCoachQuery(
+public record VerifyIfUserIsCoachQuery(
   string UserId,
   string CoachId) : IRequest<ErrorOr<Coach>>;

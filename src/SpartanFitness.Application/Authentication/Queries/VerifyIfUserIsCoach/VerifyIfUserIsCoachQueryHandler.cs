@@ -7,15 +7,15 @@ using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
 
-namespace SpartanFitness.Application.Authentication.Queries.VerifyUserIsCoach;
+namespace SpartanFitness.Application.Authentication.Queries.VerifyIfUserIsCoach;
 
-public class VerifyUserIsCoachQueryHandler
-  : IRequestHandler<VerifyUserIsCoachQuery, ErrorOr<Coach>>
+public class VerifyIfUserIsCoachQueryHandler
+  : IRequestHandler<VerifyIfUserIsCoachQuery, ErrorOr<Coach>>
 {
   private readonly IUserRepository _userRepository;
   private readonly ICoachRepository _coachRepository;
 
-  public VerifyUserIsCoachQueryHandler(
+  public VerifyIfUserIsCoachQueryHandler(
     IUserRepository userRepository,
     ICoachRepository coachRepository)
   {
@@ -24,7 +24,7 @@ public class VerifyUserIsCoachQueryHandler
   }
 
   public async Task<ErrorOr<Coach>> Handle(
-    VerifyUserIsCoachQuery query,
+    VerifyIfUserIsCoachQuery query,
     CancellationToken cancellationToken)
   {
     var userId = UserId.Create(query.UserId);
