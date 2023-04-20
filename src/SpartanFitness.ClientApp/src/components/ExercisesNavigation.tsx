@@ -1,13 +1,12 @@
 import { NavLink } from "react-router-dom";
-import classes from "./ExercisesNavigation.module.css";
 
 const ExercisesNavigation = () => {
   return (
-    <header className={classes.header}>
+    <header >
       <nav>
-        <ul className={classes.list}>
+        <ul >
           <li>
-            <NavLink
+            {/* <NavLink
               to="/exercises"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
@@ -24,7 +23,7 @@ const ExercisesNavigation = () => {
               end
             >
               New exercise
-            </NavLink>
+            </NavLink> */}
           </li>
         </ul>
       </nav>

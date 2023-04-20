@@ -1,4 +1,3 @@
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/Home";
 import MainLayout from "./layouts/MainLayout";
@@ -9,6 +8,7 @@ import NewExercisePage from "./pages/NewExercise";
 import EditExercisePage from "./pages/EditExercise";
 import ExerciseLayout from "./layouts/ExerciseLayout";
 import LoginPage from "./pages/Login";
+import "./App.css";
 
 const router = createBrowserRouter([
   {
