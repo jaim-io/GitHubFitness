@@ -13,7 +13,7 @@ const MainNavItem = ({ path, children, target = "_self", ...props }: Props) => {
         to={path}
         target={target}
         className={({ isActive }) =>
-          `${isActive ? "text-red" : undefined} hover:text-red`
+          `${isActive ? "text-red" : undefined} inline-block hover:text-red transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300`
         }
         {...props}
         end
