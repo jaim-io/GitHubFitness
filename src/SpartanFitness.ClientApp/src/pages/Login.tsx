@@ -1,51 +1,60 @@
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthenticationResponse from "../types/AuthenticationResponse";
-import User from "../types/User";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AuthContext from "../contexts/AuthProvider";
+import axios from "axios";
+
+const LOGIN_URL = `${import.meta.env.VITE_API_URL}/auth/login`;
 
 const LoginPage = () => {
+  const { setAuth } = useContext(AuthContext);
+  const emailRef = useRef<HTMLInputElement>();
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [statusCode, setStatusCode] = useState<number>();
-  const [user, setUser] = useState<User>();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  });
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsLoading(true);
+    setEmail("");
+    setPassword("");
+    setError("");
 
-    await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    axios
+      .post<AuthenticationResponse>(
+        LOGIN_URL,
+        { email: email, password: password },
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      )
       .then((res) => {
-        if (!res.ok) {
-          setError(res.statusText);
-          setStatusCode(res.status);
-        }
-
-        return res.json();
-      })
-      .then((res: AuthenticationResponse) => {
-        localStorage.setItem("token", res.token);
-        if (res.id) {
-          setUser(res);
+        if (res.data.id) {
+          localStorage.setItem("token", res.data.token);
+          setAuth(res.data);
           navigate("/");
         }
+      })
+      .catch((err) => {
+        setStatusCode(err.response.status);
+        setError(err.response.statusText);
       });
 
+    
     if (error != "") {
       toast.error(statusCode == 400 ? "Invalid credentials." : error, {
         position: "bottom-right",
@@ -80,6 +89,8 @@ const LoginPage = () => {
             placeholder="example@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="off"
           />
         </div>
         <div className="mb-6">
@@ -93,6 +104,7 @@ const LoginPage = () => {
             placeholder="******************"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
           <p className="text-red-500 text-xs italic">
             Please choose a password.

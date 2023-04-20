@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "firstName": "Jamey",
     "lastName": "Schaap",
-    "profileImage": "https://google.com",
-    "email": "jameyschaap1@spartanfitness.com",
+    "profileImage": "https://picsum.photos/200",
+    "email": "test@spartanfitness.com",
     "password": "jamey123!"
 }

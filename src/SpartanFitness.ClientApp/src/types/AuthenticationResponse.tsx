@@ -1,10 +1,7 @@
-interface AuthenticationResponse {
-  id: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
-  email: string;
+import User from "./User";
+
+type AuthenticationResponse = {
   token: string;
-}
+} & User;
 
 export default AuthenticationResponse;

@@ -1,8 +1,21 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { NavLink } from "react-router-dom";
+import AuthContext from "../contexts/AuthProvider";
 
 const UserNavItem = ({ ...props }) => {
+  const { user } = useContext(AuthContext);
+
+  const getPartOfDay = () => {
+    const now = new Date().getHours();
+
+    return now >= 5 && now < 12
+      ? "morning"
+      : now >= 12 && now < 17
+      ? "afternoon"
+      : "evening";
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left" {...props}>
       <Menu.Button>
@@ -10,7 +23,10 @@ const UserNavItem = ({ ...props }) => {
           className={
             "inline-block h-10 w-10 rounded-full ring-1 active:ring-red hover:ring-red"
           }
-          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          src={
+            user?.profileImage ??
+            "./default-profile.svg"
+          }
         />
       </Menu.Button>
       <Transition
@@ -22,10 +38,17 @@ const UserNavItem = ({ ...props }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {user && (
+            <div className="px-1 py-1">
+              <p className="text-gray-900 px-2 py-2 text-sm">
+                Good {getPartOfDay()} {user.firstName}
+              </p>
+            </div>
+          )}
           <div className="px-1 py-1 ">
-            <Menu.Item>
-              {({ active }) => (
+            {!user && (
+              <Menu.Item>
                 <NavLink
                   to="/login"
                   className={({ isActive }) =>
@@ -37,8 +60,8 @@ const UserNavItem = ({ ...props }) => {
                 >
                   Login
                 </NavLink>
-              )}
-            </Menu.Item>
+              </Menu.Item>
+            )}
             <Menu.Item>
               {({ active }) => (
                 <NavLink
