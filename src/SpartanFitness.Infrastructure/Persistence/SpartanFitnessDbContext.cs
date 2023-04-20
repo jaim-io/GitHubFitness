@@ -1,9 +1,9 @@
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Interfaces;
 using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Infrastructure.Persistence;

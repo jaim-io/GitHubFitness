@@ -1,6 +1,4 @@
-using MediatR;
-
-using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Domain.Common.Interfaces;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.DomainEvents;

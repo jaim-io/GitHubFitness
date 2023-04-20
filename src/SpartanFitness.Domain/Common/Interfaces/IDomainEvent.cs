@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace SpartanFitness.Domain.Common.Models;
+namespace SpartanFitness.Domain.Common.Interfaces;
 
 public interface IDomainEvent : INotification
 {

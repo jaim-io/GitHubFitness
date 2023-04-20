@@ -1,3 +1,5 @@
+using SpartanFitness.Domain.Common.Interfaces;
+
 namespace SpartanFitness.Domain.Common.Models;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>

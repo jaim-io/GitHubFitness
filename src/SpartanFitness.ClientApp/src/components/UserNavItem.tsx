@@ -8,7 +8,7 @@ const UserNavItem = ({ ...props }) => {
       <Menu.Button>
         <img
           className={
-            "inline-block h-10 w-10 rounded-full ring-1 active:ring-red"
+            "inline-block h-10 w-10 rounded-full ring-1 active:ring-red hover:ring-red"
           }
           src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
         />
@@ -22,7 +22,7 @@ const UserNavItem = ({ ...props }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-25 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
               {({ active }) => (
