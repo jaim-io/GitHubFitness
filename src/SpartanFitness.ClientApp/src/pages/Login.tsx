@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../contexts/AuthProvider";
 import axios from "axios";
 
-const LOGIN_URL = `${import.meta.env.VITE_API_URL}/auth/login`;
+const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/login`;
 
 const LoginPage = () => {
   const { setAuth } = useContext(AuthContext);
@@ -14,8 +14,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>("");
-  const [statusCode, setStatusCode] = useState<number>();
+  const [error, setError] = useState<Exception | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,44 +29,51 @@ const LoginPage = () => {
     event.preventDefault();
 
     setIsLoading(true);
+    setError(null);
+
+    try {
+      await axios
+        .post<AuthenticationResponse>(
+          LOGIN_ENDPOINT,
+          { email: email, password: password },
+          {
+            headers: { "Content-Type": "application/json" },
+          },
+        )
+        .then((res) => {
+          if (res.data.id) {
+            localStorage.setItem("token", res.data.token);
+            setAuth(res.data);
+            navigate("/");
+          }
+        })
+        .catch((err) => {
+          toast.error(
+            err.code == "ERR_NETWORK"
+              ? "Unable to reach server"
+              : err.response.status == 400
+              ? "Invalid credentials."
+              : err.response.statusText,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            },
+          );
+          setError({
+            message: err.response.statusText,
+            code: err.response.status,
+          });
+        });
+    } catch {}
+
     setEmail("");
     setPassword("");
-    setError("");
-
-    axios
-      .post<AuthenticationResponse>(
-        LOGIN_URL,
-        { email: email, password: password },
-        {
-          headers: { "Content-Type": "application/json" },
-        },
-      )
-      .then((res) => {
-        if (res.data.id) {
-          localStorage.setItem("token", res.data.token);
-          setAuth(res.data);
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        setStatusCode(err.response.status);
-        setError(err.response.statusText);
-      });
-
-    
-    if (error != "") {
-      toast.error(statusCode == 400 ? "Invalid credentials." : error, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
-
     setIsLoading(false);
   };
 
