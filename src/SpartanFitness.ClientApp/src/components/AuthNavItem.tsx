@@ -3,19 +3,26 @@ import { NavLink } from "react-router-dom";
 type Props = {
   path: string;
   children: string;
+  border?: boolean;
   target?: string;
 };
 
-const MainNavItem = ({ path, children, target = "_self", ...props }: Props) => {
+const AuthNavItem = ({
+  path,
+  children,
+  border = false,
+  target = "_self",
+  ...props
+}: Props) => {
   return (
-    <li>
+    <li className={`${border ? "border border-[#30363d] rounded-lg" : ""}`}>
       <NavLink
         to={path}
         target={target}
         className={({ isActive }) =>
           `${
             isActive ? "text-[#2f81f7]" : ""
-          } inline-block hover:text-[#FFFFFFB3] py-2`
+          } inline-block hover:text-[#FFFFFFB3] ${border ? "px-2 py-1.5" : ""}`
         }
         {...props}
         end
@@ -26,4 +33,4 @@ const MainNavItem = ({ path, children, target = "_self", ...props }: Props) => {
   );
 };
 
-export default MainNavItem;
+export default AuthNavItem;
