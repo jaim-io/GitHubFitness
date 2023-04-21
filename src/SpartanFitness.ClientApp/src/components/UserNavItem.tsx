@@ -14,13 +14,13 @@ const UserNavItem = ({ ...props }) => {
     <Menu as="div" className="relative inline-block text-left" {...props}>
       <Menu.Button
         className={({ open }) =>
-          `flex h-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 hover:ring-red hover:hue-rotate-90 ${
-            open ? "-translate-y-1 scale-110 ring-red hue-rotate-90" : ""
+          `flex h-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 hover:ring-[#2f81f7] hover:hue-rotate-90 ${
+            open ? "-translate-y-1 scale-110 ring-[#2f81f7] hue-rotate-90" : ""
           }`
         }
       >
         <img
-          className={`inline-block h-10 w-10 rounded-full ring-1 active:ring-red`}
+          className={`inline-block h-10 w-10 rounded-full ring-1 active:ring-[#2f81f7]`}
           src={user?.profileImage ??  DefaultProfileSvg }
         />
         <div>
@@ -55,9 +55,9 @@ const UserNavItem = ({ ...props }) => {
                     to="/login"
                     className={({ isActive }) =>
                       `${
-                        isActive ? "text-red" : "text-dark-gray"
+                        isActive ? "text-[#2f81f7]" : "text-dark-gray"
                       } group flex w-full items-center px-3 py-1 text-xs 
-                        hover:text-white hover:bg-red
+                        hover:text-white hover:bg-[#2f81f7]
                     `
                     }
                     end
@@ -71,9 +71,9 @@ const UserNavItem = ({ ...props }) => {
                     to="/register"
                     className={({ isActive }) =>
                       `${
-                        isActive ? "text-red" : "text-dark-gray"
+                        isActive ? "text-[#2f81f7]" : "text-dark-gray"
                       } group flex w-full items-center  px-3 py-1 text-xs 
-                          hover:text-white hover:bg-red
+                          hover:text-white hover:bg-[#2f81f7]
                       `
                     }
                     end
@@ -91,9 +91,9 @@ const UserNavItem = ({ ...props }) => {
                     to="/user-settings"
                     className={({ isActive }) =>
                       `${
-                        isActive ? "text-red" : "text-dark-gray"
+                        isActive ? "text-[#2f81f7]" : "text-dark-gray"
                       } group flex w-full items-center px-3 py-1 text-xs 
-                      hover:text-white hover:bg-red
+                      hover:text-white hover:bg-[#2f81f7]
                   `
                     }
                     end

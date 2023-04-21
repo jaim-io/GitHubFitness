@@ -114,7 +114,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pb-1">
           <button
             className="bg-[#238636] hover:bg-[#2EA043] text-white py-1 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full block"
             type="submit"

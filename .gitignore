@@ -10,9 +10,7 @@
 scripts/setup-db.ps1
 
 ## [SpartanFitness.Infrastructure] ##
-src/SpartanFitness.Infrastructure/MSSQL/Data/*
-src/SpartanFitness.Infrastructure/MSSQL/Log/*
-src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
+src/SpartanFitness.Infrastructure/MSSQL/*
 
 ## [SpartanFitness.ClientApp] ##
 # dependencies
