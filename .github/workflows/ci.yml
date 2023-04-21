@@ -27,12 +27,12 @@ jobs:
       
     - name: Application layer unit tests
       run: dotnet test --no-build --verbosity normal
-      working-directory: tests/GitHubFitness.Application.UnitTests
+      working-directory: tests/SpartanFitness.Application.UnitTests
       
     - name: Domain layer unit tests
       run: dotnet test --no-build --verbosity normal
-      working-directory: tests/GitHubFitness.Domain.UnitTests
+      working-directory: tests/SpartanFitness.Domain.UnitTests
       
     - name: Application layer integration tests
       run: dotnet test --no-build --verbosity normal
-      working-directory: tests/GitHubFitness.Application.IntegrationTests
+      working-directory: tests/SpartanFitness.Application.IntegrationTests
