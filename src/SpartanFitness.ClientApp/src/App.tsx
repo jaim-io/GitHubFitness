@@ -1,14 +1,18 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/Home";
-import MainLayout from "./layouts/MainLayout";
-import ErrorPage from "./pages/Error";
-import ExercisesPage from "./pages/Exercises";
-import ExerciseDetailPage from "./pages/ExerciseDetail";
-import NewExercisePage from "./pages/NewExercise";
-import EditExercisePage from "./pages/EditExercise";
-import ExerciseLayout from "./layouts/ExerciseLayout";
-import LoginPage from "./pages/Login";
 import "./App.css";
+import ExerciseLayout from "./layouts/ExerciseLayout";
+import LoginLayout from "./layouts/LoginLayout";
+import MainLayout from "./layouts/MainLayout";
+import EditExercisePage from "./pages/EditExercise";
+import ErrorPage from "./pages/Error";
+import ExerciseDetailPage from "./pages/ExerciseDetail";
+import ExercisesPage from "./pages/Exercises";
+import HomePage from "./pages/Home";
+import LoginPage from "./pages/Login";
+import NewExercisePage from "./pages/NewExercise";
+import { useContext, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import AuthContext from "./contexts/AuthProvider";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +21,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "login", element: <LoginPage /> },
       {
         path: "exercises",
         element: <ExerciseLayout />,
@@ -30,10 +33,53 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/",
+    element: <LoginLayout />,
+    errorElement: <ErrorPage />,
+    children: [{ path: "login", element: <LoginPage /> }],
+  },
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("test");
+    
+    if (user != null && user.id != "") {
+      toast.success("Login succesful", {
+        toastId: "user-login",
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }, [user]);
+
+  return (
+    <>
+      <RouterProvider router={router} />{" "}
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+    </>
+  );
 };
 
 export default App;

@@ -28,12 +28,12 @@ const ExercisesPage = () => {
             setExercises(res.data);
           })
           .catch((err) => {
-            toast.dismiss();
             toast.error(
               err.code == "ERR_NETWORK"
-                ? "Unable to reach server"
+                ? "Unable to reach the server"
                 : err.response.statusText,
               {
+                toastId: err.code,
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,

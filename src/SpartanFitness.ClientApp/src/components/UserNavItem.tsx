@@ -15,9 +15,9 @@ const UserNavItem = ({ ...props }) => {
         <>
           <Menu.Button
             className={({ open }) =>
-              `flex h-full transition ease-in-out delay-150 hover:scale-105 duration-300 hover:ring-[#2f81f7] hover:hue-rotate-90 ${
+              `flex h-full transition ease-in-out delay-150 hover:scale-110 duration-300 hover:ring-[#2f81f7] hover:hue-rotate-90 ${
                 open
-                  ? "scale-105 ring-[#2f81f7] hue-rotate-90"
+                  ? "scale-110 ring-[#2f81f7] hue-rotate-90"
                   : ""
               }`
             }

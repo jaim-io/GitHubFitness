@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../contexts/AuthProvider";
 import axios from "axios";
+import LogoSvg from "../assets/logo.svg";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/login`;
 
@@ -50,11 +51,12 @@ const LoginPage = () => {
         .catch((err) => {
           toast.error(
             err.code == "ERR_NETWORK"
-              ? "Unable to reach server"
+              ? "Unable to reach the server"
               : err.response.status == 400
               ? "Invalid credentials."
               : err.response.statusText,
             {
+              toastId: err.code,
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -79,7 +81,14 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex justify-center pt-28 pb-1">
+      <div className="flex justify-center pt-28 pb-10">
+        <div className="">
+          <img src={LogoSvg} className="w-[10rem] h-[10rem] mx-auto" />
+          <p>Sign in to SpartanFitness</p>
+        </div>
+      </div>
+
+      <div className="flex justify-center pb-1">
         <form
           onSubmit={(e) => handleLogin(e)}
           id="login-form"
@@ -130,7 +139,8 @@ const LoginPage = () => {
           </div>
         </form>
       </div>
-      <div className="flex justify-center w-full">
+
+      <div className="flex justify-center">
         <p className="px-10 pt-6 pb-5 mb-4 border border-[#30363d] max-w-sm rounded-lg">
           Not a Spartan yet?{" "}
           <Link to="/register" className="text-[#2f81f7]">
@@ -139,6 +149,7 @@ const LoginPage = () => {
           .
         </p>
       </div>
+
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

@@ -32,7 +32,7 @@ const ExerciseDetailPage = () => {
             toast.dismiss();
             toast.error(
               err.code == "ERR_NETWORK"
-                ? "Unable to reach server"
+                ? "Unable to reach the server"
                 : err.response.statusText,
               {
                 position: "bottom-right",
