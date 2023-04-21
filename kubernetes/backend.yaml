@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: backend
   labels:
-    app: githubfitness
+    app: spartanfitness
     tier: backend
 spec:
   type: ClusterIP
   selector:
-    app: githubfitness
+    app: spartanfitness
     tier: backend
   ports:
     - port: 8001
@@ -21,17 +21,17 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: githubfitness
+      app: spartanfitness
       tier: backend
   template:
     metadata:
       labels:
-        app: githubfitness
+        app: spartanfitness
         tier: backend
     spec:
       containers:
         - name: aspnetcore
-          image: jamey010/githubfitness:backend-latest
+          image: jamey010/spartanfitness:backend-latest
           resources:
             limits:
               memory: "128Mi"

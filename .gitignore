@@ -9,30 +9,30 @@
 
 scripts/setup-db.ps1
 
-## [GitHubFitness.Infrastructure] ##
-src/GitHubFitness.Infrastructure/MSSQL/Data/*
-src/GitHubFitness.Infrastructure/MSSQL/Log/*
-src/GitHubFitness.Infrastructure/MSSQL/Secrets/*
+## [SpartanFitness.Infrastructure] ##
+src/SpartanFitness.Infrastructure/MSSQL/Data/*
+src/SpartanFitness.Infrastructure/MSSQL/Log/*
+src/SpartanFitness.Infrastructure/MSSQL/Secrets/*
 
-## [GitHubFitness.ClientApp] ##
+## [SpartanFitness.ClientApp] ##
 # dependencies
-src/GitHubFitness.ClientApp/node_modules
-src/GitHubFitness.ClientApp/.pnp
-src/GitHubFitness.ClientApp/.pnp.js
+src/SpartanFitness.ClientApp/node_modules
+src/SpartanFitness.ClientApp/.pnp
+src/SpartanFitness.ClientApp/.pnp.js
 
 # testing
-src/GitHubFitness.ClientApp/coverage
+src/SpartanFitness.ClientApp/coverage
 
 # production
-src/GitHubFitness.ClientApp/build
+src/SpartanFitness.ClientApp/build
 
 # misc
-src/GitHubFitness.ClientApp/.DS_Store
-src/GitHubFitness.ClientApp/.env.local
-src/GitHubFitness.ClientApp/.env.development.local
-src/GitHubFitness.ClientApp/.env.test.local
-src/GitHubFitness.ClientApp/.env.production.local
+src/SpartanFitness.ClientApp/.DS_Store
+src/SpartanFitness.ClientApp/.env.local
+src/SpartanFitness.ClientApp/.env.development.local
+src/SpartanFitness.ClientApp/.env.test.local
+src/SpartanFitness.ClientApp/.env.production.local
 
-src/GitHubFitness.ClientApp/npm-debug.log*
-src/GitHubFitness.ClientApp/yarn-debug.log*
-src/GitHubFitness.ClientApp/yarn-error.log*
+src/SpartanFitness.ClientApp/npm-debug.log*
+src/SpartanFitness.ClientApp/yarn-debug.log*
+src/SpartanFitness.ClientApp/yarn-error.log*

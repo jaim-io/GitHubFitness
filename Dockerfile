@@ -21,4 +21,4 @@ ENV ASPNETCORE_ENVIRONMENT=Production
 RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
-CMD [ "dotnet", "GitHubFitness.Api.dll" ]
+CMD [ "dotnet", "SpartanFitness.Api.dll" ]

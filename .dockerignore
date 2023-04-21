@@ -1,7 +1,8 @@
 **/.vs
 **/.vscode
-
-.github/
+**/bin
+**/obj
+.github
 Docs/
 Requests/
-src/GitHubFitness.ClientApp/
+src/src/SpartanFitness.ClientApp/

@@ -25,7 +25,7 @@ POST {{host}}/auth/register
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://randomimage.com",
-    "email": "jameyschaap@githubfitness.com",
+    "email": "jameyschaap@spartanfitness.com",
     "password": "jamey123!"
 }
 ```
@@ -42,7 +42,7 @@ POST {{host}}/auth/register
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://randomimage.com",
-    "email": "jameyschaap@githubfitness.com",
+    "email": "jameyschaap@spartanfitness.com",
     "token": "eyJbh..z0dqcnXoY"
 }
 ```
@@ -61,7 +61,7 @@ POST {{host}}/auth/register
 
 ```json
 {
-    "email": "jameyschaap@githubfitness.com",
+    "email": "jameyschaap@spartanfitness.com",
     "password": "jamey123!"
 }
 ```
@@ -78,7 +78,7 @@ POST {{host}}/auth/register
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://randomimage.com",
-    "email": "jameyschaap@githubfitness.com",
+    "email": "jameyschaap@spartanfitness.com",
     "token": "eyJbh..z0dqcnXoY"
 }
 ```

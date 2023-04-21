@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: frontend
   labels:
-    app: githubfitness
+    app: spartanfitness
     tier: frontend
 spec:
   type: LoadBalancer
   selector:
-    app: githubfitness
+    app: spartanfitness
     tier: frontend
   ports:
     - port: 8000
@@ -22,17 +22,17 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: githubfitness
+      app: spartanfitness
       tier: frontend
   template:
     metadata:
       labels:
-        app: githubfitness
+        app: spartanfitness
         tier: frontend
     spec:
       containers:
         - name: vite-react
-          image: jamey010/githubfitness:frontend-latest
+          image: jamey010/spartanfitness:frontend-latest
           resources:
             limits:
               memory: "128Mi"

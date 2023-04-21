@@ -1,12 +1,12 @@
 version: '1.0.0'
 services:
   db:
-    container_name: githubfitness-db
+    container_name: spartanfitness-db
     image: mcr.microsoft.com/mssql/server:2022-latest
     volumes:
-      - ./src/GitHubFitness.Infrastructure/MSSQL/Data:/var/opt/mssql/data:rw
-      - ./src/GitHubFitness.Infrastructure/MSSQL/Log:/var/opt/mssql/log:rw
-      - ./src/GitHubFitness.Infrastructure/MSSQL/Secrets:/var/opt/mssql/secrets:rw
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Data:/var/opt/mssql/data:rw
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Log:/var/opt/mssql/log:rw
+      - ./src/SpartanFitness.Infrastructure/MSSQL/Secrets:/var/opt/mssql/secrets:rw
     env_file:
       - ./.db.env
     ports:
@@ -15,8 +15,8 @@ services:
   api:
     depends_on:
       - db
-    container_name: githubfitness-api
-    image: githubfitness-api:latest
+    container_name: spartanfitness-api
+    image: spartanfitness-api:latest
     build: 
       context: ./
       dockerfile: Dockerfile
@@ -26,13 +26,13 @@ services:
       - db:mssql
 
   web:
-    container_name: githubfitness-web
-    image: githubfitness-web:latest
+    container_name: spartanfitness-web
+    image: spartanfitness-web:latest
     build: 
-      context: ./src/GitHubFitness.ClientApp/
+      context: ./src/SpartanFitness.ClientApp/
       dockerfile: Dockerfile
     env_file:
-      - ./src/GitHubFitness.ClientApp/.env
+      - ./src/SpartanFitness.ClientApp/.env
     ports:
     #   - 80:80
       - 8000:8000
