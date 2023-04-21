@@ -1,0 +1,33 @@
+using GitHubFitness.Domain.Common.Models;
+
+namespace GitHubFitness.Domain.ValueObjects;
+
+public sealed class WorkoutId : ValueObject
+{
+  public Guid Value { get; private set; }
+
+  public WorkoutId(Guid value)
+  {
+    Value = value;
+  }
+
+  public static WorkoutId Create(Guid value)
+  {
+    return new(value);
+  }
+
+  public static WorkoutId Create(string value)
+  {
+    return new(Guid.Parse(value));
+  }
+
+  public static WorkoutId CreateUnique()
+  {
+    return new(Guid.NewGuid());
+  }
+
+  public override IEnumerable<object> GetEqualityComponents()
+  {
+    yield return Value;
+  }
+}

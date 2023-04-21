@@ -15,7 +15,7 @@ class User
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://randomimage.com",
-    "email": "jameyschaap@spartanfitness.com",
+    "email": "jameyschaap@githubfitness.com",
     "password": "jamey123!", // TODO: Hash and Salt this
     "createdDateTime": "2023-01-01T00:00:00.0000000Z",
     "updatedDateTime": "2023-01-01T00:00:00.0000000Z"

@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: database
   labels:
-    app: spartanfitness
+    app: githubfitness
     tier: database
 spec:
   type: ClusterIP
   selector:
-    app: spartanfitness
+    app: githubfitness
     tier: database
   ports:
     - port: 1433
@@ -21,12 +21,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: spartanfitness
+      app: githubfitness
       tier: database
   template:
     metadata:
       labels:
-        app: spartanfitness
+        app: githubfitness
         tier: database
     spec:
       containers:
