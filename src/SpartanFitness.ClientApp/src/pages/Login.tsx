@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AuthenticationResponse from "../types/AuthenticationResponse";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -82,14 +82,12 @@ const LoginPage = () => {
       <form
         onSubmit={(e) => handleLogin(e)}
         id="login-form"
-        className="w-full max-w-xs m-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
+        className="w-full max-w-sm m-auto bg-[#161b22] shadow-xl rounded-lg px-8 pt-6 pb-5 mb-4 border border-[#30363d]"
       >
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email
-          </label>
+        <div className="mb-3">
+          <label className="block text-white mb-2 ml-1">Email adress</label>
           <input
-            className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border border-[#30363d] rounded-lg w-full py-2 px-3 text-white leading-tight focus:outline focus:outline-[#2f81f7] focus:shadow-outline bg-[#0d1117]"
             id="username"
             type="text"
             placeholder="example@gmail.com"
@@ -99,12 +97,15 @@ const LoginPage = () => {
             autoComplete="off"
           />
         </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Password
-          </label>
+        <div className="mb-1">
+          <div className="relative">
+            <label className="block text-white mb-2 ml-1">Password</label>
+            <NavLink to="/temp" className="absolute top-0 right-0 text-[#2f81f7]">
+              Forgot Password?
+            </NavLink>
+          </div>
           <input
-            className="shadow appearance-none border border-red-500 rounded-lg w-full py-2 px-3 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border border-[#30363d] rounded-lg w-full py-2 px-3 text-white mb-3 leading-tight focus:outline focus:outline-[#2f81f7] focus:shadow-outline bg-[#0d1117]"
             id="password"
             type="password"
             placeholder="******************"
@@ -112,25 +113,16 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <p className="text-red-500 text-xs italic">
-            Please choose a password.
-          </p>
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-red hover:bg-[#ff809c] text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+            className="bg-[#238636] hover:bg-[#2EA043] text-white py-1 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full block"
             type="submit"
             value="Submit"
             form="login-form"
           >
             Sign In
           </button>
-          <a
-            className="inline-block align-baseline font-bold text-sm text-red hover:text-[#ff809c]"
-            href="#"
-          >
-            Forgot Password?
-          </a>
         </div>
       </form>
 
