@@ -1,63 +1,12 @@
-import { useEffect, useState } from "react";
-import Exercise from "../types/Exercise";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import ExerciseCard from "../components/ExerciseCard";
 import { Link } from "react-router-dom";
 import { Listbox } from "@headlessui/react";
-
-const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
+import useExercises from "../hooks/useExercises";
 
 const ExercisesPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [exercises, setExercises] = useState<Exercise[]>();
-  const [error, setError] = useState<Exception | null>(null);
-
-  useEffect(() => {
-    const fetchExercises = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        await axios
-          .get<Exercise[]>(EXERCISE_ENDPOINT, {
-            headers: {
-              Accept: "application/json",
-              Authorization: `bearer ${localStorage.getItem("token")}`,
-            },
-          })
-          .then((res) => {
-            setExercises(res.data);
-          })
-          .catch((err) => {
-            toast.error(
-              err.code == "ERR_NETWORK"
-                ? "Unable to reach the server"
-                : err.response.statusText,
-              {
-                toastId: err.code,
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-              },
-            );
-            setError({
-              message: err.response.statusText,
-              code: err.response.status,
-            });
-          });
-      } catch {}
-
-      setIsLoading(false);
-    };
-
-    fetchExercises();
-  }, []);
+  const result = useExercises();
+  const [_, exercises] = result.extract();
 
   return (
     <div className="px-24 pt-6">
