@@ -15,7 +15,7 @@ const AuthNavItem = ({
   ...props
 }: Props) => {
   return (
-    <li className={`${border ? "border border-[#30363d] rounded-lg" : ""}`}>
+    <div className={`${border ? "border border-[#30363d] rounded-lg" : ""}`}>
       <NavLink
         to={path}
         target={target}
@@ -29,7 +29,7 @@ const AuthNavItem = ({
       >
         {children}
       </NavLink>
-    </li>
+    </div>
   );
 };
 

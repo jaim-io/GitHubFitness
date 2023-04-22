@@ -45,8 +45,6 @@ const App = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("test");
-    
     if (user != null && user.id != "") {
       toast.success("Login succesful", {
         toastId: "user-login",

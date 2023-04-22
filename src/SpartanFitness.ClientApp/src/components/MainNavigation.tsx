@@ -23,7 +23,7 @@ const MainNavigation = () => {
           <MainNavItem path="/" children="Home" />
           <MainNavItem path="/exercises" children="Exercises" />
         </ul>
-        <div className="hidden w-full md:block md:w-auto">
+        <div className="w-full md:block md:w-auto">
           <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">
             {user && <UserNavItem />}
             {!user && <AuthNavItem path="/login" children="Sign in" />}
