@@ -2,18 +2,17 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Exercise from "../types/Exercise";
-import { Result, inl, inr } from "../types/Result";
+import { Result, createException, createValue } from "../types/Result";
 import Exception from "../types/Exception";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
 const useExercise = (id: string | undefined): Result<Exercise> => {
   const [exercise, setExercise] = useState<Exercise>();
-  const [error, setError] = useState<Exception | null>(null);
+  const [error, setError] = useState<Exception>();
 
   useEffect(() => {
     const fetchExercise = async () => {
-      setError(null);
 
       try {
         await axios
@@ -27,12 +26,12 @@ const useExercise = (id: string | undefined): Result<Exercise> => {
             setExercise(res.data);
           })
           .catch((err) => {
-            toast.dismiss();
             toast.error(
               err.code == "ERR_NETWORK"
                 ? "Unable to reach the server"
                 : err.response.statusText,
               {
+                toastId: err.code,
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -55,8 +54,8 @@ const useExercise = (id: string | undefined): Result<Exercise> => {
   }, []);
 
   return exercise == undefined
-    ? inl<Exercise>()(error!)
-    : inr<Exercise>()(exercise!);
+    ? createException<Exercise>()(error!)
+    : createValue<Exercise>()(exercise!);
 };
 
 export default useExercise;

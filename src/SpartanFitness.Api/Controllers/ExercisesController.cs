@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Exercises.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
-using SpartanFitness.Application.Exercises.Queries.GetExerciseList;
+using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
+using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Exercises;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers;
@@ -30,14 +32,14 @@ public class ExercisesController : ApiController
     _mapper = mapper;
   }
 
-  [HttpGet]
-  public async Task<IActionResult> GetExercises()
+  [HttpGet("{page:int?}/{size:int?}/{sort?}/{search?}")]
+  public async Task<IActionResult> GetExercises([FromQuery] PagingRequest request, [FromQuery] ExerciseFilters filters)
   {
-    var query = new GetExerciseListQuery();
-    ErrorOr<List<Exercise>> exercisesResult = await _mediator.Send(query);
+    var query = _mapper.Map<GetExercisePageQuery>((request, filters));
+    ErrorOr<Page<Exercise>> exercisesResult = await _mediator.Send(query);
 
     return exercisesResult.Match(
-      exercises => Ok(exercises.ConvertAll(e => _mapper.Map<ExerciseResponse>(e))),
+      exercisesPage => Ok(_mapper.Map<ExercisePageResponse>(exercisesPage)),
       errors => Problem(errors));
   }
 

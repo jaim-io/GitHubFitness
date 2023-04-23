@@ -36,9 +36,12 @@ public class ExerciseRepository
         : true;
   }
 
-  public async Task<List<Exercise>> GetAll()
+  public IEnumerable<Exercise> GetAll(Func<Exercise, bool>? filter)
   {
-    return await _dbContext.Exercises.ToListAsync();
+    return filter == null
+      ? _dbContext.Exercises
+      : _dbContext.Exercises
+        .Where(filter);
   }
 
   public async Task<Exercise?> GetByIdAsync(ExerciseId id)
