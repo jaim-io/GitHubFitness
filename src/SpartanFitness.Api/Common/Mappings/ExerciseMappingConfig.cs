@@ -23,12 +23,12 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value))
       .Map(dest => dest, src => src);
 
-    config.NewConfig<(PagingRequest Request, ExerciseFilters Filters), GetExercisePageQuery>()
-      .Map(dest => dest.PageNumber, src => src.Request.Page)
-      .Map(dest => dest.PageSize, src => src.Request.Size)
-      .Map(dest => dest.Sort, src => src.Request.Sort)
-      .Map(dest => dest.SearchQuery, src => src.Request.Search)
-      .Map(dest => dest, src => src.Filters);
+    config.NewConfig<PagingRequest, GetExercisePageQuery>()
+      .Map(dest => dest.PageNumber, src => src.Page)
+      .Map(dest => dest.PageSize, src => src.Size)
+      .Map(dest => dest.Sort, src => src.Sort)
+      .Map(dest => dest.SearchQuery, src => src.Search)
+      .Map(dest => dest, src => src);
 
     config.NewConfig<Page<Exercise>, ExercisePageResponse>()
       .Map(dest => dest.Exercises, src => src.Content)
