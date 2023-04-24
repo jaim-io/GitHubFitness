@@ -4,26 +4,28 @@ import { toast } from "react-toastify";
 import Exercise from "../types/Exercise";
 import { Result, createException, createValue } from "../types/Result";
 import Exception from "../types/Exception";
+import Page from "../types/base/Page";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
-const useExercises = (): Result<Exercise[]> => {
-  const [exercises, setExercises] = useState<Exercise[]>();
+export type ExercisesPage = { exercises: Exercise[] } & Page;
+
+const useExercises = (page: number, size: number): Result<ExercisesPage> => {
+  const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
 
   useEffect(() => {
     const fetchExercises = async () => {
-
       try {
         await axios
-          .get<Exercise[]>(EXERCISE_ENDPOINT, {
+          .get<ExercisesPage>(`${EXERCISE_ENDPOINT}?page=${page}&size=${size}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setExercises(res.data);
+            setExercisePage(res.data);
           })
           .catch((err) => {
             toast.error(
@@ -51,11 +53,11 @@ const useExercises = (): Result<Exercise[]> => {
     };
 
     fetchExercises();
-  }, []);
+  }, [page, size]);
 
-  return exercises == undefined
-    ? createException<Exercise[]>()(error!)
-    : createValue<Exercise[]>()(exercises!);
+  return exercisesPage == undefined
+    ? createException<ExercisesPage>()(error!)
+    : createValue<ExercisesPage>()(exercisesPage!);
 };
 
 export default useExercises;
