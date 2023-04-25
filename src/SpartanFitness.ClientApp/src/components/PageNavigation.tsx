@@ -6,124 +6,86 @@ type Props = {
   paginate: (page: number) => void;
 };
 
+const range = (start: number, end: number): number[] => {
+  const length = end - start;
+  return Array.from({ length }, (_, i) => i + start);
+};
+
+const paginationRange = (
+  pageNumber: number,
+  pageCount: number,
+  siblings: number,
+) => {
+  const totalSiblings = siblings * 2;
+  let res: number[];
+
+  if (pageCount == 1) {
+    res = [];
+  } else if (pageCount == 2) {
+    res = [2];
+  } else if (pageNumber - siblings <= 1) {
+    res = range(
+      2,
+      pageCount > totalSiblings + 1 ? totalSiblings + 2 + 1 : pageCount,
+    );
+  } else if (pageNumber + siblings >= pageCount) {
+    res = range(
+      pageCount - totalSiblings - 1 > 1 ? pageCount - totalSiblings - 1 : 2,
+      pageCount,
+    );
+  } else {
+    res = range(pageNumber - siblings, pageNumber + siblings + 1);
+  }
+
+  return res;
+};
+
 const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
+  const siblings = 2;
+
+  const pageRange = paginationRange(pageNumber, pageCount, siblings);
+
+  if (pageNumber < 1) {
+    return null;
+  }
+
   return (
     <div className="flex justify-center">
+      <button
+        onClick={() => paginate(pageNumber - 1)}
+        className={`${
+          pageNumber - 1 <= 0 ? "cursor-not-allowed text-gray-400" : ""
+        }`}
+        disabled={pageNumber - 1 <= 0}
+      >
+        prev
+      </button>
+
       <PageNavigationItem
         number={1}
         isActive={pageNumber == 1}
         paginate={paginate}
       />
 
-      {pageCount >= 2 && pageNumber < 4 && (
-        <PageNavigationItem
-          number={2}
-          key={2}
-          isActive={pageNumber == 2}
-          paginate={paginate}
-        />
-      )}
-      {pageCount >= 3 && pageNumber < 4 && (
-        <PageNavigationItem
-          number={3}
-          key={3}
-          isActive={pageNumber == 3}
-          paginate={paginate}
-        />
-      )}
-      {pageCount >= 4 && pageNumber < 4 && (
-        <PageNavigationItem
-          number={4}
-          key={4}
-          isActive={pageNumber == 4}
-          paginate={paginate}
-        />
-      )}
-      {pageCount >= 5 && pageNumber < 4 && (
-        <PageNavigationItem
-          number={5}
-          key={5}
-          isActive={pageNumber == 5}
-          paginate={paginate}
-        />
-      )}
-      {pageCount >= 6 && pageNumber < 4 && (
-        <PageNavigationItem
-          number={6}
-          key={6}
-          isActive={pageNumber == 6}
-          paginate={paginate}
-        />
+      {!(pageRange.length == 0) && !(pageRange[0] <= 2) && (
+        <p className="text-xl">...</p>
       )}
 
-      {pageNumber >= 4 &&
-        pageNumber <= pageCount - 4 && [
-          <PageNavigationItem
-            number={pageNumber - 2}
-            key={pageNumber - 2}
-            isActive={false}
-            paginate={paginate}
-          />,
-          <PageNavigationItem
-            number={pageNumber - 1}
-            key={pageNumber - 1}
-            isActive={false}
-            paginate={paginate}
-          />,
-          <PageNavigationItem
-            number={pageNumber}
-            key={pageNumber}
-            isActive={true}
-            paginate={paginate}
-          />,
-          <PageNavigationItem
-            number={pageNumber + 1}
-            key={pageNumber + 1}
-            isActive={false}
-            paginate={paginate}
-          />,
-          <PageNavigationItem
-            number={pageNumber + 2}
-            key={pageNumber + 2}
-            isActive={false}
-            paginate={paginate}
-          />,
-        ]}
+      {pageRange.map((n) => (
+        <PageNavigationItem
+          number={n}
+          key={n}
+          isActive={pageNumber == n}
+          paginate={paginate}
+        />
+      ))}
 
-      {pageNumber <= pageCount - 4 && [
-        <PageNavigationItem
-          number={pageCount - 5}
-          key={pageCount - 5}
-          isActive={pageCount - 5 == pageNumber}
-          paginate={paginate}
-        />,
-        <PageNavigationItem
-          number={pageCount - 4}
-          key={pageCount - 4}
-          isActive={pageCount - 4 == pageNumber}
-          paginate={paginate}
-        />,
-        <PageNavigationItem
-          number={pageCount - 3}
-          key={pageCount - 3}
-          isActive={pageCount - 3 == pageNumber}
-          paginate={paginate}
-        />,
-        <PageNavigationItem
-          number={pageCount - 2}
-          key={pageCount - 2}
-          isActive={pageCount - 2 == pageNumber}
-          paginate={paginate}
-        />,
-        <PageNavigationItem
-          number={pageCount - 1}
-          key={pageCount - 1}
-          isActive={pageCount - 1 == pageNumber}
-          paginate={paginate}
-        />,
-      ]}
+      {!(pageRange.length == 0) &&
+        !(pageRange[pageRange.length - 1] + 1 >= pageCount) && (
+          <p className="text-xl">...</p>
+        )}
 
-      {pageCount >= 7 && (
+      {pageCount > pageRange[pageRange.length - 1] && (
         <PageNavigationItem
           number={pageCount}
           key={pageCount}
@@ -131,6 +93,16 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
           paginate={paginate}
         />
       )}
+
+      <button
+        onClick={() => paginate(pageNumber + 1)}
+        className={`${
+          pageNumber + 1 > pageCount ? "cursor-not-allowed text-gray-400" : ""
+        }`}
+        disabled={pageNumber + 1 > pageCount}
+      >
+        next
+      </button>
     </div>
   );
 };

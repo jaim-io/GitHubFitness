@@ -32,7 +32,6 @@ const ExercisesPage = () => {
   };
 
   const result = useExercises(currentPage, pageSize);
-
   const [_, page] = result.extract();
 
   return (
