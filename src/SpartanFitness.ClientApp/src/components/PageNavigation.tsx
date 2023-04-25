@@ -1,4 +1,6 @@
 import PageNavigationItem from "./PageNavigationItem";
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 type Props = {
   pageNumber: number;
@@ -50,15 +52,17 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center">
       <button
         onClick={() => paginate(pageNumber - 1)}
-        className={`${
-          pageNumber - 1 <= 0 ? "cursor-not-allowed text-gray-400" : ""
+        className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pl-2 py-1.5 pr-[0.75rem] mr-1 ${
+          pageNumber - 1 <= 0
+            ? "cursor-not-allowed text-[#484F58]"
+            : "text-[#2f81f7]"
         }`}
         disabled={pageNumber - 1 <= 0}
       >
-        prev
+        <FiChevronLeft className="mr-1" /> prev
       </button>
 
       <PageNavigationItem
@@ -68,7 +72,7 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
       />
 
       {!(pageRange.length == 0) && !(pageRange[0] <= 2) && (
-        <p className="text-xl">...</p>
+        <BiDotsHorizontalRounded />
       )}
 
       {pageRange.map((n) => (
@@ -82,7 +86,7 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
 
       {!(pageRange.length == 0) &&
         !(pageRange[pageRange.length - 1] + 1 >= pageCount) && (
-          <p className="text-xl">...</p>
+          <BiDotsHorizontalRounded />
         )}
 
       {pageCount > pageRange[pageRange.length - 1] && (
@@ -96,12 +100,14 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
 
       <button
         onClick={() => paginate(pageNumber + 1)}
-        className={`${
-          pageNumber + 1 > pageCount ? "cursor-not-allowed text-gray-400" : ""
+        className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pl-2 py-1.5 pr-[0.75rem] ${
+          pageNumber + 1 > pageCount
+            ? "cursor-not-allowed text-[#484F58]"
+            : "text-[#2f81f7]"
         }`}
         disabled={pageNumber + 1 > pageCount}
       >
-        next
+        next <FiChevronRight className="ml-1" />
       </button>
     </div>
   );

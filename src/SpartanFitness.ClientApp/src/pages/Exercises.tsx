@@ -35,7 +35,7 @@ const ExercisesPage = () => {
   const [_, page] = result.extract();
 
   return (
-    <div className="px-24 pt-6">
+    <div className="px-24 pt-6 pb-8">
       <Link
         to=""
         className="text-xl font-semibold text-[#2f81f7] hover:underline hover:underline-[#2f81f7] max-w-[8rem]"
