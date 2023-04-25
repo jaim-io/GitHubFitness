@@ -10,12 +10,15 @@ const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
 export type ExercisesPage = { exercises: Exercise[] } & Page;
 
-const useExercises = (page: number, size: number): Result<ExercisesPage> => {
+const useExercises = (page: number, size: number): [Result<ExercisesPage>, boolean] => {
   const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchExercises = async () => {
+      setIsLoading(true);
+      
       try {
         await axios
           .get<ExercisesPage>(`${EXERCISE_ENDPOINT}?page=${page}&size=${size}`, {
@@ -26,6 +29,7 @@ const useExercises = (page: number, size: number): Result<ExercisesPage> => {
           })
           .then((res) => {
             setExercisePage(res.data);
+            setIsLoading(false);
           })
           .catch((err) => {
             toast.error(
@@ -44,6 +48,7 @@ const useExercises = (page: number, size: number): Result<ExercisesPage> => {
                 theme: "colored",
               },
             );
+            setIsLoading(false);
             setError({
               message: err.response.statusText,
               code: err.response.status,
@@ -56,8 +61,8 @@ const useExercises = (page: number, size: number): Result<ExercisesPage> => {
   }, [page, size]);
 
   return exercisesPage == undefined
-    ? createException<ExercisesPage>()(error!)
-    : createValue<ExercisesPage>()(exercisesPage!);
+    ? [createException<ExercisesPage>()(error!), isLoading]
+    : [createValue<ExercisesPage>()(exercisesPage!), isLoading];
 };
 
 export default useExercises;

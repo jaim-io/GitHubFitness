@@ -1,6 +1,5 @@
-import { ToastContainer, toast } from "react-toastify";
 import ExerciseCard from "../components/ExerciseCard";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Listbox } from "@headlessui/react";
 import useExercises from "../hooks/useExercises";
 import PageNavigation from "../components/PageNavigation";
@@ -31,8 +30,8 @@ const ExercisesPage = () => {
     setSearchParams({ page: page.toString(), size: getPageSize().toString() });
   };
 
-  const result = useExercises(currentPage, pageSize);
-  const [_, page] = result.extract();
+  const [result, isLoading] = useExercises(currentPage, pageSize);
+  const [error, page] = result.extract();
 
   return (
     <div className="px-24 pt-6 pb-8">
@@ -69,19 +68,6 @@ const ExercisesPage = () => {
           />
         )}
       </div>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../contexts/AuthProvider";
 import axios from "axios";
 import LogoSvg from "../assets/logo.svg";
+import Exception from "../types/Exception";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/login`;
 
@@ -149,19 +150,6 @@ const LoginPage = () => {
           .
         </p>
       </div>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </>
   );
 };

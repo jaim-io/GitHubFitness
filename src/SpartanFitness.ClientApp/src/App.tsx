@@ -11,7 +11,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import NewExercisePage from "./pages/NewExercise";
 import { useContext, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import AuthContext from "./contexts/AuthProvider";
 
 const router = createBrowserRouter([
@@ -63,19 +63,6 @@ const App = () => {
   return (
     <>
       <RouterProvider router={router} />{" "}
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </>
   );
 };
