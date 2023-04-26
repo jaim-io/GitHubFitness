@@ -1,6 +1,6 @@
 type Exception = {
   message: string;
-  code: number;
+  code: string;
 };
 
 export default Exception;

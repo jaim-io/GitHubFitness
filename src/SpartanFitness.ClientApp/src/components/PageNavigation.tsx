@@ -6,6 +6,7 @@ type Props = {
   pageNumber: number;
   pageCount: number;
   paginate: (page: number) => void;
+  className: string;
 };
 
 const range = (start: number, end: number): number[] => {
@@ -42,7 +43,12 @@ const paginationRange = (
   return res;
 };
 
-const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
+const PageNavigation = ({
+  pageNumber,
+  pageCount,
+  paginate,
+  className,
+}: Props) => {
   const siblings = 2;
 
   const pageRange = paginationRange(pageNumber, pageCount, siblings);
@@ -52,7 +58,7 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
   }
 
   return (
-    <div className="flex justify-center items-center">
+    <div className={"flex justify-center items-center " + className}>
       <button
         onClick={() => paginate(pageNumber - 1)}
         className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pl-2 py-1.5 pr-[0.75rem] mr-1 ${
@@ -100,7 +106,7 @@ const PageNavigation = ({ pageNumber, pageCount, paginate }: Props) => {
 
       <button
         onClick={() => paginate(pageNumber + 1)}
-        className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pl-2 py-1.5 pr-[0.75rem] ${
+        className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pr-2 py-1.5 pl-[0.75rem] ${
           pageNumber + 1 > pageCount
             ? "cursor-not-allowed text-[#484F58]"
             : "text-[#2f81f7]"

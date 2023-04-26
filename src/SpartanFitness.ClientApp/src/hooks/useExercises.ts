@@ -10,7 +10,10 @@ const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
 export type ExercisesPage = { exercises: Exercise[] } & Page;
 
-const useExercises = (page: number, size: number): [Result<ExercisesPage>, boolean] => {
+const useExercises = (
+  page: number,
+  size: number,
+): [Result<ExercisesPage>, boolean] => {
   const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
@@ -18,20 +21,28 @@ const useExercises = (page: number, size: number): [Result<ExercisesPage>, boole
   useEffect(() => {
     const fetchExercises = async () => {
       setIsLoading(true);
-      
+
       try {
         await axios
-          .get<ExercisesPage>(`${EXERCISE_ENDPOINT}?page=${page}&size=${size}`, {
-            headers: {
-              Accept: "application/json",
-              Authorization: `bearer ${localStorage.getItem("token")}`,
+          .get<ExercisesPage>(
+            `${EXERCISE_ENDPOINT}?page=${page}&size=${size}`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `bearer ${localStorage.getItem("token")}`,
+              },
             },
-          })
+          )
           .then((res) => {
             setExercisePage(res.data);
             setIsLoading(false);
           })
           .catch((err) => {
+            setIsLoading(false);
+            setError({
+              message: err.message,
+              code: err.code,
+            });
             toast.error(
               err.code == "ERR_NETWORK"
                 ? "Unable to reach the server"
@@ -48,11 +59,6 @@ const useExercises = (page: number, size: number): [Result<ExercisesPage>, boole
                 theme: "colored",
               },
             );
-            setIsLoading(false);
-            setError({
-              message: err.response.statusText,
-              code: err.response.status,
-            });
           });
       } catch {}
     };

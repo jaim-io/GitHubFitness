@@ -5,7 +5,7 @@ import useExercise from "../hooks/useExercise";
 const ExerciseDetailPage = () => {
   const params = useParams();
 
-  const result = useExercise(params.exerciseId);
+  const [result, isLoading] = useExercise(params.exerciseId);
   const [_, exercise] = result.extract();
 
   return (

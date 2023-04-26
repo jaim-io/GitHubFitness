@@ -7,12 +7,14 @@ import Exception from "../types/Exception";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
-const useExercise = (id: string | undefined): Result<Exercise> => {
+const useExercise = (id: string | undefined): [Result<Exercise>, boolean] => {
   const [exercise, setExercise] = useState<Exercise>();
   const [error, setError] = useState<Exception>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchExercise = async () => {
+      setIsLoading(true);
 
       try {
         await axios
@@ -24,8 +26,14 @@ const useExercise = (id: string | undefined): Result<Exercise> => {
           })
           .then((res) => {
             setExercise(res.data);
+            setIsLoading(false);
           })
           .catch((err) => {
+            setIsLoading(false);
+            setError({
+              message: err.message,
+              code: err.code,
+            });
             toast.error(
               err.code == "ERR_NETWORK"
                 ? "Unable to reach the server"
@@ -42,10 +50,6 @@ const useExercise = (id: string | undefined): Result<Exercise> => {
                 theme: "colored",
               },
             );
-            setError({
-              message: err.response.statusText,
-              code: err.response.status,
-            });
           });
       } catch {}
     };
@@ -54,8 +58,8 @@ const useExercise = (id: string | undefined): Result<Exercise> => {
   }, []);
 
   return exercise == undefined
-    ? createException<Exercise>()(error!)
-    : createValue<Exercise>()(exercise!);
+    ? [createException<Exercise>()(error!), isLoading]
+    : [createValue<Exercise>()(exercise!), isLoading];
 };
 
 export default useExercise;
