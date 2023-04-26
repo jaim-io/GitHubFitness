@@ -25,20 +25,18 @@ public class GetExercisePageQueryHandler
     GetExercisePageQuery query,
     CancellationToken cancellationToken)
   {
-    await Task.CompletedTask;
-
-    Func<Exercise, bool>? searchQuery = null;
+    Func<Exercise, bool>? filter = null;
     Guid guid;
     if (Guid.TryParse(query.SearchQuery, out guid))
     {
       var muscleGroupId = MuscleGroupId.Create(guid);
       var creatorId = CoachId.Create(guid);
 
-      searchQuery = (ex) => ex.CreatorId.Equals(creatorId) || ex.MuscleGroupIds.Contains(muscleGroupId);
+      filter = (ex) => ex.CreatorId.Equals(creatorId) || ex.MuscleGroupIds.Contains(muscleGroupId);
     }
     else if (query.SearchQuery is not null)
     {
-      searchQuery = (ex) => ex.Name.ToLower().Contains(query.SearchQuery) || ex.Description.ToLower().Contains(query.SearchQuery);
+      filter = (ex) => ex.Name.ToLower().Contains(query.SearchQuery) || ex.Description.ToLower().Contains(query.SearchQuery);
     }
 
     var pageNumber = query.PageNumber ?? 1;
@@ -46,7 +44,15 @@ public class GetExercisePageQueryHandler
     IEnumerable<Exercise> skippedExercises;
     decimal pageCount;
     {
-      var exercises = _exerciseRepository.GetAll(searchQuery ?? null);
+      IEnumerable<Exercise> exercises;
+      if (filter != null)
+      {
+        exercises = _exerciseRepository.GetAllWithFilter(filter);
+      }
+      else
+      {
+        exercises = await _exerciseRepository.GetAllAsync();
+      }
 
       skippedExercises = exercises.Skip((pageNumber - 1) * query.PageSize ?? 0);
       pageCount = query.PageSize == null
@@ -66,12 +72,24 @@ public class GetExercisePageQueryHandler
 
     content = query.Sort switch
     {
-      "name_asc" => content.OrderBy(ex => ex.Name),
-      "name_desc" => content.OrderByDescending(ex => ex.Name),
-      "created_newest" => content.OrderByDescending(ex => ex.CreatedDateTime),
-      "created_oldest" => content.OrderBy(ex => ex.CreatedDateTime),
-      "updated_newest" => content.OrderByDescending(ex => ex.UpdatedDateTime),
-      "updated_oldest" => content.OrderBy(ex => ex.UpdatedDateTime),
+      "name" => query.Order switch
+      {
+        "asc" => content.OrderBy(ex => ex.Name),
+        "desc" => content.OrderByDescending(ex => ex.Name),
+        _ => content.OrderByDescending(ex => ex.Name),
+      },
+      "created" => query.Order switch
+      {
+        "newest" => content.OrderByDescending(ex => ex.CreatedDateTime),
+        "oldest" => content.OrderBy(ex => ex.CreatedDateTime),
+        _ => content.OrderByDescending(ex => ex.CreatedDateTime),
+      },
+      "updated" => query.Order switch
+      {
+        "newest" => content.OrderByDescending(ex => ex.UpdatedDateTime),
+        "oldest" => content.OrderBy(ex => ex.UpdatedDateTime),
+        _ => content.OrderByDescending(ex => ex.UpdatedDateTime),
+      },
       _ => content.OrderByDescending(ex => ex.CreatedDateTime),
     };
 

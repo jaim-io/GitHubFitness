@@ -26,8 +26,7 @@ public class ExerciseMappingConfig : IRegister
     config.NewConfig<PagingRequest, GetExercisePageQuery>()
       .Map(dest => dest.PageNumber, src => src.Page)
       .Map(dest => dest.PageSize, src => src.Size)
-      .Map(dest => dest.Sort, src => src.Sort)
-      .Map(dest => dest.SearchQuery, src => src.Search)
+      .Map(dest => dest.SearchQuery, src => src.Query)
       .Map(dest => dest, src => src);
 
     config.NewConfig<Page<Exercise>, ExercisePageResponse>()

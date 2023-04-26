@@ -18,6 +18,11 @@ const useExercises = (
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const params = new URLSearchParams({
+    p: page.toString(),
+    ls: size.toString(),
+  });
+
   useEffect(() => {
     const fetchExercises = async () => {
       setIsLoading(true);
@@ -25,7 +30,7 @@ const useExercises = (
       try {
         await axios
           .get<ExercisesPage>(
-            `${EXERCISE_ENDPOINT}?page=${page}&size=${size}`,
+            `${EXERCISE_ENDPOINT}?${params}`,
             {
               headers: {
                 Accept: "application/json",

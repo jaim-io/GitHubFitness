@@ -4,35 +4,32 @@ import { Listbox } from "@headlessui/react";
 import useExercises from "../hooks/useExercises";
 import PageNavigation from "../components/PageNavigation";
 import { useState } from "react";
+import CurrentSearchParams from "../types/SearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
 
 const ExercisesPage = () => {
-  // search ? s -> sort, o -> order, q -> query
   const [searchParams, setSearchParams] = useSearchParams();
+  const currentParams = new CurrentSearchParams(searchParams);
 
-  const getCurrentPage = (): number =>
-    searchParams.get("page") != undefined
-      ? +searchParams.get("page")!
-      : DEFAULT_PAGE_NUMBER;
-
-  const getPageSize = (): number =>
-    searchParams.get("size") != undefined
-      ? +searchParams.get("size")!
-      : DEFAULT_PAGE_SIZE;
-
-  const [currentPage, setCurrentPage] = useState<number>(getCurrentPage());
-  const [pageSize, setPageSize] = useState<number>(getPageSize());
+  const [currentPage, setCurrentPage] = useState<number>(
+    currentParams.GetPage(DEFAULT_PAGE_NUMBER),
+  );
+  const [pageSize, setPageSize] = useState<number>(
+    currentParams.GetSize(DEFAULT_PAGE_SIZE),
+  );
+  
+  const [result, isLoading] = useExercises(currentPage, pageSize);
+  const [error, page] = result.extract();
 
   const paginate = (page: number) => {
     setCurrentPage(page);
-    setSearchParams({ page: page.toString(), size: getPageSize().toString() });
+    let params = new URLSearchParams(location.search);
+    params.set("p", page.toString());
+    params.set("ls", currentParams.GetSize(DEFAULT_PAGE_SIZE).toString());
+    setSearchParams(params);
   };
-
-  const [result, isLoading] = useExercises(currentPage, pageSize);
-  const [error, page] = result.extract();
-  console.log(page);
 
   return (
     <div className="px-24 pt-6 pb-8 h-full min-h-[90vh]">
@@ -51,8 +48,8 @@ const ExercisesPage = () => {
         >
           <p>Search-balk</p>
 
-          <p>sort-by-date</p>
-
+          <p>sort-by</p>
+          <p>sort</p>
           {/* <Listbox value={}> 
         <Listbox.Button></Listbox.Button>
         </Listbox> */}

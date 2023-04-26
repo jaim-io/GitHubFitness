@@ -32,7 +32,7 @@ public class ExercisesController : ApiController
     _mapper = mapper;
   }
 
-  [HttpGet("{page:int?}/{size:int?}/{sort?}/{search?}")]
+  [HttpGet("{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
   public async Task<IActionResult> GetExercises([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetExercisePageQuery>(request);

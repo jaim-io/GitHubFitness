@@ -36,12 +36,14 @@ public class ExerciseRepository
         : true;
   }
 
-  public IEnumerable<Exercise> GetAll(Func<Exercise, bool>? filter)
+  public IEnumerable<Exercise> GetAllWithFilter(Func<Exercise, bool> filter)
   {
-    return filter == null
-      ? _dbContext.Exercises
-      : _dbContext.Exercises
-        .Where(filter);
+    return _dbContext.Exercises.Where(filter).ToList();
+  }
+
+  public async Task<IEnumerable<Exercise>> GetAllAsync()
+  {
+    return await _dbContext.Exercises.ToListAsync();
   }
 
   public async Task<Exercise?> GetByIdAsync(ExerciseId id)

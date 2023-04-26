@@ -11,4 +11,5 @@ public record GetExercisePageQuery(
   int? PageSize,
   int? PageNumber,
   string? Sort,
+  string? Order,
   string? SearchQuery) : IRequest<ErrorOr<Page<Exercise>>>;
