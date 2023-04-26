@@ -80,8 +80,6 @@ const LoginPage = () => {
     setIsLoading(false);
   };
 
-  console.log(isLoading);
-
   return (
     <>
       <div className="flex justify-center pt-28 pb-10">

@@ -13,6 +13,8 @@ export type ExercisesPage = { exercises: Exercise[] } & Page;
 const useExercises = (
   page: number,
   size: number,
+  sort?: string,
+  order?: string,
 ): [Result<ExercisesPage>, boolean] => {
   const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
@@ -23,21 +25,26 @@ const useExercises = (
     ls: size.toString(),
   });
 
+  if (sort) {
+    params.set("s", sort!);
+  }
+
+  if (order) {
+    params.set("o", order!);
+  }
+
   useEffect(() => {
     const fetchExercises = async () => {
       setIsLoading(true);
 
       try {
         await axios
-          .get<ExercisesPage>(
-            `${EXERCISE_ENDPOINT}?${params}`,
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization: `bearer ${localStorage.getItem("token")}`,
-              },
+          .get<ExercisesPage>(`${EXERCISE_ENDPOINT}?${params}`, {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
             },
-          )
+          })
           .then((res) => {
             setExercisePage(res.data);
             setIsLoading(false);
@@ -69,7 +76,7 @@ const useExercises = (
     };
 
     fetchExercises();
-  }, [page, size]);
+  }, [page, size, sort, order]);
 
   return exercisesPage == undefined
     ? [createException<ExercisesPage>()(error!), isLoading]

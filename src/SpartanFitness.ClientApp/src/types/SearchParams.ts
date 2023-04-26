@@ -14,6 +14,16 @@ class CurrentSearchParams {
     this.searchParams.get("ls") != undefined
       ? +this.searchParams.get("ls")!
       : defaultValue;
+
+  GetSort = (defaultValue: string): string =>
+    this.searchParams.get("s") != undefined
+      ? this.searchParams.get("s")!
+      : defaultValue;
+
+  GetOrder = (defaultValue: string): string =>
+    this.searchParams.get("o") != undefined
+      ? this.searchParams.get("o")!
+      : defaultValue;
 }
 
 export default CurrentSearchParams;

@@ -1,13 +1,35 @@
-import ExerciseCard from "../components/ExerciseCard";
-import { Link, useSearchParams } from "react-router-dom";
-import { Listbox } from "@headlessui/react";
-import useExercises from "../hooks/useExercises";
-import PageNavigation from "../components/PageNavigation";
 import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import ExerciseCard from "../components/ExerciseCard";
+import ListBox from "../components/ListBox";
+import PageNavigation from "../components/PageNavigation";
+import useExercises from "../hooks/useExercises";
 import CurrentSearchParams from "../types/SearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
+const SORT_OPTIONS = [
+  {
+    name: "Newest",
+    sort: "created",
+    order: "desc",
+  },
+  {
+    name: "Oldest",
+    sort: "created",
+    order: "asc",
+  },
+  {
+    name: "Name (a-z)",
+    sort: "name",
+    order: "asc",
+  },
+  {
+    name: "Name (z-a)",
+    sort: "name",
+    order: "desc",
+  },
+];
 
 const ExercisesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,8 +41,14 @@ const ExercisesPage = () => {
   const [pageSize, setPageSize] = useState<number>(
     currentParams.GetSize(DEFAULT_PAGE_SIZE),
   );
-  
-  const [result, isLoading] = useExercises(currentPage, pageSize);
+
+  const [sort, setSort] = useState(currentParams.GetSort(SORT_OPTIONS[0].name));
+
+  const [order, setOrder] = useState(
+    currentParams.GetOrder(SORT_OPTIONS[0].order),
+  );
+
+  const [result, isLoading] = useExercises(currentPage, pageSize, sort, order);
   const [error, page] = result.extract();
 
   const paginate = (page: number) => {
@@ -29,6 +57,20 @@ const ExercisesPage = () => {
     params.set("p", page.toString());
     params.set("ls", currentParams.GetSize(DEFAULT_PAGE_SIZE).toString());
     setSearchParams(params);
+  };
+
+  const handleSort = (value: string) => {
+    const option = SORT_OPTIONS.find((o) => o.name == value);
+    if (option) {
+      setSort(option.name);
+      setOrder(option.order);
+
+      let params = new URLSearchParams(location.search);
+      params.set("s", option.sort);
+      params.set("o", option.order);
+      
+      setSearchParams(params);
+    }
   };
 
   return (
@@ -42,17 +84,18 @@ const ExercisesPage = () => {
 
       <div>
         <ul
-          className={`flex justify-center gap-4 ${
+          className={`flex justify-center gap-4 items-center ${
             isLoading ? "opacity-60 animate-pulse" : ""
           }`}
         >
           <p>Search-balk</p>
 
-          <p>sort-by</p>
-          <p>sort</p>
-          {/* <Listbox value={}> 
-        <Listbox.Button></Listbox.Button>
-        </Listbox> */}
+          <ListBox
+            selected={sort}
+            options={SORT_OPTIONS.map((o) => o.name)}
+            buttonText={"Sort by:"}
+            onChange={handleSort}
+          />
 
           <p>new</p>
         </ul>
