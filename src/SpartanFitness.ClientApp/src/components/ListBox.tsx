@@ -13,13 +13,13 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
   return (
     <Listbox value={selected} onChange={onChange}>
       <div className="relative">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] py-[5.25px] pl-3 pr-8 text-left shadow sm:text-sm min-w-full">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] py-[0.25rem] pl-3 pr-8 text-left shadow  min-w-full">
           <p className="block truncate">
             <span className="text-[#7D8590]">{buttonText} </span>
             {selected}
           </p>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <BiChevronDown className="h-5 w-5 text-white" aria-hidden="true" />
+            <BiChevronDown className="h-5 w-5 text-[#7D8590]" aria-hidden="true" />
           </span>
         </Listbox.Button>
         <Transition

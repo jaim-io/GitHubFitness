@@ -54,6 +54,29 @@ public class GetExercisePageQueryHandler
         exercises = await _exerciseRepository.GetAllAsync();
       }
 
+      exercises = query.Sort switch
+      {
+        "name" => query.Order switch
+        {
+          "asc" => exercises.OrderBy(ex => ex.Name),
+          "desc" => exercises.OrderByDescending(ex => ex.Name),
+          _ => exercises.OrderByDescending(ex => ex.Name),
+        },
+        "created" => query.Order switch
+        {
+          "desc" => exercises.OrderByDescending(ex => ex.CreatedDateTime),
+          "asc" => exercises.OrderBy(ex => ex.CreatedDateTime),
+          _ => exercises.OrderByDescending(ex => ex.CreatedDateTime),
+        },
+        "updated" => query.Order switch
+        {
+          "desc" => exercises.OrderByDescending(ex => ex.UpdatedDateTime),
+          "asc" => exercises.OrderBy(ex => ex.UpdatedDateTime),
+          _ => exercises.OrderByDescending(ex => ex.UpdatedDateTime),
+        },
+        _ => exercises.OrderByDescending(ex => ex.CreatedDateTime),
+      };
+
       skippedExercises = exercises.Skip((pageNumber - 1) * query.PageSize ?? 0);
       pageCount = query.PageSize == null
         ? 1
@@ -69,29 +92,6 @@ public class GetExercisePageQueryHandler
       ? skippedExercises
       : skippedExercises
           .Take((int)query.PageSize);
-
-    content = query.Sort switch
-    {
-      "name" => query.Order switch
-      {
-        "asc" => content.OrderBy(ex => ex.Name),
-        "desc" => content.OrderByDescending(ex => ex.Name),
-        _ => content.OrderByDescending(ex => ex.Name),
-      },
-      "created" => query.Order switch
-      {
-        "newest" => content.OrderByDescending(ex => ex.CreatedDateTime),
-        "oldest" => content.OrderBy(ex => ex.CreatedDateTime),
-        _ => content.OrderByDescending(ex => ex.CreatedDateTime),
-      },
-      "updated" => query.Order switch
-      {
-        "newest" => content.OrderByDescending(ex => ex.UpdatedDateTime),
-        "oldest" => content.OrderBy(ex => ex.UpdatedDateTime),
-        _ => content.OrderByDescending(ex => ex.UpdatedDateTime),
-      },
-      _ => content.OrderByDescending(ex => ex.CreatedDateTime),
-    };
 
     return new Page<Exercise>(
       content.ToList(),

@@ -43,31 +43,41 @@ const ExercisesPage = () => {
     currentParams.GetSize(DEFAULT_PAGE_SIZE),
   );
 
-  const [sort, setSort] = useState(currentParams.GetSort(SORT_OPTIONS[0].name));
+  const [sortName, setSortName] = useState(currentParams.GetSort(SORT_OPTIONS[0].name));
   const [order, setOrder] = useState(
     currentParams.GetOrder(SORT_OPTIONS[0].order),
   );
 
   const [query, setQuery] = useState("");
 
-  const [result, isLoading] = useExercises(currentPage, pageSize, sort, order, query);
+  const [result, isLoading] = useExercises(
+    currentPage,
+    pageSize,
+    SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
+    order,
+    query,
+  );
   const [error, page] = result.extract();
 
   const paginate = (page: number) => {
     setCurrentPage(page);
+
     let params = new URLSearchParams(location.search);
     params.set("p", page.toString());
     params.set("ls", currentParams.GetSize(DEFAULT_PAGE_SIZE).toString());
+
     setSearchParams(params);
   };
 
   const handleSort = (value: string) => {
     const option = SORT_OPTIONS.find((o) => o.name == value);
     if (option) {
-      setSort(option.name);
+      setSortName(option.name);
       setOrder(option.order);
+      setCurrentPage(DEFAULT_PAGE_NUMBER);
 
       let params = new URLSearchParams(location.search);
+      params.set("p", DEFAULT_PAGE_NUMBER.toString());
       params.set("s", option.sort);
       params.set("o", option.order);
 
@@ -75,7 +85,10 @@ const ExercisesPage = () => {
     }
   };
 
-  const handleQuerySubmit = (event: React.FormEvent<HTMLFormElement>, value: string) => {
+  const handleQuerySubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    value: string,
+  ) => {
     event.preventDefault();
     setQuery(value);
     setCurrentPage(DEFAULT_PAGE_NUMBER);
@@ -85,7 +98,7 @@ const ExercisesPage = () => {
     params.set("q", value);
 
     setSearchParams(params);
-  }
+  };
 
   return (
     <div className="px-24 pt-6 pb-8 h-full min-h-[90vh]">
@@ -104,7 +117,7 @@ const ExercisesPage = () => {
         >
           <SearchBar onSubmit={handleQuerySubmit} />
           <ListBox
-            selected={sort}
+            selected={sortName}
             options={SORT_OPTIONS.map((o) => o.name)}
             buttonText={"Sort by:"}
             onChange={handleSort}

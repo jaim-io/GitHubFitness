@@ -42,7 +42,7 @@ const SearchBar = ({ onSubmit }: Props) => {
         <input
           type="search"
           id="default-search"
-          className="block w-full p-1 pl-10 rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] focus:outline focus:outline-[#2f81f7] focus:shadow-outline search-cancel:hidden"
+          className="block w-full p-1 pl-10 rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] focus:outline focus:outline-[#2f81f7] focus:shadow-outline search-cancel:hidden placeholder-[#7D8590] overflow-scroll"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search ..."
@@ -51,10 +51,10 @@ const SearchBar = ({ onSubmit }: Props) => {
         />
         <button
           type="reset"
-          className="absolute top-0 right-0 p-[0.625rem] pl-1 text-sm font-medium text-[#8B949E] rounded-r-lg hover:text-[#2f81f7]"
+          className="absolute top-0 right-0 p-[0.625rem] pl-1 text-sm font-medium text-[#8B949E] rounded-r-lg hover:text-[#2f81f7] z-3"
           onClick={() => setValue("")}
         >
-          <ImCancelCircle className=""/>
+          <ImCancelCircle className="bg-[#262c31]"/>
           <span className="sr-only">Cancel</span>
         </button>
       </div>
