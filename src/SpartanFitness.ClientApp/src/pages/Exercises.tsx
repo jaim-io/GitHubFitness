@@ -6,6 +6,7 @@ import PageNavigation from "../components/PageNavigation";
 import useExercises from "../hooks/useExercises";
 import CurrentSearchParams from "../types/SearchParams";
 import SearchBar from "../components/SearchBar";
+import NewButton from "../components/NewButton";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -122,8 +123,7 @@ const ExercisesPage = () => {
             buttonText={"Sort by:"}
             onChange={handleSort}
           />
-
-          <p>new</p>
+          <NewButton />
         </ul>
 
         <ul className="relative min-h-[10rem]">
