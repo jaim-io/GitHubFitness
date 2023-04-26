@@ -15,6 +15,7 @@ const useExercises = (
   size: number,
   sort?: string,
   order?: string,
+  query?: string,
 ): [Result<ExercisesPage>, boolean] => {
   const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
@@ -31,6 +32,10 @@ const useExercises = (
 
   if (order) {
     params.set("o", order!);
+  }
+
+  if (query) {
+    params.set("q", query!);
   }
 
   useEffect(() => {
@@ -76,7 +81,7 @@ const useExercises = (
     };
 
     fetchExercises();
-  }, [page, size, sort, order]);
+  }, [page, size, sort, order, query]);
 
   return exercisesPage == undefined
     ? [createException<ExercisesPage>()(error!), isLoading]

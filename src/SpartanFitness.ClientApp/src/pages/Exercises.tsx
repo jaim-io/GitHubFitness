@@ -5,6 +5,7 @@ import ListBox from "../components/ListBox";
 import PageNavigation from "../components/PageNavigation";
 import useExercises from "../hooks/useExercises";
 import CurrentSearchParams from "../types/SearchParams";
+import SearchBar from "../components/SearchBar";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -43,12 +44,13 @@ const ExercisesPage = () => {
   );
 
   const [sort, setSort] = useState(currentParams.GetSort(SORT_OPTIONS[0].name));
-
   const [order, setOrder] = useState(
     currentParams.GetOrder(SORT_OPTIONS[0].order),
   );
 
-  const [result, isLoading] = useExercises(currentPage, pageSize, sort, order);
+  const [query, setQuery] = useState("");
+
+  const [result, isLoading] = useExercises(currentPage, pageSize, sort, order, query);
   const [error, page] = result.extract();
 
   const paginate = (page: number) => {
@@ -68,10 +70,22 @@ const ExercisesPage = () => {
       let params = new URLSearchParams(location.search);
       params.set("s", option.sort);
       params.set("o", option.order);
-      
+
       setSearchParams(params);
     }
   };
+
+  const handleQuerySubmit = (event: React.FormEvent<HTMLFormElement>, value: string) => {
+    event.preventDefault();
+    setQuery(value);
+    setCurrentPage(DEFAULT_PAGE_NUMBER);
+
+    let params = new URLSearchParams(location.search);
+    params.set("p", DEFAULT_PAGE_NUMBER.toString());
+    params.set("q", value);
+
+    setSearchParams(params);
+  }
 
   return (
     <div className="px-24 pt-6 pb-8 h-full min-h-[90vh]">
@@ -88,8 +102,7 @@ const ExercisesPage = () => {
             isLoading ? "opacity-60 animate-pulse" : ""
           }`}
         >
-          <p>Search-balk</p>
-
+          <SearchBar onSubmit={handleQuerySubmit} />
           <ListBox
             selected={sort}
             options={SORT_OPTIONS.map((o) => o.name)}

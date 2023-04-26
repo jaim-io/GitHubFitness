@@ -12,8 +12,8 @@ type Props = {
 const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
   return (
     <Listbox value={selected} onChange={onChange}>
-      <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] py-1 pl-3 pr-8 text-left shadow sm:text-sm min-w-full">
+      <div className="relative">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] py-[5.25px] pl-3 pr-8 text-left shadow sm:text-sm min-w-full">
           <p className="block truncate">
             <span className="text-[#7D8590]">{buttonText} </span>
             {selected}
