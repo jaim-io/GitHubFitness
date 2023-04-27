@@ -45,6 +45,8 @@ const LoginPage = () => {
         .then((res) => {
           if (res.data.id) {
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("uid", res.data.id);
+            // localStorage.setItem("user", res.data.firstName);
             setAuth(res.data);
             navigate("/");
           }

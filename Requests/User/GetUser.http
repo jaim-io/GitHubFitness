@@ -1,0 +1,13 @@
+@host=http://localhost:8001
+@id=474031bb-1aff-4af5-813c-04d361b61848
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NzQwMzFiYi0xYWZmLTRhZjUtODEzYy0wNGQzNjFiNjE4NDgiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjI2ZDA2MGZmLWE5MzAtNDA0NS1iZGQzLTRiZTc3NTQ5YjEzYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giLCJBZG1pbmlzdHJhdG9yIl0sImV4cCI6MTY4MjYyNjYwMiwiaXNzIjoiU3BhcnRhbkZpdG5lc3MiLCJhdWQiOiJTcGFydGFuRml0bmVzcyJ9.gKvBWhYYXSTT0i36C4LBLboUYYApwrfLvirkaeeQzmo
+
+###
+GET {{host}}/api/v1/users/{{id}}
+Content-Type: application/json
+
+
+###
+GET {{host}}/api/v1/users
+Content-Type: application/json
+Authorization: bearer {{token}}
