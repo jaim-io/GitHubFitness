@@ -19,6 +19,7 @@ public class SpartanFitnessDbContext : DbContext, IUnitOfWork
   public DbSet<MuscleGroup> MuscleGroups { get; set; } = null!;
   public DbSet<Exercise> Exercises { get; set; } = null!;
   public DbSet<Workout> Workouts { get; set; } = null!;
+  public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
   public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options, IMediator mediator)
     : base(options)
