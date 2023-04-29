@@ -1,14 +1,25 @@
 import { ReactNode, createContext, useState } from "react";
-import User from "../types/User";
+import Authentication from "../types/authentication/Authentication";
+import User from "../types/domain/User";
+import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 
 type AuthContextType = {
-  user: User | undefined;
-  setAuth: (user: User) => void;
+  auth: Authentication;
+  setAuth: (response: AuthenticationResponse) => void;
+  setPersist: (toggle: boolean) => void;
+};
+
+const defaultAuthentication: Authentication = {
+  user: undefined,
+  persist: true,
+  accessToken: undefined,
+  refreshToken: undefined,
 };
 
 const AuthContext = createContext<AuthContextType>({
-  user: undefined,
-  setAuth: () => {},
+  auth: defaultAuthentication,
+  setAuth: (response: AuthenticationResponse) => {},
+  setPersist: (toggle: boolean) => {},
 });
 
 type Props = {
@@ -17,10 +28,27 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User>();
+  const [accessToken, setAccessToken] = useState<string>();
+  const [refreshToken, setRefreshToken] = useState<string>();
+  const [persist, setPersist] = useState(
+    JSON.parse(localStorage.getItem("persist") ?? "false") || false,
+  );
+
   const authContext: AuthContextType = {
-    user: user,
-    setAuth: (user) => {
-      setUser(user);
+    auth: {
+      user: user,
+      persist: persist,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    },
+    setAuth: (response) => {
+      setUser(response);
+      setAccessToken(response.token);
+      setRefreshToken(response.refreshToken);
+    },
+    setPersist: (toggle) => {
+      localStorage.setItem("persist", String(toggle))
+      setPersist(toggle);
     },
   };
 

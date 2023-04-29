@@ -1,17 +1,17 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import AuthenticationResponse from "../types/AuthenticationResponse";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../contexts/AuthProvider";
 import axios from "axios";
 import LogoSvg from "../assets/logo.svg";
-import Exception from "../types/Exception";
+import Exception from "../types/domain/Exception";
+import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/login`;
 
 const LoginPage = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const emailRef = useRef<HTMLInputElement>();
 
   const navigate = useNavigate();
@@ -24,6 +24,9 @@ const LoginPage = () => {
   useEffect(() => {
     if (emailRef.current) {
       emailRef.current.focus();
+    }
+    if (auth.user != null) {
+      navigate("/");
     }
   });
 
@@ -44,7 +47,10 @@ const LoginPage = () => {
         )
         .then((res) => {
           if (res.data.id) {
+            console.log(res.data);
+
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
             localStorage.setItem("uid", res.data.id);
             // localStorage.setItem("user", res.data.firstName);
             setAuth(res.data);

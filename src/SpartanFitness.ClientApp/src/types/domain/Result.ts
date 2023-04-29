@@ -1,6 +1,6 @@
+import { Either, inl, inr } from "../base/Either";
+import { Fun } from "../base/Fun";
 import Exception from "./Exception";
-import { Either, inl, inr } from "./base/Either";
-import { Fun } from "./base/Fun";
 
 export type Result<T> = Either<Exception, T>;
 

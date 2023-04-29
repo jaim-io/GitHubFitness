@@ -7,11 +7,11 @@ import { HiChevronDown } from "react-icons/hi";
 import DefaultProfileSvg from "../assets/default-profile.svg";
 
 const UserNavItem = ({ ...props }) => {
-  const { user } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   return (
     <Menu as="div" className="relative inline-block text-left" {...props}>
-      {user && (
+      {auth.user && (
         <>
           <Menu.Button
             className={({ open }) =>
@@ -24,7 +24,7 @@ const UserNavItem = ({ ...props }) => {
           >
             <img
               className={`inline-block h-10 w-10 rounded-full ring-1 active:ring-[#2f81f7]`}
-              src={user?.profileImage ?? DefaultProfileSvg}
+              src={auth.user?.profileImage ?? DefaultProfileSvg}
             />
             <div className="h-full py-1">
               <HiChevronDown className="inline-block align-bottom" />
@@ -45,7 +45,7 @@ const UserNavItem = ({ ...props }) => {
             >
               <div className="px-1">
                 <p className="text-dark-gray px-2 py-2">
-                  Signed in as {user!.firstName}
+                  Signed in as {auth.user!.firstName}
                 </p>
               </div>
               <div className="pt-2 pb-2">

@@ -42,17 +42,17 @@ public class RefreshJwtTokenCommandHandler
       return Errors.Authentication.InvalidToken;
     }
 
-    var expiryDateUnix =
-      long.Parse(principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+    // var expiryDateUnix =
+    //   long.Parse(principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
-    var expiryDateUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-      .AddSeconds(expiryDateUnix);
+    // var expiryDateUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+    //   .AddSeconds(expiryDateUnix);
 
-    if (expiryDateUtc > DateTime.UtcNow)
-    {
-      // Token has not expired;
-      return Errors.Authentication.InvalidToken;
-    }
+    // if (expiryDateUtc > DateTime.UtcNow)
+    // {
+    //   // Token has not expired;
+    //   return Errors.Authentication.InvalidToken;
+    // }
 
     var jti = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 

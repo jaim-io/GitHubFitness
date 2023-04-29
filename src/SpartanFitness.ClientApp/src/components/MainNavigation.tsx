@@ -7,7 +7,7 @@ import AuthContext from "../contexts/AuthProvider";
 import AuthNavItem from "./AuthNavItem";
 
 const MainNavigation = () => {
-  const { user } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   return (
     <nav className="backdrop-blur bg-[#161b22] py-3 px-24">
@@ -25,9 +25,9 @@ const MainNavigation = () => {
         </ul>
         <div className="w-full md:block md:w-auto">
           <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">
-            {user && <UserNavItem />}
-            {!user && <AuthNavItem path="/login" children="Sign in" />}
-            {!user && (
+            {auth.user && <UserNavItem />}
+            {!auth.user && <AuthNavItem path="/login" children="Sign in" />}
+            {!auth.user && (
               <AuthNavItem path="/register" children="Sign up" border={true} />
             )}
           </ul>

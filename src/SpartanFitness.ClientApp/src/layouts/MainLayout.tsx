@@ -1,9 +1,10 @@
-import { Outlet } from "react-router-dom";
-import MainNavigation from "../components/MainNavigation";
-import Footer from "../components/Footer";
+import { Outlet, } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import Footer from "../components/Footer";
+import MainNavigation from "../components/MainNavigation";
 
 const MainLayout = () => {
+
   return (
     <>
       <MainNavigation />
@@ -11,7 +12,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      
+
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Exercise from "../types/Exercise";
-import { Result, createException, createValue } from "../types/Result";
-import Exception from "../types/Exception";
+import Exception from "../types/domain/Exception";
+import Exercise from "../types/domain/Exercise";
+import { Result, createException, createValue } from "../types/domain/Result";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
