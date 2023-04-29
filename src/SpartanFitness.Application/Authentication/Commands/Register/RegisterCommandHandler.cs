@@ -58,13 +58,13 @@ public class RegisterCommandHandler
 
     await _userRepository.AddAsync(user);
 
-    var (token, refreshToken) = _jwtTokenGenerator.GenerateToken(user, roles);
+    var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 
     await _refreshTokenRepository.AddAsync(refreshToken);
 
     return new AuthenticationResult(
       user,
-      token,
+      accessToken,
       refreshToken);
   }
 }

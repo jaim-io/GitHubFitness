@@ -78,13 +78,15 @@ public class RefreshJwtTokenCommandHandler
 
     if (storedRefreshToken.Used)
     {
-      // Refresh token is used
+      // Refresh token has already been used
+      // TODO: invalidate all other refresh- and access tokens
       return Errors.Authentication.InvalidToken;
     }
 
     if (storedRefreshToken.JwtId != jti)
     {
-      // Token does not match JWT token
+      // Token does not match JWT token (Token pair)
+      // TODO: invalidate all other refresh- and access tokens
       return Errors.Authentication.InvalidToken;
     }
 
@@ -101,13 +103,13 @@ public class RefreshJwtTokenCommandHandler
 
     var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
 
-    var (token, refreshToken) = _jwtTokenGenerator.GenerateToken(user, roles);
+    var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 
     await _refreshTokenRepository.AddAsync(refreshToken);
 
     return new AuthenticationResult(
       user,
-      token,
+      accessToken,
       refreshToken);
   }
 }

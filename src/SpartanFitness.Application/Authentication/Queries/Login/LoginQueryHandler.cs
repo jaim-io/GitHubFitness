@@ -49,13 +49,13 @@ public class LoginQueryHandler
 
     var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
 
-    var (token, refreshToken) = _jwtTokenGenerator.GenerateToken(user, roles);
+    var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 
     await _refreshTokenRepository.AddAsync(refreshToken);
 
     return new AuthenticationResult(
       user,
-      token,
+      accessToken,
       refreshToken);
   }
 }

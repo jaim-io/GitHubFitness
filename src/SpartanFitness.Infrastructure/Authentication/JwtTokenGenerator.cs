@@ -2,8 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-using ErrorOr;
-
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -30,7 +28,17 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     _jwtSettings = jwtSettings.Value;
   }
 
-  public Tuple<string, RefreshToken> GenerateToken(User user, HashSet<Role> roles)
+  public Tuple<string, RefreshToken> GenerateTokenPair(User user, HashSet<Role> roles)
+  {
+    var jti = Guid.NewGuid().ToString();
+
+    var accessToken = GenerateAccessToken(user, roles, jti);
+    var refreshToken = GenerateRefreshToken(user, jti);
+
+    return new Tuple<string, RefreshToken>(accessToken, refreshToken);
+  }
+
+  public string GenerateAccessToken(User user, HashSet<Role> roles, string? jti = null)
   {
     var signingCredentials = new SigningCredentials(
       new SymmetricSecurityKey(
@@ -42,7 +50,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
       new Claim(JwtRegisteredClaimNames.Sub, user.Id.Value.ToString()),
       new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
       new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+      new Claim(JwtRegisteredClaimNames.Jti, jti ?? Guid.NewGuid().ToString()),
     };
 
     foreach (var role in roles)
@@ -57,14 +65,15 @@ public class JwtTokenGenerator : IJwtTokenGenerator
       claims: claims,
       signingCredentials: signingCredentials);
 
-    var refreshToken = RefreshToken.Create(
-      jwtId: securityToken.Id,
-      expiryDateTime: DateTime.Now.AddMonths(6),
-      userId: user.Id);
+    return new JwtSecurityTokenHandler().WriteToken(securityToken);
+  }
 
-    return new(
-      new JwtSecurityTokenHandler().WriteToken(securityToken),
-      refreshToken);
+  public RefreshToken GenerateRefreshToken(User user, string? jti = null)
+  {
+    return RefreshToken.Create(
+      jwtId: jti ?? Guid.NewGuid().ToString(),
+      expiryDateTime: DateTime.Now.AddMonths(_jwtSettings.RefreshTokenExpiryMonths),
+      userId: user.Id);
   }
 
   public ClaimsPrincipal? GetPrincipalFromToken(string token)
