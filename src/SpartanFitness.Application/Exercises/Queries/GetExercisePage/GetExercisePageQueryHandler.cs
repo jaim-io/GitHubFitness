@@ -26,8 +26,7 @@ public class GetExercisePageQueryHandler
     CancellationToken cancellationToken)
   {
     Func<Exercise, bool>? filter = null;
-    Guid guid;
-    if (Guid.TryParse(query.SearchQuery, out guid))
+    if (Guid.TryParse(query.SearchQuery, out Guid guid))
     {
       var muscleGroupId = MuscleGroupId.Create(guid);
       var creatorId = CoachId.Create(guid);
@@ -36,7 +35,8 @@ public class GetExercisePageQueryHandler
     }
     else if (query.SearchQuery is not null)
     {
-      filter = (ex) => ex.Name.ToLower().Contains(query.SearchQuery) || ex.Description.ToLower().Contains(query.SearchQuery);
+      string searchQuery = query.SearchQuery.ToLower();
+      filter = (ex) => ex.Name.ToLower().Contains(searchQuery) || ex.Description.ToLower().Contains(searchQuery);
     }
 
     var pageNumber = query.PageNumber ?? 1;
@@ -83,7 +83,8 @@ public class GetExercisePageQueryHandler
         : Math.Ceiling((decimal)exercises.Count() / (int)query.PageSize);
     }
 
-    if (pageNumber > pageCount)
+    if (!(pageNumber == 1 && pageCount == 0) &&
+      pageNumber > pageCount)
     {
       return Errors.Page.NotFound;
     }

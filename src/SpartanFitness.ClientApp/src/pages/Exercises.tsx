@@ -7,6 +7,8 @@ import useExercises from "../hooks/useExercises";
 import CurrentSearchParams from "../types/SearchParams";
 import SearchBar from "../components/SearchBar";
 import NewButton from "../components/NewButton";
+import useAuth from "../hooks/useAuth";
+import { TbGhost2Filled } from "react-icons/tb";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -34,6 +36,8 @@ const SORT_OPTIONS = [
 ];
 
 const ExercisesPage = () => {
+  const { auth } = useAuth();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const currentParams = new CurrentSearchParams(searchParams);
 
@@ -44,7 +48,9 @@ const ExercisesPage = () => {
     currentParams.GetSize(DEFAULT_PAGE_SIZE),
   );
 
-  const [sortName, setSortName] = useState(currentParams.GetSort(SORT_OPTIONS[0].name));
+  const [sortName, setSortName] = useState(
+    currentParams.GetSort(SORT_OPTIONS[0].name),
+  );
   const [order, setOrder] = useState(
     currentParams.GetOrder(SORT_OPTIONS[0].order),
   );
@@ -123,7 +129,7 @@ const ExercisesPage = () => {
             buttonText={"Sort by:"}
             onChange={handleSort}
           />
-          <NewButton />
+          {auth.user && <NewButton />}
         </ul>
 
         <ul className="relative min-h-[10rem]">
@@ -164,13 +170,19 @@ const ExercisesPage = () => {
           )}
         </ul>
 
-        {page && (
+        {page && page.exercises.length >= 1 && (
           <PageNavigation
             pageNumber={page.pageNumber}
             pageCount={page.pageCount}
             paginate={paginate}
             className={` ${isLoading ? "opacity-60 animate-pulse" : ""}`}
           />
+        )}
+
+        {page && page.exercises.length === 0 && (
+          <p className="flex justify-center items-center">
+            No exercises found <TbGhost2Filled className="ml-1" size={20}/>
+          </p>
         )}
       </div>
     </div>

@@ -86,7 +86,6 @@ public class RefreshJwtTokenCommandHandler
     if (storedRefreshToken.JwtId != jti)
     {
       // Token does not match JWT token (Token pair)
-      // TODO: invalidate all other refresh- and access tokens
       return Errors.Authentication.InvalidToken;
     }
 

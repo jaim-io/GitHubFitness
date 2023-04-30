@@ -52,7 +52,6 @@ const LoginPage = () => {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("refreshToken", res.data.refreshToken);
             localStorage.setItem("uid", res.data.id);
-            // localStorage.setItem("user", res.data.firstName);
             setAuth(res.data);
             navigate("/");
           }

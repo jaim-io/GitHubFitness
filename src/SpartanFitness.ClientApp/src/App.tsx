@@ -17,12 +17,12 @@ import NewExercisePage from "./pages/NewExercise";
 import { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import AuthContext from "./contexts/AuthProvider";
-import PersistLogin from "./components/PersistLogin";
+import LoginPersistance from "./components/LoginPersistance";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PersistLogin />,
+    element: <LoginPersistance />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -54,6 +54,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  // TODO: Create a popup where the user can choose to perist their login or not
   localStorage.setItem("persist", "true");
 
   const { auth } = useContext(AuthContext);
