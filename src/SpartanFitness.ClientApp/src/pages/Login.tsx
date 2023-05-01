@@ -106,7 +106,7 @@ const LoginPage = () => {
             <label className="block text-white mb-2 ml-1">Email adress</label>
             <input
               className="shadow appearance-none border border-[#30363d] rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-[#2f81f7] focus:shadow-outline bg-[#0d1117]"
-              id="username"
+              id="email"
               type="text"
               placeholder="example@gmail.com"
               value={email}

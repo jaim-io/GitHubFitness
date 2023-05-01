@@ -1,10 +1,11 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
-import AuthContext from "../contexts/AuthProvider";
-import { FiLogIn } from "react-icons/fi";
+import { Fragment, useContext } from "react";
+import { AiFillSetting } from "react-icons/ai";
+import { FiLogOut } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
+import { NavLink } from "react-router-dom";
 import DefaultProfileSvg from "../assets/default-profile.svg";
+import AuthContext from "../contexts/AuthProvider";
 
 const UserNavItem = ({ ...props }) => {
   const { auth } = useContext(AuthContext);
@@ -15,11 +16,7 @@ const UserNavItem = ({ ...props }) => {
         <>
           <Menu.Button
             className={({ open }) =>
-              `flex h-full transition ease-in-out delay-150 hover:scale-110 duration-300 hover:ring-[#2f81f7] hover:hue-rotate-90 ${
-                open
-                  ? "scale-110 ring-[#2f81f7] hue-rotate-90"
-                  : ""
-              }`
+              `flex h-full hover:ring-[#2f81f7] ${open ? "ring-[#2f81f7]" : ""}`
             }
           >
             <img
@@ -41,28 +38,34 @@ const UserNavItem = ({ ...props }) => {
           >
             <Menu.Items
               static
-              className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-[#30363d] rounded-md border border-[#30363d] bg-[#161b22] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
-              <div className="px-1">
-                <p className="text-dark-gray px-2 py-2">
-                  Signed in as {auth.user!.firstName}
-                </p>
-              </div>
-              <div className="pt-2 pb-2">
+              <p className="px-3 py-2">Signed in as {auth.user!.firstName}</p>
+              <div className="py-2">
                 <Menu.Item>
                   <NavLink
                     to="/user-settings"
-                    className={({ isActive }) =>
-                      `${
-                        isActive ? "text-[#2f81f7]" : "text-dark-gray"
-                      } group flex w-full items-center px-3 py-1 
-                      hover:text-white hover:bg-[#2f81f7]
-                  `
+                    className={
+                      "flex w-full items-center px-3 py-1 hover:bg-[#2f81f7]"
                     }
                     end
                   >
-                    <FiLogIn className="mr-2 h-3 w-3" />
+                    <AiFillSetting className="mr-2" />
                     Settings
+                  </NavLink>
+                </Menu.Item>
+              </div>
+              <div className="py-2">
+                <Menu.Item>
+                  <NavLink
+                    to="/"
+                    className={
+                      "flex w-full items-center px-3 py-1 hover:bg-[#2f81f7]"
+                    }
+                    end
+                  >
+                    <FiLogOut className="mr-2" />
+                    Sign out
                   </NavLink>
                 </Menu.Item>
               </div>

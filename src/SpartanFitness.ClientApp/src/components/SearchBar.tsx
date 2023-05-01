@@ -24,7 +24,6 @@ const SearchBar = ({ onSubmit }: Props) => {
       <div className="relative">
         <button
           className="absolute inset-y-0 left-0 flex items-center pl-3 z-3 text-gray-500 hover:text-[#2f81f7]"
-          onClick={() => console.log("test")}
           type="submit"
         >
           <svg

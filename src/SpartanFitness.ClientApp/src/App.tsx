@@ -57,25 +57,6 @@ const App = () => {
   // TODO: Create a popup where the user can choose to perist their login or not
   localStorage.setItem("persist", "true");
 
-  const { auth } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (auth.user != null) {
-      // TODO: Change to welcome toast
-      toast.success("Login succesful", {
-        toastId: "user-login",
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
-  }, [auth]);
-
   return (
     <>
       <RouterProvider router={router} />{" "}
