@@ -22,7 +22,13 @@ const useMuscleGroups = (
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const params = SearchParamsFactory.Create(page, size, sort, order, query);
+  const queryString = SearchParamsFactory.CreateQueryString(
+    page,
+    size,
+    sort,
+    order,
+    query,
+  );
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -30,7 +36,7 @@ const useMuscleGroups = (
 
       try {
         await axios
-          .get<MuscleGroupPage>(`${MUSCLEGROUP_ENDPOINT}?${params}`, {
+          .get<MuscleGroupPage>(`${MUSCLEGROUP_ENDPOINT}${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,

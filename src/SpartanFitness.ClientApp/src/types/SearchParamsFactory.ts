@@ -1,7 +1,7 @@
 class SearchParamsFactory {
-  static Create = (
-    page: number | undefined,
-    size: number | undefined,
+  static CreateParams = (
+    page?: number | undefined,
+    size?: number | undefined,
     sort?: string | undefined,
     order?: string | undefined,
     query?: string | undefined,
@@ -29,6 +29,20 @@ class SearchParamsFactory {
     }
 
     return params;
+  };
+
+  static CreateQueryString = (
+    page?: number | undefined,
+    size?: number | undefined,
+    sort?: string | undefined,
+    order?: string | undefined,
+    query?: string | undefined,
+  ): string => {
+    const params = this.CreateParams(page, size, sort, order, query);
+
+    let queryString = `?${params}`;
+
+    return queryString.length === 1 ? "" : queryString;
   };
 }
 

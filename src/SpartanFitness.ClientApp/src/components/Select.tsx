@@ -22,8 +22,10 @@ type MultipleSelectProps = {
 
 type SelectProps = {
   options: SelectOption[];
+  searchBar?: boolean;
   isLoading?: boolean;
   ifEmpty?: ReactNode;
+  ifLoading?: ReactNode;
 } & (SingleSelectProps | MultipleSelectProps);
 
 const Select = ({
@@ -31,8 +33,10 @@ const Select = ({
   value,
   onChange,
   options,
+  searchBar = false,
   isLoading = false,
   ifEmpty,
+  ifLoading,
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(
@@ -74,22 +78,31 @@ const Select = ({
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.target == searchRef.current && e.code === "ArrowDown") {
-        setHighlightedIndex(0);
-        containerRef.current?.focus();
+      if (e.target == searchRef.current) {
+        switch (e.code) {
+
+          case "ArrowDown":
+            setHighlightedIndex(0);
+            containerRef.current?.focus();
+            break;
+
+          case "Escape":
+            // Will remove focus from searchRef and trigger closeOptions() from containerRef::OnBlur()
+            searchRef.current?.blur();
+            break;
+        }
       } else {
-        if (e.target) if (e.target != containerRef.current) return;
+        if (e.target != containerRef.current) return;
+
         switch (e.code) {
           case "Escape":
-            setIsOpen(false);
+            closeOptions();
             break;
 
           case "Enter":
           case "Space":
-            if (isOpen) {
-              if (filteredOptions.length > 0) {
-                selectOption(filteredOptions[highlightedIndex ?? 0]);
-              }
+            if (isOpen && filteredOptions.length > 0) {
+              selectOption(filteredOptions[highlightedIndex ?? 0]);
             } else {
               setIsOpen((prev) => !prev);
             }
@@ -111,7 +124,7 @@ const Select = ({
               highlightedIndex != newValue
             ) {
               setHighlightedIndex(newValue);
-            } else if (newValue <= 0) {
+            } else if (searchBar && newValue <= 0) {
               setHighlightedIndex(undefined);
               searchRef.current?.focus();
             }
@@ -125,6 +138,11 @@ const Select = ({
     return () => containerRef.current?.removeEventListener("keydown", handler);
   }, [isOpen, highlightedIndex, filteredOptions]);
 
+  const closeOptions = () => {
+    setIsOpen(false);
+    setHighlightedIndex(undefined);
+  };
+
   return (
     <>
       <div
@@ -132,11 +150,11 @@ const Select = ({
         ref={containerRef}
         onBlur={(e) => {
           if (e.relatedTarget === null && e.target.id !== "select-container") {
-            setIsOpen(false);
+            closeOptions();
           } else if (e.target == document.getElementById("select-search")) {
             return;
           } else {
-            setIsOpen(false);
+            closeOptions();
           }
         }}
         onClick={(e) => {
@@ -177,20 +195,22 @@ const Select = ({
                 </button>
               ))
             : value?.label}
-          <input
-            ref={searchRef}
-            placeholder="Search..."
-            id="select-search"
-            value={query}
-            onFocus={(e) => {
-              setIsOpen(true);
-            }}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-            onSubmit={(e) => e.preventDefault()}
-            className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch"
-          />
+          {searchBar && (
+            <input
+              ref={searchRef}
+              placeholder="Search..."
+              id="select-search"
+              value={query}
+              onFocus={(e) => {
+                setIsOpen(true);
+              }}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+              onSubmit={(e) => e.preventDefault()}
+              className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch"
+            />
+          )}
         </span>
         <div
           id="select-clear-button"
@@ -228,7 +248,7 @@ const Select = ({
                     e.stopPropagation;
                     selectOption(option);
                     if (!multiple) {
-                      setIsOpen(false);
+                      closeOptions();
                     }
                   }}
                   key={option.value}
@@ -241,30 +261,7 @@ const Select = ({
                 </li>
               ))}
             {!isLoading && filteredOptions.length === 0 && ifEmpty}
-            {isLoading && (
-              <div
-                role="status"
-                className="py-5 flex justify-center items-center"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2f81f7]"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                  />
-                </svg>
-                <span className="sr-only">Loading...</span>
-              </div>
-            )}
+            {isLoading && ifLoading}
           </ul>
         </Transition>
       </div>
