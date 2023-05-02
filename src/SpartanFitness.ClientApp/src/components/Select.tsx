@@ -1,6 +1,7 @@
 import { Combobox, Transition } from "@headlessui/react";
 import { useState, Fragment, useRef, useEffect } from "react";
 import { BiCheck } from "react-icons/bi";
+import { TbGhost2Filled } from "react-icons/tb";
 
 export type SelectOption = {
   label: string;
@@ -28,10 +29,19 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(
     undefined,
   );
+  const [query, setQuery] = useState<string>("");
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  const clearOptions = () => (multiple ? onChange([]) : onChange(undefined));
+  const filteredOptions = options.filter((o) =>
+    o.label.toLowerCase().includes(query.toLowerCase()),
+  );
+
+  const clearOptions = () => {
+    multiple ? onChange([]) : onChange(undefined);
+    setQuery("");
+  };
 
   const selectOption = (option: SelectOption) => {
     if (multiple) {
@@ -55,53 +65,92 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.target != containerRef.current) return;
-      switch (e.code) {
-        case "Escape":
-          setIsOpen(false);
-          break;
-
-        case "Enter":
-        case "Space":
-          setIsOpen((prev) => !prev);
-          if (isOpen) selectOption(options[highlightedIndex ?? 0]);
-          break;
-
-        case "ArrowUp":
-        case "ArrowDown":
-          if (!isOpen) {
-            setIsOpen(true);
+      if (e.target == searchRef.current && e.code === "ArrowDown") {
+        setHighlightedIndex(0);
+        containerRef.current?.focus();
+      } else {
+        if (e.target) if (e.target != containerRef.current) return;
+        switch (e.code) {
+          case "Escape":
+            setIsOpen(false);
             break;
-          }
 
-          const newValue =
-            (highlightedIndex ?? 0) + (e.code === "ArrowDown" ? 1 : -1);
+          case "Enter":
+          case "Space":
+            if (isOpen) {
+              if (filteredOptions.length > 0) {
+                selectOption(filteredOptions[highlightedIndex ?? 0]);
+              }
+            } else {
+              setIsOpen((prev) => !prev);
+            }
+            break;
 
-          if (
-            newValue >= 0 &&
-            newValue < options.length &&
-            highlightedIndex != newValue
-          ) {
-            setHighlightedIndex(newValue);
-          }
-          break;
+          case "ArrowUp":
+          case "ArrowDown":
+            if (!isOpen) {
+              setIsOpen(true);
+              break;
+            }
+
+            const newValue =
+              (highlightedIndex ?? 0) + (e.code === "ArrowDown" ? 1 : -1);
+
+            if (
+              newValue >= 0 &&
+              newValue < filteredOptions.length &&
+              highlightedIndex != newValue
+            ) {
+              setHighlightedIndex(newValue);
+            } else if (newValue <= 0) {
+              setHighlightedIndex(undefined);
+              searchRef.current?.focus();
+            }
+            break;
+        }
       }
     };
+
     containerRef.current?.addEventListener("keydown", handler);
 
     return () => containerRef.current?.removeEventListener("keydown", handler);
-  }, [isOpen, highlightedIndex, options]);
+  }, [isOpen, highlightedIndex, filteredOptions]);
 
   return (
     <>
       <div
+        id="select-container"
         ref={containerRef}
-        onBlur={() => setIsOpen(false)}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onBlur={(e) => {
+          if (e.relatedTarget === null && e.target.id !== "select-container") {
+            setIsOpen(false);
+          } else if (e.target == document.getElementById("select-search")) {
+            return;
+          } else {
+            setIsOpen(false);
+          }
+        }}
+        onClick={(e) => {
+          const thisElement = document.getElementById("select-container");
+          const targetElement = e.target as Element;
+          const isChild = thisElement?.contains(targetElement);
+
+          if (e.target !== thisElement && !isChild) {
+            return;
+          } else if (
+            isChild &&
+            (targetElement.id === "select-search" ||
+              targetElement.parentElement?.id === "select-options")
+          ) {
+            setIsOpen(true);
+          } else {
+            setIsOpen((prev) => !prev);
+          }
+        }}
         tabIndex={0}
-        className="relative min-w-[20rem] min-h-[1.5rem] border border-[#30363d] items-center gap-2 flex p-2 rounded-lg outline-none focus:border-[#30363d] select-none cursor-pointer"
+        className="relative min-w-[20rem] min-h-[1.5rem] border border-[#30363d] items-center gap-2 flex p-1 rounded-lg outline-none focus:border-[#30363d] select-none cursor-pointer"
       >
-        <span className="grow flex gap-2 flex-wrap">
+        <span className="grow flex gap-2 flex-wrap min-h-[2.2rem]">
           {multiple
             ? value.map((v) => (
                 <button
@@ -119,8 +168,23 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
                 </button>
               ))
             : value?.label}
+          <input
+            ref={searchRef}
+            placeholder="Search..."
+            id="select-search"
+            value={query}
+            onFocus={(e) => {
+              setIsOpen(true);
+            }}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+            onSubmit={(e) => e.preventDefault()}
+            className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch" // border border-[#30363d] rounded-lg
+          />
         </span>
         <button
+          id="select-clear-button"
           type="button"
           onClick={(e) => {
             e.stopPropagation();
@@ -133,18 +197,21 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
         <div className="bg-[#30363d] self-stretch w-[1px]"></div>
         <div className="border-[0.25rem] border-transparent border-t-white translate-y-1/4 cursor-pointer"></div>
         <ul
-          className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.25rem)] z-[100] bg-[#0d1117] ${
+          id="select-options"
+          className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-[#0d1117] ${
             isOpen ? "block" : "hidden"
           }`}
         >
-          {options.map((option, index) => (
+          {filteredOptions.map((option, index) => (
             <li
               onMouseEnter={() => setHighlightedIndex(index)}
               onMouseLeave={() => setHighlightedIndex(undefined)}
               onClick={(e) => {
                 e.stopPropagation;
                 selectOption(option);
-                setIsOpen(false);
+                if (!multiple) {
+                  setIsOpen(false);
+                }
               }}
               key={option.value}
               className={`py-[0.25rem] px-[.5rem] cursor-pointer flex items-center rounded-lg ${
@@ -155,6 +222,11 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
               {option.label}
             </li>
           ))}
+          {filteredOptions.length === 0 && (
+            <p className="flex justify-center items-center py-1 cursor-default">
+              No exercises found <TbGhost2Filled className="ml-1" size={20} />
+            </p>
+          )}
         </ul>
       </div>
     </>
