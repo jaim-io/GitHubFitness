@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Select, { SelectOption } from "../components/Select";
+import useMuscleGroups from "../hooks/useMuscleGroups";
+import { TbGhost2Filled } from "react-icons/tb";
 
 const muscleGroups = [
   {
@@ -17,7 +19,14 @@ const muscleGroups = [
 ];
 
 const NewExercisePage = () => {
-  const options = muscleGroups.map((mg) => ({ label: mg.name, value: mg.id }));
+  const [result, isLoading] = useMuscleGroups();
+  const [_, page] = result.extract();
+
+  const options = page?.muscleGroups.map((mg) => ({
+    label: mg.name,
+    value: mg.id,
+  }));
+
   const [value, setValue] = useState<SelectOption[]>([]);
 
   return (
@@ -54,13 +63,23 @@ const NewExercisePage = () => {
             />
           </div>
           <div>
-            <label>MuscleGroups</label>
+            <label className="flex text-white mb-2 ml-1 items-center">
+              Muscle groups
+              <p className="ml-1 text-[#7D8590] text-sm">(optional)</p>
+            </label>
 
             <Select
               multiple={true}
               value={value}
-              options={options}
+              options={options ?? []}
               onChange={setValue}
+              isLoading={isLoading}
+              ifEmpty={
+                <p className="flex justify-center items-center py-1 cursor-default">
+                  No muscle groups found{" "}
+                  <TbGhost2Filled className="ml-1" size={20} />
+                </p>
+              }
             />
           </div>
 

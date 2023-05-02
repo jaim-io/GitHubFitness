@@ -3,22 +3,22 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Page from "../types/base/Page";
 import Exception from "../types/domain/Exception";
-import Exercise from "../types/domain/Exercise";
+import MuscleGroup from "../types/domain/Exercise";
 import { Result, createException, createValue } from "../types/domain/Result";
 import SearchParamsFactory from "../types/SearchParamsFactory";
 
-const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
+const MUSCLEGROUP_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscle-groups`;
 
-export type ExercisesPage = { exercises: Exercise[] } & Page;
+export type MuscleGroupPage = { muscleGroups: MuscleGroup[] } & Page;
 
-const useExercises = (
+const useMuscleGroups = (
   page?: number,
   size?: number,
   sort?: string,
   order?: string,
   query?: string,
-): [Result<ExercisesPage>, boolean] => {
-  const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
+): [Result<MuscleGroupPage>, boolean] => {
+  const [musclesPage, setMusclesPage] = useState<MuscleGroupPage>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,14 +30,14 @@ const useExercises = (
 
       try {
         await axios
-          .get<ExercisesPage>(`${EXERCISE_ENDPOINT}?${params}`, {
+          .get<MuscleGroupPage>(`${MUSCLEGROUP_ENDPOINT}?${params}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setExercisePage(res.data);
+            setMusclesPage(res.data);
             setIsLoading(false);
           })
           .catch((err) => {
@@ -69,9 +69,9 @@ const useExercises = (
     fetchExercises();
   }, [page, size, sort, order, query]);
 
-  return exercisesPage == undefined
-    ? [createException<ExercisesPage>()(error!), isLoading]
-    : [createValue<ExercisesPage>()(exercisesPage!), isLoading];
+  return musclesPage == undefined
+    ? [createException<MuscleGroupPage>()(error!), isLoading]
+    : [createValue<MuscleGroupPage>()(musclesPage!), isLoading];
 };
 
-export default useExercises;
+export default useMuscleGroups;

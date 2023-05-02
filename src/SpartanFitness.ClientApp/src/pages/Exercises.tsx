@@ -4,7 +4,7 @@ import ExerciseCard from "../components/ExerciseCard";
 import ListBox from "../components/ListBox";
 import PageNavigation from "../components/PageNavigation";
 import useExercises from "../hooks/useExercises";
-import CurrentSearchParams from "../types/SearchParams";
+import CurrentSearchParams from "../types/CurrentSearchParams";
 import SearchBar from "../components/SearchBar";
 import NewButton from "../components/NewButton";
 import useAuth from "../hooks/useAuth";
@@ -38,6 +38,7 @@ const SORT_OPTIONS = [
 const ExercisesPage = () => {
   const { auth } = useAuth();
 
+  // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();
   const currentParams = new CurrentSearchParams(searchParams);
 
@@ -54,8 +55,9 @@ const ExercisesPage = () => {
   const [order, setOrder] = useState(
     currentParams.GetOrder(SORT_OPTIONS[0].order),
   );
-
+  
   const [query, setQuery] = useState("");
+  // ------------------------
 
   const [result, isLoading] = useExercises(
     currentPage,
@@ -64,7 +66,7 @@ const ExercisesPage = () => {
     order,
     query,
   );
-  const [error, page] = result.extract();
+  const [error, exercisePage] = result.extract();
 
   const paginate = (page: number) => {
     setCurrentPage(page);
@@ -138,8 +140,8 @@ const ExercisesPage = () => {
               isLoading ? "opacity-60 animate-pulse" : ""
             }`}
           >
-            {page &&
-              page.exercises.map((e) => (
+            {exercisePage &&
+              exercisePage.exercises.map((e) => (
                 <ExerciseCard exercise={e} key={e.id} />
               ))}
           </div>
@@ -170,16 +172,16 @@ const ExercisesPage = () => {
           )}
         </ul>
 
-        {page && page.exercises.length >= 1 && (
+        {exercisePage && exercisePage.exercises.length >= 1 && (
           <PageNavigation
-            pageNumber={page.pageNumber}
-            pageCount={page.pageCount}
+            pageNumber={exercisePage.pageNumber}
+            pageCount={exercisePage.pageCount}
             paginate={paginate}
             className={` ${isLoading ? "opacity-60 animate-pulse" : ""}`}
           />
         )}
 
-        {page && page.exercises.length === 0 && (
+        {exercisePage && exercisePage.exercises.length === 0 && (
           <p className="flex justify-center items-center">
             No exercises found <TbGhost2Filled className="ml-1" size={20}/>
           </p>
