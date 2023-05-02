@@ -31,9 +31,7 @@ public class ExerciseRepository
       results.Add(await _dbContext.Exercises.AnyAsync(e => e.Id == id));
     }
 
-    return results.Contains(false)
-        ? false
-        : true;
+    return !results.Contains(false);
   }
 
   public IEnumerable<Exercise> GetAllWithFilter(Func<Exercise, bool> filter)

@@ -22,6 +22,11 @@ public class MuscleGroupRepository : IMuscleGroupRepository
     await _dbContext.SaveEntitiesAsync<MuscleGroupId>();
   }
 
+  public IEnumerable<MuscleGroup> GetAllWithFilter(Func<MuscleGroup, bool> filter)
+  {
+    return _dbContext.MuscleGroups.Where(filter).ToList();
+  }
+
   public async Task<bool> ExistsAsync(MuscleGroupId id)
   {
     return await _dbContext.MuscleGroups.AnyAsync(mg => mg.Id == id);
@@ -35,13 +40,16 @@ public class MuscleGroupRepository : IMuscleGroupRepository
       results.Add(await _dbContext.MuscleGroups.AnyAsync(mg => mg.Id == id));
     }
 
-    return results.Contains(false)
-      ? false
-      : true;
+    return !results.Contains(false);
   }
 
   public async Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id)
   {
     return await _dbContext.MuscleGroups.FirstOrDefaultAsync(mg => mg.Id == id);
+  }
+
+  public async Task<IEnumerable<MuscleGroup>> GetAllAsync()
+  {
+    return await _dbContext.MuscleGroups.ToListAsync();
   }
 }
