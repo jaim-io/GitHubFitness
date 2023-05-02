@@ -71,7 +71,7 @@ public class CoachApplicationsController : ApiController
     return createdApplicationResult.Match(
       application => CreatedAtAction(
         nameof(GetCoachApplication),
-        new { applicationId = application.Id, userId = application.UserId },
+        new { applicationId = application.Id.Value, userId = application.UserId.Value },
         _mapper.Map<CoachApplicationResponse>(application)),
       errors => Problem(errors));
   }

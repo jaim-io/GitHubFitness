@@ -58,7 +58,7 @@ public class WorkoutsController : ApiController
     return workout.Match(
       workout => CreatedAtAction(
         nameof(GetWorkout),
-        new { coachId = workout.CoachId, workoutId = workout.Id },
+        new { coachId = workout.CoachId.Value, workoutId = workout.Id.Value },
         _mapper.Map<WorkoutResponse>(workout)),
       errors => Problem(errors));
   }

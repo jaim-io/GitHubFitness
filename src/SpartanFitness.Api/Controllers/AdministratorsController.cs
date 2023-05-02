@@ -52,7 +52,7 @@ public class AdministratorsController : ApiController
         return createdAdminResult.Match(
             admin => CreatedAtAction(
                 nameof(GetAdministrator), 
-                new { adminId = admin.Id }, 
+                new { adminId = admin.Id.Value }, 
                 _mapper.Map<AdministratorResponse>(admin)),
             errors => Problem(errors));
     }

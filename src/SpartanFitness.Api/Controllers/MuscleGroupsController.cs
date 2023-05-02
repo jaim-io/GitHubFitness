@@ -66,7 +66,7 @@ public class MuscleGroupsController : ApiController
     return createdMuscleGroupResult.Match(
       muscleGroup => CreatedAtAction(
         nameof(GetMuscleGroup),
-        new { muscleGroupId = muscleGroup.Id },
+        new { muscleGroupId = muscleGroup.Id.Value },
         _mapper.Map<MuscleGroupResponse>(muscleGroup)),
       errors => Problem(errors));
   }

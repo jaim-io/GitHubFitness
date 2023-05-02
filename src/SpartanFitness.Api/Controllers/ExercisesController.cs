@@ -65,7 +65,7 @@ public class ExercisesController : ApiController
     return createdExerciseResult.Match(
       exercise => CreatedAtAction(
         nameof(GetExercise),
-        new { exerciseId = exercise.Id },
+        new { exerciseId = exercise.Id.Value },
         _mapper.Map<ExerciseResponse>(exercise)),
       errors => Problem(errors));
   }

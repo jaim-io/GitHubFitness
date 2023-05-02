@@ -80,7 +80,6 @@ const Select = ({
     const handler = (e: KeyboardEvent) => {
       if (e.target == searchRef.current) {
         switch (e.code) {
-
           case "ArrowDown":
             setHighlightedIndex(0);
             containerRef.current?.focus();
@@ -189,7 +188,7 @@ const Select = ({
                   className="group flex items-center border border-[#30363d] rounded-lg py-[.15rem] px-[.5rem] gap-1 cursor-pointer bg-none outline-none hover:bg-[#30363d] focus:bg-[#30363d]"
                 >
                   {v.label}
-                  <span className="bg-none text-white border-none outline-none cursor-pointer group-hover:text-red group-focus:text-red text-lg">
+                  <span className="bg-none text-white border-none outline-none cursor-pointer text-lg">
                     &times;
                   </span>
                 </button>
@@ -224,7 +223,7 @@ const Select = ({
             &times;
           </span>
         </div>
-        <div className="bg-[#30363d] self-stretch w-[1px]"></div>
+        <div className="bg-[#30363d] self-stretch w-[1px]" />
         <div className="self-stretch flex items-center hover:bg-[#30363d] justify-center mr-1 rounded-lg cursor-pointer p-1">
           <HiChevronDown size={16} />
         </div>

@@ -1,9 +1,9 @@
 import {
   createBrowserRouter,
-  RouterProvider,
-  useNavigate,
+  RouterProvider
 } from "react-router-dom";
 import "./App.css";
+import LoginPersistance from "./components/LoginPersistance";
 import ExerciseLayout from "./layouts/ExerciseLayout";
 import LoginLayout from "./layouts/LoginLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -14,10 +14,6 @@ import ExercisesPage from "./pages/Exercises";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import NewExercisePage from "./pages/NewExercise";
-import { useContext, useEffect } from "react";
-import { toast } from "react-toastify";
-import AuthContext from "./contexts/AuthProvider";
-import LoginPersistance from "./components/LoginPersistance";
 
 const router = createBrowserRouter([
   {

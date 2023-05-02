@@ -50,7 +50,7 @@ public class CoachesController : ApiController
         return createdCoachResult.Match(
             coach => CreatedAtAction(
                 nameof(GetCoach),
-                new { coachId = coach.Id },
+                new { coachId = coach.Id.Value },
                 _mapper.Map<CoachResponse>(coach)),
             errors => Problem(errors));
     }

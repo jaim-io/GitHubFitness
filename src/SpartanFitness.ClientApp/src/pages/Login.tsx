@@ -30,8 +30,8 @@ const LoginPage = () => {
     }
   });
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     setIsLoading(true);
     setError(null);
