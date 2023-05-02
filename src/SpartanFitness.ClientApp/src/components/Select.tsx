@@ -1,7 +1,8 @@
-import { Combobox, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import { useState, Fragment, useRef, useEffect } from "react";
 import { BiCheck } from "react-icons/bi";
 import { TbGhost2Filled } from "react-icons/tb";
+import { HiChevronDown } from "react-icons/hi";
 
 export type SelectOption = {
   label: string;
@@ -150,7 +151,7 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
         tabIndex={0}
         className="relative min-w-[20rem] min-h-[1.5rem] border border-[#30363d] items-center gap-2 flex p-1 rounded-lg outline-none focus:border-[#30363d] select-none cursor-pointer"
       >
-        <span className="grow flex gap-2 flex-wrap min-h-[2.2rem]">
+        <span className="grow flex gap-2 flex-wrap min-h-[2.2rem] pl-1">
           {multiple
             ? value.map((v) => (
                 <button
@@ -159,10 +160,10 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
                     e.stopPropagation();
                     selectOption(v);
                   }}
-                  className="group flex items-center border border-[#30363d] rounded-lg py-[.15rem] px-[.25rem] gap-1 cursor-pointer bg-none outline-none hover:bg-[#30363d] focus:bg-[#30363d]"
+                  className="group flex items-center border border-[#30363d] rounded-lg py-[.15rem] px-[.5rem] gap-1 cursor-pointer bg-none outline-none hover:bg-[#30363d] focus:bg-[#30363d]"
                 >
                   {v.label}
-                  <span className="bg-none text-white border-none outline-none cursor-pointer group-hover:text-[#2f81f7] group-focus:text-[#2f81f7] text-lg">
+                  <span className="bg-none text-white border-none outline-none cursor-pointer group-hover:text-red group-focus:text-red text-lg">
                     &times;
                   </span>
                 </button>
@@ -180,54 +181,63 @@ const Select = ({ multiple, value, onChange, options }: SelectProps) => {
               setQuery(e.target.value);
             }}
             onSubmit={(e) => e.preventDefault()}
-            className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch" // border border-[#30363d] rounded-lg
+            className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch"
           />
         </span>
-        <button
+        <div
           id="select-clear-button"
-          type="button"
+          className="self-stretch flex items-center hover:bg-[#30363d] justify-center rounded-lg cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             clearOptions();
           }}
-          className="bg-none text-white border-none outline-none cursor-pointer hover:text-[#2f81f7] focus:text-[#2f81f7]"
         >
-          &times;
-        </button>
+          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-2">
+            &times;
+          </span>
+        </div>
         <div className="bg-[#30363d] self-stretch w-[1px]"></div>
-        <div className="border-[0.25rem] border-transparent border-t-white translate-y-1/4 cursor-pointer"></div>
-        <ul
-          id="select-options"
-          className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-[#0d1117] ${
-            isOpen ? "block" : "hidden"
-          }`}
+        <div className="self-stretch flex items-center hover:bg-[#30363d] justify-center mr-1 rounded-lg cursor-pointer p-1">
+          <HiChevronDown size={16} />
+        </div>
+        <Transition
+          show={isOpen}
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          {filteredOptions.map((option, index) => (
-            <li
-              onMouseEnter={() => setHighlightedIndex(index)}
-              onMouseLeave={() => setHighlightedIndex(undefined)}
-              onClick={(e) => {
-                e.stopPropagation;
-                selectOption(option);
-                if (!multiple) {
-                  setIsOpen(false);
-                }
-              }}
-              key={option.value}
-              className={`py-[0.25rem] px-[.5rem] cursor-pointer flex items-center rounded-lg ${
-                isHighlighted(index) ? "bg-[#30363d]" : ""
-              }`}
-            >
-              {isSelected(option) ? <BiCheck className="pr-1" /> : null}
-              {option.label}
-            </li>
-          ))}
-          {filteredOptions.length === 0 && (
-            <p className="flex justify-center items-center py-1 cursor-default">
-              No exercises found <TbGhost2Filled className="ml-1" size={20} />
-            </p>
-          )}
-        </ul>
+          <ul
+            id="select-options"
+            className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-[#0d1117]`}
+          >
+            {filteredOptions.map((option, index) => (
+              <li
+                onMouseEnter={() => setHighlightedIndex(index)}
+                onMouseLeave={() => setHighlightedIndex(undefined)}
+                onClick={(e) => {
+                  e.stopPropagation;
+                  selectOption(option);
+                  if (!multiple) {
+                    setIsOpen(false);
+                  }
+                }}
+                key={option.value}
+                className={`py-[0.25rem] px-[.5rem] cursor-pointer flex items-center rounded-lg ${
+                  isHighlighted(index) ? "bg-[#30363d]" : ""
+                }`}
+              >
+                {isSelected(option) ? <BiCheck className="pr-1" /> : null}
+                {option.label}
+              </li>
+            ))}
+            {filteredOptions.length === 0 && (
+              <p className="flex justify-center items-center py-1 cursor-default">
+                No exercises found <TbGhost2Filled className="ml-1" size={20} />
+              </p>
+            )}
+          </ul>
+        </Transition>
       </div>
     </>
   );

@@ -79,7 +79,3 @@ const NewExercisePage = () => {
 };
 
 export default NewExercisePage;
-
-// https://headlessui.com/react/combobox
-// https://flowbite.com/docs/components/dropdowns/#background-hover
-// https://flowbite.com/docs/components/dropdowns/#dropdown-with-search
