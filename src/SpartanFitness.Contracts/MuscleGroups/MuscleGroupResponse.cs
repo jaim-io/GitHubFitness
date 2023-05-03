@@ -5,6 +5,5 @@ public record MuscleGroupResponse(
     string Name,
     string Description,
     string Image,
-    string CoachId,
     DateTime CreatedDateTime,
     DateTime UpdatedDateTime);

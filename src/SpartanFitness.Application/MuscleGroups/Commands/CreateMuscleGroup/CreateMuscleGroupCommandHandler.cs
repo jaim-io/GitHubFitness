@@ -13,16 +13,13 @@ public class CreateMuscleGroupCommandHandler
     : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroup>>
 {
     private readonly IUserRepository _userRepository;
-    private readonly ICoachRepository _coachRepository;
     private readonly IMuscleGroupRepository _muscleGroupRepository;
 
     public CreateMuscleGroupCommandHandler(
         IUserRepository userRepository,
-        ICoachRepository coachRepository,
         IMuscleGroupRepository muscleGroupRepository)
     {
         _userRepository = userRepository;
-        _coachRepository = coachRepository;
         _muscleGroupRepository = muscleGroupRepository;
     }
 
@@ -37,15 +34,9 @@ public class CreateMuscleGroupCommandHandler
             return Errors.User.NotFound;
         }
 
-        if (await _coachRepository.GetByUserIdAsync(userId) is not Coach coach)
-        {
-            return Errors.Coach.NotFound;
-        }
-
         var muscleGroup = MuscleGroup.Create(
             command.Name,
             command.Description,
-            coach.Id,
             command.Image);
 
         await _muscleGroupRepository.AddAsync(muscleGroup);

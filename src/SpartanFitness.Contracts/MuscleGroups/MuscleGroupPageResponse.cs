@@ -9,7 +9,6 @@ public record MuscleGroupPageMusclesResponse(
   string Id,
   string Name,
   string Description,
-  string CreatorId,
   string Image,
   DateTime CreatedDateTime,
   DateTime UpdatedDateTime);

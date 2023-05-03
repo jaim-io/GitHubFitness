@@ -24,11 +24,5 @@ public class MuscleGroupConfiguration : IEntityTypeConfiguration<MuscleGroup>
             .HasConversion(
                 id => id.Value,
                 value => MuscleGroupId.Create(value));
-
-        builder.Property(mg => mg.CreatorId)
-            .ValueGeneratedNever()
-            .HasConversion(
-                id => id.Value,
-                value => CoachId.Create(value));
     }
 }

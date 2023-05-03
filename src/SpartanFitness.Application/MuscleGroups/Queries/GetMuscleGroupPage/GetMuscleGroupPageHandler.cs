@@ -22,14 +22,7 @@ public class GetMuscleGroupPageHandler : IRequestHandler<GetMuscleGroupPageQuery
   public async Task<ErrorOr<Page<MuscleGroup>>> Handle(GetMuscleGroupPageQuery query, CancellationToken cancellationToken)
   {
     Func<MuscleGroup, bool>? filter = null;
-    if (Guid.TryParse(query.SearchQuery, out Guid guid))
-    {
-      var muscleGroupId = MuscleGroupId.Create(guid);
-      var creatorId = CoachId.Create(guid);
-
-      filter = (mg) => mg.CreatorId.Equals(creatorId);
-    }
-    else if (query.SearchQuery is not null)
+    if (query.SearchQuery is not null)
     {
       string searchQuery = query.SearchQuery.ToLower();
       filter = (mg) => mg.Name.ToLower().Contains(searchQuery) || mg.Description.ToLower().Contains(searchQuery);
