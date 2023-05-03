@@ -10,11 +10,11 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 
-public class GetMuscleGroupPageHandler : IRequestHandler<GetMuscleGroupPageQuery, ErrorOr<Page<MuscleGroup>>>
+public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPageQuery, ErrorOr<Page<MuscleGroup>>>
 {
   private readonly IMuscleGroupRepository _muscleGroupRepository;
 
-  public GetMuscleGroupPageHandler(IMuscleGroupRepository muscleGroupRepository)
+  public GetMuscleGroupPageQueryHandler(IMuscleGroupRepository muscleGroupRepository)
   {
     _muscleGroupRepository = muscleGroupRepository;
   }
@@ -30,46 +30,46 @@ public class GetMuscleGroupPageHandler : IRequestHandler<GetMuscleGroupPageQuery
 
     var pageNumber = query.PageNumber ?? 1;
 
-    IEnumerable<MuscleGroup> skippedMuscles;
+    IEnumerable<MuscleGroup> skippedMuscleGroups;
     decimal pageCount;
     {
-      IEnumerable<MuscleGroup> muscles;
+      IEnumerable<MuscleGroup> muscleGroups;
       if (filter != null)
       {
-        muscles = _muscleGroupRepository.GetAllWithFilter(filter);
+        muscleGroups = _muscleGroupRepository.GetAllWithFilter(filter);
       }
       else
       {
-        muscles = await _muscleGroupRepository.GetAllAsync();
+        muscleGroups = await _muscleGroupRepository.GetAllAsync();
       }
 
-      muscles = query.Sort switch
+      muscleGroups = query.Sort switch
       {
         "name" => query.Order switch
         {
-          "asc" => muscles.OrderBy(ex => ex.Name),
-          "desc" => muscles.OrderByDescending(ex => ex.Name),
-          _ => muscles.OrderByDescending(ex => ex.Name),
+          "asc" => muscleGroups.OrderBy(mg => mg.Name),
+          "desc" => muscleGroups.OrderByDescending(mg => mg.Name),
+          _ => muscleGroups.OrderByDescending(mg => mg.Name),
         },
         "created" => query.Order switch
         {
-          "desc" => muscles.OrderByDescending(ex => ex.CreatedDateTime),
-          "asc" => muscles.OrderBy(ex => ex.CreatedDateTime),
-          _ => muscles.OrderByDescending(ex => ex.CreatedDateTime),
+          "desc" => muscleGroups.OrderByDescending(mg => mg.CreatedDateTime),
+          "asc" => muscleGroups.OrderBy(mg => mg.CreatedDateTime),
+          _ => muscleGroups.OrderByDescending(mg => mg.CreatedDateTime),
         },
         "updated" => query.Order switch
         {
-          "desc" => muscles.OrderByDescending(ex => ex.UpdatedDateTime),
-          "asc" => muscles.OrderBy(ex => ex.UpdatedDateTime),
-          _ => muscles.OrderByDescending(ex => ex.UpdatedDateTime),
+          "desc" => muscleGroups.OrderByDescending(mg => mg.UpdatedDateTime),
+          "asc" => muscleGroups.OrderBy(mg => mg.UpdatedDateTime),
+          _ => muscleGroups.OrderByDescending(mg => mg.UpdatedDateTime),
         },
-        _ => muscles.OrderByDescending(ex => ex.CreatedDateTime),
+        _ => muscleGroups.OrderByDescending(mg => mg.CreatedDateTime),
       };
 
-      skippedMuscles = muscles.Skip((pageNumber - 1) * query.PageSize ?? 0);
+      skippedMuscleGroups = muscleGroups.Skip((pageNumber - 1) * query.PageSize ?? 0);
       pageCount = query.PageSize == null
         ? 1
-        : Math.Ceiling((decimal)muscles.Count() / (int)query.PageSize);
+        : Math.Ceiling((decimal)muscleGroups.Count() / (int)query.PageSize);
     }
 
     if (!(pageNumber == 1 && pageCount == 0) &&
@@ -79,8 +79,8 @@ public class GetMuscleGroupPageHandler : IRequestHandler<GetMuscleGroupPageQuery
     }
 
     var content = query.PageSize == null
-      ? skippedMuscles
-      : skippedMuscles
+      ? skippedMuscleGroups
+      : skippedMuscleGroups
           .Take((int)query.PageSize);
 
     return new Page<MuscleGroup>(

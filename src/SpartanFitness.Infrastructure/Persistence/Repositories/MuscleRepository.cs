@@ -26,6 +26,11 @@ public class MuscleRepository : IMuscleRepository
     return await _dbContext.Muscles.ToListAsync();
   }
 
+  public IEnumerable<Muscle> GetAllWithFilter(Func<Muscle, bool> filter)
+  {
+    return _dbContext.Muscles.Where(filter).ToList();
+  }
+
   public async Task<Muscle?> GetByIdAsync(MuscleId id)
   {
     return await _dbContext.Muscles.FirstOrDefaultAsync(m => m.Id == id);
