@@ -50,12 +50,12 @@ public class MuscleGroupsController : ApiController
     ErrorOr<MuscleGroup> muscleGroupResult = await _mediator.Send(query);
 
     return muscleGroupResult.Match(
-      muscleGroupResult => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroupResult)),
+      muscleGroup => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroup)),
       errors => Problem(errors));
   }
 
   [HttpPost("create")]
-  [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
+  [Authorize(Roles = RoleTypes.Administrator)]
   public async Task<IActionResult> CreateMuscleGroup(
     CreateMuscleGroupRequest request)
   {
