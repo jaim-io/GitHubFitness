@@ -7,10 +7,6 @@ public class CreateMuscleGroupCommandValidator
 {
     public CreateMuscleGroupCommandValidator()
     {
-        RuleFor(x => x.UserId)
-            .Must(x => Guid.TryParse(x, out _))
-            .WithMessage("The user ID must be a valid GUID");
-
         RuleFor(x => x.Name)
             .NotEmpty();
 

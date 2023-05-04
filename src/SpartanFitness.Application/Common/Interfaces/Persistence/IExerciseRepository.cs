@@ -6,8 +6,8 @@ namespace SpartanFitness.Application.Common.Interfaces.Persistence;
 public interface IExerciseRepository
 {
   Task AddAsync(Exercise exercise);
-  IEnumerable<Exercise> GetAllWithFilter(Func<Exercise, bool> filter);
   Task<IEnumerable<Exercise>> GetAllAsync();
+  Task<List<Exercise>> GetBySearchQueryAsync(string searchQuery);
   Task<Exercise?> GetByIdAsync(ExerciseId id);
   Task<Exercise?> GetByNameAsync(string name);
   Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids);

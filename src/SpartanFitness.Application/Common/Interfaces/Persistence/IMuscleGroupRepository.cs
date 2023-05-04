@@ -9,7 +9,7 @@ public interface IMuscleGroupRepository
   Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id);
   Task<MuscleGroup?> GetByNameAsync(string name);
   Task<IEnumerable<MuscleGroup>> GetAllAsync();
-  IEnumerable<MuscleGroup> GetAllWithFilter(Func<MuscleGroup, bool> filter);
+  Task<List<MuscleGroup>> GetBySearchQueryAsync(string searchQuery);
   Task<bool> ExistsAsync(MuscleGroupId id);
   Task<bool> ExistsAsync(IEnumerable<MuscleGroupId> ids);
 }

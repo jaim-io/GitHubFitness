@@ -22,9 +22,13 @@ public class MuscleGroupRepository : IMuscleGroupRepository
     await _dbContext.SaveEntitiesAsync<MuscleGroupId>();
   }
 
-  public IEnumerable<MuscleGroup> GetAllWithFilter(Func<MuscleGroup, bool> filter)
+  public async Task<List<MuscleGroup>> GetBySearchQueryAsync(string searchQuery)
   {
-    return _dbContext.MuscleGroups.Where(filter).ToList();
+    string query = searchQuery.ToLower();
+
+    return await _dbContext.MuscleGroups
+      .Where(mg => (mg.Name.ToLower().Contains(query) || mg.Description.ToLower().Contains(query)))
+      .ToListAsync();
   }
 
   public async Task<bool> ExistsAsync(MuscleGroupId id)

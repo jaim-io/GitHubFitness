@@ -39,14 +39,18 @@ public class ExerciseRepository
     return !results.Contains(false);
   }
 
-  public IEnumerable<Exercise> GetAllWithFilter(Func<Exercise, bool> filter)
-  {
-    return _dbContext.Exercises.Where(filter).ToList();
-  }
-
   public async Task<IEnumerable<Exercise>> GetAllAsync()
   {
     return await _dbContext.Exercises.ToListAsync();
+  }
+
+  public async Task<List<Exercise>> GetBySearchQueryAsync(string searchQuery)
+  {
+    string query = searchQuery.ToLower();
+
+    return await _dbContext.Exercises
+      .Where(e => (e.Name.ToLower().Contains(query) || e.Description.ToLower().Contains(query)))
+      .ToListAsync();
   }
 
   public async Task<Exercise?> GetByIdAsync(ExerciseId id)
