@@ -10,37 +10,35 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 
 public class CreateMuscleGroupCommandHandler
-    : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroup>>
+  : IRequestHandler<CreateMuscleGroupCommand, ErrorOr<MuscleGroup>>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IMuscleGroupRepository _muscleGroupRepository;
+  private readonly IUserRepository _userRepository;
+  private readonly IMuscleGroupRepository _muscleGroupRepository;
 
-    public CreateMuscleGroupCommandHandler(
-        IUserRepository userRepository,
-        IMuscleGroupRepository muscleGroupRepository)
+  public CreateMuscleGroupCommandHandler(
+    IUserRepository userRepository,
+    IMuscleGroupRepository muscleGroupRepository)
+  {
+    _userRepository = userRepository;
+    _muscleGroupRepository = muscleGroupRepository;
+  }
+
+  public async Task<ErrorOr<MuscleGroup>> Handle(
+    CreateMuscleGroupCommand command,
+    CancellationToken cancellationToken)
+  {
+    if (await _muscleGroupRepository.GetByNameAsync(command.Name) is MuscleGroup)
     {
-        _userRepository = userRepository;
-        _muscleGroupRepository = muscleGroupRepository;
+      return Errors.MuscleGroup.DuplicateName;
     }
 
-    public async Task<ErrorOr<MuscleGroup>> Handle(
-        CreateMuscleGroupCommand command,
-        CancellationToken cancellationToken)
-    {
-        var userId = UserId.Create(command.UserId);
+    var muscleGroup = MuscleGroup.Create(
+      command.Name,
+      command.Description,
+      command.Image);
 
-        if (!await _userRepository.ExistsAsync(userId))
-        {
-            return Errors.User.NotFound;
-        }
+    await _muscleGroupRepository.AddAsync(muscleGroup);
 
-        var muscleGroup = MuscleGroup.Create(
-            command.Name,
-            command.Description,
-            command.Image);
-
-        await _muscleGroupRepository.AddAsync(muscleGroup);
-
-        return muscleGroup;
-    }
+    return muscleGroup;
+  }
 }

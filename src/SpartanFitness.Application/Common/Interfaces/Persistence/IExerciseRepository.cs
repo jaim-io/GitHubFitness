@@ -9,6 +9,7 @@ public interface IExerciseRepository
   IEnumerable<Exercise> GetAllWithFilter(Func<Exercise, bool> filter);
   Task<IEnumerable<Exercise>> GetAllAsync();
   Task<Exercise?> GetByIdAsync(ExerciseId id);
+  Task<Exercise?> GetByNameAsync(string name);
   Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids);
   Task<IEnumerable<MuscleGroupId>> GetMuscleGroupIds(IEnumerable<ExerciseId> exerciseIds);
 }

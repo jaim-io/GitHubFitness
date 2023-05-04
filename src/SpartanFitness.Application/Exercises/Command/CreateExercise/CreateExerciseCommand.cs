@@ -4,7 +4,7 @@ using MediatR;
 
 using SpartanFitness.Domain.Aggregates;
 
-namespace SpartanFitness.Application.Exercises.CreateExercise;
+namespace SpartanFitness.Application.Exercises.Command.CreateExercise;
 
 public record CreateExerciseCommand(
     string UserId,

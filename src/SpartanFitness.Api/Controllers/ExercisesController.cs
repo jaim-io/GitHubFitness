@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Exercises.CreateExercise;
+using SpartanFitness.Application.Exercises.Command.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 using SpartanFitness.Contracts.Common;

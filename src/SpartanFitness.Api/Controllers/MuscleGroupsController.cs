@@ -59,8 +59,7 @@ public class MuscleGroupsController : ApiController
   public async Task<IActionResult> CreateMuscleGroup(
     CreateMuscleGroupRequest request)
   {
-    var userId = Authorization.GetUserIdFromClaims(HttpContext);
-    var command = _mapper.Map<CreateMuscleGroupCommand>((request, userId));
+    var command = _mapper.Map<CreateMuscleGroupCommand>(request);
     ErrorOr<MuscleGroup> createdMuscleGroupResult = await _mediator.Send(command);
 
     return createdMuscleGroupResult.Match(

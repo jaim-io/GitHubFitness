@@ -7,6 +7,7 @@ public interface IMuscleGroupRepository
 {
   Task AddAsync(MuscleGroup muscleGroup);
   Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id);
+  Task<MuscleGroup?> GetByNameAsync(string name);
   Task<IEnumerable<MuscleGroup>> GetAllAsync();
   IEnumerable<MuscleGroup> GetAllWithFilter(Func<MuscleGroup, bool> filter);
   Task<bool> ExistsAsync(MuscleGroupId id);
