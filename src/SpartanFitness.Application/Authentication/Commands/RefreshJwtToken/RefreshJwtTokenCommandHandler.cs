@@ -34,7 +34,9 @@ public class RefreshJwtTokenCommandHandler
     _roleRepository = roleRepository;
   }
 
-  public async Task<ErrorOr<AuthenticationResult>> Handle(RefreshJwtTokenCommand command, CancellationToken cancellationToken)
+  public async Task<ErrorOr<AuthenticationResult>> Handle(
+    RefreshJwtTokenCommand command,
+    CancellationToken cancellationToken)
   {
     if (_jwtTokenGenerator.GetPrincipalFromToken(command.Token) is not ClaimsPrincipal principal)
     {
@@ -76,10 +78,18 @@ public class RefreshJwtTokenCommandHandler
       return Errors.Authentication.InvalidToken;
     }
 
+    var userIdString = principal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value;
+    var userId = UserId.Create(userIdString);
+
     if (storedRefreshToken.Used)
     {
       // Refresh token has already been used
-      // TODO: invalidate all other refresh- and access tokens
+      // TODO: invalidate all access tokens
+
+      var tokens = await _refreshTokenRepository.GetByUserIdAsync(userId);
+      tokens.ForEach(t => t.Invalidate());
+      await _refreshTokenRepository.UpdateRangeAsync(tokens);
+
       return Errors.Authentication.InvalidToken;
     }
 
@@ -91,9 +101,6 @@ public class RefreshJwtTokenCommandHandler
 
     storedRefreshToken.Use();
     await _refreshTokenRepository.UpdateAsync(storedRefreshToken);
-
-    var userIdString = principal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value;
-    var userId = UserId.Create(userIdString);
 
     if (await _userRepository.GetByIdAsync(userId) is not User user)
     {

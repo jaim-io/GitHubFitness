@@ -52,4 +52,5 @@ public class RefreshToken : AggregateRoot<RefreshTokenId, Guid>
   }
 
   public void Use() => Used = true;
+  public void Invalidate() => Invalidated = true;
 }
