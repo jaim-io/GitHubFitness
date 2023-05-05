@@ -10,7 +10,7 @@ public class UserMappingConfig : IRegister
   public void Register(TypeAdapterConfig config)
   {
     config.NewConfig<User, UserResponse>()
-      .Map(dest => dest.Id, src => src.Id.Value)
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
       .Map(dest => dest, src => src);
   }
 }

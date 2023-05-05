@@ -17,8 +17,8 @@ public class MuscleMappingConfig : IRegister
       .Map(dest => dest, src => src);
 
     config.NewConfig<Muscle, MuscleResponse>()
-      .Map(dest => dest.Id, src => src.Id.Value)
-      .Map(dest => dest.MuscleGroupId, src => src.MuscleGroupId.Value)
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.MuscleGroupId, src => src.MuscleGroupId.Value.ToString())
       .Map(dest => dest, src => src);
 
     config.NewConfig<PagingRequest, GetMusclePageQuery>()
@@ -32,8 +32,8 @@ public class MuscleMappingConfig : IRegister
       .Map(dest => dest, src => src);
 
     config.NewConfig<Muscle, MusclePageMuscleResponse>()
-      .Map(dest => dest.Id, src => src.Id.Value)
-      .Map(dest => dest.MuscleGroupId, src => src.MuscleGroupId.Value)
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.MuscleGroupId, src => src.MuscleGroupId.Value.ToString())
       .Map(dest => dest, src => src);
   }
 }

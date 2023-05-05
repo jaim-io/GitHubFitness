@@ -11,18 +11,18 @@ namespace SpartanFitness.Api.Common.Mappings;
 /// </summary>
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Adds Mapster's mappings to the Presentation layer [Clean Architecture Layers].
-    /// </summary>
-    public static IServiceCollection AddMappings(
-        this IServiceCollection services)
-    {
-        var config = TypeAdapterConfig.GlobalSettings;
-        config.Scan(Assembly.GetExecutingAssembly());
+  /// <summary>
+  /// Adds Mapster's mappings to the Presentation layer [Clean Architecture Layers].
+  /// </summary>
+  public static IServiceCollection AddMappings(
+    this IServiceCollection services)
+  {
+    var config = TypeAdapterConfig.GlobalSettings;
+    config.Scan(Assembly.GetExecutingAssembly());
 
-        services.AddSingleton(config);
-        services.AddScoped<IMapper, ServiceMapper>();
+    services.AddSingleton(config);
+    services.AddScoped<IMapper, ServiceMapper>();
 
-        return services;
-    }
+    return services;
+  }
 }

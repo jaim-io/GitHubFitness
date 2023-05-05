@@ -8,13 +8,13 @@ namespace SpartanFitness.Api.Common.Mappings;
 
 public class AdministratorMappingConfig : IRegister
 {
-    public void Register(TypeAdapterConfig config)
-    {
-        config.NewConfig<CreateAdministratorRequest, CreateAdministratorCommand>();
+  public void Register(TypeAdapterConfig config)
+  {
+    config.NewConfig<CreateAdministratorRequest, CreateAdministratorCommand>();
 
-        config.NewConfig<Administrator, AdministratorResponse>()
-            .Map(dest => dest.Id, src => src.Id.Value)
-            .Map(dest => dest.UserId, src => src.UserId.Value)
-            .Map(dest => dest, src => src);
-    }
+    config.NewConfig<Administrator, AdministratorResponse>()
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.UserId, src => src.UserId.Value.ToString())
+      .Map(dest => dest, src => src);
+  }
 }

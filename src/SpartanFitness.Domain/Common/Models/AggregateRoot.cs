@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace SpartanFitness.Domain.Common.Models;
 
 public abstract class AggregateRoot<TId, TIdType> : Entity<TId>

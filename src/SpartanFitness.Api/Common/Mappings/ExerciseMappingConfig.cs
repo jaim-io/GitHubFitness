@@ -18,10 +18,10 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest, src => src.Request);
 
     config.NewConfig<Exercise, ExerciseResponse>()
-      .Map(dest => dest.Id, src => src.Id.Value)
-      .Map(dest => dest.CreatorId, src => src.CreatorId.Value)
-      .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value))
-      .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value))
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.CreatorId, src => src.CreatorId.Value.ToString())
+      .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value.ToString()))
+      .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value.ToString()))
       .Map(dest => dest, src => src);
 
     config.NewConfig<PagingRequest, GetExercisePageQuery>()
@@ -35,10 +35,10 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest, src => src);
 
     config.NewConfig<Exercise, ExercisePageExerciseResponse>()
-      .Map(dest => dest.Id, src => src.Id.Value)
-      .Map(dest => dest.CreatorId, src => src.CreatorId.Value)
-      .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value))
-      .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value))
+      .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.CreatorId, src => src.CreatorId.Value.ToString())
+      .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value.ToString()))
+      .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value.ToString()))
       .Map(dest => dest, src => src);
   }
 }
