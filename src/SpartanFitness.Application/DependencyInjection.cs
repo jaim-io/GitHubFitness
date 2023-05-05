@@ -15,19 +15,19 @@ namespace SpartanFitness.Application;
 /// </summary>
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Adds the Application layer [Clean Architecture Layers].
-    /// </summary>
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        services.AddMediatR(typeof(DependencyInjection).Assembly);
+  /// <summary>
+  /// Adds the Application layer [Clean Architecture Layers].
+  /// </summary>
+  public static IServiceCollection AddApplication(this IServiceCollection services)
+  {
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
-        services.AddScoped(
-            typeof(IPipelineBehavior<,>),
-            typeof(ValidationBehavior<,>));
+    services.AddScoped(
+      typeof(IPipelineBehavior<,>),
+      typeof(ValidationBehavior<,>));
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-        return services;
-    }
+    return services;
+  }
 }
