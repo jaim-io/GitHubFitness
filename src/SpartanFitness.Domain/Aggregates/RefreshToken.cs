@@ -3,7 +3,7 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
-public class RefreshToken : AggregateRoot<RefreshTokenId>
+public class RefreshToken : AggregateRoot<RefreshTokenId, Guid>
 {
   public string JwtId { get; private set; }
   public DateTime CreationDateTime { get; private set; }

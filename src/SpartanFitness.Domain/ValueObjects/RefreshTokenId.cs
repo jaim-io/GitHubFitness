@@ -2,9 +2,9 @@
 
 namespace SpartanFitness.Domain.ValueObjects;
 
-public class RefreshTokenId : ValueObject
+public class RefreshTokenId : AggregateRootId<Guid>
 {
-  public Guid Value { get; private set; }
+  public override Guid Value { get; protected set; }
 
   public RefreshTokenId(Guid value)
   {

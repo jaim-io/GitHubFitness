@@ -36,17 +36,17 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
 
   private void ConfigureExerciseMuscleGroupIdsTable(EntityTypeBuilder<Exercise> builder)
   {
-    builder.OwnsMany(e => e.MuscleGroupIds, mgi =>
+    builder.OwnsMany(e => e.MuscleGroupIds, mgib =>
     {
-      mgi.ToTable("ExerciseMuscleGroupIds");
+      mgib.ToTable("ExerciseMuscleGroupIds");
 
-      mgi.WithOwner().HasForeignKey("ExerciseId");
+      mgib.WithOwner().HasForeignKey("ExerciseId");
 
-      mgi.HasKey("Id");
+      mgib.HasKey("Id");
 
-      mgi.Property(mg => mg.Value)
-        .HasColumnName("MuscleGroupId")
-        .ValueGeneratedNever();
+      mgib.Property(mgi => mgi.Value)
+        .ValueGeneratedNever()
+        .HasColumnName("MuscleGroupId");
     });
 
     builder.Metadata.FindNavigation(nameof(Exercise.MuscleGroupIds))!

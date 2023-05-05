@@ -2,9 +2,9 @@
 
 namespace SpartanFitness.Domain.ValueObjects;
 
-public class MuscleId : ValueObject
+public class MuscleId : AggregateRootId<Guid>
 {
-  public Guid Value { get; private set; }
+  public override Guid Value { get; protected set; }
 
   public MuscleId(Guid value)
   {

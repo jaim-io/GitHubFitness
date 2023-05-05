@@ -70,12 +70,13 @@ public class CreateExerciseCommandHandler
       return Errors.Muscle.NotFound;
     }
 
+    var coachId = CoachId.Create(coach.Id.Value);
     var exercise = Exercise.Create(
       muscleGroupIds,
       muscleIds,
       command.Name,
       command.Description,
-      coach.Id,
+      coachId,
       command.Image,
       command.Video);
 

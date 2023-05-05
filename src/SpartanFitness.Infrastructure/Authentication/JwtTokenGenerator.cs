@@ -9,6 +9,7 @@ using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Authentication;
 
@@ -73,7 +74,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     return RefreshToken.Create(
       jwtId: jti ?? Guid.NewGuid().ToString(),
       expiryDateTime: DateTime.Now.AddMonths(_jwtSettings.RefreshTokenExpiryMonths),
-      userId: user.Id);
+      userId: UserId.Create(user.Id.Value));
   }
 
   public ClaimsPrincipal? GetPrincipalFromToken(string token)

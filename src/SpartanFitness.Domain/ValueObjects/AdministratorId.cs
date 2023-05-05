@@ -2,9 +2,9 @@ using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Domain.ValueObjects;
 
-public sealed class AdministratorId : ValueObject
+public sealed class AdministratorId : AggregateRootId<Guid>
 {
-    public Guid Value { get; private set; }
+    public override Guid Value { get; protected set; }
 
     public AdministratorId(Guid value)
     {

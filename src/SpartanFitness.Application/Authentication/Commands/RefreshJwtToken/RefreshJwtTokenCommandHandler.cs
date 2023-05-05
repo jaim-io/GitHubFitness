@@ -100,7 +100,7 @@ public class RefreshJwtTokenCommandHandler
       return Errors.User.NotFound;
     }
 
-    var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
+    var roles = await _roleRepository.GetRolesByUserIdAsync(userId);
 
     var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 

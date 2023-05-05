@@ -3,7 +3,7 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
-public sealed class Coach : AggregateRoot<CoachId>
+public sealed class Coach : AggregateRoot<CoachId, Guid>
 {
     public UserId UserId { get; private set; }
     public DateTime CreatedDateTime { get; private set; }

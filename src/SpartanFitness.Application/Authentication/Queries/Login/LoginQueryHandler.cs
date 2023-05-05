@@ -7,6 +7,7 @@ using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.Authentication.Queries.Login;
 
@@ -47,7 +48,8 @@ public class LoginQueryHandler
       return Errors.Authentication.InvalidCredentials;
     }
 
-    var roles = await _roleRepository.GetRolesByUserIdAsync(user.Id);
+    var userId = UserId.Create(user.Id.Value);
+    var roles = await _roleRepository.GetRolesByUserIdAsync(userId);
 
     var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 

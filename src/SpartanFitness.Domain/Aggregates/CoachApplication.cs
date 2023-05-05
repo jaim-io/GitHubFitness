@@ -11,7 +11,7 @@ public enum Status
   Denied,
 }
 
-public class CoachApplication : AggregateRoot<CoachApplicationId>
+public class CoachApplication : AggregateRoot<CoachApplicationId, Guid>
 {
   public string Motivation { get; private set; }
   public string Remarks { get; private set; }
@@ -81,7 +81,7 @@ public class CoachApplication : AggregateRoot<CoachApplicationId>
     SetRemarks(remarks);
     SetClosedDateTime(DateTime.UtcNow);
 
-    AddDomainEvent(new CoachApplicationApproved(Id, UserId));
+    AddDomainEvent(new CoachApplicationApproved(this));
   }
 
   public void Deny(string remarks)

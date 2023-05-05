@@ -4,7 +4,7 @@ using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
-public sealed class Workout : AggregateRoot<WorkoutId>
+public sealed class Workout : AggregateRoot<WorkoutId, Guid>
 {
     private List<MuscleGroupId> _muscleGroupIds = new();
     private List<WorkoutExercise> _workoutExercises = new();

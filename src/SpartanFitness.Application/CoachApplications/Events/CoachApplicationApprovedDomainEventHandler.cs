@@ -21,7 +21,7 @@ public sealed class CoachApplicationApprovedDomainEventHandler
     CancellationToken cancellationToken)
   {
     var coach = Coach.Create(
-      notification.UserId);
+      notification.coachApplication.UserId);
 
     await _coachRepository.AddAsync(coach);
   }
