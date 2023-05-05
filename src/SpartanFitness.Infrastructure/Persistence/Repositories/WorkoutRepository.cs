@@ -20,7 +20,7 @@ public class WorkoutRepository
   {
     _dbContext.Add(workout);
 
-    await _dbContext.SaveEntitiesAsync<WorkoutId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public Task<Workout?> GetByIdAsync(WorkoutId id)

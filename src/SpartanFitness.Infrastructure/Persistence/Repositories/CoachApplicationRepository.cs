@@ -19,7 +19,7 @@ public class CoachApplicationRepository : ICoachApplicationRepository
   {
     _dbContext.Add(coachApplication);
 
-    await _dbContext.SaveEntitiesAsync<CoachApplicationId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<bool> AreRelatedAsync(CoachApplicationId id, UserId userId)
@@ -45,6 +45,6 @@ public class CoachApplicationRepository : ICoachApplicationRepository
   public async Task UpdateAsync(CoachApplication coachApplication)
   {
     _dbContext.Update(coachApplication);
-    await _dbContext.SaveEntitiesAsync<CoachApplicationId>();
+    await _dbContext.SaveChangesAsync();
   }
 }

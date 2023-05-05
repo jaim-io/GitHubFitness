@@ -1,5 +1,7 @@
 using SpartanFitness.Api;
+using SpartanFitness.Application;
 using SpartanFitness.Domain;
+using SpartanFitness.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {

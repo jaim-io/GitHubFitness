@@ -36,7 +36,7 @@ public class MuscleGroupsController : ApiController
   public async Task<IActionResult> GetMuscleGroups([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetMuscleGroupPageQuery>(request);
-    ErrorOr<Page<MuscleGroup>> muscleGroupResult = await _mediator.Send(query);
+    ErrorOr<Pagination<MuscleGroup>> muscleGroupResult = await _mediator.Send(query);
 
     return muscleGroupResult.Match(
       muscleGroupPage => Ok(_mapper.Map<MuscleGroupPageResponse>(muscleGroupPage)),

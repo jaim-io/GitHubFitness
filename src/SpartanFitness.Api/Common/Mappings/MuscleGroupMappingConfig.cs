@@ -26,7 +26,7 @@ public class MuscleGroupMappingConfig : IRegister
       .Map(dest => dest.SearchQuery, src => src.Query)
       .Map(dest => dest, src => src);
 
-    config.NewConfig<Page<MuscleGroup>, MuscleGroupPageResponse>()
+    config.NewConfig<Pagination<MuscleGroup>, MuscleGroupPageResponse>()
       .Map(dest => dest.MuscleGroups, src => src.Content)
       .Map(dest => dest, src => src);
     

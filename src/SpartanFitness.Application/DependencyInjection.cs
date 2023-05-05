@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using SpartanFitness.Application.Common.Behaviours;
 
-namespace SpartanFitness.Api;
+namespace SpartanFitness.Application;
 
 /// <summary>
 /// Static DependencyInjection wich will be injected in /SpartanFitness.Api/Program.cs.

@@ -9,7 +9,7 @@ using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 
-public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPageQuery, ErrorOr<Page<MuscleGroup>>>
+public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPageQuery, ErrorOr<Pagination<MuscleGroup>>>
 {
   private readonly IMuscleGroupRepository _muscleGroupRepository;
 
@@ -18,7 +18,7 @@ public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPage
     _muscleGroupRepository = muscleGroupRepository;
   }
 
-  public async Task<ErrorOr<Page<MuscleGroup>>> Handle(
+  public async Task<ErrorOr<Pagination<MuscleGroup>>> Handle(
     GetMuscleGroupPageQuery query,
     CancellationToken cancellationToken)
   {
@@ -71,7 +71,7 @@ public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPage
       : muscleGroups
         .Take((int)query.PageSize);
 
-    return new Page<MuscleGroup>(
+    return new Pagination<MuscleGroup>(
       muscleGroups.ToList(),
       pageNumber,
       (int)pageCount);

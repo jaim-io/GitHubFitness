@@ -1,5 +1,5 @@
 using SpartanFitness.Domain.Common.Models;
-using SpartanFitness.Domain.DomainEvents;
+using SpartanFitness.Domain.Events;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
@@ -81,7 +81,7 @@ public class CoachApplication : AggregateRoot<CoachApplicationId>
     SetRemarks(remarks);
     SetClosedDateTime(DateTime.UtcNow);
 
-    AddDomainEvent(new CoachApplicationApprovedDomainEvent(Id, UserId));
+    AddDomainEvent(new CoachApplicationApproved(Id, UserId));
   }
 
   public void Deny(string remarks)

@@ -30,7 +30,7 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest.SearchQuery, src => src.Query)
       .Map(dest => dest, src => src);
 
-    config.NewConfig<Page<Exercise>, ExercisePageResponse>()
+    config.NewConfig<Pagination<Exercise>, ExercisePageResponse>()
       .Map(dest => dest.Exercises, src => src.Content)
       .Map(dest => dest, src => src);
 

@@ -19,7 +19,7 @@ public class CoachRepository : ICoachRepository
   {
     _dbContext.Add(coach);
 
-    await _dbContext.SaveEntitiesAsync<CoachId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<Coach?> GetByIdAsync(CoachId id)

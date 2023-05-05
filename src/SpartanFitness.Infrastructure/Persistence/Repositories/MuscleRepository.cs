@@ -18,7 +18,7 @@ public class MuscleRepository : IMuscleRepository
   public async Task AddAsync(Muscle muscle)
   {
     _dbContext.Add(muscle);
-    await _dbContext.SaveEntitiesAsync<MuscleId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<IEnumerable<Muscle>> GetAllAsync()

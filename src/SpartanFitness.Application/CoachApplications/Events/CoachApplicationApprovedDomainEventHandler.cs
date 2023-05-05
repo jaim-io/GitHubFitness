@@ -2,12 +2,12 @@ using MediatR;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
-using SpartanFitness.Domain.DomainEvents;
+using SpartanFitness.Domain.Events;
 
 namespace SpartanFitness.Application.CoachApplications.Events;
 
 public sealed class CoachApplicationApprovedDomainEventHandler
-  : INotificationHandler<CoachApplicationApprovedDomainEvent>
+  : INotificationHandler<CoachApplicationApproved>
 {
   private readonly ICoachRepository _coachRepository;
 
@@ -17,7 +17,7 @@ public sealed class CoachApplicationApprovedDomainEventHandler
   }
 
   public async Task Handle(
-    CoachApplicationApprovedDomainEvent notification,
+    CoachApplicationApproved notification,
     CancellationToken cancellationToken)
   {
     var coach = Coach.Create(

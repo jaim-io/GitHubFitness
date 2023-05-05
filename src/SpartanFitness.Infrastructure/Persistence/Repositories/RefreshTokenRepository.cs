@@ -20,7 +20,7 @@ public class RefreshTokenRepository
   {
     _dbContext.Add(token);
 
-    await _dbContext.SaveEntitiesAsync<RefreshTokenId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<RefreshToken?> GetByIdAsync(RefreshTokenId id)
@@ -31,6 +31,6 @@ public class RefreshTokenRepository
   public async Task UpdateAsync(RefreshToken token)
   {
     _dbContext.Update(token);
-    await _dbContext.SaveEntitiesAsync<RefreshTokenId>();
+    await _dbContext.SaveChangesAsync();
   }
 }

@@ -1,16 +1,14 @@
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Domain.Aggregates;
-using SpartanFitness.Domain.Common.Interfaces;
 using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Infrastructure.Persistence.Interceptors;
 
 namespace SpartanFitness.Infrastructure.Persistence;
 
-public class SpartanFitnessDbContext : DbContext, IUnitOfWork
+public class SpartanFitnessDbContext : DbContext
 {
-  private IMediator _mediator;
+  private readonly PublishDomainEventsInterceptor _publishDomainEventsInterceptor;
 
   public DbSet<User> Users { get; set; } = null!;
   public DbSet<Coach> Coaches { get; set; } = null!;
@@ -22,25 +20,18 @@ public class SpartanFitnessDbContext : DbContext, IUnitOfWork
   public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
   public DbSet<Muscle> Muscles { get; set; } = null!;
 
-  public SpartanFitnessDbContext(DbContextOptions<SpartanFitnessDbContext> options, IMediator mediator)
+  public SpartanFitnessDbContext(
+    DbContextOptions<SpartanFitnessDbContext> options,
+    PublishDomainEventsInterceptor publishDomainEventsInterceptor)
     : base(options)
   {
-    _mediator = mediator;
-  }
-
-  public async Task<bool> SaveEntitiesAsync<TId>(CancellationToken cancellationToken = default(CancellationToken))
-    where TId : ValueObject
-  {
-    await _mediator.DispatchDomainEventsAsync<TId>(this);
-
-    var result = await SaveChangesAsync(cancellationToken);
-
-    return true;
+    _publishDomainEventsInterceptor = publishDomainEventsInterceptor;
   }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder
+      .Ignore<List<IDomainEvent>>()
       .ApplyConfigurationsFromAssembly(typeof(SpartanFitnessDbContext).Assembly);
 
     base.OnModelCreating(modelBuilder);
@@ -48,9 +39,13 @@ public class SpartanFitnessDbContext : DbContext, IUnitOfWork
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
+    optionsBuilder.AddInterceptors(_publishDomainEventsInterceptor);
+    
     if (!optionsBuilder.IsConfigured)
     {
       optionsBuilder.UseSqlServer("Name=ConnectionStrings:SpartanFitness");
     }
+    
+    base.OnConfiguring(optionsBuilder);
   }
 }

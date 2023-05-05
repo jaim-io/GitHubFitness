@@ -13,15 +13,16 @@ using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Infrastructure.Authentication;
 using SpartanFitness.Infrastructure.Persistence;
+using SpartanFitness.Infrastructure.Persistence.Interceptors;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
 using SpartanFitness.Infrastructure.Services;
 
 using Swashbuckle.AspNetCore.Filters;
 
-namespace SpartanFitness.Api;
+namespace SpartanFitness.Infrastructure;
 
 /// <summary>
-/// Static DependencyInjection wich will be injected in /SpartanFitness.Api/Program.cs.
+/// Static DependencyInjection which will be injected in /SpartanFitness.Api/Program.cs.
 /// </summary>
 public static class DependencyInjection
 {
@@ -47,6 +48,7 @@ public static class DependencyInjection
         services.AddDbContext<SpartanFitnessDbContext>(options =>
             options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
 
+        services.AddScoped<PublishDomainEventsInterceptor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICoachRepository, CoachRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();

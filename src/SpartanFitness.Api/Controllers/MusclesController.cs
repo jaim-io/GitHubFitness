@@ -43,7 +43,7 @@ public class MusclesController : ApiController
   public async Task<IActionResult> GetMuscles([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetMusclePageQuery>(request);
-    ErrorOr<Page<Muscle>> musclePageResult = await _mediator.Send(query);
+    ErrorOr<Pagination<Muscle>> musclePageResult = await _mediator.Send(query);
 
     return musclePageResult.Match(
       musclePage => Ok(_mapper.Map<MusclePageResponse>(musclePage)),

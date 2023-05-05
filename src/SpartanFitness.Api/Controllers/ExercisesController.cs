@@ -36,7 +36,7 @@ public class ExercisesController : ApiController
   public async Task<IActionResult> GetExercises([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetExercisePageQuery>(request);
-    ErrorOr<Page<Exercise>> exercisesResult = await _mediator.Send(query);
+    ErrorOr<Pagination<Exercise>> exercisesResult = await _mediator.Send(query);
 
     return exercisesResult.Match(
       exercisesPage => Ok(_mapper.Map<ExercisePageResponse>(exercisesPage)),

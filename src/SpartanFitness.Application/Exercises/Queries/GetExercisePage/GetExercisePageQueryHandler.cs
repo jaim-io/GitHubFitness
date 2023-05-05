@@ -10,7 +10,7 @@ using SpartanFitness.Domain.Common.Models;
 namespace SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 
 public class GetExercisePageQueryHandler
-  : IRequestHandler<GetExercisePageQuery, ErrorOr<Page<Exercise>>>
+  : IRequestHandler<GetExercisePageQuery, ErrorOr<Pagination<Exercise>>>
 {
   private readonly IExerciseRepository _exerciseRepository;
 
@@ -20,7 +20,7 @@ public class GetExercisePageQueryHandler
     _exerciseRepository = exerciseRepository;
   }
 
-  public async Task<ErrorOr<Page<Exercise>>> Handle(
+  public async Task<ErrorOr<Pagination<Exercise>>> Handle(
     GetExercisePageQuery query,
     CancellationToken cancellationToken)
   {
@@ -72,7 +72,7 @@ public class GetExercisePageQueryHandler
       : exercises
         .Take((int)query.PageSize);
 
-    return new Page<Exercise>(
+    return new Pagination<Exercise>(
       exercises.ToList(),
       pageNumber,
       (int)pageCount);

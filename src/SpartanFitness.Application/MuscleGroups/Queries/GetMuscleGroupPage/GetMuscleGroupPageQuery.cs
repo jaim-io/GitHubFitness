@@ -12,4 +12,4 @@ public record GetMuscleGroupPageQuery(
   int? PageNumber,
   string? Sort,
   string? Order,
-  string? SearchQuery) : IRequest<ErrorOr<Page<MuscleGroup>>>;
+  string? SearchQuery) : IRequest<ErrorOr<Pagination<MuscleGroup>>>;

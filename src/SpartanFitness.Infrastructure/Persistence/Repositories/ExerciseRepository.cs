@@ -20,7 +20,7 @@ public class ExerciseRepository
   {
     _dbContext.Add(exercise);
 
-    await _dbContext.SaveEntitiesAsync<ExerciseId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<Exercise?> GetByNameAsync(string name)

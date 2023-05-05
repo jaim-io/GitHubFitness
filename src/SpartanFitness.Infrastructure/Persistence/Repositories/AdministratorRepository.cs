@@ -19,7 +19,7 @@ public class AdministratorRepository : IAdministratorRepository
   {
     _dbContext.Add(admin);
 
-    await _dbContext.SaveEntitiesAsync<AdministratorId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<Administrator?> GetByIdAsync(AdministratorId id)

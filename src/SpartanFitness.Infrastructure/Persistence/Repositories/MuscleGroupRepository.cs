@@ -19,7 +19,7 @@ public class MuscleGroupRepository : IMuscleGroupRepository
   {
     _dbContext.Add(muscleGroup);
 
-    await _dbContext.SaveEntitiesAsync<MuscleGroupId>();
+    await _dbContext.SaveChangesAsync();
   }
 
   public async Task<List<MuscleGroup>> GetBySearchQueryAsync(string searchQuery)
