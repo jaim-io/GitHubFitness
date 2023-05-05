@@ -64,4 +64,15 @@ public class MuscleRepository : IMuscleRepository
   {
     return await _dbContext.Muscles.FirstOrDefaultAsync(m => m.Name == name);
   }
+
+  public async Task<bool> ExistsAsync(IEnumerable<MuscleId> ids)
+  {
+    var result = new List<bool>();
+    foreach (var id in ids)
+    {
+      result.Add(await _dbContext.Muscles.AnyAsync(m => m.Id == id));
+    }
+
+    return !result.Contains(false);
+  }
 }

@@ -38,13 +38,13 @@ public class MuscleGroupRepository : IMuscleGroupRepository
 
   public async Task<bool> ExistsAsync(IEnumerable<MuscleGroupId> ids)
   {
-    var results = new List<bool>();
+    var result = new List<bool>();
     foreach (var id in ids)
     {
-      results.Add(await _dbContext.MuscleGroups.AnyAsync(mg => mg.Id == id));
+      result.Add(await _dbContext.MuscleGroups.AnyAsync(mg => mg.Id == id));
     }
 
-    return !results.Contains(false);
+    return !result.Contains(false);
   }
 
   public async Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id)
