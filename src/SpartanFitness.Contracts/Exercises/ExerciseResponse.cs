@@ -8,5 +8,6 @@ public record ExerciseResponse(
     string Image,
     string Video,
     List<string> MuscleGroupIds,
+    List<string> MuscleIds,
     DateTime CreatedDateTime,
     DateTime UpdatedDateTime);

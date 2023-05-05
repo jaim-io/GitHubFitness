@@ -11,5 +11,6 @@ public record CreateExerciseCommand(
     string Name,
     string Description,
     List<string>? MuscleGroupIds,
+    List<string>? MuscleIds,
     string Image,
     string Video) : IRequest<ErrorOr<Exercise>>;
