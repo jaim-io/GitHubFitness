@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ExerciseCard from "../components/ExerciseCard";
 import ListBox from "../components/ListBox";
@@ -95,7 +95,7 @@ const ExercisesPage = () => {
   };
 
   const handleQuerySubmit = (
-    event: React.FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
     value: string,
   ) => {
     event.preventDefault();
@@ -146,7 +146,7 @@ const ExercisesPage = () => {
               ))}
           </div>
 
-          {(isLoading == true || isLoading == undefined) && (
+          {(isLoading || isLoading == undefined) && (
             <div
               role="status"
               className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"

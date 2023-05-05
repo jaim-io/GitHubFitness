@@ -3,32 +3,34 @@ import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { HiChevronDown } from "react-icons/hi";
 
-export type SelectOption = {
+export type SelectOption<T extends string | number> = {
   label: string;
-  value: string | number;
+  value: T;
 };
 
-type SingleSelectProps = {
+type SingleSelectProps<T extends string | number> = {
   multiple?: false;
-  value: SelectOption;
-  onChange: (value: SelectOption | undefined) => void;
+  value: SelectOption<T>;
+  onChange: (value: SelectOption<T> | undefined) => void;
 };
 
-type MultipleSelectProps = {
+type MultipleSelectProps<T extends string | number> = {
   multiple: true;
-  value: SelectOption[];
-  onChange: (value: SelectOption[]) => void;
+  value: SelectOption<T>[];
+  onChange: (value: SelectOption<T>[]) => void;
 };
 
-type SelectProps = {
-  options: SelectOption[];
+type SelectProps<T extends string | number> = {
+  id: string | number;
+  options: SelectOption<T>[];
   searchBar?: boolean;
   isLoading?: boolean;
   ifEmpty?: ReactNode;
   ifLoading?: ReactNode;
-} & (SingleSelectProps | MultipleSelectProps);
+} & (SingleSelectProps<T> | MultipleSelectProps<T>);
 
-const Select = ({
+const Select = <T extends string | number>({
+  id,
   multiple,
   value,
   onChange,
@@ -37,7 +39,12 @@ const Select = ({
   isLoading = false,
   ifEmpty,
   ifLoading,
-}: SelectProps) => {
+}: SelectProps<T>) => {
+  const searchId = `select-search-${id}`;
+  const containerId = `select-container-${id}`;
+  const optionsId = `select-options-${id}`;
+  const clearButtonId = `select-clear-button-${id}`;
+
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(
     undefined,
@@ -56,7 +63,7 @@ const Select = ({
     setQuery("");
   };
 
-  const selectOption = (option: SelectOption) => {
+  const selectOption = (option: SelectOption<T>) => {
     if (multiple) {
       value.find((v) => v.label == option.label) != undefined
         ? onChange(value.filter((o) => o.label !== option.label))
@@ -68,7 +75,7 @@ const Select = ({
     }
   };
 
-  const isSelected = (option: SelectOption) => {
+  const isSelected = (option: SelectOption<T>) => {
     return multiple
       ? value.find((v) => v.label == option.label) != undefined
       : option.label === value.label;
@@ -145,19 +152,21 @@ const Select = ({
   return (
     <>
       <div
-        id="select-container"
+        id={containerId}
         ref={containerRef}
         onBlur={(e) => {
-          if (e.relatedTarget === null && e.target.id !== "select-container") {
+          if (!containerRef.current?.contains(e.relatedTarget)) {
             closeOptions();
-          } else if (e.target == document.getElementById("select-search")) {
+          } else if (e.relatedTarget === null && e.target.id !== containerId) {
+            closeOptions();
+          } else if (e.target == document.getElementById(searchId)) {
             return;
           } else {
             closeOptions();
           }
         }}
         onClick={(e) => {
-          const thisElement = document.getElementById("select-container");
+          const thisElement = document.getElementById(containerId);
           const targetElement = e.target as Element;
           const isChild = thisElement?.contains(targetElement);
 
@@ -165,8 +174,8 @@ const Select = ({
             return;
           } else if (
             isChild &&
-            (targetElement.id === "select-search" ||
-              targetElement.parentElement?.id === "select-options")
+            (targetElement.id === searchId ||
+              targetElement.parentElement?.id === optionsId)
           ) {
             setIsOpen(true);
           } else {
@@ -198,7 +207,7 @@ const Select = ({
             <input
               ref={searchRef}
               placeholder="Search..."
-              id="select-search"
+              id={searchId}
               value={query}
               onFocus={(e) => {
                 setIsOpen(true);
@@ -211,8 +220,9 @@ const Select = ({
             />
           )}
         </span>
-        <div
-          id="select-clear-button"
+        <button
+          type="button"
+          id={clearButtonId}
           className="self-stretch flex items-center hover:bg-[#30363d] justify-center rounded-lg cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
@@ -222,11 +232,18 @@ const Select = ({
           <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-2">
             &times;
           </span>
-        </div>
+        </button>
         <div className="bg-[#30363d] self-stretch w-[1px]" />
-        <div className="self-stretch flex items-center hover:bg-[#30363d] justify-center mr-1 rounded-lg cursor-pointer p-1">
+        <button
+          type="button"
+          className="self-stretch flex items-center hover:bg-[#30363d] justify-center mr-1 rounded-lg cursor-pointer p-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen((prev) => !prev);
+          }}
+        >
           <HiChevronDown size={16} />
-        </div>
+        </button>
         <Transition
           show={isOpen}
           as={Fragment}
@@ -235,7 +252,7 @@ const Select = ({
           leaveTo="opacity-0"
         >
           <ul
-            id="select-options"
+            id={optionsId}
             className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-[#0d1117]`}
           >
             {!isLoading &&

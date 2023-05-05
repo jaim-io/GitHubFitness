@@ -6,6 +6,7 @@ interface Exercise {
   image: string;
   video: string;
   muscleGroupIds: string[];
+  muscleIds: string[];
   createdDateTime: Date;
   updatedDateTime: Date;
 }
