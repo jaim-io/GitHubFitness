@@ -16,11 +16,11 @@ const UserNavItem = ({ ...props }) => {
         <>
           <Menu.Button
             className={({ open }) =>
-              `flex h-full hover:ring-[#2f81f7] ${open ? "ring-[#2f81f7]" : ""}`
+              `flex h-full hover:ring-blue ${open ? "ring-blue" : ""}`
             }
           >
             <img
-              className={`inline-block h-10 w-10 rounded-full ring-1 active:ring-[#2f81f7]`}
+              className={`inline-block h-10 w-10 rounded-full ring-1 active:ring-blue`}
               src={auth.user?.profileImage ?? DefaultProfileSvg}
             />
             <div className="h-full py-1">
@@ -38,7 +38,7 @@ const UserNavItem = ({ ...props }) => {
           >
             <Menu.Items
               static
-              className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-[#30363d] rounded-md border border-[#30363d] bg-[#161b22] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-gray rounded-md border border-gray bg-semi-black shadow-lg ring-1 ring-semi-black ring-opacity-5 focus:outline-none"
             >
               <p className="px-3 py-2">Signed in as {auth.user!.firstName}</p>
               <div className="py-2">
@@ -46,7 +46,7 @@ const UserNavItem = ({ ...props }) => {
                   <NavLink
                     to="/user-settings"
                     className={
-                      "flex w-full items-center px-3 py-1 hover:bg-[#2f81f7]"
+                      "flex w-full items-center px-3 py-1 hover:bg-blue"
                     }
                     end
                   >
@@ -60,7 +60,7 @@ const UserNavItem = ({ ...props }) => {
                   <NavLink
                     to="/"
                     className={
-                      "flex w-full items-center px-3 py-1 hover:bg-[#2f81f7]"
+                      "flex w-full items-center px-3 py-1 hover:bg-blue"
                     }
                     end
                   >

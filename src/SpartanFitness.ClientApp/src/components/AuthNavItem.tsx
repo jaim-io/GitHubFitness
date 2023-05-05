@@ -15,13 +15,13 @@ const AuthNavItem = ({
   ...props
 }: Props) => {
   return (
-    <div className={`${border ? "border border-[#30363d] rounded-lg" : ""}`}>
+    <div className={`${border ? "border border-gray rounded-lg" : ""}`}>
       <NavLink
         to={path}
         target={target}
         className={({ isActive }) =>
           `${
-            isActive ? "text-[#2f81f7]" : ""
+            isActive ? "text-blue" : ""
           } inline-block hover:text-[#FFFFFFB3] ${border ? "px-2 py-1.5" : ""}`
         }
         {...props}

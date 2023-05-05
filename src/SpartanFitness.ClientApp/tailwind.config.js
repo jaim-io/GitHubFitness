@@ -1,12 +1,16 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
-        red: "#fe0039",
-        "dark-gray": "#242424",
-        "default-border-color": "#30363d",
+        blue: "#2f81f7",
+        "light-gray": "#7D8590",
+        "gray": "#30363d",
+        "semi-black": "#161b22",
+        "black": "#0d1117",
+        "light-green": "#2EA043",
+        "dark-green": "#238636",
       },
     },
   },

@@ -13,7 +13,7 @@ const MainNavItem = ({ path, children, target = "_self", ...props }: Props) => {
       target={target}
       className={({ isActive }) =>
         `${
-          isActive ? "text-[#2f81f7]" : ""
+          isActive ? "text-blue" : ""
         } inline-block hover:text-[#FFFFFFB3] py-2`
       }
       {...props}

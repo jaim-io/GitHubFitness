@@ -23,7 +23,7 @@ const SearchBar = ({ onSubmit }: Props) => {
       </label>
       <div className="relative">
         <button
-          className="absolute inset-y-0 left-0 flex items-center pl-3 z-3 text-gray-500 hover:text-[#2f81f7]"
+          className="absolute inset-y-0 left-0 flex items-center pl-3 z-3 text-gray-500 hover:text-blue"
           type="submit"
         >
           <svg
@@ -45,7 +45,7 @@ const SearchBar = ({ onSubmit }: Props) => {
         <input
           type="search"
           id="default-search"
-          className="block w-full p-1 pl-10 pr-7 rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] focus:outline focus:outline-[#2f81f7] focus:shadow-outline search-cancel:hidden placeholder-[#7D8590] overflow-scroll z-1"
+          className="block w-full p-1 pl-10 pr-7 rounded-lg border border-gray bg-[#262c31] hover:border-[#8B949E] hover:bg-gray focus:outline focus:outline-blue focus:shadow-outline search-cancel:hidden placeholder-light-gray overflow-scroll z-1"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search ..."
@@ -54,7 +54,7 @@ const SearchBar = ({ onSubmit }: Props) => {
         />
         <button
           type="reset"
-          className="absolute top-0 right-[0.125rem] p-[0.625rem] pl-1 text-sm font-medium text-[#8B949E] rounded-r-lg hover:text-[#2f81f7] z-3"
+          className="absolute top-0 right-[0.125rem] p-[0.625rem] pl-1 text-sm font-medium text-[#8B949E] rounded-r-lg hover:text-blue z-3"
           onClick={() => setValue("")}
         >
           <ImCancelCircle className="bg-[#262c31]" size={14} />

@@ -183,7 +183,7 @@ const Select = <T extends string | number>({
           }
         }}
         tabIndex={0}
-        className="relative min-w-[20rem] min-h-[1.5rem] border border-[#30363d] items-center gap-2 flex p-1 rounded-lg outline-none focus:border-[#30363d] select-none cursor-pointer"
+        className="relative min-w-[20rem] min-h-[1.5rem] border border-gray items-center gap-2 flex p-1 rounded-lg outline-none focus:border-gray select-none cursor-pointer"
       >
         <span className="grow flex gap-2 flex-wrap min-h-[2.2rem] pl-1">
           {multiple
@@ -194,7 +194,7 @@ const Select = <T extends string | number>({
                     e.stopPropagation();
                     selectOption(v);
                   }}
-                  className="group flex items-center border border-[#30363d] rounded-lg py-[.15rem] px-[.5rem] gap-1 cursor-pointer bg-none outline-none hover:bg-[#30363d] focus:bg-[#30363d]"
+                  className="group flex items-center border border-gray rounded-lg py-[.15rem] px-[.5rem] gap-1 cursor-pointer bg-none outline-none hover:bg-gray focus:bg-gray"
                 >
                   {v.label}
                   <span className="bg-none text-white border-none outline-none cursor-pointer text-lg">
@@ -216,14 +216,14 @@ const Select = <T extends string | number>({
                 setQuery(e.target.value);
               }}
               onSubmit={(e) => e.preventDefault()}
-              className="shadow appearance-none px-1 text-white leading-tight bg-[#0d1117] outline-none w-stretch"
+              className="shadow appearance-none px-1 text-white leading-tight bg-black outline-none w-stretch"
             />
           )}
         </span>
         <button
           type="button"
           id={clearButtonId}
-          className="self-stretch flex items-center hover:bg-[#30363d] justify-center rounded-lg cursor-pointer"
+          className="self-stretch flex items-center hover:bg-gray justify-center rounded-lg cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             clearOptions();
@@ -233,10 +233,10 @@ const Select = <T extends string | number>({
             &times;
           </span>
         </button>
-        <div className="bg-[#30363d] self-stretch w-[1px]" />
+        <div className="bg-gray self-stretch w-[1px]" />
         <button
           type="button"
-          className="self-stretch flex items-center hover:bg-[#30363d] justify-center mr-1 rounded-lg cursor-pointer p-1"
+          className="self-stretch flex items-center hover:bg-gray justify-center mr-1 rounded-lg cursor-pointer p-1"
           onClick={(e) => {
             e.stopPropagation();
             setIsOpen((prev) => !prev);
@@ -253,7 +253,7 @@ const Select = <T extends string | number>({
         >
           <ul
             id={optionsId}
-            className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-[#30363d] rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-[#0d1117]`}
+            className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-gray rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-black`}
           >
             {!isLoading &&
               filteredOptions.map((option, index) => (
@@ -269,7 +269,7 @@ const Select = <T extends string | number>({
                   }}
                   key={option.value}
                   className={`py-[0.25rem] px-[.5rem] cursor-pointer flex items-center rounded-lg ${
-                    isHighlighted(index) ? "bg-[#30363d]" : ""
+                    isHighlighted(index) ? "bg-gray" : ""
                   }`}
                 >
                   {isSelected(option) ? <BiCheck className="mr-1" /> : null}

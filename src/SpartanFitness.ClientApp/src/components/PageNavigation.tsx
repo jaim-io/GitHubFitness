@@ -64,7 +64,7 @@ const PageNavigation = ({
         className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pl-2 py-1.5 pr-[0.75rem] mr-1 ${
           pageNumber - 1 <= 0
             ? "cursor-not-allowed text-[#484F58]"
-            : "text-[#2f81f7]"
+            : "text-blue"
         }`}
         disabled={pageNumber - 1 <= 0}
       >
@@ -109,7 +109,7 @@ const PageNavigation = ({
         className={`flex items-center hover:bg-[#B1BAC4]/[.12] rounded-lg pr-2 py-1.5 pl-[0.75rem] ${
           pageNumber + 1 > pageCount
             ? "cursor-not-allowed text-[#484F58]"
-            : "text-[#2f81f7]"
+            : "text-blue"
         }`}
         disabled={pageNumber + 1 > pageCount}
       >

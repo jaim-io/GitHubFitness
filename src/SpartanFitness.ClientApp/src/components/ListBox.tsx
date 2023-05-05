@@ -13,13 +13,13 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
   return (
     <Listbox value={selected} onChange={onChange}>
       <div className="relative">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[#30363d] bg-[#262c31] hover:border-[#8B949E] hover:bg-[#30363D] py-[0.25rem] pl-3 pr-8 text-left shadow  min-w-full">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-gray bg-[#262c31] hover:border-[#8B949E] hover:bg-gray py-[0.25rem] pl-3 pr-8 text-left shadow  min-w-full">
           <p className="block truncate">
-            <span className="text-[#7D8590]">{buttonText} </span>
+            <span className="text-light-gray">{buttonText} </span>
             {selected}
           </p>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <BiChevronDown className="h-5 w-5 text-[#7D8590]" aria-hidden="true" />
+            <BiChevronDown className="h-5 w-5 text-light-gray" aria-hidden="true" />
           </span>
         </Listbox.Button>
         <Transition
@@ -28,7 +28,7 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-[#30363d] bg-[#161b22] py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
+          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-gray bg-semi-black py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
             <div className="my-1">
               {options.map((option, optionIdx) => (
                 <Listbox.Option

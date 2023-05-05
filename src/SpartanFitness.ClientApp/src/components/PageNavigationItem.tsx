@@ -11,7 +11,7 @@ const PageNavigationItem = ({ number, isActive, paginate }: Props) => {
     <button
       onClick={() => paginate(number)}
       className={`px-[calc(0.8rem)] py-[0.3rem] rounded-lg mr-1 ${
-        isActive ? "bg-[#2f81f7]" : ""
+        isActive ? "bg-blue" : ""
       }`}
     >
       {number}
