@@ -15,9 +15,9 @@ using SpartanFitness.Contracts.CoachApplications;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
-[Route("api/v1/users/{userId}/coach-applications")]
+[Route("api/v{version:apiVersion}/users/{userId}/coach-applications")]
 public class CoachApplicationsController : ApiController
 {
   private readonly ISender _mediator;

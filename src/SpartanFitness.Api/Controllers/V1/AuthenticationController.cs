@@ -13,12 +13,12 @@ using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Authentication.Queries.Login;
 using SpartanFitness.Contracts.Authentication;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
 /// <summary>
 /// This controller handles the authentication and registration.
 /// </summary>
-[Route("auth")]
+[Route("v{version:apiVersion}/auth")]
 [AllowAnonymous]
 public class AuthenticationController : ApiController
 {

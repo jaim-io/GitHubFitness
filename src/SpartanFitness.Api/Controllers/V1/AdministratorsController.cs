@@ -13,9 +13,9 @@ using SpartanFitness.Contracts.Administrators;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
-[Route("api/v1/admins")]
+[Route("api/v{version:apiVersion}/admins")]
 public class AdministratorsController : ApiController
 {
     private readonly ISender _mediator;

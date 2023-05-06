@@ -14,9 +14,9 @@ using SpartanFitness.Contracts.Muscles;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Models;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
-[Route("api/v1/muscles")]
+[Route("api/v{version:apiVersion}/muscles")]
 public class MusclesController : ApiController
 {
   private readonly ISender _mediator;

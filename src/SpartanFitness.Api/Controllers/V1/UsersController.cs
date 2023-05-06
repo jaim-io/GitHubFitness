@@ -12,9 +12,9 @@ using SpartanFitness.Contracts.Users;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
-[Route("api/v1/users")]
+[Route("api/v{version:apiVersion}/users")]
 public class UsersController : ApiController
 {
   private readonly ISender _mediator;
