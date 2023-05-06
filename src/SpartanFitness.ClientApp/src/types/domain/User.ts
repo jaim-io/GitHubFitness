@@ -4,6 +4,6 @@ type User = {
   lastName: string;
   profileImage: string;
   email: string;
-}
+};
 
 export default User;

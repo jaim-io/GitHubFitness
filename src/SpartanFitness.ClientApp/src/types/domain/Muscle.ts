@@ -6,6 +6,6 @@ type Muscle = {
   image: string;
   createdDateTime: Date;
   updatedDateTime: Date;
-}
+};
 
 export default Muscle;

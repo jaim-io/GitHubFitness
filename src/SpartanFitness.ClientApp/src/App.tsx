@@ -1,7 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import LoginPersistance from "./components/LoginPersistance";
 import ExerciseLayout from "./layouts/ExerciseLayout";

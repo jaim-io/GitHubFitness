@@ -1,0 +1,19 @@
+{
+  "plugins": ["import", "react"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "import/no-unused-modules": [1, { "unusedExports": true }],
+    "react/react-in-jsx-scope": "off"
+  },
+  "env": {
+    "browser": true
+  },
+  "ignorePatterns": [
+    "postcss.config.js",
+    "tailwind.config.js"
+  ]
+}

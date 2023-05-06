@@ -18,10 +18,10 @@ export const Fun = function <T1, T2>(f: (_: T1) => T2): Fun<T1, T2> {
 
   wrapper.repeatUntil = function (
     this: Fun<T1, T1>,
-    condition: Fun<T1, boolean>
+    condition: Fun<T1, boolean>,
   ): Fun<T1, T1> {
     return Fun((x) =>
-      condition(x) ? x : this.then(this.repeatUntil(condition))(x)
+      condition(x) ? x : this.then(this.repeatUntil(condition))(x),
     );
   };
 

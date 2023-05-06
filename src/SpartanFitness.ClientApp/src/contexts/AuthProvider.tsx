@@ -18,8 +18,8 @@ const defaultAuthentication: Authentication = {
 
 const AuthContext = createContext<AuthContextType>({
   auth: defaultAuthentication,
-  setAuth: (response: AuthenticationResponse) => {},
-  setPersist: (toggle: boolean) => {},
+  setAuth: (_response: AuthenticationResponse) => {},
+  setPersist: (_toggle: boolean) => {},
 });
 
 type Props = {
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: Props) => {
       setRefreshToken(response.refreshToken);
     },
     setPersist: (toggle) => {
-      localStorage.setItem("persist", String(toggle))
+      localStorage.setItem("persist", String(toggle));
       setPersist(toggle);
     },
   };

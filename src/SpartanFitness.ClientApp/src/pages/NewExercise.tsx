@@ -1,15 +1,14 @@
-import React, { FormEvent, useState } from "react";
-import Select, { SelectOption } from "../components/Select";
-import useMuscleGroups from "../hooks/useMuscleGroups";
+import axios from "axios";
+import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import LoadingIcon from "../components/Icons/LoadingIcon";
+import Select, { SelectOption } from "../components/Select";
+import useMuscleGroups from "../hooks/useMuscleGroups";
+import useMuscles from "../hooks/useMuscles";
 import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
-import useMuscles from "../hooks/useMuscles";
-import Muscle from "../types/domain/Muscle";
-import LoadingIcon from "../components/Icons/LoadingIcon";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 
@@ -25,14 +24,14 @@ const NewExercisePage = () => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Exception>();
+  const [, setError] = useState<Exception>();
   const navigate = useNavigate();
 
   const [muscleGroupResult, muscleGroupPageIsLoading] = useMuscleGroups();
   const [_, muscleGroupPage] = muscleGroupResult.extract();
 
   // const muscleGroupIdsToGet = selectedMuscleGroups.filter(sm => !musclesInMemory.find(mim => mim.muscleGroupId == sm.value))
-  const [musclesResult, musclesAreLoading] = useMuscles();
+  const [musclesResult] = useMuscles();
   const [__, musclePage] = musclesResult.extract();
 
   const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({

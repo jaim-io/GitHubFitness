@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const LoginPersistance = () => {
   const { auth } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
 
   useEffect(() => {

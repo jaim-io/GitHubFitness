@@ -5,6 +5,6 @@ type MuscleGroup = {
   image: string;
   createdDateTime: Date;
   updatedDateTime: Date;
-}
+};
 
 export default MuscleGroup;

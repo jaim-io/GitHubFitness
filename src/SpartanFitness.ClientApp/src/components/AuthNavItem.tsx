@@ -20,9 +20,9 @@ const AuthNavItem = ({
         to={path}
         target={target}
         className={({ isActive }) =>
-          `${
-            isActive ? "text-blue" : ""
-          } inline-block hover:text-[#FFFFFFB3] ${border ? "px-2 py-1.5" : ""}`
+          `${isActive ? "text-blue" : ""} inline-block hover:text-[#FFFFFFB3] ${
+            border ? "px-2 py-1.5" : ""
+          }`
         }
         {...props}
         end

@@ -9,6 +9,6 @@ RUN yarn install --fronzen-lockfile
 COPY . .
 RUN yarn run build
 
-ENV NODE_ENV production
+ENV NODE_ENV dev
 EXPOSE 80
 CMD [ "yarn", "run", "dev" ]

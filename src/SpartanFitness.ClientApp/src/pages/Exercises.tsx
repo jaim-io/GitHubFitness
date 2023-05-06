@@ -1,15 +1,15 @@
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
+import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useSearchParams } from "react-router-dom";
 import ExerciseCard from "../components/ExerciseCard";
+import LoadingIcon from "../components/Icons/LoadingIcon";
 import ListBox from "../components/ListBox";
+import NewButton from "../components/NewButton";
 import PageNavigation from "../components/PageNavigation";
+import SearchBar from "../components/SearchBar";
+import useAuth from "../hooks/useAuth";
 import useExercises from "../hooks/useExercises";
 import CurrentSearchParams from "../types/CurrentSearchParams";
-import SearchBar from "../components/SearchBar";
-import NewButton from "../components/NewButton";
-import useAuth from "../hooks/useAuth";
-import { TbGhost2Filled } from "react-icons/tb";
-import LoadingIcon from "../components/Icons/LoadingIcon";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -46,9 +46,7 @@ const ExercisesPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(
     currentParams.GetPage(DEFAULT_PAGE_NUMBER),
   );
-  const [pageSize, setPageSize] = useState<number>(
-    currentParams.GetSize(DEFAULT_PAGE_SIZE),
-  );
+  const [pageSize] = useState<number>(currentParams.GetSize(DEFAULT_PAGE_SIZE));
 
   const [sortName, setSortName] = useState(
     currentParams.GetSort(SORT_OPTIONS[0].name),
@@ -67,7 +65,7 @@ const ExercisesPage = () => {
     order,
     query,
   );
-  const [error, exercisePage] = result.extract();
+  const [, exercisePage] = result.extract();
 
   const paginate = (page: number) => {
     setCurrentPage(page);

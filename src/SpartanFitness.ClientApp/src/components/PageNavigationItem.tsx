@@ -1,5 +1,3 @@
-import { NavLink } from "react-router-dom";
-
 type Props = {
   number: number;
   isActive: boolean;

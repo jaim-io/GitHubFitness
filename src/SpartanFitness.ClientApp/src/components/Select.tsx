@@ -209,7 +209,7 @@ const Select = <T extends string | number>({
               placeholder="Search..."
               id={searchId}
               value={query}
-              onFocus={(e) => {
+              onFocus={() => {
                 setIsOpen(true);
               }}
               onChange={(e) => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 import Exception from "../types/domain/Exception";
@@ -9,7 +9,7 @@ const AUTH_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/refresh`;
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
-  const [error, setError] = useState<Exception>();
+  const [, setError] = useState<Exception>();
 
   const refresh = async () => {
     try {

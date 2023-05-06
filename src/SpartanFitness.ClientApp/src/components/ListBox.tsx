@@ -19,7 +19,10 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
             {selected}
           </p>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <BiChevronDown className="h-5 w-5 text-light-gray" aria-hidden="true" />
+            <BiChevronDown
+              className="h-5 w-5 text-light-gray"
+              aria-hidden="true"
+            />
           </span>
         </Listbox.Button>
         <Transition

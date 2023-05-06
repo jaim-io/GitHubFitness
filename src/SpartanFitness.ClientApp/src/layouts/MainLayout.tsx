@@ -1,10 +1,9 @@
-import { Outlet, } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Footer from "../components/Footer";
 import MainNavigation from "../components/MainNavigation";
 
 const MainLayout = () => {
-
   return (
     <>
       <MainNavigation />
