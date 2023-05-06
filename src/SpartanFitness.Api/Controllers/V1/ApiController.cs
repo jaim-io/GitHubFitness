@@ -1,5 +1,7 @@
 using System.Security.Claims;
 
+using Asp.Versioning;
+
 using ErrorOr;
 
 using Microsoft.AspNetCore.Authorization;
@@ -9,12 +11,13 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SpartanFitness.Api.Common.Http;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
 /// <summary>
-/// Base classs of all controllers, which inherits from ControllerBase.
+/// Base class of all controllers, which inherits from ControllerBase.
 /// </summary>
 [ApiController]
+[ApiVersion("1.0")]
 [Authorize]
 public class ApiController : ControllerBase
 {

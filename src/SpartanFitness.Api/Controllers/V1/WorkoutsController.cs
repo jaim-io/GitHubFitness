@@ -14,9 +14,9 @@ using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Enums;
 
-namespace SpartanFitness.Api.Controllers;
+namespace SpartanFitness.Api.Controllers.V1;
 
-[Route("api/v1/coaches/{coachId}/[controller]")]
+[Route("api/v{version:apiVersion}/coaches/{coachId}/[controller]")]
 public class WorkoutsController : ApiController
 {
   private readonly IMapper _mapper;
@@ -53,9 +53,9 @@ public class WorkoutsController : ApiController
     }
 
     var command = _mapper.Map<CreateWorkoutCommand>((request, coachId));
-    ErrorOr<Workout> workout = await _mediator.Send(command);
+    ErrorOr<Workout> workoutResult = await _mediator.Send(command);
 
-    return workout.Match(
+    return workoutResult.Match(
       workout => CreatedAtAction(
         nameof(GetWorkout),
         new { coachId = workout.CoachId.Value, workoutId = workout.Id.Value },

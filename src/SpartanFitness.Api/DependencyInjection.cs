@@ -1,3 +1,5 @@
+using Asp.Versioning;
+
 using BuberDinner.Api.Common.Errors;
 
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -8,7 +10,7 @@ using SpartanFitness.Api.Common.Mappings;
 namespace SpartanFitness.Api;
 
 /// <summary>
-/// Static DependencyInjection wich will be injected in /SpartanFitness.Api/Program.cs.
+/// Static DependencyInjection which will be injected in /SpartanFitness.Api/Program.cs.
 /// </summary>
 public static class DependencyInjection
 {
@@ -19,6 +21,12 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddControllers();
+        services.AddApiVersioning(options =>
+        {
+          options.AssumeDefaultVersionWhenUnspecified = true;
+          options.DefaultApiVersion = ApiVersion.Default;
+          options.ReportApiVersions = true;
+        });
         services.AddMappings();
 
         services.AddEndpointsApiExplorer();
