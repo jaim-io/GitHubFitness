@@ -70,7 +70,7 @@ const ExercisesPage = () => {
   const paginate = (page: number) => {
     setCurrentPage(page);
 
-    let params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(location.search);
     params.set("p", page.toString());
     params.set("ls", currentParams.GetSize(DEFAULT_PAGE_SIZE).toString());
 
@@ -84,7 +84,7 @@ const ExercisesPage = () => {
       setOrder(option.order);
       setCurrentPage(DEFAULT_PAGE_NUMBER);
 
-      let params = new URLSearchParams(location.search);
+      const params = new URLSearchParams(location.search);
       params.set("p", DEFAULT_PAGE_NUMBER.toString());
       params.set("s", option.sort);
       params.set("o", option.order);
@@ -101,7 +101,7 @@ const ExercisesPage = () => {
     setQuery(value);
     setCurrentPage(DEFAULT_PAGE_NUMBER);
 
-    let params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(location.search);
     params.set("p", DEFAULT_PAGE_NUMBER.toString());
     params.set("q", value);
 

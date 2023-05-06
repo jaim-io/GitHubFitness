@@ -28,11 +28,11 @@ const NewExercisePage = () => {
   const navigate = useNavigate();
 
   const [muscleGroupResult, muscleGroupPageIsLoading] = useMuscleGroups();
-  const [_, muscleGroupPage] = muscleGroupResult.extract();
+  const [, muscleGroupPage] = muscleGroupResult.extract();
 
   // const muscleGroupIdsToGet = selectedMuscleGroups.filter(sm => !musclesInMemory.find(mim => mim.muscleGroupId == sm.value))
   const [musclesResult] = useMuscles();
-  const [__, musclePage] = musclesResult.extract();
+  const [, musclePage] = musclesResult.extract();
 
   const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({
     label: mg.name,
@@ -112,7 +112,9 @@ const NewExercisePage = () => {
             },
           );
         });
-    } catch {}
+    } catch {
+      /* empty */
+    }
   };
 
   return (

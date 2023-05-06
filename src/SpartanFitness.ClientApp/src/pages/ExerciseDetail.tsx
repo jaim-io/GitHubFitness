@@ -5,7 +5,7 @@ const ExerciseDetailPage = () => {
   const params = useParams();
 
   const [result] = useExercise(params.exerciseId!);
-  const [_, exercise] = result.extract();
+  const [, exercise] = result.extract();
 
   return (
     <>

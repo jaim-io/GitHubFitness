@@ -1,19 +1,24 @@
 {
-  "plugins": ["import", "react"],
+  "plugins": ["import", "react", "@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
+  "root": true,
   "rules": {
     "import/no-unused-modules": [1, { "unusedExports": true }],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "env": {
     "browser": true
   },
-  "ignorePatterns": [
-    "postcss.config.js",
-    "tailwind.config.js"
-  ]
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

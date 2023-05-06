@@ -51,7 +51,9 @@ const useRefreshToken = () => {
             });
           }
         });
-    } catch {}
+    } catch {
+      /* empty */
+    }
   };
   return refresh;
 };

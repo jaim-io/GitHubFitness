@@ -18,7 +18,9 @@ const defaultAuthentication: Authentication = {
 
 const AuthContext = createContext<AuthContextType>({
   auth: defaultAuthentication,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   setAuth: (_response: AuthenticationResponse) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   setPersist: (_toggle: boolean) => {},
 });
 

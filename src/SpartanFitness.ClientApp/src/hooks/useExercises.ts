@@ -69,7 +69,9 @@ const useExercises = (
               },
             );
           });
-      } catch {}
+      } catch {
+        /* empty */
+      }
     };
 
     fetchExercises();

@@ -20,15 +20,17 @@ const MainNavigation = () => {
               alt="SpartanFitness Logo"
             />
           </Link>
-          <MainNavItem path="/" children="Home" />
-          <MainNavItem path="/exercises" children="Exercises" />
+          <MainNavItem path="/">Home</MainNavItem>
+          <MainNavItem path="/exercises">Exercises</MainNavItem>
         </ul>
         <div className="w-full md:block md:w-auto">
           <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">
             {auth.user && <UserNavItem />}
-            {!auth.user && <AuthNavItem path="/login" children="Sign in" />}
+            {!auth.user && <AuthNavItem path="/login">Sign in</AuthNavItem>}
             {!auth.user && (
-              <AuthNavItem path="/register" children="Sign up" border={true} />
+              <AuthNavItem path="/register" border={true}>
+                Sign up
+              </AuthNavItem>
             )}
           </ul>
         </div>

@@ -51,7 +51,9 @@ const useExercise = (id: string): [Result<Exercise>, boolean] => {
               },
             );
           });
-      } catch {}
+      } catch {
+        /* empty */
+      }
     };
 
     fetchExercise();

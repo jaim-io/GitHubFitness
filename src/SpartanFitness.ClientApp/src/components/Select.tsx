@@ -115,7 +115,7 @@ const Select = <T extends string | number>({
             break;
 
           case "ArrowUp":
-          case "ArrowDown":
+          case "ArrowDown": {
             if (!isOpen) {
               setIsOpen(true);
               break;
@@ -135,6 +135,7 @@ const Select = <T extends string | number>({
               searchRef.current?.focus();
             }
             break;
+          }
         }
       }
     };

@@ -40,7 +40,7 @@ class SearchParamsFactory {
   ): string => {
     const params = this.CreateParams(page, size, sort, order, query);
 
-    let queryString = `?${params}`;
+    const queryString = `?${params}`;
 
     return queryString.length === 1 ? "" : queryString;
   };

@@ -79,7 +79,9 @@ const LoginPage = () => {
             },
           );
         });
-    } catch {}
+    } catch {
+      /* empty */
+    }
 
     setEmail("");
     setPassword("");

@@ -56,7 +56,7 @@ const joinEither = <L, R>(): Fun<Either<L, Either<L, R>>, Either<L, R>> =>
       : nestedEither.value,
   );
 
-//@ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const bindEither = <L, R, R2>(
   eith: Either<L, R>,
   f: Fun<R, Either<L, R2>>,

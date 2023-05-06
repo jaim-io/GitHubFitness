@@ -69,7 +69,9 @@ const useMuscleGroups = (
               },
             );
           });
-      } catch {}
+      } catch {
+        /* empty */
+      }
     };
 
     fetchExercises();

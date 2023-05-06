@@ -5,7 +5,7 @@ const ErrorPage = () => {
   return (
     <>
       <MainNavigation />
-      <h1>The page you're looking for does not exist.</h1>
+      <h1>The page you&apos;re looking for does not exist.</h1>
       <Footer />
     </>
   );

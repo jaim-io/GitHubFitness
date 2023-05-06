@@ -69,7 +69,9 @@ const useMuscles = (
               },
             );
           });
-      } catch {}
+      } catch {
+        /* empty */
+      }
     };
 
     fetchMuscles();

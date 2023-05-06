@@ -40,7 +40,7 @@ const UserNavItem = ({ ...props }) => {
               static
               className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-gray rounded-md border border-gray bg-semi-black shadow-lg ring-1 ring-semi-black ring-opacity-5 focus:outline-none"
             >
-              <p className="px-3 py-2">Signed in as {auth.user!.firstName}</p>
+              <p className="px-3 py-2">Signed in as {auth.user.firstName}</p>
               <div className="py-2">
                 <Menu.Item>
                   <NavLink
