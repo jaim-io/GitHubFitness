@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "ci-testing" ]
   pull_request:
     branches: [ "main" ]
 
@@ -37,8 +37,9 @@ jobs:
       
   build-web:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./src/SpartanFitness.ClientApp
+    defaults:
+      run:
+        working-directory: ./src/SpartanFitness.ClientApp
     steps:
     - uses: actions/checkout@v3
     
@@ -51,7 +52,7 @@ jobs:
       run: yarn install --frozen-lockfile
     
     - name: Build
-      run: yarn run build --if-present
+      run: yarn run build
     
     - name: Run ESLint
-      run: yarn run eslint . --ext .ts,.tsx
+      run: yarn eslint '**/*.{ts,tsx}' --config ./.eslintrc
