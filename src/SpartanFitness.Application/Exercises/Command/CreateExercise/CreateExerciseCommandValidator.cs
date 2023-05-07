@@ -15,7 +15,7 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
       .WithMessage("The muscle group ID must be a valid GUID");
 
     RuleFor(x => x.MuscleGroupIds)
-      .Must(x => x != null ? x.Distinct().Count() == x.Count() : true)
+      .Must(x => x == null || x.Distinct().Count() == x.Count)
       .WithMessage("The list of muscle group IDs has to contain unique values");
 
     RuleForEach(x => x.MuscleIds)
@@ -23,7 +23,7 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
       .WithMessage("The muscle group ID must be a valid GUID");
 
     RuleFor(x => x.MuscleIds)
-      .Must(x => x != null ? x.Distinct().Count() == x.Count() : true)
+      .Must(x => x == null || x.Distinct().Count() == x.Count)
       .WithMessage("The list of muscle group IDs has to contain unique values");
 
     RuleFor(x => x.Name)
