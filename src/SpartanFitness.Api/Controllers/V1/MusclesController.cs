@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.Muscles.Command.CreateMuscle;
 using SpartanFitness.Application.Muscles.Query.GetMuscleById;
 using SpartanFitness.Application.Muscles.Query.GetMusclePage;
+using SpartanFitness.Application.Muscles.Query.GetMusclesById;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Muscles;
 using SpartanFitness.Domain.Aggregates;
@@ -36,6 +37,17 @@ public class MusclesController : ApiController
 
     return muscleResult.Match(
       muscle => Ok(_mapper.Map<MuscleResponse>(muscle)),
+      Problem);
+  }
+
+  [HttpGet("{id}")]
+  public async Task<IActionResult> GetMusclesByIds([FromQuery(Name = "id")] List<string> ids)
+  {
+    var query = new GetMusclesByIdQuery(ids);
+    ErrorOr<List<Muscle>> musclesResult = await _mediator.Send(query);
+
+    return musclesResult.Match(
+      muscles => Ok(_mapper.Map<MuscleResponse[]>(muscles)),
       Problem);
   }
 
