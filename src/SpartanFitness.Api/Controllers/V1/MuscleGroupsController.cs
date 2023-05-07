@@ -33,8 +33,8 @@ public class MuscleGroupsController : ApiController
     _mapper = mapper;
   }
 
-  [HttpGet("{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
-  public async Task<IActionResult> GetMuscleGroups([FromQuery] PagingRequest request)
+  [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetMuscleGroupsPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetMuscleGroupPageQuery>(request);
     ErrorOr<Pagination<MuscleGroup>> muscleGroupResult = await _mediator.Send(query);
@@ -44,7 +44,7 @@ public class MuscleGroupsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpGet("{id}")]
+  [HttpGet("{id?}")]
   public async Task<IActionResult> GetMuscleGroupsByIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMuscleGroupsByIdQuery(ids);

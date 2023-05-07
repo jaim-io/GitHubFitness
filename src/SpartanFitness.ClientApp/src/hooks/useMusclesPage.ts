@@ -6,7 +6,7 @@ import Exception from "../types/domain/Exception";
 import Muscle from "../types/domain/Muscle";
 import SearchParamsFactory from "../types/SearchParamsFactory";
 
-const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles`;
+const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/page/muscles`;
 
 export type MusclePage = { muscles: Muscle[] } & Page;
 

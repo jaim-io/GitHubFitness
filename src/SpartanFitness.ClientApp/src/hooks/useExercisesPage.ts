@@ -6,7 +6,7 @@ import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
 import SearchParamsFactory from "../types/SearchParamsFactory";
 
-const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
+const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/page`;
 
 export type ExercisesPage = { exercises: Exercise[] } & Page;
 

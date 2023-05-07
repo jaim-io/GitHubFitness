@@ -11,6 +11,8 @@ import ExercisesPage from "./pages/Exercises";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import NewExercisePage from "./pages/NewExercise";
+import axios from "axios";
+import Exercise from "./types/domain/Exercise";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,35 @@ const router = createBrowserRouter([
             children: [
               { index: true, element: <ExercisesPage /> },
               { path: "new", element: <NewExercisePage /> },
-              { path: ":exerciseId", element: <ExerciseDetailPage /> },
+              {
+                path: ":exerciseId",
+                element: <ExerciseDetailPage />,
+                loader: async ({ params }) => {
+                  try {
+                    const response = await axios.get<Exercise>(
+                      `${import.meta.env.VITE_API_BASE}/exercises/${
+                        params.exerciseId
+                      }`,
+                      {
+                        headers: {
+                          Accept: "application/json",
+                          Authorization: `bearer ${localStorage.getItem(
+                            "token",
+                          )}`,
+                        },
+                      },
+                    );
+
+                    return response.data;
+                  } catch (err) {
+                    if (axios.isAxiosError(err)) {
+                      return err.message;
+                    } else {
+                      return "An unexpected error occurred";
+                    }
+                  }
+                },
+              },
               { path: ":exerciseId/edit", element: <EditExercisePage /> },
             ],
           },

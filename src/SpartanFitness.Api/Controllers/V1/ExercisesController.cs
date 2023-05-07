@@ -32,8 +32,8 @@ public class ExercisesController : ApiController
     _mapper = mapper;
   }
 
-  [HttpGet("{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
-  public async Task<IActionResult> GetExercises([FromQuery] PagingRequest request)
+  [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetExercisesPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetExercisePageQuery>(request);
     ErrorOr<Pagination<Exercise>> exercisesResult = await _mediator.Send(query);

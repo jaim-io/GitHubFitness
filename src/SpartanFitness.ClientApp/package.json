@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "npx eslint",
+    "lint": "eslint '**/*.{ts,tsx}' --config ./.eslintrc",
     "prettier": "npx prettier ./src/ --write"
   },
   "dependencies": {

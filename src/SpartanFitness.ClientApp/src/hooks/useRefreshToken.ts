@@ -5,7 +5,7 @@ import AuthenticationResponse from "../types/authentication/AuthenticationRespon
 import Exception from "../types/domain/Exception";
 import useAuth from "./useAuth";
 
-const AUTH_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/refresh`;
+const AUTH_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/auth/refresh`;
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();

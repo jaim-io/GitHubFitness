@@ -1,19 +1,16 @@
-import { Link, useParams } from "react-router-dom";
-import useExercise from "../hooks/useExercise";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import useMusclesByIds from "../hooks/useMusclesByIds";
+import { Link, useLoaderData } from "react-router-dom";
+import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
+import useMusclesByIds from "../hooks/useMusclesByIds";
 import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
 
 const ExerciseDetailPage = () => {
-  const params = useParams();
-
-  const [exercise, , exerciseIsLoading] = useExercise(params.exerciseId!);
+  const exercise = useLoaderData() as Exercise;
 
   let musclesAreLoading = false;
   let muscles: Muscle[] | undefined = undefined;
-  if (exercise?.muscleIds != undefined && exercise?.muscleIds.length != 0) {
+  if (exercise.muscleIds != undefined && exercise.muscleIds.length != 0) {
     [muscles, , musclesAreLoading] = useMusclesByIds(exercise.muscleIds);
   } else {
     muscles = [];
@@ -22,8 +19,8 @@ const ExerciseDetailPage = () => {
   let muscleGroupsAreLoading = false;
   let muscleGroups: MuscleGroup[] | undefined = undefined;
   if (
-    exercise?.muscleGroupIds != undefined &&
-    exercise?.muscleGroupIds.length != 0
+    exercise.muscleGroupIds != undefined &&
+    exercise.muscleGroupIds.length != 0
   ) {
     [muscleGroups, , muscleGroupsAreLoading] = useMuscleGroupsByIds(
       exercise.muscleGroupIds,
@@ -34,8 +31,6 @@ const ExerciseDetailPage = () => {
 
   return (
     <div className={"flex items-center"}>
-      {exerciseIsLoading && <LoadingIcon />}
-
       {exercise && (
         <div className={"flex items-center"}>
           <div>

@@ -40,7 +40,7 @@ public class MusclesController : ApiController
       Problem);
   }
 
-  [HttpGet("{id}")]
+  [HttpGet("{id?}")]
   public async Task<IActionResult> GetMusclesByIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMusclesByIdQuery(ids);
@@ -51,8 +51,8 @@ public class MusclesController : ApiController
       Problem);
   }
 
-  [HttpGet("{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
-  public async Task<IActionResult> GetMuscles([FromQuery] PagingRequest request)
+  [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetMusclesPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetMusclePageQuery>(request);
     ErrorOr<Pagination<Muscle>> musclePageResult = await _mediator.Send(query);

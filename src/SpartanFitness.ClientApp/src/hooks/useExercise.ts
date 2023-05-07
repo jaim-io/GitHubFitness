@@ -6,7 +6,9 @@ import Exercise from "../types/domain/Exercise";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
-const useExercise = (id: string): [Exercise | undefined, Exception | undefined, boolean] => {
+const useExercise = (
+  id: string,
+): [Exercise | undefined, Exception | undefined, boolean] => {
   const [exercise, setExercise] = useState<Exercise>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
