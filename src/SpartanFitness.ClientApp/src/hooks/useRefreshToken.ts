@@ -11,7 +11,7 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
   const [, setError] = useState<Exception>();
 
-  const refresh = async () => {
+  return async () => {
     try {
       await axios
         .post<AuthenticationResponse>(
@@ -55,7 +55,6 @@ const useRefreshToken = () => {
       /* empty */
     }
   };
-  return refresh;
 };
 
 export default useRefreshToken;

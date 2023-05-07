@@ -1,13 +1,12 @@
 type Props = {
-  size?: number;
   classNames?: string;
 };
 
-const LoadingIcon = ({ classNames = "", size = 6 }: Props) => {
+const LoadingIcon = ({ classNames = "" }: Props) => {
   return (
     <svg
       aria-hidden="true"
-      className={`w-${size} h-${size} animate-spin ${classNames}`}
+      className={`animate-spin ${classNames}`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

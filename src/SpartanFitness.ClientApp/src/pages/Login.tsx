@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +9,7 @@ import Exception from "../types/domain/Exception";
 import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 
-const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/auth/login`;
+const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/auth/login`;
 
 const LoginPage = () => {
   const { auth, setAuth } = useContext(AuthContext);
@@ -31,7 +31,7 @@ const LoginPage = () => {
     }
   });
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsLoading(true);
@@ -92,7 +92,11 @@ const LoginPage = () => {
     <>
       <div className="flex justify-center pt-28 pb-10">
         <div className="">
-          <img src={LogoSvg} className="w-[10rem] h-[10rem] mx-auto" />
+          <img
+            src={LogoSvg}
+            className="w-[10rem] h-[10rem] mx-auto"
+            alt={"SpartanFitness Logo"}
+          />
           <p>Sign in to SpartanFitness</p>
         </div>
       </div>
@@ -140,13 +144,10 @@ const LoginPage = () => {
               value="Submit"
               form="login-form"
             >
-              {isLoading == false && <p>Sign In</p>}
-              {(isLoading == true || isLoading == undefined) && (
+              {!isLoading && <p>Sign In</p>}
+              {(isLoading || isLoading == undefined) && (
                 <div className="flex items-center justify-center animate-pulse">
-                  <LoadingIcon
-                    classNames="mr-2 text-gray-200 dark:text-gray-600 fill-white"
-                    size={6}
-                  />
+                  <LoadingIcon classNames="mr-2 text-white fill-white w-5 h-5" />
                   <p>Logging in...</p>
                 </div>
               )}

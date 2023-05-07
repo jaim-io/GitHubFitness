@@ -5,10 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import Select, { SelectOption } from "../components/Select";
-import useMuscleGroups from "../hooks/useMuscleGroups";
-import useMuscles from "../hooks/useMuscles";
+import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
+import useMusclesPage from "../hooks/useMusclesPage";
 import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
+import Muscle from "../types/domain/Muscle";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 
@@ -27,23 +28,21 @@ const NewExercisePage = () => {
   const [, setError] = useState<Exception>();
   const navigate = useNavigate();
 
-  const [muscleGroupResult, muscleGroupPageIsLoading] = useMuscleGroups();
-  const [, muscleGroupPage] = muscleGroupResult.extract();
+  const [muscleGroupPage, , muscleGroupPageIsLoading] = useMuscleGroupsPage();
 
   // const muscleGroupIdsToGet = selectedMuscleGroups.filter(sm => !musclesInMemory.find(mim => mim.muscleGroupId == sm.value))
-  const [musclesResult] = useMuscles();
-  const [, musclePage] = musclesResult.extract();
+  const [musclePage, , musclePageIsLoading] = useMusclesPage();
 
   const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({
     label: mg.name,
     value: mg.id,
   }));
   const shownMuscles = musclePage?.muscles.filter(
-    (m) =>
+    (m: Muscle) =>
       selectedMuscleGroups.find((mg) => mg.value === m.muscleGroupId) !=
       undefined,
   );
-  const musclesOptions = shownMuscles?.map((m) => ({
+  const musclesOptions = shownMuscles?.map((m: Muscle) => ({
     label: m.name,
     value: m.id,
   }));
@@ -178,10 +177,7 @@ const NewExercisePage = () => {
                   role="status"
                   className="py-5 flex justify-center items-center"
                 >
-                  <LoadingIcon
-                    classNames="mr-2 text-gray-200 dark:text-gray-600 fill-blue"
-                    size={8}
-                  />
+                  <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
                   <span className="sr-only">Loading...</span>
                 </div>
               }
@@ -202,7 +198,7 @@ const NewExercisePage = () => {
               value={selectedMuscles}
               options={musclesOptions ?? []}
               onChange={setSelectedMuscles}
-              isLoading={false}
+              isLoading={musclePageIsLoading}
               ifEmpty={
                 <p className="flex justify-center items-center py-1 cursor-default">
                   No muscle found matching the muscle groups{" "}
@@ -214,10 +210,7 @@ const NewExercisePage = () => {
                   role="status"
                   className="py-5 flex justify-center items-center"
                 >
-                  <LoadingIcon
-                    classNames="mr-2 text-gray-200 dark:text-gray-600 fill-blue"
-                    size={8}
-                  />
+                  <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
                   <span className="sr-only">Loading...</span>
                 </div>
               }
@@ -264,10 +257,7 @@ const NewExercisePage = () => {
               {!isLoading && <p>Create exercise</p>}
               {(isLoading || isLoading == undefined) && (
                 <div className="flex items-center justify-center animate-pulse">
-                  <LoadingIcon
-                    classNames="mr-2 text-gray-200 dark:text-gray-600 fill-white"
-                    size={6}
-                  />
+                  <LoadingIcon classNames="mr-2 text-white fill-white w-4 h-4" />
                   <p>Creating...</p>
                 </div>
               )}

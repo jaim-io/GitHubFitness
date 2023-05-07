@@ -8,7 +8,7 @@ import NewButton from "../components/NewButton";
 import PageNavigation from "../components/PageNavigation";
 import SearchBar from "../components/SearchBar";
 import useAuth from "../hooks/useAuth";
-import useExercises from "../hooks/useExercises";
+import useExercisesPage from "../hooks/useExercisesPage";
 import CurrentSearchParams from "../types/CurrentSearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
@@ -58,14 +58,13 @@ const ExercisesPage = () => {
   const [query, setQuery] = useState("");
   // ------------------------
 
-  const [result, isLoading] = useExercises(
+  const [exercisePage, , isLoading] = useExercisesPage(
     currentPage,
     pageSize,
     SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
     order,
     query,
   );
-  const [, exercisePage] = result.extract();
 
   const paginate = (page: number) => {
     setCurrentPage(page);
@@ -146,14 +145,8 @@ const ExercisesPage = () => {
           </div>
 
           {(isLoading || isLoading == undefined) && (
-            <div
-              role="status"
-              className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
-            >
-              <LoadingIcon
-                classNames="mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue"
-                size={8}
-              />
+            <div role="status" className="flex justify-center items-center">
+              <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-8 h-8" />
               <span className="sr-only">Loading...</span>
             </div>
           )}

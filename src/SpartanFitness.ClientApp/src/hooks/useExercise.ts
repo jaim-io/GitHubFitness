@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
-import { Result, createException, createValue } from "../types/domain/Result";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
-const useExercise = (id: string): [Result<Exercise>, boolean] => {
+const useExercise = (id: string): [Exercise | undefined, Exception | undefined, boolean] => {
   const [exercise, setExercise] = useState<Exercise>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,9 +58,7 @@ const useExercise = (id: string): [Result<Exercise>, boolean] => {
     fetchExercise();
   }, []);
 
-  return exercise == undefined
-    ? [createException<Exercise>()(error!), isLoading]
-    : [createValue<Exercise>()(exercise!), isLoading];
+  return [exercise, error, isLoading];
 };
 
 export default useExercise;
