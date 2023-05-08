@@ -44,7 +44,7 @@ public class MuscleGroupsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpGet("{id?}")]
+  [HttpGet("ids/{id?}")]
   public async Task<IActionResult> GetMuscleGroupsByIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMuscleGroupsByIdQuery(ids);
