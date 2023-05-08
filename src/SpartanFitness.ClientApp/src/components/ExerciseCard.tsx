@@ -15,7 +15,7 @@ const ExerciseCard = ({ exercise }: Props) => {
         {exercise.name}
       </Link>
       <div className="pb-2"></div>
-      <div className="w-full border border-gray" />
+      <div className="w-full border border-gray rounded-lg" />
       <p
         className="pt-2 text-sm"
         style={{

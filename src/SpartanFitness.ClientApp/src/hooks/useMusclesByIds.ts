@@ -4,7 +4,7 @@ import Exception from "../types/domain/Exception";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles`;
+const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles/ids`;
 
 const createQueryString = (ids: string[]): string => {
   const params: string[] = [];

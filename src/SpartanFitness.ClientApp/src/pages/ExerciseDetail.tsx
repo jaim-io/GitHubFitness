@@ -5,6 +5,11 @@ import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
+import { BiDumbbell } from "react-icons/bi";
+import { MdFitbit } from "react-icons/md";
+import { SiElectron } from "react-icons/si";
+
+// TODO: Add save/favorite button
 
 const ExerciseDetailPage = () => {
   const exercise = useRouteLoaderData("exercise-details") as Exercise;
@@ -31,45 +36,86 @@ const ExerciseDetailPage = () => {
   }
 
   return (
-    <div className={"flex items-center"}>
-      {exercise && (
-        <div className={"flex items-center"}>
-          <div>
-            <img src={exercise.image} alt={`${exercise.name} image`} />
-          </div>
-          <div>
-            <h1>Exercise details</h1>
-            <p>{exercise.name}</p>
-            <p>{exercise.description}</p>
-
-            {muscles && (
-              <div>
-                {muscles.length != 0 ? (
-                  muscles.map((m) => <p key={m.id}>{m.name}</p>)
-                ) : (
-                  <p>No muscles specified</p>
-                )}
-              </div>
-            )}
-            {musclesAreLoading && <p>Muscles are loading</p>}
-
-            {muscleGroups && (
-              <div>
-                {muscleGroups.length != 0 ? (
-                  muscleGroups.map((mg) => <p key={mg.id}>{mg.name}</p>)
-                ) : (
-                  <p>No muscles groups specified</p>
-                )}
-              </div>
-            )}
-            {muscleGroupsAreLoading && <p>MuscleGroups are loading</p>}
-
-            <Link to=".." relative="path">
-              Back
-            </Link>
-          </div>
+    <div className={"flex justify-center pt-6 pb-8 h-full min-h-[90vh] max-w-"}>
+      <div className="mr-6 max-w-[18rem]">
+        <img
+          src={exercise.image}
+          alt={`${exercise.name} image`}
+          className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
+        />
+        <div className="mt-4">
+          {muscleGroups && (
+            <div className="flex flex-wrap">
+              {muscleGroups.length != 0 ? (
+                muscleGroups.map((mg) => (
+                  <Link
+                    key={mg.id}
+                    className="rounded-full border border-gray mr-2 px-2 py-1 mb-2 hover:bg-gray flex items-center"
+                    to={`/muscle-groups/${mg.id}`}
+                  >
+                    <MdFitbit className="mr-1" />
+                    {mg.name}
+                  </Link>
+                ))
+              ) : (
+                <p>No muscle groups specified</p>
+              )}
+            </div>
+          )}
+          {muscleGroupsAreLoading && <p>Muscle groups are loading</p>}
         </div>
-      )}
+
+        <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
+
+        <div className="mt-4">
+          {muscles && (
+            <div className="flex flex-wrap">
+              {muscles.length != 0 ? (
+                muscles.map((m) => (
+                  <Link
+                    key={m.id}
+                    className="rounded-full border border-gray mr-2 px-2 py-1 mb-2 hover:bg-gray flex items-center"
+                    to={`/muscles/${m.id}`}
+                  >
+                    <SiElectron className="mr-1" />
+                    {m.name}
+                  </Link>
+                ))
+              ) : (
+                <p>No muscles specified</p>
+              )}
+            </div>
+          )}
+          {musclesAreLoading && <p>Muscles are loading</p>}
+        </div>
+      </div>
+      <div className="relative">
+        <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6">
+          <h1 className="text-light-gray flex items-center">
+            <BiDumbbell className="mr-1" size={16} />
+            Exercise<span className="mx-1">/</span>
+            <span className="text-blue">{exercise.name}</span>
+          </h1>
+          <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
+          <p className="pt-4">{exercise.description}</p>
+        </div>
+        <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4 ">
+          <iframe
+            className="w-full h-[18.125rem]"
+            src={exercise.video}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          />
+        </div>
+
+        <Link
+          to=".."
+          relative="path"
+          className="absolute right-0 mt-4 mr-1 bg-gray hover:bg-semi-black border border-gray rounded-lg py-1 px-3"
+        >
+          Back
+        </Link>
+      </div>
     </div>
   );
 };
@@ -77,7 +123,7 @@ const ExerciseDetailPage = () => {
 export default ExerciseDetailPage;
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  // Will raise an AxiosError
+  // Will raise an AxiosError if fetching fails
 
   const response = await axios.get<Exercise>(
     `${import.meta.env.VITE_API_BASE}/exercises/${params.exerciseId}`,

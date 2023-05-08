@@ -4,7 +4,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import MuscleGroup from "../types/domain/MuscleGroup";
 
-const MUSCLEGROUPS_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscle-groups`;
+const MUSCLEGROUPS_ENDPOINT = `${
+  import.meta.env.VITE_API_BASE
+}/muscle-groups/ids`;
 
 const createQueryString = (ids: string[]): string => {
   const params: string[] = [];
