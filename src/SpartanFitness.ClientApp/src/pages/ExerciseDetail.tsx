@@ -1,12 +1,13 @@
-import { Link, useLoaderData } from "react-router-dom";
+import axios from "axios";
+import { Link, LoaderFunctionArgs, useRouteLoaderData } from "react-router-dom";
+import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
+import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
-import useMusclesByIds from "../hooks/useMusclesByIds";
-import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
 
 const ExerciseDetailPage = () => {
-  const exercise = useLoaderData() as Exercise;
+  const exercise = useRouteLoaderData("exercise-details") as Exercise;
 
   let musclesAreLoading = false;
   let muscles: Muscle[] | undefined = undefined;
@@ -74,3 +75,19 @@ const ExerciseDetailPage = () => {
 };
 
 export default ExerciseDetailPage;
+
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  // Will raise an AxiosError
+
+  const response = await axios.get<Exercise>(
+    `${import.meta.env.VITE_API_BASE}/exercises/${params.exerciseId}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `bearer ${localStorage.getItem("token")}`,
+      },
+    },
+  );
+
+  return response.data;
+};

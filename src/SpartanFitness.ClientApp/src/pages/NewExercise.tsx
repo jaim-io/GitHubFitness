@@ -6,12 +6,24 @@ import { toast } from "react-toastify";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import Select, { SelectOption } from "../components/Select";
 import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
-import useMusclesPage from "../hooks/useMusclesPage";
 import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
+const MUSCLES_ENDPOINT = `${
+  import.meta.env.VITE_API_BASE
+}/muscles/muscle-group-ids`;
+
+const createQueryString = (ids: string[]): string => {
+  const params: string[] = [];
+
+  ids.forEach((id) => params.push(`id=${id}`));
+
+  const queryString = `?${params.join("&")}`;
+
+  return ids.length == 0 ? "" : queryString;
+};
 
 const NewExercisePage = () => {
   const [name, setName] = useState("");
@@ -29,19 +41,42 @@ const NewExercisePage = () => {
   const navigate = useNavigate();
 
   const [muscleGroupPage, , muscleGroupPageIsLoading] = useMuscleGroupsPage();
+  const [muscles, setMuscles] = useState<Muscle[]>([]);
+  const [musclesAreLoading, setMusclesAreLoading] = useState(false);
 
-  // const muscleGroupIdsToGet = selectedMuscleGroups.filter(sm => !musclesInMemory.find(mim => mim.muscleGroupId == sm.value))
-  const [musclePage, , musclePageIsLoading] = useMusclesPage();
+  const onMuscleGroupSelectionChange = async (
+    selected: SelectOption<string>[],
+  ) => {
+    const queryString = createQueryString(selected.map((s) => s.value));
+
+    setMusclesAreLoading(true);
+    const response = await axios.get<Muscle[]>(
+      `${MUSCLES_ENDPOINT}${queryString}`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+
+    setMusclesAreLoading(false);
+
+    const muscles = response.data;
+    setMuscles(muscles);
+  };
 
   const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({
     label: mg.name,
     value: mg.id,
   }));
-  const shownMuscles = musclePage?.muscles.filter(
+
+  const shownMuscles = Object.values(muscles).filter(
     (m: Muscle) =>
       selectedMuscleGroups.find((mg) => mg.value === m.muscleGroupId) !=
       undefined,
   );
+
   const musclesOptions = shownMuscles?.map((m: Muscle) => ({
     label: m.name,
     value: m.id,
@@ -164,7 +199,10 @@ const NewExercisePage = () => {
               multiple={true}
               value={selectedMuscleGroups}
               options={muscleGroupOptions ?? []}
-              onChange={setSelectedMuscleGroups}
+              onChange={(selected) => {
+                setSelectedMuscleGroups(selected);
+                onMuscleGroupSelectionChange(selected);
+              }}
               isLoading={muscleGroupPageIsLoading}
               ifEmpty={
                 <p className="flex justify-center items-center py-1 cursor-default">
@@ -198,7 +236,7 @@ const NewExercisePage = () => {
               value={selectedMuscles}
               options={musclesOptions ?? []}
               onChange={setSelectedMuscles}
-              isLoading={musclePageIsLoading}
+              isLoading={musclesAreLoading}
               ifEmpty={
                 <p className="flex justify-center items-center py-1 cursor-default">
                   No muscle found matching the muscle groups{" "}
