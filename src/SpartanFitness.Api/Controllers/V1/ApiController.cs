@@ -74,8 +74,7 @@ public class ApiController : ControllerBase
             => context.User.IsInRole(RoleTypes.Administrator);
         public static bool UserIdMatchesClaim(HttpContext context, string userId)
             => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == userId;
-
-        public static string GetUserIdFromClaims(HttpContext context)
+        public static string GetUserId(HttpContext context)
             => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
 }

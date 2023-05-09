@@ -81,4 +81,16 @@ public sealed class User : AggregateRoot<UserId, Guid>
 
     return user;
   }
+
+  public void SaveExercise(Exercise exercise)
+  {
+    var id = ExerciseId.Create(exercise.Id.Value);
+    _savedExerciseIds.Add(id);
+  }
+  
+  public void UnSaveExercise(Exercise exercise)
+  {
+    var id = ExerciseId.Create(exercise.Id.Value);
+    _savedExerciseIds.Remove(id);
+  }
 }

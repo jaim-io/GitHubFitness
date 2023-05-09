@@ -7,7 +7,7 @@ using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
 
-namespace SpartanFitness.Application.Exercises.Command.CreateExercise;
+namespace SpartanFitness.Application.Exercises.Commands.CreateExercise;
 
 public class CreateExerciseCommandHandler
   : IRequestHandler<CreateExerciseCommand, ErrorOr<Exercise>>

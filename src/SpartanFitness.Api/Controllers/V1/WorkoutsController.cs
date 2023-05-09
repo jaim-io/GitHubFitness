@@ -45,7 +45,7 @@ public class WorkoutsController : ApiController
   [Authorize(Roles = RoleTypes.Coach)]
   public async Task<IActionResult> CreateWorkout(CreateWorkoutRequest request, string coachId)
   {
-    var query = new VerifyIfUserIsCoachQuery(Authorization.GetUserIdFromClaims(HttpContext), coachId);
+    var query = new VerifyIfUserIsCoachQuery(Authorization.GetUserId(HttpContext), coachId);
     ErrorOr<Coach> isAuthorizedResult = await _mediator.Send(query);
     if (isAuthorizedResult.IsError)
     {

@@ -76,7 +76,7 @@ public class CoachApplicationsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpPut("{applicationId}/approve")]
+  [HttpPatch("{applicationId}/approve")]
   [Authorize(Roles = RoleTypes.Administrator)]
   public async Task<IActionResult> ApproveCoachApplication(
     ApproveCoachApplicationRequest request,
@@ -91,7 +91,7 @@ public class CoachApplicationsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpPut("{applicationId}/deny")]
+  [HttpPatch("{applicationId}/deny")]
   [Authorize(Roles = RoleTypes.Administrator)]
   public async Task<IActionResult> DenyCoachApplication(
     DenyCoachApplicationRequest request,

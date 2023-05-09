@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Exercises.Command.CreateExercise;
+using SpartanFitness.Application.Exercises.Commands.CreateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 using SpartanFitness.Contracts.Common;
@@ -58,7 +58,7 @@ public class ExercisesController : ApiController
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> CreateExercise(CreateExerciseRequest request)
   {
-    var userId = Authorization.GetUserIdFromClaims(HttpContext);
+    var userId = Authorization.GetUserId(HttpContext);
     var command = _mapper.Map<CreateExerciseCommand>((request, userId));
     ErrorOr<Exercise> createdExerciseResult = await _mediator.Send(command);
 
