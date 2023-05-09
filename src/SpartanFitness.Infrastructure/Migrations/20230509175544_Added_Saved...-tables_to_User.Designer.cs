@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpartanFitness.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using SpartanFitness.Infrastructure.Persistence;
 namespace SpartanFitness.Infrastructure.Migrations
 {
     [DbContext(typeof(SpartanFitnessDbContext))]
-    partial class SpartanFitnessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230509175544_Added_Saved...-tables_to_User")]
+    partial class Added_Savedtables_to_User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
