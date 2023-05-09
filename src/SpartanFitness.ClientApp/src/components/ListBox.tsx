@@ -13,7 +13,7 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
   return (
     <Listbox value={selected} onChange={onChange}>
       <div className="relative">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-gray bg-[#262c31] hover:border-[#8B949E] hover:bg-gray py-[0.25rem] pl-3 pr-8 text-left shadow  min-w-full">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-[rgba(240,246,252,0.1)] bg-[#262c31] hover:border-[#8B949E] hover:bg-gray py-[0.25rem] pl-3 pr-8 text-left shadow  min-w-full">
           <p className="block truncate">
             <span className="text-light-gray">{buttonText} </span>
             {selected}
@@ -31,7 +31,7 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-gray bg-semi-black py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
+          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-gray bg-semi-black py-1 text-base shadow-lg focus:outline-none sm:text-sm z-5">
             <div className="my-1">
               {options.map((option, optionIdx) => (
                 <Listbox.Option

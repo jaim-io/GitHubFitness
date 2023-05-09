@@ -6,6 +6,7 @@ export default {
       colors: {
         blue: "#2f81f7",
         "light-gray": "#7D8590",
+        "hover-gray": "#8b949e",
         gray: "#30363d",
         "semi-black": "#161b22",
         black: "#0d1117",

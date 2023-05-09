@@ -10,7 +10,7 @@ const MainNavigation = () => {
   const { auth } = useContext(AuthContext);
 
   return (
-    <nav className="backdrop-blur bg-semi-black py-3 px-24">
+    <nav className="bg-semi-black py-3 px-24">
       <div className="flex flex-wrap items-center justify-between mx-auto">
         <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">
           <Link to="/" className="flex items-center">

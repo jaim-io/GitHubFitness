@@ -184,7 +184,9 @@ const Select = <T extends string | number>({
           }
         }}
         tabIndex={0}
-        className="relative min-w-[20rem] min-h-[1.5rem] border border-gray items-center gap-2 flex p-1 rounded-lg outline-none focus:border-gray select-none cursor-pointer"
+        className={`relative min-w-[20rem] min-h-[1.5rem] border ${
+          isOpen ? "border-blue" : "border-gray hover:border-hover-gray"
+        } items-center gap-2 flex p-1 rounded-lg outline-none focus:border-blue select-none cursor-pointer`}
       >
         <span className="grow flex gap-2 flex-wrap min-h-[2.2rem] pl-1">
           {multiple
@@ -254,7 +256,7 @@ const Select = <T extends string | number>({
         >
           <ul
             id={optionsId}
-            className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-gray rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[100] bg-black`}
+            className={`absolute m-0 p-2 list-none max-h-[15rem] overflow-y-auto border border-gray rounded-lg w-full left-0 top-[calc(100%+0.45rem)] z-[5] bg-black`}
           >
             {!isLoading &&
               filteredOptions.map((option, index) => (

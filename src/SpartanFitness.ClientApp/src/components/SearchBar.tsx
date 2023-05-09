@@ -45,7 +45,7 @@ const SearchBar = ({ onSubmit }: Props) => {
         <input
           type="search"
           id="default-search"
-          className="block w-full p-1 pl-10 pr-7 rounded-lg border border-gray bg-[#262c31] hover:border-[#8B949E] hover:bg-gray focus:outline focus:outline-blue focus:shadow-outline search-cancel:hidden placeholder-light-gray overflow-scroll z-1"
+          className="block w-full p-1 pl-10 pr-7 rounded-lg border border-[rgba(240,246,252,0.1)] bg-[#262c31] hover:border-[#8B949E] hover:bg-gray focus:outline focus:outline-blue focus:shadow-outline search-cancel:hidden placeholder-light-gray overflow-scroll z-1"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search ..."

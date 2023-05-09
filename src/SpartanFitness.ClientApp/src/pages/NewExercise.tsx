@@ -162,7 +162,7 @@ const NewExercisePage = () => {
               Exercise name *
             </label>
             <input
-              className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
               id="exercise-name"
               type="text"
               placeholder="Barbell bench press"
@@ -178,7 +178,7 @@ const NewExercisePage = () => {
               <p className="ml-1 text-light-gray text-sm">(optional)</p>
             </label>
             <input
-              className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
               id="description"
               type="text"
               placeholder="A chest exercise which involves chest, delts and triceps..."
@@ -259,7 +259,7 @@ const NewExercisePage = () => {
           <div className="mb-4">
             <label className="block text-white mb-2 ml-1">Image URL *</label>
             <input
-              className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
               type="text"
               placeholder="https://google.com/exercise-image"
               value={image}
@@ -271,7 +271,7 @@ const NewExercisePage = () => {
           <div className="mb-4">
             <label className="block text-white mb-2 ml-1">Video URL *</label>
             <input
-              className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
               type="text"
               placeholder="https://youtube.com/exercise-video"
               value={video}
@@ -283,13 +283,13 @@ const NewExercisePage = () => {
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
           <div className="w-full relative mt-6">
             <Link
-              className="absolute left-0 bg-gray hover:bg-semi-black border border-gray rounded-lg py-1 px-3 flex justify-center items-center"
+              className="absolute left-0 bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"
               to=".."
             >
               Cancel
             </Link>
             <button
-              className="absolute right-0 bg-dark-green hover:bg-light-green border border-gray rounded-lg py-1 px-3 flex justify-center items-center"
+              className="absolute right-0 bg-dark-green hover:bg-light-green border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"
               type="submit"
             >
               {!isLoading && <p>Create exercise</p>}

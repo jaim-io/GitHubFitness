@@ -11,7 +11,7 @@ const UserNavItem = ({ ...props }) => {
   const { auth } = useContext(AuthContext);
 
   return (
-    <Menu as="div" className="relative inline-block text-left" {...props}>
+    <Menu as="div" className="relative inline-block text-left z-20" {...props}>
       {auth.user && (
         <>
           <Menu.Button
