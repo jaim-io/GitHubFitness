@@ -51,14 +51,14 @@ public class GetMuscleGroupPageQueryHandler : IRequestHandler<GetMuscleGroupPage
       _ => muscleGroups.OrderByDescending(mg => mg.CreatedDateTime),
     };
 
+    decimal pageCount = query.PageSize == null
+      ? 1
+      : Math.Ceiling((decimal)muscleGroups.Count() / (int)query.PageSize);
+
     // .ToList() -> Possible multiple enumeration of IEnumerable
     muscleGroups = muscleGroups
       .Skip((pageNumber - 1) * query.PageSize ?? 0)
       .ToList();
-
-    decimal pageCount = query.PageSize == null
-      ? 1
-      : Math.Ceiling((decimal)muscleGroups.Count() / (int)query.PageSize);
 
     if (!(pageNumber == 1 && pageCount == 0) &&
         pageNumber > pageCount)

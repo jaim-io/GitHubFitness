@@ -31,7 +31,7 @@ const ListBox = ({ selected, options, buttonText, onChange }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-gray bg-semi-black py-1 text-base shadow-lg focus:outline-none sm:text-sm z-5">
+          <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-[10rem] overflow-auto rounded-xl border border-gray bg-semi-black py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
             <div className="my-1">
               {options.map((option, optionIdx) => (
                 <Listbox.Option

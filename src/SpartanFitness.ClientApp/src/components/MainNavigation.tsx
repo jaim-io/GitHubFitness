@@ -16,7 +16,7 @@ const MainNavigation = () => {
           <Link to="/" className="flex items-center">
             <img
               src={LogoWhiteNoCircle}
-              className="h-10 mr-3 transition ease-in-out delay-150 hover:scale-105 duration-300 inline-block"
+              className="h-10 mr-3 inline-block"
               alt="SpartanFitness Logo"
             />
           </Link>

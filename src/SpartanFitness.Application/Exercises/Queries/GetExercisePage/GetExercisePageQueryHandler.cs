@@ -53,13 +53,13 @@ public class GetExercisePageQueryHandler
       _ => exercises.OrderByDescending(ex => ex.CreatedDateTime),
     };
 
-    exercises = exercises
-      .Skip((pageNumber - 1) * query.PageSize ?? 0)
-      .ToList();
-
     decimal pageCount = query.PageSize == null
       ? 1
       : Math.Ceiling((decimal)exercises.Count() / (int)query.PageSize);
+
+    exercises = exercises
+      .Skip((pageNumber - 1) * query.PageSize ?? 0)
+      .ToList();
 
     if (!(pageNumber == 1 && pageCount == 0) &&
         pageNumber > pageCount)

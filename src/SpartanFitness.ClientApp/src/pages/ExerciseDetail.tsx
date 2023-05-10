@@ -1,10 +1,5 @@
 import axios from "axios";
-import { Link, LoaderFunctionArgs, useRouteLoaderData } from "react-router-dom";
-import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
-import useMusclesByIds from "../hooks/useMusclesByIds";
-import Exercise from "../types/domain/Exercise";
-import Muscle from "../types/domain/Muscle";
-import MuscleGroup from "../types/domain/MuscleGroup";
+import { useState } from "react";
 import { BiDumbbell } from "react-icons/bi";
 import {
   MdBookmarkAdded,
@@ -12,10 +7,15 @@ import {
   MdOutlineBookmarkAdd,
 } from "react-icons/md";
 import { SiElectron } from "react-icons/si";
-import { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth";
+import { Link, LoaderFunctionArgs, useRouteLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
 import useCoach from "../hooks/useCoach";
+import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
+import useMusclesByIds from "../hooks/useMusclesByIds";
+import Exercise from "../types/domain/Exercise";
+import Muscle from "../types/domain/Muscle";
+import MuscleGroup from "../types/domain/MuscleGroup";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
@@ -48,7 +48,7 @@ const ExerciseDetailPage = () => {
     muscleGroups = [];
   }
 
-  const [coach, , coachIsLoading] = useCoach(exercise.creatorId);
+  const [coach] = useCoach(exercise.creatorId);
 
   const handleSaving = async () => {
     setSaved((prev) => !prev);
@@ -190,13 +190,28 @@ const ExerciseDetailPage = () => {
           />
         </div>
 
-        <Link
-          to=".."
-          relative="path"
-          className="absolute right-0 mt-4 mr-1 bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3"
-        >
-          Back
-        </Link>
+        <div className="mt-4">
+          <Link
+            to=".."
+            relative="path"
+            className="absolute left-0 bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3"
+          >
+            Back
+          </Link>
+
+          <div className="absolute right-0 py-1 px-3 border border-gray rounded-lg flex items-center text-light-gray ml-2 justify-center">
+            {!coach ? (
+              <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-6 h-6" />
+            ) : (
+              <>
+                Created by:{" "}
+                <span className="text-blue ml-1">
+                  {coach!.firstName} {coach!.lastName}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
