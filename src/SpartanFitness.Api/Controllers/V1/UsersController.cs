@@ -41,7 +41,7 @@ public class UsersController : ApiController
   }
 
   [HttpPatch("{userId}/saved/exercises/add")]
-  public async Task<IActionResult> SaveExercise([FromQuery] string userId, [FromBody] string exerciseId)
+  public async Task<IActionResult> SaveExercise([FromRoute] string userId, [FromBody] SaveExerciseRequest request)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
     if (!isUser)
@@ -49,7 +49,7 @@ public class UsersController : ApiController
       return Unauthorized();
     }
 
-    var command = _mapper.Map<SaveExerciseCommand>((userId, exerciseId));
+    var command = _mapper.Map<SaveExerciseCommand>((request, userId));
     ErrorOr<Unit> result = await _mediator.Send(command);
 
     return result.Match(
@@ -58,7 +58,7 @@ public class UsersController : ApiController
   }
 
   [HttpPatch("{userId}/saved/exercises/remove")]
-  public async Task<IActionResult> UnSaveExercise([FromQuery] string userId, [FromBody] string exerciseId)
+  public async Task<IActionResult> UnSaveExercise([FromRoute] string userId, [FromBody] UnSaveExerciseRequest request)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
     if (!isUser)
@@ -66,7 +66,7 @@ public class UsersController : ApiController
       return Unauthorized();
     }
 
-    var command = _mapper.Map<UnSaveExerciseCommand>((userId, exerciseId));
+    var command = _mapper.Map<UnSaveExerciseCommand>((request, userId));
     ErrorOr<Unit> result = await _mediator.Send(command);
 
     return result.Match(

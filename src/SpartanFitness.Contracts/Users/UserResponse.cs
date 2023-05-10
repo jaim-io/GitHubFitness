@@ -5,4 +5,7 @@ public record UserResponse(
   string FirstName,
   string LastName,
   string ProfileImage,
-  string Email);
+  string Email,
+  List<string> SavedExerciseIds,
+  List<string> SavedMuscleIds,
+  List<string> SavedMuscleGroupIds);
