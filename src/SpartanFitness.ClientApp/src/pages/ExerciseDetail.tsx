@@ -6,15 +6,26 @@ import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
 import { BiDumbbell } from "react-icons/bi";
-import { MdFitbit } from "react-icons/md";
+import {
+  MdBookmarkAdded,
+  MdFitbit,
+  MdOutlineBookmarkAdd,
+} from "react-icons/md";
 import { SiElectron } from "react-icons/si";
-import { MdOutlineBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
+import useCoach from "../hooks/useCoach";
+import LoadingIcon from "../components/Icons/LoadingIcon";
 
-// TODO: Add save/favorite button
+const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
 const ExerciseDetailPage = () => {
   const exercise = useRouteLoaderData("exercise-details") as Exercise;
+  const { auth } = useAuth();
+  const [saved, setSaved] = useState(
+    Object.values(auth.user!.savedExerciseIds).includes(exercise.id),
+  );
 
   let musclesAreLoading = false;
   let muscles: Muscle[] | undefined = undefined;
@@ -37,8 +48,54 @@ const ExerciseDetailPage = () => {
     muscleGroups = [];
   }
 
-  const [saved, setSaved] = useState(false);
-  // GetCoach
+  const [coach, , coachIsLoading] = useCoach(exercise.creatorId);
+
+  const handleSaving = async () => {
+    setSaved((prev) => !prev);
+
+    const action = saved ? "remove" : "add";
+
+    await axios
+      .patch(
+        `${USER_ENDPOINT}/${auth.user?.id}/saved/exercises/${action}`,
+        {
+          exerciseId: exercise.id,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      )
+      .then(() => {
+        if (action == "add") {
+          auth.user!.savedExerciseIds.push(exercise.id);
+        } else {
+          auth.user!.savedExerciseIds =
+            auth.user?.savedExerciseIds.filter((id) => id !== exercise.id) ??
+            [];
+        }
+      })
+      .catch((err) => {
+        toast.error(
+          err.code == "ERR_NETWORK"
+            ? "Unable to reach the server"
+            : err.response.statusText,
+          {
+            toastId: err.code,
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          },
+        );
+      });
+  };
 
   return (
     <div className={"flex justify-center pt-6 pb-8 h-full min-h-[90vh]"}>
@@ -48,23 +105,23 @@ const ExerciseDetailPage = () => {
           alt={`${exercise.name} image`}
           className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
         />
-        {saved ? (
-          <button
-            className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
-            onClick={() => setSaved(false)}
-          >
-            <MdBookmarkAdded className="mr-1 fill-[#e3b341]" size={16} />
-            Saved
-          </button>
-        ) : (
-          <button
-            className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
-            onClick={() => setSaved(true)}
-          >
-            <MdOutlineBookmarkAdd className="mr-1" size={16} />
-            Save
-          </button>
-        )}
+
+        <button
+          className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
+          onClick={handleSaving}
+        >
+          {saved ? (
+            <>
+              <MdBookmarkAdded className="mr-1 fill-[#e3b341]" size={16} />
+              Saved
+            </>
+          ) : (
+            <>
+              <MdOutlineBookmarkAdd className="mr-1" size={16} />
+              Save
+            </>
+          )}
+        </button>
 
         <div className="mt-4">
           {muscleGroups && (
@@ -88,7 +145,9 @@ const ExerciseDetailPage = () => {
           {muscleGroupsAreLoading && <p>Muscle groups are loading</p>}
         </div>
 
-        <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
+        {muscles?.length !== 0 && muscleGroups?.length !== 0 && (
+          <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
+        )}
 
         <div className="mt-4">
           {muscles && (

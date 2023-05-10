@@ -4,6 +4,9 @@ type User = {
   lastName: string;
   profileImage: string;
   email: string;
+  savedExerciseIds: string[];
+  savedMusclesIds: string[];
+  savedMuscleGroupIds: string[];
 };
 
 export default User;
