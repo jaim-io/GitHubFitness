@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
-using SpartanFitness.Domain.Enums;
+using SpartanFitness.Domain.Common.Identity;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Authentication;
@@ -29,7 +29,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     _jwtSettings = jwtSettings.Value;
   }
 
-  public Tuple<string, RefreshToken> GenerateTokenPair(User user, HashSet<Role> roles)
+  public Tuple<string, RefreshToken> GenerateTokenPair(User user, HashSet<IdentityRole> roles)
   {
     var jti = Guid.NewGuid().ToString();
 
@@ -39,7 +39,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     return new Tuple<string, RefreshToken>(accessToken, refreshToken);
   }
 
-  public string GenerateAccessToken(User user, HashSet<Role> roles, string? jti = null)
+  public string GenerateAccessToken(User user, HashSet<IdentityRole> roles, string? jti = null)
   {
     var signingCredentials = new SigningCredentials(
       new SymmetricSecurityKey(

@@ -8,6 +8,7 @@ using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.Enums;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Application.Authentication.Commands.Register;
 
@@ -54,9 +55,10 @@ public class RegisterCommandHandler
       hashedPassword,
       salt);
 
-    var roles = new HashSet<Role> { Role.User };
-
     await _userRepository.AddAsync(user);
+
+    var userId = UserId.Create(user.Id.Value);
+    var roles = await _roleRepository.GetRolesByUserIdAsync(userId);
 
     var (accessToken, refreshToken) = _jwtTokenGenerator.GenerateTokenPair(user, roles);
 
