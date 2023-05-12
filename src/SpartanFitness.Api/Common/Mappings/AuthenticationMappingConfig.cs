@@ -5,6 +5,7 @@ using SpartanFitness.Application.Authentication.Commands.Register;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Authentication.Queries.Login;
 using SpartanFitness.Contracts.Authentication;
+using SpartanFitness.Domain.Common.Identity;
 
 namespace SpartanFitness.Api.Common.Mappings;
 
@@ -27,5 +28,10 @@ public class AuthenticationMappingConfig : IRegister
       .Map(dest => dest.SavedMuscleGroupIds, src => src.User.SavedMuscleGroupIds.Select(id => id.Value.ToString()))
       .Map(dest => dest.RefreshToken, src => src.RefreshToken.Id.Value.ToString())
       .Map(dest => dest, src => src.User);
+
+    config.NewConfig<IdentityRole, AuthenticationResponseRole>()
+      .Map(dest => dest.Id, src => src.RoleId.Value.ToString())
+      .Map(dest => dest.Name, src => src.Name)
+      .Map(dest => dest, src => src);
   }
 }

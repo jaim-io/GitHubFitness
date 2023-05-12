@@ -116,6 +116,7 @@ public class RefreshJwtTokenCommandHandler
     return new AuthenticationResult(
       user,
       accessToken,
-      refreshToken);
+      refreshToken,
+      roles);
   }
 }

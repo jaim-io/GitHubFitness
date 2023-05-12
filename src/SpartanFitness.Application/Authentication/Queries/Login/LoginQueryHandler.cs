@@ -58,6 +58,7 @@ public class LoginQueryHandler
     return new AuthenticationResult(
       user,
       accessToken,
-      refreshToken);
+      refreshToken,
+      roles);
   }
 }

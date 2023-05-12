@@ -67,6 +67,7 @@ public class RegisterCommandHandler
     return new AuthenticationResult(
       user,
       accessToken,
-      refreshToken);
+      refreshToken,
+      roles);
   }
 }
