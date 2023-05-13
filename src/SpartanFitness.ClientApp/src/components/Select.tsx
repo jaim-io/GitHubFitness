@@ -160,18 +160,17 @@ const Select = <T extends string | number>({
             closeOptions();
           } else if (e.relatedTarget === null && e.target.id !== containerId) {
             closeOptions();
-          } else if (e.target == document.getElementById(searchId)) {
+          } else if (e.target == searchRef.current) {
             return;
           } else {
             closeOptions();
           }
         }}
         onClick={(e) => {
-          const thisElement = document.getElementById(containerId);
           const targetElement = e.target as Element;
-          const isChild = thisElement?.contains(targetElement);
+          const isChild = containerRef.current?.contains(targetElement);
 
-          if (e.target !== thisElement && !isChild) {
+          if (e.target !== containerRef.current && !isChild) {
             return;
           } else if (
             isChild &&

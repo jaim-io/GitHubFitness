@@ -71,13 +71,7 @@ const NewExercisePage = () => {
     value: mg.id,
   }));
 
-  const shownMuscles = Object.values(muscles).filter(
-    (m: Muscle) =>
-      selectedMuscleGroups.find((mg) => mg.value === m.muscleGroupId) !=
-      undefined,
-  );
-
-  const musclesOptions = shownMuscles?.map((m: Muscle) => ({
+  const musclesOptions = muscles.map((m: Muscle) => ({
     label: m.name,
     value: m.id,
   }));
