@@ -34,15 +34,13 @@ const router = createBrowserRouter([
               { path: "new", element: <NewExercisePage /> },
               {
                 path: ":exerciseId",
-                id: "exercise-details",
+                element: <ExerciseDetailPage />,
                 loader: exerciseDetailLoader,
-                children: [
-                  {
-                    index: true,
-                    element: <ExerciseDetailPage />,
-                  },
-                  { path: "edit", element: <EditExercisePage /> },
-                ],
+              },
+              {
+                path: ":exerciseId/edit",
+                element: <EditExercisePage />,
+                loader: exerciseDetailLoader,
               },
             ],
           },

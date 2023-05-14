@@ -8,7 +8,7 @@ import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { SiElectron } from "react-icons/si";
 import { TbGhost2Filled } from "react-icons/tb";
-import { Link, useNavigate, useRouteLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import Select, { SelectOption } from "../components/Select";
 import useAuth from "../hooks/useAuth";
@@ -34,7 +34,7 @@ const createQueryString = (ids: string[]): string => {
 };
 
 const EditExercisePage = () => {
-  const exercise = useRouteLoaderData("exercise-details") as Exercise;
+  const exercise = useLoaderData() as Exercise;
   const { auth } = useAuth();
   const muscleGroupSelectorRef = useRef<HTMLDivElement>(null);
   const muscleSelectorRef = useRef<HTMLDivElement>(null);
@@ -156,16 +156,15 @@ const EditExercisePage = () => {
 
     await axios
       .put(
-        `${EXERCISE_ENDPOINT}${exercise.id}`,
+        `${EXERCISE_ENDPOINT}/${exercise.id}`,
         {
           id: exercise.id,
           name: name,
           description: description,
-          creatorId: exercise.id,
           image: exercise.image,
           video: exercise.video,
-          muscleGroupIds: displayedMuscleGroups,
-          muscleIds: displayedMuscles,
+          muscleGroupIds: displayedMuscleGroups?.map((m) => m.id),
+          muscleIds: displayedMuscles?.map((m) => m.id),
         },
         {
           headers: {
@@ -174,8 +173,8 @@ const EditExercisePage = () => {
           },
         },
       )
-      .then((res) => {
-        navigate("..");
+      .then(() => {
+        navigate(`/exercises/${exercise.id}`);
       })
       .catch();
 
@@ -288,7 +287,7 @@ const EditExercisePage = () => {
               <span className="text-blue">
                 <input
                   className={
-                    "bg-transparent outline-none rounded-lg w-full focus:bg-gray hover:bg-gray"
+                    "bg-transparent outline-none rounded-lg w-[30rem] focus:bg-gray hover:bg-gray"
                   }
                   value={name}
                   spellCheck={false}

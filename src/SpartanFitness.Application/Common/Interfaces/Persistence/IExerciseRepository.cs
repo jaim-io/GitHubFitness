@@ -12,4 +12,5 @@ public interface IExerciseRepository
   Task<Exercise?> GetByNameAsync(string name);
   Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids);
   Task<IEnumerable<MuscleGroupId>> GetMuscleGroupIds(IEnumerable<ExerciseId> exerciseIds);
+  Task UpdateAsync(Exercise exercise);
 }

@@ -1,0 +1,29 @@
+@host=http://localhost:8001
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMjUxNDQ0MC0yZTBmLTQwZTQtYjJmNC05MmM4NTEyZDYzNDciLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjMzOWM0MDdjLWY4MmItNDdhZS1hNjE3LWU1YWI2NmY5OWRmYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giLCJBZG1pbmlzdHJhdG9yIl0sIlVzZXJJZCI6ImUyNTE0NDQwLTJlMGYtNDBlNC1iMmY0LTkyYzg1MTJkNjM0NyIsIkNvYWNoSWQiOiI0YzQ1Njc1Yy1kY2JhLTRjNDMtYjZmYi1hNzk3NTYwMWM3MTkiLCJBZG1pbmlzdHJhdG9ySWQiOiIwNWZmNTBlNS0zMWNkLTRlNjUtOTM0ZC03ZDAwMjRhMjZmOWEiLCJleHAiOjE2ODQwNzc4NDUsImlzcyI6IlNwYXJ0YW5GaXRuZXNzIiwiYXVkIjoiU3BhcnRhbkZpdG5lc3MifQ.NwxRuPTF4JvSPfr9gztrTlNWIcYHeHQUdB2gUKUJD9I
+@id=728c3bc9-b55c-4837-af34-ee37bf0daf34
+
+PUT {{host}}/api/v1/exercises/update/{{id}}
+Content-Type: application/json
+Authorization: bearer {{token}}
+
+{
+    "id": "728c3bc9-b55c-4837-af34-ee37bf0daf34",
+    "name": "Smith squat 5",
+    "description": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur",
+    "image": "https://picsum.photos/200",
+    "video": "https://www.youtube.com/watch?v=ajTTZ7iy6Ls",
+    "muscleGroupIds": [
+        "d254c751-0a42-42af-94cd-553bb8ef14a8",
+        "75156fb6-75b6-46d5-9776-20b246f2dc5a",
+        "6c6c072d-f64e-45f8-b023-32cf3d5ff053"
+    ],
+    "muscleIds": [
+        "13c22f0c-d8dd-42b7-ab04-1cf9d99b2d38",
+        "33630672-b907-4740-8e93-74dc192085be",
+        "2acf8136-8ee5-49a2-a6c9-15f6aabd61e8",
+        "4ebdcc8b-e9cb-404e-abd4-40bd4cf5f876",
+        "1b426565-8080-4433-a8e8-6e2d334d3139",
+        "89e03cd0-f4a5-4a79-b8f8-7401ff13f37f",
+        "e48dedc7-f767-4b85-bb9c-eaceeba54e83"
+    ]
+}

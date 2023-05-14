@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpartanFitness.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using SpartanFitness.Infrastructure.Persistence;
 namespace SpartanFitness.Infrastructure.Migrations
 {
     [DbContext(typeof(SpartanFitnessDbContext))]
-    partial class SpartanFitnessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230514113342_Added_LastUpdaterId_to_Exercise")]
+    partial class Added_LastUpdaterId_to_Exercise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

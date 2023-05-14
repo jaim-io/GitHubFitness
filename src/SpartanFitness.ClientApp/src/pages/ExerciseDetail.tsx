@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
 import {
   MdBookmarkAdded,
@@ -7,8 +8,9 @@ import {
   MdOutlineBookmarkAdd,
 } from "react-icons/md";
 import { SiElectron } from "react-icons/si";
-import { Link, LoaderFunctionArgs, useRouteLoaderData } from "react-router-dom";
+import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingIcon from "../components/Icons/LoadingIcon";
 import useAuth from "../hooks/useAuth";
 import useCoach from "../hooks/useCoach";
 import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
@@ -16,13 +18,11 @@ import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import { AiFillEdit } from "react-icons/ai";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
 const ExerciseDetailPage = () => {
-  const exercise = useRouteLoaderData("exercise-details") as Exercise;
+  const exercise = useLoaderData() as Exercise;
   const { auth } = useAuth();
   const [saved, setSaved] = useState(
     Object.values(auth.user!.savedExerciseIds).includes(exercise.id),

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Exercises.Commands.CreateExercise;
+using SpartanFitness.Application.Exercises.Commands.UpdateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
 using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 using SpartanFitness.Contracts.Common;
@@ -25,8 +26,8 @@ public class ExercisesController : ApiController
   private readonly IMapper _mapper;
 
   public ExercisesController(
-      ISender mediator,
-      IMapper mapper)
+    ISender mediator,
+    IMapper mapper)
   {
     _mediator = mediator;
     _mapper = mapper;
@@ -68,5 +69,23 @@ public class ExercisesController : ApiController
         new { exerciseId = exercise.Id.Value },
         _mapper.Map<ExerciseResponse>(exercise)),
       errors => Problem(errors));
+  }
+
+  [HttpPut("update/{exerciseId}")]
+  [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
+  public async Task<IActionResult> UpdateExercise([FromBody] UpdateExerciseRequest request, [FromRoute] string exerciseId)
+  {
+    if (request.Id != exerciseId)
+    {
+      return BadRequest("Route ID must match the ID field in the request body.");
+    }
+
+    var coachId = Authorization.GetCoachId(HttpContext);
+    var command = _mapper.Map<UpdateExerciseCommand>((request, coachId));
+    ErrorOr<Exercise> updatedExerciseResult = await _mediator.Send(command);
+
+    return updatedExerciseResult.Match(
+      exercise => Ok(_mapper.Map<ExerciseResponse>(exercise)),
+      Problem);
   }
 }

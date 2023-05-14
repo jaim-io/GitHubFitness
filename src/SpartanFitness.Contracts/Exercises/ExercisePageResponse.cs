@@ -10,6 +10,7 @@ public record ExercisePageExerciseResponse(
   string Name,
   string Description,
   string CreatorId,
+  string LastUpdaterId,
   string Image,
   string Video,
   List<string> MuscleGroupIds,

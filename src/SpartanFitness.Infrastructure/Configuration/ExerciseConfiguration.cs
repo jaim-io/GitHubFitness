@@ -82,5 +82,11 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
       .HasConversion(
         id => id.Value,
         value => CoachId.Create(value));
+
+    builder.Property(e => e.LastUpdaterId)
+      .ValueGeneratedNever()
+      .HasConversion(
+      id => id.Value,
+      value => CoachId.Create(value));
   }
 }

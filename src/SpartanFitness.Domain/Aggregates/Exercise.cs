@@ -10,6 +10,7 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
   public string Name { get; private set; }
   public string Description { get; private set; }
   public CoachId CreatorId { get; private set; }
+  public CoachId LastUpdaterId { get; private set; }
   public string Image { get; private set; }
   public string Video { get; private set; }
   public IReadOnlyList<MuscleGroupId> MuscleGroupIds => _muscleGroupIds.AsReadOnly();
@@ -23,7 +24,8 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
     List<MuscleId> muscleIds,
     string name,
     string description,
-    CoachId coachId,
+    CoachId creatorId,
+    CoachId lastUpdaterId,
     string image,
     string video,
     DateTime createdDateTime,
@@ -34,7 +36,8 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
     _muscleIds = muscleIds;
     Name = name;
     Description = description;
-    CreatorId = coachId;
+    CreatorId = creatorId;
+    LastUpdaterId = lastUpdaterId;
     Image = image;
     Video = video;
     CreatedDateTime = createdDateTime;
@@ -63,9 +66,47 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
       name,
       description,
       coachId,
+      coachId,
       image,
       video,
       DateTime.UtcNow,
       DateTime.UtcNow);
   }
+
+  public void SetName(string name)
+  {
+    Name = name;
+  }
+
+  public void SetDescription(string description)
+  {
+    Description = description;
+  }
+
+  public void SetLastUpdater(CoachId id)
+  {
+    LastUpdaterId = id;
+  }
+
+  public void SetMuscleGroups(List<MuscleGroupId> ids)
+  {
+    _muscleGroupIds = ids;
+  }
+
+  public void SetMuscles(List<MuscleId> ids)
+  {
+    _muscleIds = ids;
+  }
+
+  public void SetImage(string image)
+  {
+    Image = image;
+  }
+
+  public void SetVideo(string video)
+  {
+    Video = video;
+  }
+
+  public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
 }

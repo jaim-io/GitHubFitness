@@ -1,6 +1,7 @@
 using Mapster;
 
 using SpartanFitness.Application.Exercises.Commands.CreateExercise;
+using SpartanFitness.Application.Exercises.Commands.UpdateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Exercises;
@@ -17,9 +18,14 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest, src => src.Request);
 
+    config.NewConfig<(UpdateExerciseRequest Request, string CoachId), UpdateExerciseCommand>()
+      .Map(dest => dest.LastUpdaterId, src => src.CoachId)
+      .Map(dest => dest, src => src.Request);
+    
     config.NewConfig<Exercise, ExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
       .Map(dest => dest.CreatorId, src => src.CreatorId.Value.ToString())
+      .Map(dest => dest.LastUpdaterId, src => src.LastUpdaterId.Value.ToString())
       .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value.ToString()))
       .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value.ToString()))
       .Map(dest => dest, src => src);
@@ -37,6 +43,7 @@ public class ExerciseMappingConfig : IRegister
     config.NewConfig<Exercise, ExercisePageExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
       .Map(dest => dest.CreatorId, src => src.CreatorId.Value.ToString())
+      .Map(dest => dest.LastUpdaterId, src => src.LastUpdaterId.Value.ToString())
       .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value.ToString()))
       .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value.ToString()))
       .Map(dest => dest, src => src);
