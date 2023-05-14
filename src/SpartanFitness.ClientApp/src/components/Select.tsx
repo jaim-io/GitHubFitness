@@ -236,16 +236,9 @@ const Select = <T extends string | number>({
           </span>
         </button>
         <div className="bg-gray self-stretch w-[1px]" />
-        <button
-          type="button"
-          className="self-stretch flex items-center hover:bg-gray justify-center mr-1 rounded-lg cursor-pointer p-1"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
-          }}
-        >
+        <div className="self-stretch flex items-center hover:bg-gray justify-center mr-1 rounded-lg cursor-pointer p-1">
           <HiChevronDown size={16} />
-        </button>
+        </div>
         <Transition
           show={isOpen}
           as={Fragment}

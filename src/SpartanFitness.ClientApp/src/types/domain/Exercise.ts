@@ -3,6 +3,7 @@ interface Exercise {
   name: string;
   description: string;
   creatorId: string;
+  lastUpdaterId: string;
   image: string;
   video: string;
   muscleGroupIds: string[];

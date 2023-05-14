@@ -18,6 +18,7 @@ import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
+import { toast } from "react-toastify";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/update`;
 const MUSCLES_ENDPOINT = `${
@@ -213,11 +214,39 @@ const EditExercisePage = () => {
         },
       )
       .then(() => {
-        navigate("..");
+        setIsLoading(false);
+        toast.success("Exercise has been updated", {
+          toastId: "exercise-updated",
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        navigate(`/exercises/${exercise.id}`);
       })
-      .catch();
-
-    setIsLoading(false);
+      .catch((err) => {
+        setIsLoading(false);
+        toast.error(
+          err.code == "ERR_NETWORK"
+            ? "Unable to reach the server"
+            : err.response.statusText,
+          {
+            toastId: err.code,
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          },
+        );
+      });
   };
 
   return (
@@ -225,7 +254,7 @@ const EditExercisePage = () => {
       <div className="flex justify-center pt-6 h-full">
         <Link
           className="bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3"
-          to={".."}
+          to={`/exercises/${exercise.id}`}
         >
           <RxExit className="mr-1" /> Leave edit mode
         </Link>
@@ -270,14 +299,13 @@ const EditExercisePage = () => {
             {displayedMuscleGroups && (
               <div className="flex flex-wrap">
                 {displayedMuscleGroups.map((mg) => (
-                  <button
-                    type="button"
+                  <span
                     key={mg.id}
-                    className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                    className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center cursor-not-allowed"
                   >
                     <MdFitbit className="mr-1" />
                     {mg.name}{" "}
-                  </button>
+                  </span>
                 ))}
                 <button
                   type="button"
@@ -297,14 +325,13 @@ const EditExercisePage = () => {
             {displayedMuscles && (
               <div className="flex flex-wrap">
                 {displayedMuscles.map((m) => (
-                  <button
-                    type="button"
+                  <span
                     key={m.id}
-                    className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                    className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center cursor-not-allowed"
                   >
                     <SiElectron className="mr-1" />
                     {m.name}
-                  </button>
+                  </span>
                 ))}
                 <button
                   type="button"
@@ -367,8 +394,8 @@ const EditExercisePage = () => {
             </button>
 
             <div className="absolute right-0 py-1 px-3 border border-gray rounded-lg flex items-center text-light-gray ml-2 justify-center">
-              Created by:{" "}
-              <span className="text-blue ml-1">
+              Last updated by:{" "}
+              <span className="text-blue ml-1 hover:underline cursor-not-allowed">
                 {auth.user!.firstName} {auth.user!.lastName}
               </span>
             </div>

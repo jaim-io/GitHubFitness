@@ -49,7 +49,7 @@ const ExerciseDetailPage = () => {
     muscleGroups = [];
   }
 
-  const [coach] = useCoach(exercise.creatorId);
+  const [lastUpdater] = useCoach(exercise.lastUpdaterId);
 
   const handleSaving = async () => {
     setSaved((prev) => !prev);
@@ -181,7 +181,7 @@ const ExerciseDetailPage = () => {
               <span className="text-blue">{exercise.name}</span>
             </h1>
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
-            <p className="pt-4">{exercise.description}</p>
+            <p className="pt-4 whitespace-pre-line">{exercise.description}</p>
           </div>
           <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4 ">
             <iframe
@@ -215,14 +215,17 @@ const ExerciseDetailPage = () => {
             </div>
 
             <div className="absolute right-0 py-1 px-3 border border-gray rounded-lg flex items-center text-light-gray ml-2 justify-center">
-              {!coach ? (
+              {!lastUpdater ? (
                 <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-6 h-6" />
               ) : (
                 <>
-                  Created by:{" "}
-                  <span className="text-blue ml-1">
-                    {coach!.firstName} {coach!.lastName}
-                  </span>
+                  Last updated by:{" "}
+                  <Link
+                    to={`/coaches/${exercise.lastUpdaterId}`}
+                    className="text-blue ml-1 hover:underline"
+                  >
+                    {lastUpdater!.firstName} {lastUpdater!.lastName}
+                  </Link>
                 </>
               )}
             </div>

@@ -50,7 +50,6 @@ const SearchBar = ({ onSubmit }: Props) => {
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search ..."
           autoComplete="off"
-          required
         />
         <button
           type="reset"
