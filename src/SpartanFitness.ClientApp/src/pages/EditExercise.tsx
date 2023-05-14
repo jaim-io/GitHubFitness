@@ -1,21 +1,22 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
+import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
+import { BsCloudUploadFill } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
+import { RxExit } from "react-icons/rx";
 import { SiElectron } from "react-icons/si";
+import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useNavigate, useRouteLoaderData } from "react-router-dom";
+import LoadingIcon from "../components/Icons/LoadingIcon";
+import Select, { SelectOption } from "../components/Select";
 import useAuth from "../hooks/useAuth";
 import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
+import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
 import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
-import MuscleGroup from "../types/domain/MuscleGroup";
-import { RxExit } from "react-icons/rx";
-import Select, { SelectOption } from "../components/Select";
-import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
-import axios from "axios";
-import Draggable from "react-draggable";
-import { TbGhost2Filled } from "react-icons/tb";
-import LoadingIcon from "../components/Icons/LoadingIcon";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/update`;
 const MUSCLES_ENDPOINT = `${
@@ -35,7 +36,10 @@ const createQueryString = (ids: string[]): string => {
 const EditExercisePage = () => {
   const exercise = useRouteLoaderData("exercise-details") as Exercise;
   const { auth } = useAuth();
-  const dragTestRef = useRef<HTMLDivElement>(null);
+  const muscleGroupSelectorRef = useRef<HTMLDivElement>(null);
+  const muscleSelectorRef = useRef<HTMLDivElement>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [initialMuscles, , initialMusclesAreLoading] =
     exercise.muscleIds.length != 0
@@ -50,6 +54,7 @@ const EditExercisePage = () => {
   const [name, setName] = useState(exercise.name);
   const [description, setDescription] = useState(exercise.description);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
   const [selectedMuscles, setSelectedMuscles] = useState<
     SelectOption<string>[]
   >(
@@ -64,11 +69,44 @@ const EditExercisePage = () => {
       ? initialMuscleGroups?.map((m) => ({ label: m.name, value: m.id }))
       : [],
   );
+
+  const setDescriptionAreaHeight = () => {
+    descriptionRef.current!.style.height =
+      descriptionRef.current!.scrollHeight + "px";
+  };
+
+  useEffect(() => {
+    setDescriptionAreaHeight();
+  }, []);
+
   const navigate = useNavigate();
 
   const [muscleGroupPage, , muscleGroupPageIsLoading] = useMuscleGroupsPage();
-  const [muscles, setMuscles] = useState<Muscle[]>([]);
+  const [muscles, setMuscles] = useState<Muscle[]>(initialMuscles ?? []);
   const [musclesAreLoading, setMusclesAreLoading] = useState(false);
+
+  useEffect(() => {
+    if (
+      Object.values(selectedMuscles).length == 0 &&
+      initialMuscles !== undefined
+    ) {
+      setSelectedMuscles(
+        initialMuscles.map((m) => ({ label: m.name, value: m.id })),
+      );
+      setMuscles(initialMuscles);
+    }
+  }, [initialMuscles]);
+
+  useEffect(() => {
+    if (
+      Object.values(selectedMuscleGroups).length == 0 &&
+      initialMuscleGroups !== undefined
+    ) {
+      setSelectedMuscleGroups(
+        initialMuscleGroups.map((m) => ({ label: m.name, value: m.id })),
+      );
+    }
+  }, [initialMuscleGroups]);
 
   const onMuscleGroupSelectionChange = async (
     selected: SelectOption<string>[],
@@ -97,29 +135,79 @@ const EditExercisePage = () => {
     value: mg.id,
   }));
 
-  const musclesOptions = muscles.map((m: Muscle) => ({
+  const displayedMuscleGroups = muscleGroupPage?.muscleGroups.filter((mg) =>
+    Object.values(selectedMuscleGroups).find((smg) => mg.id === smg.value),
+  );
+
+  const displayedMuscles = muscles?.filter((mg) =>
+    Object.values(selectedMuscles).find((smg) => mg.id === smg.value),
+  );
+
+  const muscleOptions = muscles.map((m: Muscle) => ({
     label: m.name,
     value: m.id,
   }));
 
-  const setDescriptionAreaHeight = () => {
-    descriptionRef.current!.style.height =
-      descriptionRef.current!.scrollHeight + "px";
-  };
+  const [showMuscleSelector, setShowMuscleSelector] = useState(false);
+  const [showMuscleGroupSelector, setShowMuscleGroupSelector] = useState(false);
 
-  useEffect(() => {
-    setDescriptionAreaHeight();
-  }, []);
+  const handleSaveChanges = async () => {
+    setIsLoading(true);
+
+    await axios
+      .put(
+        `${EXERCISE_ENDPOINT}${exercise.id}`,
+        {
+          id: exercise.id,
+          name: name,
+          description: description,
+          creatorId: exercise.id,
+          image: exercise.image,
+          video: exercise.video,
+          muscleGroupIds: displayedMuscleGroups,
+          muscleIds: displayedMuscles,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      )
+      .then((res) => {
+        navigate("..");
+      })
+      .catch();
+
+    setIsLoading(false);
+  };
 
   return (
     <>
       <div className="flex justify-center pt-6 h-full">
         <Link
-          className="bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer"
+          className="bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3"
           to={".."}
         >
           <RxExit className="mr-1" /> Leave edit mode
         </Link>
+        <button
+          className="px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer"
+          onClick={handleSaveChanges}
+        >
+          {isLoading || isLoading == undefined ? (
+            <div className="flex items-center justify-center animate-pulse">
+              <LoadingIcon classNames="mr-2 text-white fill-white w-5 h-5" />
+              <p>Saving...</p>
+            </div>
+          ) : (
+            <>
+              {" "}
+              <BsCloudUploadFill className="mr-1" />
+              Save changes
+            </>
+          )}
+        </button>
       </div>
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
@@ -141,9 +229,9 @@ const EditExercisePage = () => {
           </button>
 
           <div className="mt-4">
-            {initialMuscleGroups && (
+            {displayedMuscleGroups && (
               <div className="flex flex-wrap">
-                {initialMuscleGroups.map((mg) => (
+                {displayedMuscleGroups.map((mg) => (
                   <button
                     type="button"
                     key={mg.id}
@@ -151,31 +239,26 @@ const EditExercisePage = () => {
                   >
                     <MdFitbit className="mr-1" />
                     {mg.name}{" "}
-                    <span className="bg-none text-white border-none outline-none cursor-pointer text-lg ml-1">
-                      &times;
-                    </span>
                   </button>
                 ))}
                 <button
                   type="button"
-                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-2 mb-2 hover:border-hover-gray flex items-center"
+                  onClick={() => setShowMuscleGroupSelector((prev) => !prev)}
                 >
-                  <span className="">&#43;</span>
+                  <AiFillEdit size={16} />
                 </button>
               </div>
             )}
             {initialMuscleGroupsAreLoading && <p>Muscle groups are loading</p>}
           </div>
 
-          {initialMuscles?.length !== 0 &&
-            initialMuscleGroups?.length !== 0 && (
-              <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
-            )}
+          <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
 
           <div className="mt-4">
-            {initialMuscles && (
+            {displayedMuscles && (
               <div className="flex flex-wrap">
-                {initialMuscles.map((m) => (
+                {displayedMuscles.map((m) => (
                   <button
                     type="button"
                     key={m.id}
@@ -183,16 +266,14 @@ const EditExercisePage = () => {
                   >
                     <SiElectron className="mr-1" />
                     {m.name}
-                    <span className="bg-none text-white border-none outline-none cursor-pointer text-lg ml-1">
-                      &times;
-                    </span>
                   </button>
                 ))}
                 <button
                   type="button"
-                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-2 mb-2 hover:border-hover-gray flex items-center"
+                  onClick={() => setShowMuscleSelector((prev) => !prev)}
                 >
-                  <span className="">&#43;</span>
+                  <AiFillEdit size={16} />
                 </button>
               </div>
             )}
@@ -253,46 +334,104 @@ const EditExercisePage = () => {
                 {auth.user!.firstName} {auth.user!.lastName}
               </span>
             </div>
-            <Draggable nodeRef={dragTestRef}>
-              <div
-                className="border border-gray rounded-lg pt-2 z-10 bg-black"
-                ref={dragTestRef}
-              >
-                <p className="text-center mb-1 cursor-move">
-                  Muscle group selection
-                </p>
-                <Select
-                  id={"muscleGroups"}
-                  searchBar={true}
-                  multiple={true}
-                  value={selectedMuscleGroups}
-                  options={muscleGroupOptions ?? []}
-                  onChange={(selected) => {
-                    setSelectedMuscleGroups(selected);
-                    onMuscleGroupSelectionChange(selected);
-                  }}
-                  isLoading={muscleGroupPageIsLoading}
-                  ifEmpty={
-                    <p className="flex justify-center items-center py-1 cursor-default">
-                      No muscle groups found{" "}
-                      <TbGhost2Filled className="ml-1" size={20} />
-                    </p>
-                  }
-                  ifLoading={
-                    <div
-                      role="status"
-                      className="py-5 flex justify-center items-center"
-                    >
-                      <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  }
-                />
-              </div>
-            </Draggable>
           </div>
         </div>
       </div>
+
+      <Draggable
+        nodeRef={muscleGroupSelectorRef}
+        bounds={{ left: -550, right: 550, top: -300, bottom: 450 }}
+      >
+        <div
+          className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+            showMuscleGroupSelector ? "" : "hidden"
+          }`}
+          ref={muscleGroupSelectorRef}
+        >
+          <p className="text-center mb-1 cursor-move">Muscle group selection</p>
+          <button
+            type="button"
+            onClick={() => setShowMuscleGroupSelector(false)}
+            className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+          >
+            <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+              &times;
+            </span>
+          </button>
+          <Select
+            id={"muscleGroups"}
+            searchBar={true}
+            multiple={true}
+            value={selectedMuscleGroups}
+            options={muscleGroupOptions ?? []}
+            onChange={(selected) => {
+              setSelectedMuscleGroups(selected);
+              onMuscleGroupSelectionChange(selected);
+            }}
+            isLoading={muscleGroupPageIsLoading}
+            ifEmpty={
+              <p className="flex justify-center items-center py-1 cursor-default">
+                No muscle groups found{" "}
+                <TbGhost2Filled className="ml-1" size={20} />
+              </p>
+            }
+            ifLoading={
+              <div
+                role="status"
+                className="py-5 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            }
+          />
+        </div>
+      </Draggable>
+
+      <Draggable nodeRef={muscleSelectorRef}>
+        <div
+          className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+            showMuscleSelector ? "" : "hidden"
+          }`}
+          ref={muscleSelectorRef}
+        >
+          <p className="text-center mb-1 cursor-move">Muscle selection</p>
+          <button
+            type="button"
+            onClick={() => setShowMuscleSelector(false)}
+            className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+          >
+            <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+              &times;
+            </span>
+          </button>
+          <Select
+            id={"muscles"}
+            searchBar={true}
+            multiple={true}
+            value={selectedMuscles}
+            options={muscleOptions ?? []}
+            onChange={(selected) => {
+              setSelectedMuscles(selected);
+            }}
+            isLoading={musclesAreLoading}
+            ifEmpty={
+              <p className="flex justify-center items-center py-1 cursor-default">
+                No muscles found <TbGhost2Filled className="ml-1" size={20} />
+              </p>
+            }
+            ifLoading={
+              <div
+                role="status"
+                className="py-5 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            }
+          />
+        </div>
+      </Draggable>
     </>
   );
 };
