@@ -9,6 +9,7 @@ import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
 import Exception from "../types/domain/Exception";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
+import MuscleGroup from "../types/domain/MuscleGroup";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 const MUSCLES_ENDPOINT = `${
@@ -44,9 +45,47 @@ const NewExercisePage = () => {
   const [muscles, setMuscles] = useState<Muscle[]>([]);
   const [musclesAreLoading, setMusclesAreLoading] = useState(false);
 
+  /**
+   * Removes selected muscles where selectedMuscle.muscleGroupId is not Selected (in selectedMuscleGroups)
+   */
+  const updateMuscleSelection = (
+    changedMuscleGroups: SelectOption<string>[],
+  ) => {
+    // MuscleGroups
+    const mgs: MuscleGroup[] = [];
+    Object.values(changedMuscleGroups).forEach((smg) => {
+      const muscleGroup = muscleGroupPage?.muscleGroups.find(
+        (mg) => mg.id === smg.value,
+      );
+      if (muscleGroup) mgs.push(muscleGroup);
+    });
+
+    // Muscles
+    const ms: Muscle[] = [];
+    Object.values(selectedMuscles).forEach((sm) => {
+      const muscle = muscles.find((m) => m.id === sm.value);
+      if (muscle) ms.push(muscle);
+    });
+
+    setSelectedMuscles((prev) => {
+      const selection: SelectOption<string>[] = [];
+      prev.forEach((sm) => {
+        const muscle = ms.find((m) => m.id === sm.value);
+        if (muscle) {
+          if (mgs.find((mg) => mg.id === muscle.muscleGroupId)) {
+            selection.push(sm);
+          }
+        }
+      });
+      return selection;
+    });
+  };
+
   const onMuscleGroupSelectionChange = async (
     selected: SelectOption<string>[],
   ) => {
+    updateMuscleSelection(selected);
+
     const queryString = createQueryString(selected.map((s) => s.value));
 
     setMusclesAreLoading(true);
