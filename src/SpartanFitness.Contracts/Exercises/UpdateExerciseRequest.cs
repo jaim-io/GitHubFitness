@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace SpartanFitness.Contracts.Exercises;
 
 public record UpdateExerciseRequest(
@@ -6,5 +8,5 @@ public record UpdateExerciseRequest(
   string Description,
   List<string>? MuscleGroupIds,
   List<string>? MuscleIds,
-  string Image,
+  IFormFile? Image,
   string Video);

@@ -53,9 +53,13 @@ const EditExercisePage = () => {
       ? useMuscleGroupsByIds(exercise.muscleGroupIds)
       : [[], undefined, false];
 
+  // getImage
+
   const [name, setName] = useState(exercise.name);
   const [description, setDescription] = useState(exercise.description);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [image, setImage] = useState<File>();
+  const [video, setVideo] = useState<string>(exercise.video);
 
   const [selectedMuscles, setSelectedMuscles] = useState<
     SelectOption<string>[]
@@ -194,25 +198,27 @@ const EditExercisePage = () => {
   const handleSaveChanges = async () => {
     setIsLoading(true);
 
+    const formData = new FormData();
+    formData.append("Id", exercise.id);
+    formData.append("Name", name);
+    formData.append("Description", description);
+    formData.append("Image", image!);
+    formData.append("Video", video);
+
+    displayedMuscleGroups?.forEach((mg, i) =>
+      formData.append(`muscleGroupIds[${i}]`, mg.id),
+    );
+    displayedMuscles?.forEach((m, i) =>
+      formData.append(`muscleIds[${i}]`, m.id),
+    );
+
     await axios
-      .put(
-        `${EXERCISE_ENDPOINT}/${exercise.id}`,
-        {
-          id: exercise.id,
-          name: name,
-          description: description,
-          image: exercise.image,
-          video: exercise.video,
-          muscleGroupIds: displayedMuscleGroups?.map((m) => m.id),
-          muscleIds: displayedMuscles?.map((m) => m.id),
+      .put(`${EXERCISE_ENDPOINT}/${exercise.id}`, formData, {
+        headers: {
+          Accept: "multipart/form-data",
+          Authorization: `bearer ${localStorage.getItem("token")}`,
         },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      )
+      })
       .then(() => {
         setIsLoading(false);
         toast.success("Exercise has been updated", {
@@ -278,6 +284,14 @@ const EditExercisePage = () => {
       </div>
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0] !== null)
+                setImage(e.target.files[0]);
+            }}
+          />
           <img
             src={exercise.image}
             alt={`${exercise.name} image`}

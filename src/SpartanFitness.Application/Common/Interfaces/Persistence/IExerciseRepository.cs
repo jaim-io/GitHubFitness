@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.ValueObjects;
 

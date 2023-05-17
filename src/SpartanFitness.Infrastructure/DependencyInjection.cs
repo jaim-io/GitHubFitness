@@ -59,6 +59,7 @@ public static class DependencyInjection
         services.AddScoped<IWorkoutRepository, WorkoutRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IMuscleRepository, MuscleRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
 
         return services;
     }

@@ -19,9 +19,15 @@ public class ExerciseMappingConfig : IRegister
       .Map(dest => dest, src => src.Request);
 
     config.NewConfig<(UpdateExerciseRequest Request, string CoachId), UpdateExerciseCommand>()
+      .Map(dest => dest.Id, src => src.Request.Id)
+      .Map(dest => dest.Name, src => src.Request.Name)
+      .Map(dest => dest.Description, src => src.Request.Description)
+      .Map(dest => dest.MuscleGroupIds, src => src.Request.MuscleGroupIds)
+      .Map(dest => dest.MuscleIds, src => src.Request.MuscleIds)
+      .Map(dest => dest.Video, src => src.Request.Video)
       .Map(dest => dest.LastUpdaterId, src => src.CoachId)
-      .Map(dest => dest, src => src.Request);
-    
+      .IgnoreNonMapped(true);
+
     config.NewConfig<Exercise, ExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
       .Map(dest => dest.CreatorId, src => src.CreatorId.Value.ToString())

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
@@ -78,7 +79,7 @@ public class ExerciseRepository
   public async Task UpdateAsync(Exercise exercise)
   {
     exercise.SetUpdatedDateTime();
-    
+
     _dbContext.Update(exercise);
     await _dbContext.SaveChangesAsync();
   }

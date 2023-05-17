@@ -13,39 +13,52 @@ public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseComman
 {
   private readonly ICoachRepository _coachRepository;
   private readonly IExerciseRepository _exerciseRepository;
+  private readonly IImageRepository _imageRepository;
 
-  public UpdateExerciseCommandHandler(ICoachRepository coachRepository, IExerciseRepository exerciseRepository)
+  public UpdateExerciseCommandHandler(
+    ICoachRepository coachRepository,
+    IExerciseRepository exerciseRepository,
+    IImageRepository imageRepository)
   {
     _coachRepository = coachRepository;
     _exerciseRepository = exerciseRepository;
+    _imageRepository = imageRepository;
   }
 
-  public async Task<ErrorOr<Exercise>> Handle(UpdateExerciseCommand request, CancellationToken cancellationToken)
+  public async Task<ErrorOr<Exercise>> Handle(UpdateExerciseCommand command, CancellationToken cancellationToken)
   {
-    var lastUpdaterId = CoachId.Create(request.LastUpdaterId);
+    var lastUpdaterId = CoachId.Create(command.LastUpdaterId);
     if (await _coachRepository.GetByIdAsync(lastUpdaterId) is null)
     {
       return Errors.Coach.NotFound;
     }
 
-    var exerciseId = ExerciseId.Create(request.Id);
+    var exerciseId = ExerciseId.Create(command.Id);
     if (await _exerciseRepository.GetByIdAsync(exerciseId) is not Exercise exercise)
     {
       return Errors.Exercise.NotFound;
     }
 
-    var muscleGroupIds = request.MuscleGroupIds?.ConvertAll(MuscleGroupId.Create);
-    var muscleIds = request.MuscleIds?.ConvertAll(MuscleId.Create);
+    var muscleGroupIds = command.MuscleGroupIds?.ConvertAll(MuscleGroupId.Create);
+    var muscleIds = command.MuscleIds?.ConvertAll(MuscleId.Create);
 
-    exercise.SetName(request.Name);
-    exercise.SetDescription(request.Description);
+    exercise.SetName(command.Name);
+    exercise.SetDescription(command.Description);
     exercise.SetLastUpdater(lastUpdaterId);
     exercise.SetMuscleGroups(muscleGroupIds ?? new());
     exercise.SetMuscles(muscleIds ?? new());
-    exercise.SetImage(request.Image);
-    exercise.SetVideo(request.Video);
+    exercise.SetVideo(command.Video);
 
     await _exerciseRepository.UpdateAsync(exercise);
+
+    if (command.Image is not null)
+    {
+      await _imageRepository.SaveAsync<ExerciseId>(exerciseId, command.Image);
+    }
+    else if (_imageRepository.Exists<ExerciseId>(exerciseId))
+    {
+      _imageRepository.Delete<ExerciseId>(exerciseId);
+    }
 
     return exercise;
   }

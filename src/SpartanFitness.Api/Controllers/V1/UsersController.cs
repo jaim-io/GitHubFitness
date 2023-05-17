@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.UnSaveExercise;
+using SpartanFitness.Application.Users.Commands.UploadUserImage;
 using SpartanFitness.Application.Users.Queries.GetUserById;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Domain.Aggregates;
@@ -71,6 +72,30 @@ public class UsersController : ApiController
 
     return result.Match(
       _ => NoContent(),
+      Problem);
+  }
+
+  [HttpGet("{userId}/image")]
+  public async Task<IActionResult> GetImage(string userId)
+  {
+    await Task.CompletedTask;
+    return Ok();
+  }
+
+  [HttpPost("{userId}/image/upload")]
+  public async Task<IActionResult> UploadImage([FromRoute] string userId, [FromForm(Name = "Data")] IFormFile file)
+  {
+    var userIdFromClaims = Authorization.GetUserId(HttpContext);
+    if (userIdFromClaims != userId)
+    {
+      return Unauthorized();
+    }
+
+    var command = new UploadUserImageCommand(userId, file);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => Ok(new { actionName = nameof(GetImage), routeValues = new { userId } }),
       Problem);
   }
 }

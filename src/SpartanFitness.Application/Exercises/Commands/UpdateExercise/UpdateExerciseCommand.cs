@@ -2,6 +2,8 @@
 
 using MediatR;
 
+using Microsoft.AspNetCore.Http;
+
 using SpartanFitness.Domain.Aggregates;
 
 namespace SpartanFitness.Application.Exercises.Commands.UpdateExercise;
@@ -13,5 +15,5 @@ public record UpdateExerciseCommand(
   string Description,
   List<string>? MuscleGroupIds,
   List<string>? MuscleIds,
-  string Image,
+  IFormFile? Image,
   string Video) : IRequest<ErrorOr<Exercise>>;
