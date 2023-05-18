@@ -7,11 +7,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Common.Results;
 using SpartanFitness.Application.Exercises.Commands.CreateExercise;
 using SpartanFitness.Application.Exercises.Commands.UpdateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
-using SpartanFitness.Application.Exercises.Queries.GetExerciseImage;
 using SpartanFitness.Application.Exercises.Queries.GetExercisePage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Exercises;
@@ -76,7 +74,7 @@ public class ExercisesController : ApiController
   [HttpPut("update/{exerciseId}")]
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> UpdateExercise(
-    [FromForm] UpdateExerciseRequest request,
+    [FromBody] UpdateExerciseRequest request,
     [FromRoute] string exerciseId)
   {
     if (request.Id != exerciseId)
@@ -84,25 +82,12 @@ public class ExercisesController : ApiController
       return BadRequest("Route ID must match the ID field in the request body.");
     }
 
-    Console.WriteLine(request.Image?.ContentType);
-
     var coachId = Authorization.GetCoachId(HttpContext);
     var command = _mapper.Map<UpdateExerciseCommand>((request, coachId)) with { Image = request.Image, };
     ErrorOr<Exercise> updatedExerciseResult = await _mediator.Send(command);
 
     return updatedExerciseResult.Match(
       exercise => Ok(_mapper.Map<ExerciseResponse>(exercise)),
-      Problem);
-  }
-
-  [HttpGet("{exerciseId}/image")]
-  public async Task<IActionResult> GetExerciseImage([FromRoute] string exerciseId)
-  {
-    var query = new GetExerciseImageQuery(exerciseId);
-    ErrorOr<ImageResult> imageResult = await _mediator.Send(query);
-
-    return imageResult.Match(
-      result => File(result.FileContents, result.ContentType),
       Problem);
   }
 }

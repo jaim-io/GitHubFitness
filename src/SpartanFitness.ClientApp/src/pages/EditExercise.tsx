@@ -9,6 +9,7 @@ import { RxExit } from "react-icons/rx";
 import { SiElectron } from "react-icons/si";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import Select, { SelectOption } from "../components/Select";
 import useAuth from "../hooks/useAuth";
@@ -18,7 +19,6 @@ import useMusclesByIds from "../hooks/useMusclesByIds";
 import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
-import { toast } from "react-toastify";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/update`;
 const MUSCLES_ENDPOINT = `${
@@ -53,12 +53,10 @@ const EditExercisePage = () => {
       ? useMuscleGroupsByIds(exercise.muscleGroupIds)
       : [[], undefined, false];
 
-  // getImage
-
   const [name, setName] = useState(exercise.name);
   const [description, setDescription] = useState(exercise.description);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const [image, setImage] = useState<File>();
+  const [image, setImage] = useState<string>(exercise.image);
   const [video, setVideo] = useState<string>(exercise.video);
 
   const [selectedMuscles, setSelectedMuscles] = useState<
@@ -111,6 +109,35 @@ const EditExercisePage = () => {
       setSelectedMuscleGroups(
         initialMuscleGroups.map((m) => ({ label: m.name, value: m.id })),
       );
+    }
+  }, [initialMuscleGroups]);
+
+  useEffect(() => {
+    // Fetches the inital muscle options
+    const fetchMusclesAsync = async () => {
+      const queryString = createQueryString(
+        initialMuscleGroups!.map((s) => s.id),
+      );
+
+      setMusclesAreLoading(true);
+      const response = await axios.get<Muscle[]>(
+        `${MUSCLES_ENDPOINT}${queryString}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      setMusclesAreLoading(false);
+
+      const muscles = response.data;
+      setMuscles(muscles);
+    };
+
+    if (initialMuscleGroups) {
+      fetchMusclesAsync();
     }
   }, [initialMuscleGroups]);
 
@@ -198,27 +225,25 @@ const EditExercisePage = () => {
   const handleSaveChanges = async () => {
     setIsLoading(true);
 
-    const formData = new FormData();
-    formData.append("Id", exercise.id);
-    formData.append("Name", name);
-    formData.append("Description", description);
-    formData.append("Image", image!);
-    formData.append("Video", video);
-
-    displayedMuscleGroups?.forEach((mg, i) =>
-      formData.append(`muscleGroupIds[${i}]`, mg.id),
-    );
-    displayedMuscles?.forEach((m, i) =>
-      formData.append(`muscleIds[${i}]`, m.id),
-    );
-
     await axios
-      .put(`${EXERCISE_ENDPOINT}/${exercise.id}`, formData, {
-        headers: {
-          Accept: "multipart/form-data",
-          Authorization: `bearer ${localStorage.getItem("token")}`,
+      .put(
+        `${EXERCISE_ENDPOINT}/${exercise.id}`,
+        {
+          id: exercise.id,
+          name: name,
+          description: description,
+          image: exercise.image,
+          video: exercise.video,
+          muscleGroupIds: displayedMuscleGroups?.map((m) => m.id),
+          muscleIds: displayedMuscles?.map((m) => m.id),
         },
-      })
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      )
       .then(() => {
         setIsLoading(false);
         toast.success("Exercise has been updated", {
@@ -284,16 +309,8 @@ const EditExercisePage = () => {
       </div>
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files && e.target.files[0] !== null)
-                setImage(e.target.files[0]);
-            }}
-          />
           <img
-            src={exercise.image}
+            src={image}
             alt={`${exercise.name} image`}
             className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
           />

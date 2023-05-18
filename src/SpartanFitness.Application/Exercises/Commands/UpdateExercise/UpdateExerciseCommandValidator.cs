@@ -36,17 +36,6 @@ public class UpdateExerciseCommandValidator : AbstractValidator<UpdateExerciseCo
     RuleFor(x => x.Description)
       .NotEmpty();
 
-    RuleFor(x => x.Image)
-      .Must(file => file is null || file.ContentType is "image/png" or "image/jpg" or "image/jpeg")
-      .WithMessage("File must be either a png or jpg/jpeg");
-
-    RuleFor(x => x.Image)
-      .Must(file => file is null || file.Length > 0)
-      .WithMessage("File must not be empty");
-
-    // TODO: max file size
-    // TODO: file validation
-
     RuleFor(x => x.Video)
       .NotEmpty();
   }

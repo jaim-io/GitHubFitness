@@ -30,7 +30,7 @@ var app = builder.Build();
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-  app.UseHttpsRedirection();
+  // app.UseHttpsRedirection();
   app.UseAuthentication();
   app.UseAuthorization();
   app.MapControllers();

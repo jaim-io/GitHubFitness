@@ -8,5 +8,5 @@ public record UpdateExerciseRequest(
   string Description,
   List<string>? MuscleGroupIds,
   List<string>? MuscleIds,
-  IFormFile? Image,
+  string Image,
   string Video);

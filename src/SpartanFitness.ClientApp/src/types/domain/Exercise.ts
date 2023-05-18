@@ -1,4 +1,4 @@
-interface Exercise {
+type Exercise = {
   id: string;
   name: string;
   description: string;
@@ -10,6 +10,6 @@ interface Exercise {
   muscleIds: string[];
   createdDateTime: Date;
   updatedDateTime: Date;
-}
+};
 
 export default Exercise;

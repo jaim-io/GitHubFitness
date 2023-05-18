@@ -13,16 +13,13 @@ public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseComman
 {
   private readonly ICoachRepository _coachRepository;
   private readonly IExerciseRepository _exerciseRepository;
-  private readonly IImageRepository _imageRepository;
 
   public UpdateExerciseCommandHandler(
     ICoachRepository coachRepository,
-    IExerciseRepository exerciseRepository,
-    IImageRepository imageRepository)
+    IExerciseRepository exerciseRepository)
   {
     _coachRepository = coachRepository;
     _exerciseRepository = exerciseRepository;
-    _imageRepository = imageRepository;
   }
 
   public async Task<ErrorOr<Exercise>> Handle(UpdateExerciseCommand command, CancellationToken cancellationToken)
@@ -47,18 +44,10 @@ public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseComman
     exercise.SetLastUpdater(lastUpdaterId);
     exercise.SetMuscleGroups(muscleGroupIds ?? new());
     exercise.SetMuscles(muscleIds ?? new());
+    exercise.SetImage(command.Image);
     exercise.SetVideo(command.Video);
 
     await _exerciseRepository.UpdateAsync(exercise);
-
-    if (command.Image is not null)
-    {
-      await _imageRepository.SaveAsync<ExerciseId>(exerciseId, command.Image);
-    }
-    else if (_imageRepository.Exists<ExerciseId>(exerciseId))
-    {
-      _imageRepository.Delete<ExerciseId>(exerciseId);
-    }
 
     return exercise;
   }
