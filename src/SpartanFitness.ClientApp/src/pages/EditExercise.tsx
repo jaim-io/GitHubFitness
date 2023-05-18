@@ -57,7 +57,9 @@ const EditExercisePage = () => {
   const [description, setDescription] = useState(exercise.description);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [image, setImage] = useState<string>(exercise.image);
+  const [previewImage, setPreviewImage] = useState<string>(exercise.image);
   const [video, setVideo] = useState<string>(exercise.video);
+  const [previewVideo, setPreviewVideo] = useState<string>(exercise.video);
 
   const [selectedMuscles, setSelectedMuscles] = useState<
     SelectOption<string>[]
@@ -221,6 +223,14 @@ const EditExercisePage = () => {
 
   const [showMuscleSelector, setShowMuscleSelector] = useState(false);
   const [showMuscleGroupSelector, setShowMuscleGroupSelector] = useState(false);
+  const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
+  const [showVideoUrlInputBar, setShowVideoUrlInputBar] = useState(false);
+
+  const popupActive = () =>
+    showMuscleSelector ||
+    showMuscleGroupSelector ||
+    showImageUrlInputBar ||
+    showVideoUrlInputBar;
 
   const handleSaveChanges = async () => {
     setIsLoading(true);
@@ -232,8 +242,8 @@ const EditExercisePage = () => {
           id: exercise.id,
           name: name,
           description: description,
-          image: exercise.image,
-          video: exercise.video,
+          image: image,
+          video: video,
           muscleGroupIds: displayedMuscleGroups?.map((m) => m.id),
           muscleIds: displayedMuscles?.map((m) => m.id),
         },
@@ -283,15 +293,24 @@ const EditExercisePage = () => {
   return (
     <>
       <div className="flex justify-center pt-6 h-full">
-        <Link
-          className="bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3"
-          to={`/exercises/${exercise.id}`}
-        >
-          <RxExit className="mr-1" /> Leave edit mode
-        </Link>
         <button
-          className="px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer"
+          className={`${popupActive() ? "hover:cursor-not-allowed" : ""}`}
+        >
+          <Link
+            className={`bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3 ${
+              popupActive() ? "opacity-50 pointer-events-none" : ""
+            }`}
+            to={`/exercises/${exercise.id}`}
+          >
+            <RxExit className="mr-1" /> Leave edit mode
+          </Link>
+        </button>
+        <button
+          className={`px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
+            popupActive() ? "hover:cursor-not-allowed opacity-50" : ""
+          }`}
           onClick={handleSaveChanges}
+          disabled={popupActive()}
         >
           {isLoading || isLoading == undefined ? (
             <div className="flex items-center justify-center animate-pulse">
@@ -309,11 +328,25 @@ const EditExercisePage = () => {
       </div>
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
-          <img
-            src={image}
-            alt={`${exercise.name} image`}
-            className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
-          />
+          <div
+            className="relative cursor-pointer"
+            onClick={() => setShowImageUrlInputBar((prev) => !prev)}
+          >
+            <img
+              src={previewImage}
+              alt={`${exercise.name} image`}
+              className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
+            />
+            <div
+              className={`absolute left-0 top-0 w-full h-full items-center rounded-full ease-in-out duration-200 hover:backdrop-blur-sm ${
+                showImageUrlInputBar ? "backdrop-blur-sm" : ""
+              }`}
+            >
+              <div className="relative flex justify-center top-[48%]">
+                <AiFillEdit size={18} />
+              </div>
+            </div>
+          </div>
 
           <button
             type="button"
@@ -396,7 +429,7 @@ const EditExercisePage = () => {
             <p className="pt-4">
               <textarea
                 ref={descriptionRef}
-                className="outline-none w-full bg-transparent resize-none rounded-lg focus:bg-gray hover:bg-gray"
+                className="outline-none w-full bg-transparent rounded-lg focus:bg-gray hover:bg-gray"
                 value={description}
                 spellCheck={false}
                 onChange={(e) => {
@@ -407,12 +440,26 @@ const EditExercisePage = () => {
             </p>
           </div>
           <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4">
-            <iframe
-              className="w-full h-[18.125rem]"
-              src={exercise.video}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            />
+            <div
+              className="relative cursor-pointer"
+              onClick={() => setShowVideoUrlInputBar((prev) => !prev)}
+            >
+              <iframe
+                className="w-full h-[18.125rem]"
+                src={previewVideo}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              />
+              <div
+                className={`absolute left-0 top-0 w-full h-full items-center ease-in-out duration-200 hover:backdrop-blur-md ${
+                  showVideoUrlInputBar ? "backdrop-blur-sm" : ""
+                }`}
+              >
+                <div className="relative flex justify-center top-[48%]">
+                  <AiFillEdit size={18} />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="mt-4">
@@ -434,12 +481,97 @@ const EditExercisePage = () => {
         </div>
       </div>
 
+      <div
+        className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+          showImageUrlInputBar ? "" : "hidden"
+        }`}
+      >
+        <p className="text-center mb-1">Image URL</p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowImageUrlInputBar(false);
+            setPreviewImage(image);
+          }}
+          className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+        >
+          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+            &#43;
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowImageUrlInputBar(false);
+            setImage(previewImage);
+          }}
+          className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+        >
+          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+            &times;
+          </span>
+        </button>
+
+        <div className="flex w-full items-center justify-center">
+          <input
+            onChange={(e) => setImage(e.target.value)}
+            value={image}
+            className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+            autoComplete="off"
+            placeholder="https://example.com/your-image"
+          />
+        </div>
+      </div>
+
+      <div
+        className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+          showVideoUrlInputBar ? "" : "hidden"
+        }`}
+      >
+        <p className="text-center mb-1">Video URL</p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowVideoUrlInputBar(false);
+            setPreviewVideo(video);
+          }}
+          className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+        >
+          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+            &#43;
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowVideoUrlInputBar(false);
+            setVideo(previewVideo);
+          }}
+          className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+        >
+          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+            &times;
+          </span>
+        </button>
+        <input
+          onChange={(e) => setVideo(e.target.value)}
+          value={video}
+          className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+          autoComplete="off"
+          placeholder="https://example.com/your-video"
+        />
+      </div>
+
       <Draggable
         nodeRef={muscleGroupSelectorRef}
         bounds={{ left: -550, right: 550, top: -300, bottom: 450 }}
       >
         <div
-          className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+          className={`absolute top-[30%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
             showMuscleGroupSelector ? "" : "hidden"
           }`}
           ref={muscleGroupSelectorRef}
