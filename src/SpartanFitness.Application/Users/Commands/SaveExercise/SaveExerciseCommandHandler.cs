@@ -35,7 +35,6 @@ public class SaveExerciseCommandHandler : IRequestHandler<SaveExerciseCommand, E
     }
 
     user.SaveExercise(exercise);
-
     await _userRepository.UpdateAsync(user);
     
     return Unit.Value;

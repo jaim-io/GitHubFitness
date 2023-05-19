@@ -1,3 +1,4 @@
+using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.ValueObjects;
 
@@ -95,5 +96,20 @@ public sealed class User : AggregateRoot<UserId, Guid>
   {
     var id = ExerciseId.Create(exercise.Id.Value);
     _savedExerciseIds.Remove(id);
+  }
+
+  public void SaveMuscleGroup(MuscleGroup muscleGroup)
+  {
+    var id = MuscleGroupId.Create(muscleGroup.Id.Value);
+    if (!_savedMuscleGroupIds.Contains(id))
+    {
+      _savedMuscleGroupIds.Add(id);
+    }
+  }
+
+  public void UnSaveMuscleGroup(MuscleGroup muscleGroup)
+  {
+    var id = MuscleGroupId.Create(muscleGroup.Id.Value);
+    _savedMuscleGroupIds.Remove(id);
   }
 }

@@ -7,9 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Users.Commands.SaveExercise;
-using SpartanFitness.Application.Users.Commands.UnSaveExercise;
-using SpartanFitness.Application.Users.Commands.UploadUserImage;
 using SpartanFitness.Application.Users.Queries.GetUserById;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Domain.Aggregates;
@@ -38,40 +35,6 @@ public class UsersController : ApiController
 
     return result.Match(
       user => Ok(_mapper.Map<UserResponse>(user)),
-      Problem);
-  }
-
-  [HttpPatch("{userId}/saved/exercises/add")]
-  public async Task<IActionResult> SaveExercise([FromRoute] string userId, [FromBody] SaveExerciseRequest request)
-  {
-    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
-    if (!isUser)
-    {
-      return Unauthorized();
-    }
-
-    var command = _mapper.Map<SaveExerciseCommand>((request, userId));
-    ErrorOr<Unit> result = await _mediator.Send(command);
-
-    return result.Match(
-      _ => NoContent(),
-      Problem);
-  }
-
-  [HttpPatch("{userId}/saved/exercises/remove")]
-  public async Task<IActionResult> UnSaveExercise([FromRoute] string userId, [FromBody] UnSaveExerciseRequest request)
-  {
-    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
-    if (!isUser)
-    {
-      return Unauthorized();
-    }
-
-    var command = _mapper.Map<UnSaveExerciseCommand>((request, userId));
-    ErrorOr<Unit> result = await _mediator.Send(command);
-
-    return result.Match(
-      _ => NoContent(),
       Problem);
   }
 }
