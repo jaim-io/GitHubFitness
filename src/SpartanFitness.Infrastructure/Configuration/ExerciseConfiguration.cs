@@ -69,13 +69,13 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
       .HasMaxLength(100);
 
     builder.Property(e => e.Description)
-      .HasMaxLength(512);
+      .HasMaxLength(2048);
 
     builder.Property(e => e.Image)
-      .HasMaxLength(512);
+      .HasMaxLength(2048);
 
     builder.Property(e => e.Video)
-      .HasMaxLength(512);
+      .HasMaxLength(2048);
 
     builder.Property(e => e.CreatorId)
       .ValueGeneratedNever()

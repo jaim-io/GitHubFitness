@@ -90,10 +90,10 @@ public class WorkoutConfiguration : IEntityTypeConfiguration<Workout>
       .HasMaxLength(100);
 
     builder.Property(w => w.Description)
-      .HasMaxLength(512);
+      .HasMaxLength(2048);
 
     builder.Property(w => w.Image)
-      .HasMaxLength(256);
+      .HasMaxLength(2048);
 
     builder.Property(w => w.CoachId)
       .ValueGeneratedNever()

@@ -28,5 +28,11 @@ public class MuscleConfiguration : IEntityTypeConfiguration<Muscle>
       .HasConversion(
         id => id.Value,
         value => MuscleGroupId.Create(value));
+
+    builder.Property(m => m.Description)
+      .HasMaxLength(2048);
+
+    builder.Property(m => m.Image)
+      .HasMaxLength(2048);
   }
 }

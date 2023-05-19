@@ -92,7 +92,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(100);
 
         builder.Property(u => u.ProfileImage)
-            .HasMaxLength(250);
+            .HasMaxLength(2048);
 
         builder.Property(u => u.Salt)
             .ValueGeneratedNever();

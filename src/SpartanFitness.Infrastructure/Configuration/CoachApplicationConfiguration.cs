@@ -32,9 +32,9 @@ public class CoachApplicationConfiguration : IEntityTypeConfiguration<CoachAppli
                 value => UserId.Create(value));
 
         builder.Property(ca => ca.Motivation)
-            .HasMaxLength(255);
+            .HasMaxLength(2048);
         
         builder.Property(ca => ca.Remarks)
-            .HasMaxLength(255);
+            .HasMaxLength(2048);
     }
 }
