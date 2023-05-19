@@ -7,13 +7,16 @@ public class CreateMuscleCommandValidator : AbstractValidator<CreateMuscleComman
   public CreateMuscleCommandValidator()
   {
     RuleFor(x => x.Name)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(100);
 
     RuleFor(x => x.Description)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
 
     RuleFor(x => x.Image)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
 
     RuleFor(x => x.MuscleGroupId)
       .Must(x => Guid.TryParse(x, out _))

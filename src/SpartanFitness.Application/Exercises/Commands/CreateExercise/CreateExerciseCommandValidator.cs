@@ -27,15 +27,19 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
       .WithMessage("The list of muscle group IDs has to contain unique values");
 
     RuleFor(x => x.Name)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(100);
 
     RuleFor(x => x.Description)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
 
     RuleFor(x => x.Image)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
 
     RuleFor(x => x.Video)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
   }
 }

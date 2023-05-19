@@ -8,7 +8,7 @@ import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { SiElectron } from "react-icons/si";
 import { TbGhost2Filled } from "react-icons/tb";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import Select, { SelectOption } from "../components/Select";
@@ -38,6 +38,7 @@ const createQueryString = (ids: string[]): string => {
 const EditExercisePage = () => {
   const exercise = useLoaderData() as Exercise;
   const { auth } = useAuth();
+
   const muscleGroupSelectorRef = useRef<HTMLDivElement>(null);
   const muscleSelectorRef = useRef<HTMLDivElement>(null);
 
@@ -294,16 +295,13 @@ const EditExercisePage = () => {
     <>
       <div className="flex justify-center pt-6 h-full">
         <button
-          className={`${popupActive() ? "hover:cursor-not-allowed" : ""}`}
+          className={`bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3 ${
+            popupActive() ? "opacity-50 hover:cursor-not-allowed" : ""
+          }`}
+          type="button"
+          onClick={() => navigate(-1)}
         >
-          <Link
-            className={`bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3 ${
-              popupActive() ? "opacity-50 pointer-events-none" : ""
-            }`}
-            to={`/exercises/${exercise.id}`}
-          >
-            <RxExit className="mr-1" /> Leave edit mode
-          </Link>
+          <RxExit className="mr-1" /> Leave edit mode
         </button>
         <button
           className={`px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
