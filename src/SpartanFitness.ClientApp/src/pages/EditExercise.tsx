@@ -327,8 +327,14 @@ const EditExercisePage = () => {
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
           <div
-            className="relative cursor-pointer"
-            onClick={() => setShowImageUrlInputBar((prev) => !prev)}
+            className={`relative ${
+              showVideoUrlInputBar ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (!showVideoUrlInputBar) {
+                setShowImageUrlInputBar((prev) => !prev);
+              }
+            }}
           >
             <img
               src={previewImage}
@@ -414,9 +420,11 @@ const EditExercisePage = () => {
               Exercise<span className="mx-1">/</span>
               <span className="text-blue">
                 <input
-                  className={
-                    "bg-transparent outline-none rounded-lg w-[30rem] focus:bg-gray hover:bg-gray"
-                  }
+                  className={`bg-transparent outline-none rounded-lg w-[30rem] focus:bg-gray hover:bg-gray ${
+                    showImageUrlInputBar || showVideoUrlInputBar
+                      ? "pointer-events-none"
+                      : ""
+                  }`}
                   value={name}
                   spellCheck={false}
                   onChange={(e) => setName(e.target.value)}
@@ -427,7 +435,11 @@ const EditExercisePage = () => {
             <p className="pt-4">
               <textarea
                 ref={descriptionRef}
-                className="outline-none w-full bg-transparent rounded-lg focus:bg-gray hover:bg-gray"
+                className={`outline-none w-full bg-transparent rounded-lg focus:bg-gray hover:bg-gray ${
+                  showImageUrlInputBar || showVideoUrlInputBar
+                    ? "pointer-events-none"
+                    : ""
+                }`}
                 value={description}
                 spellCheck={false}
                 onChange={(e) => {
@@ -439,8 +451,14 @@ const EditExercisePage = () => {
           </div>
           <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4">
             <div
-              className="relative cursor-pointer"
-              onClick={() => setShowVideoUrlInputBar((prev) => !prev)}
+              className={`relative ${
+                showImageUrlInputBar ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
+              onClick={() => {
+                if (!showImageUrlInputBar) {
+                  setShowVideoUrlInputBar((prev) => !prev);
+                }
+              }}
             >
               <iframe
                 className="w-full h-[18.125rem]"
@@ -490,12 +508,12 @@ const EditExercisePage = () => {
           type="button"
           onClick={() => {
             setShowImageUrlInputBar(false);
-            setPreviewImage(image);
+            setImage(previewImage);
           }}
           className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
         >
           <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
-            &#43;
+            &times;
           </span>
         </button>
 
@@ -503,12 +521,12 @@ const EditExercisePage = () => {
           type="button"
           onClick={() => {
             setShowImageUrlInputBar(false);
-            setImage(previewImage);
+            setPreviewImage(image);
           }}
           className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
         >
           <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
-            &times;
+            &#x2713;
           </span>
         </button>
 
@@ -534,12 +552,12 @@ const EditExercisePage = () => {
           type="button"
           onClick={() => {
             setShowVideoUrlInputBar(false);
-            setPreviewVideo(video);
+            setVideo(previewVideo);
           }}
           className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
         >
           <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
-            &#43;
+            &times;
           </span>
         </button>
 
@@ -547,14 +565,15 @@ const EditExercisePage = () => {
           type="button"
           onClick={() => {
             setShowVideoUrlInputBar(false);
-            setVideo(previewVideo);
+            setPreviewVideo(video);
           }}
           className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
         >
           <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
-            &times;
+            &#x2713;
           </span>
         </button>
+
         <input
           onChange={(e) => setVideo(e.target.value)}
           value={video}
@@ -578,7 +597,7 @@ const EditExercisePage = () => {
           <button
             type="button"
             onClick={() => setShowMuscleGroupSelector(false)}
-            className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+            className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
           >
             <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
               &times;
@@ -625,7 +644,7 @@ const EditExercisePage = () => {
           <button
             type="button"
             onClick={() => setShowMuscleSelector(false)}
-            className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+            className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
           >
             <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
               &times;

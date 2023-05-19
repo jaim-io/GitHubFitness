@@ -30,17 +30,6 @@ public class MusclesController : ApiController
     _mapper = mapper;
   }
 
-  [HttpGet("{muscleId}")]
-  public async Task<IActionResult> GetMuscle([FromQuery] string muscleId)
-  {
-    var query = new GetMuscleByIdQuery(muscleId);
-    ErrorOr<Muscle> muscleResult = await _mediator.Send(query);
-
-    return muscleResult.Match(
-      muscle => Ok(_mapper.Map<MuscleResponse>(muscle)),
-      Problem);
-  }
-
   [HttpGet("ids/{id?}")]
   public async Task<IActionResult> GetMusclesByIds([FromQuery(Name = "id")] List<string> ids)
   {
@@ -49,6 +38,17 @@ public class MusclesController : ApiController
 
     return musclesResult.Match(
       muscles => Ok(_mapper.Map<MuscleResponse[]>(muscles)),
+      Problem);
+  }
+
+  [HttpGet("{muscleId}")]
+  public async Task<IActionResult> GetMuscle(string muscleId)
+  {
+    var query = new GetMuscleByIdQuery(muscleId);
+    ErrorOr<Muscle> muscleResult = await _mediator.Send(query);
+
+    return muscleResult.Match(
+      muscle => Ok(_mapper.Map<MuscleResponse>(muscle)),
       Problem);
   }
 

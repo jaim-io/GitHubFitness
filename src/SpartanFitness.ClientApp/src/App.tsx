@@ -18,6 +18,11 @@ import MuscleGroupsPage from "./pages/MuscleGroups";
 import MuscleGroupDetailPage, {
   loader as muscleGroupDetailLoader,
 } from "./pages/MuscleGroupDetail";
+import MuscleLayout from "./layouts/MuscleLayout";
+import MusclesPage from "./pages/Muscles";
+import MuscleDetailPage, {
+  loader as muscleDetailLoader,
+} from "./pages/MuscleDetail";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +63,18 @@ const router = createBrowserRouter([
                 path: ":muscleGroupId",
                 element: <MuscleGroupDetailPage />,
                 loader: muscleGroupDetailLoader,
+              },
+            ],
+          },
+          {
+            path: "muscles",
+            element: <MuscleLayout />,
+            children: [
+              { index: true, element: <MusclesPage /> },
+              {
+                path: ":muscleId",
+                element: <MuscleDetailPage />,
+                loader: muscleDetailLoader,
               },
             ],
           },

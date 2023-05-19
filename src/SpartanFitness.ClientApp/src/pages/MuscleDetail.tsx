@@ -1,11 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import {
-  MdBookmarkAdded,
-  MdFitbit,
-  MdOutlineBookmarkAdd,
-} from "react-icons/md";
+import { MdBookmarkAdded, MdOutlineBookmarkAdd } from "react-icons/md";
 import { SiElectron } from "react-icons/si";
+import { MdFitbit } from "react-icons/md";
 import {
   Link,
   LoaderFunctionArgs,
@@ -14,23 +11,21 @@ import {
 } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
-import useMusclesByMuscleGroupId from "../hooks/useMusclesByMuscleGroupId";
-import MuscleGroup from "../types/domain/MuscleGroup";
+import Muscle from "../types/domain/Muscle";
+import useMuscleGroup from "../hooks/useMuscleGroup";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
-const MuscleGroupDetailPage = () => {
-  const muscleGroup = useLoaderData() as MuscleGroup;
+const MuscleDetailPage = () => {
+  const muscle = useLoaderData() as Muscle;
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
-    Object.values(auth.user!.savedMuscleGroupIds ?? []).includes(
-      muscleGroup.id,
-    ),
+    Object.values(auth.user!.savedMusclesIds ?? []).includes(muscle.id),
   );
 
-  const [muscles, , musclesAreLoading] = useMusclesByMuscleGroupId(
-    muscleGroup.id,
+  const [muscleGroup, , musclesAreLoading] = useMuscleGroup(
+    muscle.muscleGroupId,
   );
 
   const handleSaving = async () => {
@@ -40,9 +35,9 @@ const MuscleGroupDetailPage = () => {
 
     await axios
       .patch(
-        `${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups/${action}`,
+        `${USER_ENDPOINT}/${auth.user?.id}/saved/muscles/${action}`,
         {
-          muscleGroupId: muscleGroup.id,
+          muscleId: muscle.id,
         },
         {
           headers: {
@@ -53,12 +48,10 @@ const MuscleGroupDetailPage = () => {
       )
       .then(() => {
         if (action == "add") {
-          auth.user!.savedMuscleGroupIds.push(muscleGroup.id);
+          auth.user!.savedMusclesIds.push(muscle.id);
         } else {
-          auth.user!.savedMuscleGroupIds =
-            auth.user?.savedMuscleGroupIds.filter(
-              (id) => id !== muscleGroup.id,
-            ) ?? [];
+          auth.user!.savedMusclesIds =
+            auth.user?.savedMusclesIds.filter((id) => id !== muscle.id) ?? [];
         }
       })
       .catch((err) => {
@@ -86,8 +79,8 @@ const MuscleGroupDetailPage = () => {
       <div className={"flex justify-center pt-6 pb-20 h-full"}>
         <div className="mr-6 max-w-[18rem]">
           <img
-            src={muscleGroup.image}
-            alt={`${muscleGroup.name} image`}
+            src={muscle.image}
+            alt={`${muscle.name} image`}
             className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
           />
 
@@ -109,19 +102,16 @@ const MuscleGroupDetailPage = () => {
           </button>
 
           <div className="mt-4">
-            {muscles && (
+            {muscleGroup && (
               <div className="flex flex-wrap">
-                {muscles.length != 0 &&
-                  muscles.map((m) => (
-                    <Link
-                      key={m.id}
-                      className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
-                      to={`/muscles/${m.id}`}
-                    >
-                      <SiElectron className="mr-1" />
-                      {m.name}
-                    </Link>
-                  ))}
+                <Link
+                  key={muscleGroup.id}
+                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                  to={`/muscles/${muscleGroup.id}`}
+                >
+                  <MdFitbit className="mr-1" />
+                  {muscleGroup.name}
+                </Link>
               </div>
             )}
             {musclesAreLoading && <p>Muscles are loading</p>}
@@ -131,19 +121,17 @@ const MuscleGroupDetailPage = () => {
         <div className="relative">
           <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6">
             <h1 className="text-light-gray flex items-center">
-              <MdFitbit className="mr-1" size={16} />
-              Muscle group<span className="mx-1">/</span>
-              <span className="text-blue">{muscleGroup.name}</span>
+              <SiElectron className="mr-1" size={16} />
+              Muscle<span className="mx-1">/</span>
+              <span className="text-blue">{muscle.name}</span>
             </h1>
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
-            <p className="pt-4 whitespace-pre-line">
-              {muscleGroup.description}
-            </p>
+            <p className="pt-4 whitespace-pre-line">{muscle.description}</p>
           </div>
           {/* <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4 ">
             <iframe
               className="w-full h-[18.125rem]"
-              src={muscleGroup.video}
+              src={muscle.video}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             />
@@ -166,13 +154,13 @@ const MuscleGroupDetailPage = () => {
   );
 };
 
-export default MuscleGroupDetailPage;
+export default MuscleDetailPage;
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   // Will raise an AxiosError if fetching fails
 
-  const response = await axios.get<MuscleGroup>(
-    `${import.meta.env.VITE_API_BASE}/muscle-groups/${params.muscleGroupId}`,
+  const response = await axios.get<Muscle>(
+    `${import.meta.env.VITE_API_BASE}/muscles/${params.muscleId}`,
     {
       headers: {
         Accept: "application/json",

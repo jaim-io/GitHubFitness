@@ -31,7 +31,7 @@ const ExerciseDetailPage = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
-    Object.values(auth.user!.savedExerciseIds).includes(exercise.id),
+    Object.values(auth.user!.savedExerciseIds ?? []).includes(exercise.id),
   );
 
   let musclesAreLoading = false;
