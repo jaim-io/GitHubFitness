@@ -1,8 +1,10 @@
 using Mapster;
 
 using SpartanFitness.Application.Users.Commands.SaveExercise;
+using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.UnSaveExercise;
+using SpartanFitness.Application.Users.Commands.UnSaveMuscle;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscleGroup;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
@@ -40,6 +42,16 @@ public class UserMappingConfig : IRegister
     config.NewConfig<(UnSaveMuscleGroupRequest Request, string UserId), UnSaveMuscleGroupCommand>()
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.MuscleGroupId, src => src.Request.MuscleGroupId)
+      .Map(dest => dest, src => src);
+
+    config.NewConfig<(SaveMuscleRequest Request, string UserId), SaveMuscleCommand>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.MuscleId, src => src.Request.MuscleId)
+      .Map(dest => dest, src => src);
+
+    config.NewConfig<(UnSaveMuscleRequest Request, string UserId), UnSaveMuscleCommand>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.MuscleId, src => src.Request.MuscleId)
       .Map(dest => dest, src => src);
   }
 }

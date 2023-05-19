@@ -112,4 +112,19 @@ public sealed class User : AggregateRoot<UserId, Guid>
     var id = MuscleGroupId.Create(muscleGroup.Id.Value);
     _savedMuscleGroupIds.Remove(id);
   }
+  
+  public void SaveMuscle(Muscle muscle)
+  {
+    var id = MuscleId.Create(muscle.Id.Value);
+    if (!_savedMuscleIds.Contains(id))
+    {
+      _savedMuscleIds.Add(id);
+    }
+  }
+
+  public void UnSaveMuscle(Muscle muscle)
+  {
+    var id = MuscleId.Create(muscle.Id.Value);
+    _savedMuscleIds.Remove(id);
+  }
 }

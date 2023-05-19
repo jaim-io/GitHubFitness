@@ -21,7 +21,7 @@ const MuscleDetailPage = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
-    Object.values(auth.user!.savedMusclesIds ?? []).includes(muscle.id),
+    Object.values(auth.user!.savedMuscleIds ?? []).includes(muscle.id),
   );
 
   const [muscleGroup, , musclesAreLoading] = useMuscleGroup(
@@ -48,10 +48,10 @@ const MuscleDetailPage = () => {
       )
       .then(() => {
         if (action == "add") {
-          auth.user!.savedMusclesIds.push(muscle.id);
+          auth.user!.savedMuscleIds.push(muscle.id);
         } else {
-          auth.user!.savedMusclesIds =
-            auth.user?.savedMusclesIds.filter((id) => id !== muscle.id) ?? [];
+          auth.user!.savedMuscleIds =
+            auth.user?.savedMuscleIds.filter((id) => id !== muscle.id) ?? [];
         }
       })
       .catch((err) => {

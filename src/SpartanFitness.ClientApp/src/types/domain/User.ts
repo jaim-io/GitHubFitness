@@ -6,7 +6,7 @@ type User = {
   email: string;
   roles: Role[];
   savedExerciseIds: string[];
-  savedMusclesIds: string[];
+  savedMuscleIds: string[];
   savedMuscleGroupIds: string[];
 };
 
