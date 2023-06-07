@@ -30,8 +30,7 @@ public class CreateMuscleCommandHandler : IRequestHandler<CreateMuscleCommand, E
     var muscle = Muscle.Create(
       command.Name,
       command.Description,
-      command.Image,
-      muscleGroupId);
+      command.Image);
 
     await _muscleRepository.AddAsync(muscle);
 

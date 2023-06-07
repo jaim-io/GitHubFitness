@@ -25,14 +25,20 @@ public class
 
   public async Task<ErrorOr<List<Muscle>>> Handle(GetMusclesByMuscleGroupIdQuery query, CancellationToken cancellationToken)
   {
-    var ids = query.Ids.ConvertAll(MuscleGroupId.Create);
+    var muscleGroupIds = query.Ids.ConvertAll(MuscleGroupId.Create);
 
-    if (!await _muscleGroupRepository.ExistsAsync(ids))
+    if (!await _muscleGroupRepository.ExistsAsync(muscleGroupIds))
     {
       return Errors.MuscleGroup.NotFound;
     }
 
-    var muscles = await _muscleRepository.GetByMuscleGroupIdAsync(ids);
+    var muscleGroups = await _muscleGroupRepository.GetByIdAsync(muscleGroupIds);
+    
+    var muscleIds = muscleGroups
+      .SelectMany(mg => mg.MuscleIds)
+      .ToList();
+
+    var muscles = await _muscleRepository.GetByIdAsync(muscleIds);
 
     return muscles;
   }

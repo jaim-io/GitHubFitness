@@ -20,7 +20,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
       builder.OwnsMany(u => u.SavedMuscleGroupIds, smgib =>
       {
-        smgib.ToTable("SavedMuscleGroupIds");
+        smgib.ToTable("UserSavedMuscleGroupIds");
 
         smgib.WithOwner().HasForeignKey("UserId");
 
@@ -39,7 +39,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
       builder.OwnsMany(u => u.SavedMuscleIds, smib =>
       {
-        smib.ToTable("SavedMuscleIds");
+        smib.ToTable("UserSavedMuscleIds");
 
         smib.WithOwner().HasForeignKey("UserId");
 
@@ -58,7 +58,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
       builder.OwnsMany(u => u.SavedExerciseIds, seib =>
       {
-        seib.ToTable("SavedExerciseIds");
+        seib.ToTable("UserSavedExerciseIds");
 
         seib.WithOwner().HasForeignKey("UserId");
 

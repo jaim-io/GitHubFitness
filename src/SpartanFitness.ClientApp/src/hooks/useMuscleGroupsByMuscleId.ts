@@ -1,34 +1,34 @@
 import { useEffect, useState } from "react";
-import Muscle from "../types/domain/Muscle";
 import Exception from "../types/domain/Exception";
 import axios from "axios";
 import { toast } from "react-toastify";
+import MuscleGroup from "../types/domain/MuscleGroup";
 
-const MUSCLES_ENDPOINT = `${
+const MUSCLEGROUPS_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
-}/muscles/muscle-group-ids`;
+}/muscle-groups/muscle-ids`;
 
-const useMusclesByMuscleGroupId = (
+const useMuscleGroupsByMuscleId = (
   id: string,
-): [Muscle[] | undefined, Exception | undefined, boolean] => {
-  const [muscles, setMuscles] = useState<Muscle[]>();
+): [MuscleGroup[] | undefined, Exception | undefined, boolean] => {
+  const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchMusclesAsync = async () => {
+    const fetchMuscleGroupsAsync = async () => {
       setIsLoading(true);
 
       try {
         await axios
-          .get<Muscle[]>(`${MUSCLES_ENDPOINT}?id=${id}`, {
+          .get<MuscleGroup[]>(`${MUSCLEGROUPS_ENDPOINT}?id=${id}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setMuscles(res.data);
+            setMuscleGroups(res.data);
             setIsLoading(false);
           })
           .catch((err) => {
@@ -59,10 +59,10 @@ const useMusclesByMuscleGroupId = (
       }
     };
 
-    fetchMusclesAsync();
+    fetchMuscleGroupsAsync();
   }, [id]);
 
-  return [muscles, error, isLoading];
+  return [muscleGroups, error, isLoading];
 };
 
-export default useMusclesByMuscleGroupId;
+export default useMuscleGroupsByMuscleId;

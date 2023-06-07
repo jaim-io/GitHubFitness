@@ -3,6 +3,7 @@ type MuscleGroup = {
   name: string;
   description: string;
   image: string;
+  muscleIds: string[];
   createdDateTime: Date;
   updatedDateTime: Date;
 };

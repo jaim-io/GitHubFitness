@@ -35,7 +35,8 @@ public class CreateMuscleGroupCommandHandler
     var muscleGroup = MuscleGroup.Create(
       command.Name,
       command.Description,
-      command.Image);
+      command.Image,
+      new());
 
     await _muscleGroupRepository.AddAsync(muscleGroup);
 

@@ -24,11 +24,11 @@ public class UpdateExerciseCommandValidator : AbstractValidator<UpdateExerciseCo
 
     RuleForEach(x => x.MuscleIds)
       .Must(x => Guid.TryParse(x, out _))
-      .WithMessage("The muscle group ID must be a valid GUID");
+      .WithMessage("The muscle ID must be a valid GUID");
 
     RuleFor(x => x.MuscleIds)
       .Must(x => x == null || x.Distinct().Count() == x.Count)
-      .WithMessage("The list of muscle group IDs has to contain unique values");
+      .WithMessage("The list of muscle IDs has to contain unique values");
 
     RuleFor(x => x.Name)
       .NotEmpty()

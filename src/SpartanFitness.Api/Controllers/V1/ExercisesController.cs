@@ -71,7 +71,7 @@ public class ExercisesController : ApiController
       Problem);
   }
 
-  [HttpPut("update/{exerciseId}")]
+  [HttpPut("{exerciseId}/update")]
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> UpdateExercise(
     [FromBody] UpdateExerciseRequest request,

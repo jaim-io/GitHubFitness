@@ -5,5 +5,6 @@ public record MuscleGroupResponse(
     string Name,
     string Description,
     string Image,
+    List<string> MuscleIds,
     DateTime CreatedDateTime,
     DateTime UpdatedDateTime);

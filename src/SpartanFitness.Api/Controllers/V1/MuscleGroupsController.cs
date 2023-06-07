@@ -11,6 +11,7 @@ using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupsById;
+using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupsByMuscleIds;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.MuscleGroups;
 using SpartanFitness.Domain.Aggregates;
@@ -48,6 +49,17 @@ public class MuscleGroupsController : ApiController
   public async Task<IActionResult> GetMuscleGroupsByIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMuscleGroupsByIdQuery(ids);
+    ErrorOr<List<MuscleGroup>> muscleGroupsResult = await _mediator.Send(query);
+
+    return muscleGroupsResult.Match(
+      muscleGroups => Ok(_mapper.Map<MuscleGroupResponse[]>(muscleGroups)),
+      Problem);
+  }
+
+  [HttpGet("muscle-ids/{id?}")]
+  public async Task<IActionResult> GetMuscleGroupsByMuscleIds([FromQuery(Name = "id")] List<string> ids)
+  {
+    var query = new GetMuscleGroupsByMuscleIdsQuery(ids);
     ErrorOr<List<MuscleGroup>> muscleGroupsResult = await _mediator.Send(query);
 
     return muscleGroupsResult.Match(

@@ -7,7 +7,6 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
 {
   public string Name { get; set; }
   public string Description { get; set; }
-  public MuscleGroupId MuscleGroupId { get; set; }
   public string Image { get; set; }
   public DateTime CreatedDateTime { get; set; }
   public DateTime UpdatedDateTime { get; set; }
@@ -18,8 +17,7 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
     string description,
     string image,
     DateTime createdDateTime,
-    DateTime updatedDateTime,
-    MuscleGroupId muscleGroupId)
+    DateTime updatedDateTime)
     : base(id)
   {
     Name = name;
@@ -27,7 +25,6 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
     Image = image;
     CreatedDateTime = createdDateTime;
     UpdatedDateTime = updatedDateTime;
-    MuscleGroupId = muscleGroupId;
   }
 
 #pragma warning disable CS8618
@@ -39,8 +36,7 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
   public static Muscle Create(
     string name,
     string description,
-    string image,
-    MuscleGroupId muscleGroupId)
+    string image)
   {
     return new(
       MuscleId.CreateUnique(),
@@ -48,7 +44,6 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
       description,
       image,
       DateTime.UtcNow,
-      DateTime.UtcNow,
-      muscleGroupId);
+      DateTime.UtcNow);
   }
 }

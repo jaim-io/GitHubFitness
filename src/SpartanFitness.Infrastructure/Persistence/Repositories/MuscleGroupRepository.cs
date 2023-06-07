@@ -66,4 +66,21 @@ public class MuscleGroupRepository : IMuscleGroupRepository
   {
     return await _dbContext.MuscleGroups.ToListAsync();
   }
+
+  public async Task<List<MuscleGroup>> GetByMuscleIdAsync(MuscleId id)
+  {
+    return await _dbContext.MuscleGroups.Where(mg => mg.MuscleIds.Contains(id)).ToListAsync();
+  }
+
+  public async Task<List<MuscleGroup>> GetByMuscleIdAsync(List<MuscleId> ids)
+  {
+    // The argument 'ids' throw the following exception if not converted to GUID:
+    // "No backing field could be found for property 'MuscleGroup.MuscleIds#MuscleId.Id' and the property does not have a getter."
+    var rawIds = ids.ConvertAll(id => id.Value);
+
+    return await _dbContext.MuscleGroups
+      .Where(mg => mg.MuscleIds
+        .Any(id => rawIds.Contains(id.Value)))
+      .ToListAsync();
+  }
 }

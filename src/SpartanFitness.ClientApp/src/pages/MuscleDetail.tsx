@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import { MdBookmarkAdded, MdOutlineBookmarkAdd } from "react-icons/md";
+import {
+  MdBookmarkAdded,
+  MdFitbit,
+  MdOutlineBookmarkAdd,
+} from "react-icons/md";
 import { SiElectron } from "react-icons/si";
-import { MdFitbit } from "react-icons/md";
 import {
   Link,
   LoaderFunctionArgs,
@@ -12,7 +15,7 @@ import {
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import Muscle from "../types/domain/Muscle";
-import useMuscleGroup from "../hooks/useMuscleGroup";
+import useMuscleGroupsByMuscleId from "../hooks/useMuscleGroupsByMuscleId";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -24,8 +27,9 @@ const MuscleDetailPage = () => {
     Object.values(auth.user!.savedMuscleIds ?? []).includes(muscle.id),
   );
 
-  const [muscleGroup, , musclesAreLoading] = useMuscleGroup(
-    muscle.muscleGroupId,
+  // useMuscleGroupByMuscleId(muscleId)
+  const [muscleGroups, , muscleGroupsAreLoading] = useMuscleGroupsByMuscleId(
+    muscle.id,
   );
 
   const handleSaving = async () => {
@@ -102,19 +106,25 @@ const MuscleDetailPage = () => {
           </button>
 
           <div className="mt-4">
-            {muscleGroup && (
+            {muscleGroups && (
               <div className="flex flex-wrap">
-                <Link
-                  key={muscleGroup.id}
-                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
-                  to={`/muscles/${muscleGroup.id}`}
-                >
-                  <MdFitbit className="mr-1" />
-                  {muscleGroup.name}
-                </Link>
+                {muscleGroups.length != 0 ? (
+                  muscleGroups.map((mg) => (
+                    <Link
+                      key={mg.id}
+                      className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                      to={`/muscle-groups/${mg.id}`}
+                    >
+                      <MdFitbit className="mr-1" />
+                      {mg.name}
+                    </Link>
+                  ))
+                ) : (
+                  <p>No muscle groups specified</p>
+                )}
               </div>
             )}
-            {musclesAreLoading && <p>Muscles are loading</p>}
+            {muscleGroupsAreLoading && <p>Muscle groups are loading</p>}
           </div>
         </div>
 

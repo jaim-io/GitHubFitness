@@ -40,21 +40,6 @@ public class MuscleRepository : IMuscleRepository
       .ToListAsync();
   }
 
-  public async Task<List<Muscle>> GetBySearchQueryAsync(string searchQuery, MuscleGroupId id)
-  {
-    string query = searchQuery.ToLower();
-
-    return await _dbContext.Muscles
-      .Where(m => (m.Name.ToLower().Contains(query) || m.Description.ToLower().Contains(query)) &&
-                  m.MuscleGroupId == id)
-      .ToListAsync();
-  }
-
-  public async Task<List<Muscle>> GetByMuscleGroupIdAsync(MuscleGroupId id)
-  {
-    return await _dbContext.Muscles.Where(m => m.MuscleGroupId == id).ToListAsync();
-  }
-
   public async Task<Muscle?> GetByIdAsync(MuscleId id)
   {
     return await _dbContext.Muscles.FirstOrDefaultAsync(m => m.Id == id);
@@ -64,13 +49,6 @@ public class MuscleRepository : IMuscleRepository
   {
     return await _dbContext.Muscles
       .Where(m => ids.Contains(m.Id))
-      .ToListAsync();
-  }
-
-  public async Task<List<Muscle>> GetByMuscleGroupIdAsync(List<MuscleGroupId> ids)
-  {
-    return await _dbContext.Muscles
-      .Where(m => ids.Contains(m.MuscleGroupId))
       .ToListAsync();
   }
 

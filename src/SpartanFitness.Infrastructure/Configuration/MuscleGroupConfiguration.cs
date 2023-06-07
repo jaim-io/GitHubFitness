@@ -11,6 +11,26 @@ public class MuscleGroupConfiguration : IEntityTypeConfiguration<MuscleGroup>
   public void Configure(EntityTypeBuilder<MuscleGroup> builder)
   {
     ConfigureMuscleGroupsTable(builder);
+    ConfigureMuscleGroupsMuscleIdsTable(builder);
+  }
+
+  private void ConfigureMuscleGroupsMuscleIdsTable(EntityTypeBuilder<MuscleGroup> builder)
+  {
+    builder.OwnsMany(mg => mg.MuscleIds, mib =>
+    {
+      mib.ToTable("MuscleGroupMuscleIds");
+
+      mib.WithOwner().HasForeignKey("MuscleGroupId");
+
+      mib.HasKey("Id");
+
+      mib.Property(m => m.Value)
+        .HasColumnName("MuscleId")
+        .ValueGeneratedNever();
+    });
+
+    builder.Metadata.FindNavigation(nameof(MuscleGroup.MuscleIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
   }
 
   private void ConfigureMuscleGroupsTable(EntityTypeBuilder<MuscleGroup> builder)

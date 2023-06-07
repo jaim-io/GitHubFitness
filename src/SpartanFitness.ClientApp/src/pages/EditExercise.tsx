@@ -20,7 +20,7 @@ import Exercise from "../types/domain/Exercise";
 import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
 
-const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/update`;
+const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 const MUSCLES_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
 }/muscles/muscle-group-ids`;
@@ -171,7 +171,7 @@ const EditExercisePage = () => {
       prev.forEach((sm) => {
         const muscle = ms.find((m) => m.id === sm.value);
         if (muscle) {
-          if (mgs.find((mg) => mg.id === muscle.muscleGroupId)) {
+          if (mgs.find((mg) => mg.muscleIds.includes(muscle.id))) {
             selection.push(sm);
           }
         }
@@ -238,7 +238,7 @@ const EditExercisePage = () => {
 
     await axios
       .put(
-        `${EXERCISE_ENDPOINT}/${exercise.id}`,
+        `${EXERCISE_ENDPOINT}/${exercise.id}/update`,
         {
           id: exercise.id,
           name: name,

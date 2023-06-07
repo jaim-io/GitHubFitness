@@ -72,7 +72,7 @@ const NewExercisePage = () => {
       prev.forEach((sm) => {
         const muscle = ms.find((m) => m.id === sm.value);
         if (muscle) {
-          if (mgs.find((mg) => mg.id === muscle.muscleGroupId)) {
+          if (mgs.find((mg) => mg.muscleIds.includes(muscle.id))) {
             selection.push(sm);
           }
         }
