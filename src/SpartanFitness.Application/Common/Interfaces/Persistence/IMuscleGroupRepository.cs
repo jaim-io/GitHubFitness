@@ -15,4 +15,5 @@ public interface IMuscleGroupRepository
   Task<List<MuscleGroup>> GetByMuscleIdAsync(List<MuscleId> ids);
   Task<bool> ExistsAsync(MuscleGroupId id);
   Task<bool> ExistsAsync(IEnumerable<MuscleGroupId> ids);
+  Task UpdateAsync(MuscleGroup muscleGroup);
 }

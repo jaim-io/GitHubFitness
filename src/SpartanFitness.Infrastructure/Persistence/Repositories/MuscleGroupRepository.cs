@@ -47,6 +47,12 @@ public class MuscleGroupRepository : IMuscleGroupRepository
     return !result.Contains(false);
   }
 
+  public async Task UpdateAsync(MuscleGroup muscleGroup)
+  {
+    _dbContext.Update(muscleGroup);
+    await _dbContext.SaveChangesAsync();
+  }
+
   public async Task<MuscleGroup?> GetByIdAsync(MuscleGroupId id)
   {
     return await _dbContext.MuscleGroups.FirstOrDefaultAsync(mg => mg.Id == id);

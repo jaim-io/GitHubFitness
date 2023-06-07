@@ -1,6 +1,7 @@
 using Mapster;
 
 using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
+using SpartanFitness.Application.MuscleGroups.Commands.UpdateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.MuscleGroups;
@@ -15,6 +16,9 @@ public class MuscleGroupMappingConfig : IRegister
   {
     config.NewConfig<(CreateMuscleGroupRequest Request, string UserId), CreateMuscleGroupCommand>()
       .Map(dest => dest, src => src.Request);
+
+    config.NewConfig<UpdateMuscleGroupRequest, UpdateMuscleGroupCommand>()
+      .Map(dest => dest, src => src);
 
     config.NewConfig<MuscleGroup, MuscleGroupResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())

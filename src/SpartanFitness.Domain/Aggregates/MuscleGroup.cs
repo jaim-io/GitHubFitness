@@ -12,6 +12,7 @@ public sealed class MuscleGroup : AggregateRoot<MuscleGroupId, Guid>
   public IReadOnlyList<MuscleId> MuscleIds => _muscleIds.AsReadOnly();
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
+
   private MuscleGroup(
     MuscleGroupId id,
     string name,
@@ -51,4 +52,9 @@ public sealed class MuscleGroup : AggregateRoot<MuscleGroupId, Guid>
       DateTime.UtcNow,
       DateTime.UtcNow);
   }
+
+  public void SetName(string name) => Name = name;
+  public void SetDescription(string description) => Description = description;
+  public void SetMuscleIds(List<MuscleId> muscleIds) => _muscleIds = muscleIds;
+  public void SetImage(string image) => Image = image;
 }

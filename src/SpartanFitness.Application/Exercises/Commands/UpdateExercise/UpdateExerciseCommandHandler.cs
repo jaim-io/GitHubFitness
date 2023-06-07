@@ -43,9 +43,10 @@ public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseComman
     exercise.SetDescription(command.Description);
     exercise.SetLastUpdater(lastUpdaterId);
     exercise.SetMuscleGroups(muscleGroupIds ?? new());
-    exercise.SetMuscles(muscleIds ?? new());
+    exercise.SetMuscleIds(muscleIds ?? new());
     exercise.SetImage(command.Image);
     exercise.SetVideo(command.Video);
+    exercise.SetUpdatedDateTime();
 
     await _exerciseRepository.UpdateAsync(exercise);
 

@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Muscles.Command.CreateMuscle;
+using SpartanFitness.Application.Muscles.Query.GetAllMuscles;
 using SpartanFitness.Application.Muscles.Query.GetMuscleById;
 using SpartanFitness.Application.Muscles.Query.GetMusclePage;
 using SpartanFitness.Application.Muscles.Query.GetMusclesById;
@@ -49,6 +50,17 @@ public class MusclesController : ApiController
 
     return muscleResult.Match(
       muscle => Ok(_mapper.Map<MuscleResponse>(muscle)),
+      Problem);
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> GetAllMuscle()
+  {
+    var query = new GetAllMusclesQuery();
+    ErrorOr<List<Muscle>> musclesResult = await _mediator.Send(query);
+
+    return musclesResult.Match(
+      muscles => Ok(_mapper.Map<List<MuscleResponse>>(muscles)),
       Problem);
   }
 

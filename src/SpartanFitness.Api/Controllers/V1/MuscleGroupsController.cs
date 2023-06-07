@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
+using SpartanFitness.Application.MuscleGroups.Commands.UpdateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupsById;
@@ -92,5 +93,24 @@ public class MuscleGroupsController : ApiController
         new { muscleGroupId = muscleGroup.Id.Value },
         _mapper.Map<MuscleGroupResponse>(muscleGroup)),
       errors => Problem(errors));
+  }
+
+  [HttpPut("{muscleGroupId}/update")]
+  [Authorize(Roles = $"{RoleTypes.Administrator}")]
+  public async Task<IActionResult> UpdateMuscleGroup(
+  [FromBody] UpdateMuscleGroupRequest request,
+  [FromRoute] string muscleGroupId)
+  {
+    if (request.Id != muscleGroupId)
+    {
+      return BadRequest("Route ID must match the ID field in the request body.");
+    }
+
+    var command = _mapper.Map<UpdateMuscleGroupCommand>(request);
+    ErrorOr<MuscleGroup> updatedMuscleGroupResult = await _mediator.Send(command);
+
+    return updatedMuscleGroupResult.Match(
+      muscleGroup => Ok(_mapper.Map<MuscleGroupResponse>(muscleGroup)),
+      Problem);
   }
 }

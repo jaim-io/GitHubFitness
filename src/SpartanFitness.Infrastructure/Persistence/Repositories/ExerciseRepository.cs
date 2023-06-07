@@ -78,8 +78,6 @@ public class ExerciseRepository
 
   public async Task UpdateAsync(Exercise exercise)
   {
-    exercise.SetUpdatedDateTime();
-
     _dbContext.Update(exercise);
     await _dbContext.SaveChangesAsync();
   }

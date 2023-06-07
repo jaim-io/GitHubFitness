@@ -93,7 +93,7 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
     _muscleGroupIds = ids;
   }
 
-  public void SetMuscles(List<MuscleId> ids)
+  public void SetMuscleIds(List<MuscleId> ids)
   {
     _muscleIds = ids;
   }
