@@ -66,7 +66,7 @@ const router = createBrowserRouter([
                 loader: muscleGroupDetailLoader,
               },
               {
-                path: ":muscleGroupId",
+                path: ":muscleGroupId/edit",
                 element: <EditMuscleGroupPage />,
                 loader: muscleGroupDetailLoader,
               },

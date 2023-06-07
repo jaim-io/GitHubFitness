@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import useMusclesByMuscleGroupId from "../hooks/useMusclesByMuscleGroupId";
 import MuscleGroup from "../types/domain/MuscleGroup";
+import { AiFillEdit } from "react-icons/ai";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -158,6 +159,15 @@ const MuscleGroupDetailPage = () => {
               >
                 Back
               </button>
+
+              {auth.user?.roles.find((r) => r.name == "Administrator") && (
+                <Link
+                  className="bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg px-3 h-[30px] flex items-center"
+                  to={"edit"}
+                >
+                  <AiFillEdit className="mr-1" size={18} />
+                </Link>
+              )}
             </div>
           </div>
         </div>
