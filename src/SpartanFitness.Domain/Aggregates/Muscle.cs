@@ -46,4 +46,9 @@ public class Muscle : AggregateRoot<MuscleId, Guid>
       DateTime.UtcNow,
       DateTime.UtcNow);
   }
+
+  public void SetName(string name) => Name = name;
+  public void SetDescription(string description) => Description = description;
+  public void SetImage(string image) => Image = image;
+  public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
 }

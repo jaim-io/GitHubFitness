@@ -1,6 +1,7 @@
 ﻿namespace SpartanFitness.Contracts.Muscles;
 
-public record CreateMuscleRequest(
-  string Name,
+public record UpdateMuscleRequest(
+  string Id,
+  string Name, 
   string Description,
   string Image);

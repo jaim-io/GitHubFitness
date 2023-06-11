@@ -1,6 +1,7 @@
 ﻿using Mapster;
 
 using SpartanFitness.Application.Muscles.Command.CreateMuscle;
+using SpartanFitness.Application.Muscles.Command.UpdateMuscle;
 using SpartanFitness.Application.Muscles.Query.GetMusclePage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Muscles;
@@ -14,6 +15,9 @@ public class MuscleMappingConfig : IRegister
   public void Register(TypeAdapterConfig config)
   {
     config.NewConfig<CreateMuscleRequest, CreateMuscleCommand>()
+      .Map(dest => dest, src => src);
+
+    config.NewConfig<UpdateMuscleRequest, UpdateMuscleCommand>()
       .Map(dest => dest, src => src);
 
     config.NewConfig<Muscle, MuscleResponse>()

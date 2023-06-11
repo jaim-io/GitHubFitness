@@ -4,9 +4,11 @@ using MapsterMapper;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Muscles.Command.CreateMuscle;
+using SpartanFitness.Application.Muscles.Command.UpdateMuscle;
 using SpartanFitness.Application.Muscles.Query.GetAllMuscles;
 using SpartanFitness.Application.Muscles.Query.GetMuscleById;
 using SpartanFitness.Application.Muscles.Query.GetMusclePage;
@@ -16,6 +18,7 @@ using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Muscles;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers.V1;
 
@@ -97,6 +100,25 @@ public class MusclesController : ApiController
         nameof(GetMuscle),
         new { muscleId = muscle.Id.Value },
         _mapper.Map<MuscleResponse>(muscle)),
+      Problem);
+  }
+
+  [HttpPut("{muscleId}/update")]
+  [Authorize(Roles = $"{RoleTypes.Administrator}")]
+  public async Task<IActionResult> UpdateMuscle(
+    [FromBody] UpdateMuscleRequest request,
+    [FromRoute] string muscleId)
+  {
+    if (request.Id != muscleId)
+    {
+      return BadRequest("Route ID must match the ID field in the request body.");
+    }
+
+    var command = _mapper.Map<UpdateMuscleCommand>(request);
+    ErrorOr<Muscle> muscleResult = await _mediator.Send(command);
+
+    return muscleResult.Match(
+      muscle => Ok(_mapper.Map<MuscleResponse>(muscle)),
       Problem);
   }
 }

@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import Muscle from "../types/domain/Muscle";
 import useMuscleGroupsByMuscleId from "../hooks/useMuscleGroupsByMuscleId";
+import { AiFillEdit } from "react-icons/ai";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -27,7 +28,6 @@ const MuscleDetailPage = () => {
     Object.values(auth.user!.savedMuscleIds ?? []).includes(muscle.id),
   );
 
-  // useMuscleGroupByMuscleId(muscleId)
   const [muscleGroups, , muscleGroupsAreLoading] = useMuscleGroupsByMuscleId(
     muscle.id,
   );
@@ -138,14 +138,6 @@ const MuscleDetailPage = () => {
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
             <p className="pt-4 whitespace-pre-line">{muscle.description}</p>
           </div>
-          {/* <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4 ">
-            <iframe
-              className="w-full h-[18.125rem]"
-              src={muscle.video}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            />
-          </div> */}
 
           <div className="mt-4">
             <div className="absolute left-0 w-[30%] flex items-start">
@@ -156,6 +148,15 @@ const MuscleDetailPage = () => {
               >
                 Back
               </button>
+
+              {auth.user?.roles.find((r) => r.name == "Administrator") && (
+                <Link
+                  className="bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg px-3 h-[30px] flex items-center"
+                  to={"edit"}
+                >
+                  <AiFillEdit className="mr-1" size={18} />
+                </Link>
+              )}
             </div>
           </div>
         </div>

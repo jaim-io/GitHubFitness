@@ -24,6 +24,7 @@ import MuscleDetailPage, {
   loader as muscleDetailLoader,
 } from "./pages/MuscleDetail";
 import EditMuscleGroupPage from "./pages/EditMuscleGroup";
+import EditMusclePage from "./pages/EditMuscle";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
               {
                 path: ":muscleId",
                 element: <MuscleDetailPage />,
+                loader: muscleDetailLoader,
+              },
+              {
+                path: ":muscleId/edit",
+                element: <EditMusclePage />,
                 loader: muscleDetailLoader,
               },
             ],

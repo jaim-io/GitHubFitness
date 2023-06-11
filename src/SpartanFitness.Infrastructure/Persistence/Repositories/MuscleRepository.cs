@@ -67,4 +67,10 @@ public class MuscleRepository : IMuscleRepository
 
     return !result.Contains(false);
   }
+
+  public async Task UpdateAsync(Muscle muscle)
+  {
+    _dbContext.Update(muscle);
+    await _dbContext.SaveChangesAsync();
+  }
 }

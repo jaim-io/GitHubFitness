@@ -20,7 +20,7 @@ public class ExerciseMappingConfig : IRegister
 
     config.NewConfig<(UpdateExerciseRequest Request, string CoachId), UpdateExerciseCommand>()
       .Map(dest => dest.LastUpdaterId, src => src.CoachId)
-       .Map(dest => dest, src => src.Request);
+      .Map(dest => dest, src => src.Request);
 
     config.NewConfig<Exercise, ExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
