@@ -21,6 +21,7 @@ const MainNavigation = () => {
             />
           </Link>
           <MainNavItem path="/">Home</MainNavItem>
+          <div className="bg-gray self-stretch w-[1px]" />
           <MainNavItem path="/exercises">Exercises</MainNavItem>
           <MainNavItem path="/muscle-groups">Muscle groups</MainNavItem>
           <MainNavItem path="/muscles">Muscles</MainNavItem>

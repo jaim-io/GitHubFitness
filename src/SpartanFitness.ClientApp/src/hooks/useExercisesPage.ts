@@ -10,13 +10,25 @@ const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/page`;
 
 export type ExercisesPage = { exercises: Exercise[] } & Page;
 
-const useExercisesPage = (
-  page?: number,
-  size?: number,
-  sort?: string,
-  order?: string,
-  query?: string,
-): [ExercisesPage | undefined, Exception | undefined, boolean] => {
+type PageArguments = {
+  page?: number;
+  size?: number;
+  sort?: string;
+  order?: string;
+  query?: string;
+};
+
+const useExercisesPage = ({
+  page,
+  size,
+  sort,
+  order,
+  query,
+}: PageArguments): [
+  ExercisesPage | undefined,
+  Exception | undefined,
+  boolean,
+] => {
   const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);

@@ -58,13 +58,13 @@ const ExercisesPage = () => {
   const [query, setQuery] = useState("");
   // ------------------------
 
-  const [exercisePage, , isLoading] = useExercisesPage(
-    currentPage,
-    pageSize,
-    SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
-    order,
-    query,
-  );
+  const [exercisePage, , isLoading] = useExercisesPage({
+    page: currentPage,
+    size: pageSize,
+    sort: SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
+    order: order,
+    query: query,
+  });
 
   const paginate = (page: number) => {
     setCurrentPage(page);
