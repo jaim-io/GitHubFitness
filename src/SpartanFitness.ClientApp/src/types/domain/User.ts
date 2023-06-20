@@ -8,6 +8,7 @@ type User = {
   savedExerciseIds: string[];
   savedMuscleIds: string[];
   savedMuscleGroupIds: string[];
+  savedWorkoutIds: string[];
 };
 
 type Role = {

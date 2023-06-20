@@ -8,93 +8,113 @@ namespace SpartanFitness.Infrastructure.Configuration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+  public void Configure(EntityTypeBuilder<User> builder)
+  {
+    ConfigureUsersTable(builder);
+    ConfigureUserSavedExerciseIdsTable(builder);
+    ConfigureUserSavedMuscleIdsTable(builder);
+    ConfigureUserSavedMuscleGroupIdsTable(builder);
+    ConfigureUserSavedWorkoutIdsTable(builder);
+  }
+
+  private void ConfigureUserSavedWorkoutIdsTable(EntityTypeBuilder<User> builder)
+  {
+    builder.OwnsMany(u => u.SavedWorkoutIds, swib =>
+   {
+     swib.ToTable("UserSavedWorkoutIds");
+
+     swib.WithOwner().HasForeignKey("UserId");
+
+     swib.HasKey("Id");
+
+     swib.Property(smi => smi.Value)
+       .HasColumnName("WorkoutId")
+       .ValueGeneratedNever();
+   });
+
+    builder.Metadata.FindNavigation(nameof(User.SavedWorkoutIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
+  }
+
+  private void ConfigureUserSavedMuscleGroupIdsTable(EntityTypeBuilder<User> builder)
+  {
+    builder.OwnsMany(u => u.SavedMuscleGroupIds, smgib =>
     {
-        ConfigureUsersTable(builder);
-        ConfigureUserSavedExerciseIdsTable(builder);
-        ConfigureUserSavedMuscleIdsTable(builder);
-        ConfigureUserSavedMuscleGroupIdsTable(builder);
-    }
+      smgib.ToTable("UserSavedMuscleGroupIds");
 
-    private void ConfigureUserSavedMuscleGroupIdsTable(EntityTypeBuilder<User> builder)
+      smgib.WithOwner().HasForeignKey("UserId");
+
+      smgib.HasKey("Id");
+
+      smgib.Property(smi => smi.Value)
+        .HasColumnName("MuscleGroupId")
+        .ValueGeneratedNever();
+    });
+
+    builder.Metadata.FindNavigation(nameof(User.SavedMuscleGroupIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
+  }
+
+  private void ConfigureUserSavedMuscleIdsTable(EntityTypeBuilder<User> builder)
+  {
+    builder.OwnsMany(u => u.SavedMuscleIds, smib =>
     {
-      builder.OwnsMany(u => u.SavedMuscleGroupIds, smgib =>
-      {
-        smgib.ToTable("UserSavedMuscleGroupIds");
+      smib.ToTable("UserSavedMuscleIds");
 
-        smgib.WithOwner().HasForeignKey("UserId");
+      smib.WithOwner().HasForeignKey("UserId");
 
-        smgib.HasKey("Id");
+      smib.HasKey("Id");
 
-        smgib.Property(smi => smi.Value)
-          .HasColumnName("MuscleGroupId")
-          .ValueGeneratedNever();
-      });
-      
-      builder.Metadata.FindNavigation(nameof(User.SavedMuscleGroupIds))!
-        .SetPropertyAccessMode(PropertyAccessMode.Field);
-    }
-    
-    private void ConfigureUserSavedMuscleIdsTable(EntityTypeBuilder<User> builder)
+      smib.Property(smi => smi.Value)
+        .HasColumnName("MuscleId")
+        .ValueGeneratedNever();
+    });
+
+    builder.Metadata.FindNavigation(nameof(User.SavedMuscleIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
+  }
+
+  private void ConfigureUserSavedExerciseIdsTable(EntityTypeBuilder<User> builder)
+  {
+    builder.OwnsMany(u => u.SavedExerciseIds, seib =>
     {
-      builder.OwnsMany(u => u.SavedMuscleIds, smib =>
-      {
-        smib.ToTable("UserSavedMuscleIds");
+      seib.ToTable("UserSavedExerciseIds");
 
-        smib.WithOwner().HasForeignKey("UserId");
+      seib.WithOwner().HasForeignKey("UserId");
 
-        smib.HasKey("Id");
+      seib.HasKey("Id");
 
-        smib.Property(smi => smi.Value)
-          .HasColumnName("MuscleId")
-          .ValueGeneratedNever();
-      });
-      
-      builder.Metadata.FindNavigation(nameof(User.SavedMuscleIds))!
-        .SetPropertyAccessMode(PropertyAccessMode.Field);
-    }
-    
-    private void ConfigureUserSavedExerciseIdsTable(EntityTypeBuilder<User> builder)
-    {
-      builder.OwnsMany(u => u.SavedExerciseIds, seib =>
-      {
-        seib.ToTable("UserSavedExerciseIds");
+      seib.Property(sei => sei.Value)
+        .HasColumnName("ExerciseId")
+        .ValueGeneratedNever();
+    });
 
-        seib.WithOwner().HasForeignKey("UserId");
+    builder.Metadata.FindNavigation(nameof(User.SavedExerciseIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
+  }
 
-        seib.HasKey("Id");
+  private void ConfigureUsersTable(EntityTypeBuilder<User> builder)
+  {
+    builder.ToTable("Users");
 
-        seib.Property(sei => sei.Value)
-          .HasColumnName("ExerciseId")
-          .ValueGeneratedNever();
-      });
-      
-      builder.Metadata.FindNavigation(nameof(User.SavedExerciseIds))!
-        .SetPropertyAccessMode(PropertyAccessMode.Field);
-    }
+    builder.HasKey(u => u.Id);
 
-    private void ConfigureUsersTable(EntityTypeBuilder<User> builder)
-    {
-        builder.ToTable("Users");
+    builder.Property(u => u.Id)
+      .ValueGeneratedNever()
+      .HasConversion(
+        id => id.Value,
+        value => UserId.Create(value));
 
-        builder.HasKey(u => u.Id);
+    builder.Property(u => u.FirstName)
+      .HasMaxLength(100);
 
-        builder.Property(u => u.Id)
-            .ValueGeneratedNever()
-            .HasConversion(
-                id => id.Value,
-                value => UserId.Create(value));
+    builder.Property(u => u.LastName)
+      .HasMaxLength(100);
 
-        builder.Property(u => u.FirstName)
-            .HasMaxLength(100);
+    builder.Property(u => u.ProfileImage)
+      .HasMaxLength(2048);
 
-        builder.Property(u => u.LastName)
-            .HasMaxLength(100);
-
-        builder.Property(u => u.ProfileImage)
-            .HasMaxLength(2048);
-
-        builder.Property(u => u.Salt)
-            .ValueGeneratedNever();
-    }
+    builder.Property(u => u.Salt)
+      .ValueGeneratedNever();
+  }
 }

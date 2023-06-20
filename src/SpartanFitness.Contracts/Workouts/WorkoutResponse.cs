@@ -14,7 +14,7 @@ public record WorkoutResponse(
 
 public record WorkoutExerciseResponse(
   string Id,
-  string OrderNumber,
+  uint OrderNumber,
   string ExerciseId,
   uint Sets,
   uint MinReps,

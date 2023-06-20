@@ -8,4 +8,5 @@ public record UserResponse(
   string Email,
   List<string> SavedExerciseIds,
   List<string> SavedMuscleIds,
-  List<string> SavedMuscleGroupIds);
+  List<string> SavedMuscleGroupIds,
+  List<string> SavedWorkoutIds);

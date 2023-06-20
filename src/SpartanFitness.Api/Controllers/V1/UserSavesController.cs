@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
+using SpartanFitness.Application.Users.Commands.SaveWorkout;
 using SpartanFitness.Application.Users.Commands.UnSaveExercise;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscle;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscleGroup;
+using SpartanFitness.Application.Users.Commands.UnSaveWorkout;
 using SpartanFitness.Contracts.Users.Saves;
 
 namespace SpartanFitness.Api.Controllers.V1;
@@ -61,7 +63,7 @@ public class UserSavesController : ApiController
       _ => NoContent(),
       Problem);
   }
-  
+
   [HttpPatch("muscle-groups/add")]
   public async Task<IActionResult> SaveMuscleGroup([FromRoute] string userId, [FromBody] SaveMuscleGroupRequest request)
   {
@@ -80,7 +82,9 @@ public class UserSavesController : ApiController
   }
 
   [HttpPatch("muscle-groups/remove")]
-  public async Task<IActionResult> UnSaveMuscleGroup([FromRoute] string userId, [FromBody] UnSaveMuscleGroupRequest request)
+  public async Task<IActionResult> UnSaveMuscleGroup(
+    [FromRoute] string userId,
+    [FromBody] UnSaveMuscleGroupRequest request)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
     if (!isUser)
@@ -95,7 +99,7 @@ public class UserSavesController : ApiController
       _ => NoContent(),
       Problem);
   }
-  
+
   [HttpPatch("muscles/add")]
   public async Task<IActionResult> SaveMuscle([FromRoute] string userId, [FromBody] SaveMuscleRequest request)
   {
@@ -123,6 +127,40 @@ public class UserSavesController : ApiController
     }
 
     var command = _mapper.Map<UnSaveMuscleCommand>((request, userId));
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => NoContent(),
+      Problem);
+  }
+
+  [HttpPatch("workouts/add")]
+  public async Task<IActionResult> SaveWorkout([FromRoute] string userId, [FromBody] SaveWorkoutRequest request)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = _mapper.Map<SaveWorkoutCommand>((request, userId));
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => NoContent(),
+      Problem);
+  }
+
+  [HttpPatch("workouts/remove")]
+  public async Task<IActionResult> UnSaveWorkout([FromRoute] string userId, [FromBody] UnSaveWorkoutRequest request)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = _mapper.Map<UnSaveWorkoutCommand>((request, userId));
     ErrorOr<Unit> result = await _mediator.Send(command);
 
     return result.Match(

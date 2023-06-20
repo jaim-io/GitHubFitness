@@ -3,7 +3,6 @@
 using MediatR;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
-using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
