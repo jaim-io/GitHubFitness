@@ -52,6 +52,7 @@ public class CreateWorkoutCommandHandler
       return Errors.Exercise.NotFound;
     }
 
+    var muscleIds = await _exerciseRepository.GetMuscleIds(workoutExercises.Select(we => we.ExerciseId));
     var muscleGroupIds = await _exerciseRepository.GetMuscleGroupIds(workoutExercises.Select(we => we.ExerciseId));
 
     var workout = Workout.Create(
@@ -59,6 +60,7 @@ public class CreateWorkoutCommandHandler
       description: command.Description,
       coachId: CoachId.Create(command.CoachId),
       image: command.Image,
+      muscleIds: muscleIds.ToList(),
       muscleGroupIds: muscleGroupIds.ToList(),
       workoutExercises: workoutExercises);
 

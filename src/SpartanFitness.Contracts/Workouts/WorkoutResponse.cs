@@ -6,6 +6,7 @@ public record WorkoutResponse(
   string Description,
   string CoachId,
   string Image,
+  List<string> MuscleIds,
   List<string> MuscleGroupIds,
   List<WorkoutExerciseResponse> WorkoutExercises,
   DateTime CreatedDateTime,

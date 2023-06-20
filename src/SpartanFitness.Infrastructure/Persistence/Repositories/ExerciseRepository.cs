@@ -81,4 +81,21 @@ public class ExerciseRepository
     _dbContext.Update(exercise);
     await _dbContext.SaveChangesAsync();
   }
+
+  public async Task<IEnumerable<MuscleId>> GetMuscleIds(IEnumerable<ExerciseId> exerciseIds)
+  {
+    var muscleIds = new List<MuscleId>();
+
+    foreach (var exerciseId in exerciseIds)
+    {
+      if (await _dbContext.Exercises
+        .AsNoTrackingWithIdentityResolution()
+        .FirstOrDefaultAsync(e => e.Id == exerciseId) is Exercise exercise)
+      {
+        muscleIds.AddRange(exercise.MuscleIds.ToList());
+      }
+    }
+
+    return muscleIds.Distinct();
+  }
 }

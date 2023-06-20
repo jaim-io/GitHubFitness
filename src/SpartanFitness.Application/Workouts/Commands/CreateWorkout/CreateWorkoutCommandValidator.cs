@@ -8,10 +8,16 @@ public class CreateWorkoutCommandValidator
   public CreateWorkoutCommandValidator()
   {
     RuleFor(x => x.Name)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(100);
 
     RuleFor(x => x.Description)
-      .NotEmpty();
+      .NotEmpty()
+      .MaximumLength(2048);
+
+    RuleFor(x => x.Image)
+      .NotEmpty()
+      .MaximumLength(2048);
 
     RuleFor(x => x.CoachId)
       .Must(x => Guid.TryParse(x, out _))

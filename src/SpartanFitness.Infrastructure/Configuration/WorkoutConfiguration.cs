@@ -14,20 +14,40 @@ public class WorkoutConfiguration : IEntityTypeConfiguration<Workout>
   {
     ConfigureWorkoutsTable(builder);
     ConfigureWorkoutExerciseTable(builder);
+    ConfigureWorkoutMuscleIdsTable(builder);
     ConfigureWorkoutMuscleGroupIdsTable(builder);
+  }
+
+  private void ConfigureWorkoutMuscleIdsTable(EntityTypeBuilder<Workout> builder)
+  {
+    builder.OwnsMany(we => we.MuscleIds, mib =>
+    {
+      mib.ToTable("WorkoutMuscleIds");
+
+      mib.WithOwner().HasForeignKey("WorkoutId");
+
+      mib.HasKey("Id");
+
+      mib.Property(mg => mg.Value)
+        .HasColumnName("MuscleId")
+        .ValueGeneratedNever();
+    });
+
+    builder.Metadata.FindNavigation(nameof(Workout.MuscleIds))!
+      .SetPropertyAccessMode(PropertyAccessMode.Field);
   }
 
   private void ConfigureWorkoutMuscleGroupIdsTable(EntityTypeBuilder<Workout> builder)
   {
-    builder.OwnsMany(we => we.MuscleGroupIds, mgi =>
+    builder.OwnsMany(we => we.MuscleGroupIds, mgib =>
     {
-      mgi.ToTable("WorkoutMuscleGroupIds");
+      mgib.ToTable("WorkoutMuscleGroupIds");
 
-      mgi.WithOwner().HasForeignKey("WorkoutId");
+      mgib.WithOwner().HasForeignKey("WorkoutId");
 
-      mgi.HasKey("Id");
+      mgib.HasKey("Id");
 
-      mgi.Property(mg => mg.Value)
+      mgib.Property(mg => mg.Value)
         .HasColumnName("MuscleGroupId")
         .ValueGeneratedNever();
     });

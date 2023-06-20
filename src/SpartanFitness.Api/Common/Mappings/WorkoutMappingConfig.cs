@@ -18,6 +18,7 @@ public class WorkoutMappingConfig : IRegister
     config.NewConfig<Workout, WorkoutResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
       .Map(dest => dest.CoachId, src => src.CoachId.Value.ToString())
+      .Map(dest => dest.MuscleIds, src => src.MuscleIds.Select(muscleId => muscleId.Value.ToString()))
       .Map(dest => dest.MuscleGroupIds, src => src.MuscleGroupIds.Select(muscleGroupId => muscleGroupId.Value.ToString()));
 
     config.NewConfig<WorkoutExercise, WorkoutExerciseResponse>()
