@@ -25,6 +25,7 @@ const MainNavigation = () => {
           <MainNavItem path="/exercises">Exercises</MainNavItem>
           <MainNavItem path="/muscle-groups">Muscle groups</MainNavItem>
           <MainNavItem path="/muscles">Muscles</MainNavItem>
+          <MainNavItem path="/workouts">Workouts</MainNavItem>
         </ul>
         <div className="w-full md:block md:w-auto">
           <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">

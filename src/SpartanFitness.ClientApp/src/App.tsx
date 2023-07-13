@@ -25,6 +25,11 @@ import MuscleDetailPage, {
 } from "./pages/MuscleDetail";
 import EditMuscleGroupPage from "./pages/EditMuscleGroup";
 import EditMusclePage from "./pages/EditMuscle";
+import WorkoutLayout from "./layouts/WorkoutLayout";
+import WorkoutsPage from "./pages/Workouts";
+import WorkoutDetailPage, {
+  loader as workoutDetailLoader,
+} from "./pages/WorkoutDetail";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +92,18 @@ const router = createBrowserRouter([
                 path: ":muscleId/edit",
                 element: <EditMusclePage />,
                 loader: muscleDetailLoader,
+              },
+            ],
+          },
+          {
+            path: "workouts",
+            element: <WorkoutLayout />,
+            children: [
+              { index: true, element: <WorkoutsPage /> },
+              {
+                path: ":workoutId",
+                element: <WorkoutDetailPage />,
+                loader: workoutDetailLoader,
               },
             ],
           },

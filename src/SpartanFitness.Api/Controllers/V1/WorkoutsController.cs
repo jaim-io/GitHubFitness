@@ -10,8 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using SpartanFitness.Application.Authentication.Queries.VerifyIfUserIsCoach;
 using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutById;
+using SpartanFitness.Application.Workouts.Queries.GetWorkoutPage;
+using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.Enums;
 
 namespace SpartanFitness.Api.Controllers.V1;
@@ -39,6 +42,17 @@ public class WorkoutsController : ApiController
     return workoutResult.Match(
       workout => Ok(_mapper.Map<WorkoutResponse>(workout)),
       errors => Problem(errors));
+  }
+
+  [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetWorkoutsPage([FromQuery] PagingRequest request)
+  {
+    var query = _mapper.Map<GetWorkoutPageQuery>(request);
+    ErrorOr<Pagination<Workout>> result = await _mediator.Send(query);
+
+    return result.Match(
+     result => Ok(_mapper.Map<WorkoutPageResponse>(result)),
+     Problem);
   }
 
   [HttpPost("create")]
