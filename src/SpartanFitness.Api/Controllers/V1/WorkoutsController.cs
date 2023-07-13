@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using SpartanFitness.Application.Authentication.Queries.VerifyIfUserIsCoach;
 using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutById;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutPage;
@@ -59,11 +58,10 @@ public class WorkoutsController : ApiController
   [Authorize(Roles = RoleTypes.Coach)]
   public async Task<IActionResult> CreateWorkout(CreateWorkoutRequest request, string coachId)
   {
-    var query = new VerifyIfUserIsCoachQuery(Authorization.GetUserId(HttpContext), coachId);
-    ErrorOr<Coach> isAuthorizedResult = await _mediator.Send(query);
-    if (isAuthorizedResult.IsError)
+    var isCoach = Authorization.CoachIdMatchesClaim(HttpContext, coachId);
+    if (!isCoach)
     {
-      return Problem(isAuthorizedResult.Errors);
+      return Unauthorized();
     }
 
     var command = _mapper.Map<CreateWorkoutCommand>((request, coachId));

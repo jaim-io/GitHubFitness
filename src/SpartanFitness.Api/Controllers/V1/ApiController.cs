@@ -70,10 +70,17 @@ public class ApiController : ControllerBase
 
   protected static class Authorization
   {
-    public static bool IsAdmin(HttpContext context)
-      => context.User.IsInRole(RoleTypes.Administrator);
     public static bool UserIdMatchesClaim(HttpContext context, string userId)
       => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == userId;
+    public static bool CoachIdMatchesClaim(HttpContext context, string coachId)
+    {
+      var claim = context.User.Claims.FirstOrDefault(c => c.Type == $"{RoleTypes.Coach}Id");
+      return claim is not null && claim.Value == coachId;
+    }
+
+    public static bool IsAdmin(HttpContext context)
+      => context.User.IsInRole(RoleTypes.Administrator);
+
     public static string GetUserId(HttpContext context)
       => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
     public static string GetCoachId(HttpContext context)
