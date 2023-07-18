@@ -1,0 +1,472 @@
+import { Fragment, useEffect, useState } from "react";
+import { WorkoutExercise } from "../types/domain/Workout";
+import { Combobox, Transition } from "@headlessui/react";
+import { HiChevronUpDown, HiChevronUp, HiChevronDown } from "react-icons/hi2";
+import Exercise from "../types/domain/Exercise";
+
+type NewWorkoutExercise = WorkoutExercise & { name: string };
+
+const TEMP_DATA: NewWorkoutExercise[] = [
+  {
+    id: "1",
+    name: "Incline dumbell press",
+    orderNumber: 1,
+    exerciseId: "1",
+    sets: 2,
+    minReps: 10,
+    maxReps: 12,
+    exerciseType: "Default",
+  },
+  {
+    id: "2",
+    name: "Bulgarian split squat",
+    orderNumber: 2,
+    exerciseId: "2",
+    sets: 2,
+    minReps: 10,
+    maxReps: 12,
+    exerciseType: "Default",
+  },
+];
+
+const TEMP_EXERCISES: Exercise[] = [
+  {
+    id: "1",
+    name: "Incline dumbell press",
+    description: "",
+    creatorId: "",
+    lastUpdaterId: "",
+    image: "",
+    video: "",
+    muscleGroupIds: [],
+    muscleIds: [],
+    createdDateTime: new Date(),
+    updatedDateTime: new Date(),
+  },
+  {
+    id: "2",
+    name: "Bulgarian split squat",
+    description: "",
+    creatorId: "",
+    lastUpdaterId: "",
+    image: "",
+    video: "",
+    muscleGroupIds: [],
+    muscleIds: [],
+    createdDateTime: new Date(),
+    updatedDateTime: new Date(),
+  },
+];
+
+const EXERCISE_TYPES = ["Default", "Dropset", "Superset"];
+
+const getRandomInt = (max: number): number => Math.floor(Math.random() * max);
+
+const createDefaultValue = (
+  orderNumber: number,
+  exercises: Exercise[],
+): NewWorkoutExercise => {
+  const randomExercise = exercises[getRandomInt(exercises.length)];
+
+  return {
+    id: getRandomInt(100000000).toString(),
+    name: randomExercise.name,
+    orderNumber: orderNumber,
+    exerciseId: randomExercise.id,
+    sets: 0,
+    minReps: 0,
+    maxReps: 0,
+    exerciseType: EXERCISE_TYPES[0],
+  };
+};
+
+const TestWorkouts = () => {
+  console.log(
+    "Note: Remember to disable React.StrictMode when using ShiftUp & ShiftDown.",
+    "React.StrictMode will sometimes call functions twice.",
+    "Since ShiftUp & ShiftDown are not pure functions the functionality will break.",
+  );
+
+  const [exercises, setExercises] = useState<NewWorkoutExercise[]>(TEMP_DATA);
+
+  const onRemove = (orderNumber: number) =>
+    setExercises((prev) => prev.filter((e) => e.orderNumber != orderNumber));
+
+  const onChange = (updatedExercise: NewWorkoutExercise) =>
+    setExercises((prev) =>
+      prev.map((ex) =>
+        ex.orderNumber === updatedExercise.orderNumber ? updatedExercise : ex,
+      ),
+    );
+
+  const shiftDown = (orderNumber: number) =>
+    setExercises((prev) => {
+      if (orderNumber - 1 >= 1) {
+        const target = prev.find((e) => e.orderNumber === orderNumber - 1);
+        const current = prev.find((e) => e.orderNumber === orderNumber);
+
+        if (target && current) {
+          target.orderNumber = target.orderNumber + 1;
+          current.orderNumber = current.orderNumber - 1;
+
+          return prev.map((ex) => {
+            if (ex.orderNumber === orderNumber - 1) {
+              return target;
+            }
+
+            if (ex.orderNumber === orderNumber) {
+              return current;
+            }
+
+            return ex;
+          });
+        }
+      }
+
+      return prev;
+    });
+
+  const shiftUp = (orderNumber: number) =>
+    setExercises((prev) => {
+      if (orderNumber + 1 <= Object.values(exercises).length) {
+        const current = prev.find((e) => e.orderNumber === orderNumber);
+        const target = prev.find((e) => e.orderNumber === orderNumber + 1);
+
+        if (current && target) {
+          current.orderNumber = current.orderNumber + 1;
+          target.orderNumber = target.orderNumber - 1;
+
+          return prev.map((ex) => {
+            if (ex.orderNumber === orderNumber) {
+              return target;
+            }
+
+            if (ex.orderNumber === orderNumber + 1) {
+              return current;
+            }
+
+            return ex;
+          });
+        }
+      }
+
+      return prev;
+    });
+
+  return (
+    <>
+      <div className="grid grid-cols-13 gap-1 ">
+        <span className="border border-x-0 border-t-0 col-span-4 mx-1.5">
+          Exercise
+        </span>
+        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+          Sets
+        </span>
+        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+          Reps-min
+        </span>
+        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+          Reps-max
+        </span>
+        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+          Type
+        </span>
+        <></>
+      </div>
+
+      {exercises
+        .sort((e1, e2) => (e1.orderNumber < e2.orderNumber ? -1 : 1))
+        .map((ex) => (
+          <Row
+            key={ex.id}
+            workoutExercise={ex}
+            onRemove={onRemove}
+            onChange={onChange}
+            onShiftDown={shiftDown}
+            onShiftUp={shiftUp}
+            exercises={TEMP_EXERCISES}
+          />
+        ))}
+      <button
+        type="button"
+        className="mt-1 font-bold bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg px-2 flex justify-center items-center"
+        onClick={() =>
+          setExercises((prev) => [
+            ...prev,
+            createDefaultValue(exercises.length + 1, TEMP_EXERCISES),
+          ])
+        }
+      >
+        &#43;
+      </button>
+    </>
+  );
+};
+
+type RowProps = {
+  exercises: Exercise[];
+  workoutExercise: NewWorkoutExercise;
+  onRemove: (orderNumber: number) => void;
+  onChange: (exercise: NewWorkoutExercise) => void;
+  onShiftDown: (orderNumber: number) => void;
+  onShiftUp: (orderNumber: number) => void;
+};
+
+const Row = ({
+  exercises,
+  workoutExercise,
+  onRemove,
+  onChange,
+  onShiftDown,
+  onShiftUp,
+}: RowProps) => {
+  let exercise = exercises.find((e) => e.id === workoutExercise.exerciseId);
+
+  // The default value for an exercise name is "";
+  if (workoutExercise.name === "" && !exercise) {
+    exercise = exercises[getRandomInt(exercises.length)];
+  } else if (!exercise) {
+    // Raise error
+    return <></>;
+  }
+
+  const [selectedExercise, setSelectedExercise] = useState(exercise);
+
+  const [name, setName] = useState(workoutExercise.name);
+  const [exerciseId, setExerciseId] = useState(workoutExercise.exerciseId);
+  const [sets, setSets] = useState(workoutExercise.sets);
+  const [minReps, setMinReps] = useState(workoutExercise.minReps);
+  const [maxReps, setMaxReps] = useState(workoutExercise.maxReps);
+  const [selectedType, setSelectedType] = useState(
+    workoutExercise.exerciseType,
+  );
+
+  const [nameQuery, setNameQuery] = useState("");
+  const filteredExercises =
+    nameQuery === ""
+      ? exercises
+      : exercises.filter((e) =>
+          e.name.toLowerCase().includes(nameQuery.toLowerCase()),
+        );
+
+  const [typeQuery, setTypeQuery] = useState("");
+  const filteredTypes =
+    typeQuery === ""
+      ? EXERCISE_TYPES
+      : EXERCISE_TYPES.filter((t) =>
+          t.toLowerCase().includes(typeQuery.toLowerCase()),
+        );
+
+  useEffect(() => {
+    onChange({
+      ...workoutExercise,
+      name: name,
+      exerciseId: exerciseId,
+      sets: sets,
+      minReps: minReps,
+      maxReps: maxReps,
+      exerciseType: selectedType,
+    });
+  }, [name, exerciseId, sets, minReps, maxReps, selectedType]);
+
+  return (
+    <div className="flex">
+      <div className="grid grid-cols-13 py-1 gap-1">
+        {/* Exercise selection */}
+        <Combobox
+          value={selectedExercise}
+          onChange={(exercise) => {
+            setSelectedExercise(exercise);
+            setName(exercise.name);
+            setExerciseId(exercise.id);
+          }}
+        >
+          <div className="relative col-span-4">
+            <div className="relative w-full cursor-default rounded-lg shadow-md">
+              <Combobox.Input
+                spellCheck="false"
+                displayValue={(exercise: Exercise) => exercise.name}
+                onChange={(e) => setNameQuery(e.target.value)}
+                className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 bg-black text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline"
+              />
+              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                <HiChevronUpDown
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </Combobox.Button>
+            </div>
+
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              afterLeave={() => setNameQuery("")}
+            >
+              <Combobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
+                {filteredExercises.length === 0 && typeQuery !== "" ? (
+                  <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                    Nothing found.
+                  </div>
+                ) : (
+                  filteredExercises.map((exercise) => (
+                    <Combobox.Option
+                      key={exercise.id}
+                      className={({ active, selected }) =>
+                        `flex cursor-pointer select-none py-2 pr-4 text-whiten rounded-lg pl-3 ${
+                          selected ? "bg-blue" : ""
+                        } ${active && !selected ? "bg-gray" : ""}`
+                      }
+                      value={exercise}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span
+                            className={`block truncate ${
+                              selected ? "font-medium" : "font-normal"
+                            }`}
+                          >
+                            {exercise.name}
+                          </span>
+                        </>
+                      )}
+                    </Combobox.Option>
+                  ))
+                )}
+              </Combobox.Options>
+            </Transition>
+          </div>
+        </Combobox>
+
+        <input
+          value={sets}
+          className="col-span-2 shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (!isNaN(value)) {
+              setSets(value);
+            }
+          }}
+        />
+        <input
+          value={minReps}
+          className="col-span-2 shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (!isNaN(value)) {
+              // Error minReps > maxReps
+              if (minReps === maxReps) {
+                setMaxReps(value);
+              }
+              setMinReps(value);
+            }
+          }}
+        />
+        <input
+          value={maxReps}
+          className="col-span-2 shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (!isNaN(value)) {
+              // Error maxReps < minReps
+              setMaxReps(value);
+            }
+          }}
+        />
+
+        {/* Type selection */}
+        <Combobox value={selectedType} onChange={setSelectedType}>
+          <div className="relative col-span-2">
+            <div className="relative w-full cursor-default rounded-lg shadow-md">
+              <Combobox.Input
+                spellCheck="false"
+                onChange={(e) => setTypeQuery(e.target.value)}
+                className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 bg-black text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline"
+              />
+              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                <HiChevronUpDown
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </Combobox.Button>
+            </div>
+
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              afterLeave={() => setTypeQuery("")}
+            >
+              <Combobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
+                {filteredTypes.length === 0 && typeQuery !== "" ? (
+                  <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                    Nothing found.
+                  </div>
+                ) : (
+                  filteredTypes.map((type) => (
+                    <Combobox.Option
+                      key={type}
+                      className={({ active, selected }) =>
+                        `flex cursor-pointer select-none py-2 pr-4 text-whiten rounded-lg pl-3 ${
+                          selected ? "bg-blue" : ""
+                        } ${active && !selected ? "bg-gray" : ""}`
+                      }
+                      value={type}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span
+                            className={`block truncate ${
+                              selected ? "font-medium" : "font-normal"
+                            }`}
+                          >
+                            {type}
+                          </span>
+                        </>
+                      )}
+                    </Combobox.Option>
+                  ))
+                )}
+              </Combobox.Options>
+            </Transition>
+          </div>
+        </Combobox>
+        <div className="relative align-middle pl-2">
+          <button
+            type="button"
+            className="font-bold bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-2 flex justify-center items-center"
+            onClick={() => onRemove(workoutExercise.orderNumber)}
+          >
+            &times;
+          </button>
+          {/* decrease ordernumber */}
+          <button
+            className="absolute top-0 right-0"
+            type="button"
+            onClick={() => onShiftDown(workoutExercise.orderNumber)}
+          >
+            <HiChevronUp />
+          </button>
+          {/* increase ordernumber */}
+          <button
+            className="absolute bottom-0 right-0"
+            type="button"
+            onClick={() => onShiftUp(workoutExercise.orderNumber)}
+          >
+            <HiChevronDown />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TestWorkouts;
+
+// Change reps
+// IRepetitions
+//  -> StandardReps i.e. 10
+//  -> MindMaxReps i.e. 10-20
+//  -> DiffReps i.e. 10, 12, 20

@@ -13,6 +13,10 @@ export default {
         "light-green": "#2EA043",
         "dark-green": "#238636",
       },
+      gridTemplateColumns: {
+        13: "repeat(13, minmax(0, 1fr))",
+        14: "repeat(14, minmax(0, 1fr))",
+      },
     },
   },
   plugins: [
