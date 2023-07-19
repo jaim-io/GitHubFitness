@@ -1,75 +1,31 @@
 import { Fragment, useEffect, useState } from "react";
-import { WorkoutExercise } from "../types/domain/Workout";
+import { EXERCISE_TYPES, WorkoutExercise } from "../types/domain/Workout";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiChevronUpDown, HiChevronUp, HiChevronDown } from "react-icons/hi2";
 import Exercise from "../types/domain/Exercise";
 
-type NewWorkoutExercise = WorkoutExercise & { name: string };
+export type WorkoutExerciseWrapper = WorkoutExercise & {
+  name: string;
+  muscleGroupIds: string[];
+  muscleIds: string[];
+};
 
-const TEMP_DATA: NewWorkoutExercise[] = [
-  {
-    id: "1",
-    name: "Incline dumbell press",
-    orderNumber: 1,
-    exerciseId: "1",
-    sets: 2,
-    minReps: 10,
-    maxReps: 12,
-    exerciseType: "Default",
-  },
-  {
-    id: "2",
-    name: "Bulgarian split squat",
-    orderNumber: 2,
-    exerciseId: "2",
-    sets: 2,
-    minReps: 10,
-    maxReps: 12,
-    exerciseType: "Default",
-  },
-];
+export const getRandomInt = (max: number): number =>
+  Math.floor(Math.random() * max);
 
-const TEMP_EXERCISES: Exercise[] = [
-  {
-    id: "1",
-    name: "Incline dumbell press",
-    description: "",
-    creatorId: "",
-    lastUpdaterId: "",
-    image: "",
-    video: "",
-    muscleGroupIds: [],
-    muscleIds: [],
-    createdDateTime: new Date(),
-    updatedDateTime: new Date(),
-  },
-  {
-    id: "2",
-    name: "Bulgarian split squat",
-    description: "",
-    creatorId: "",
-    lastUpdaterId: "",
-    image: "",
-    video: "",
-    muscleGroupIds: [],
-    muscleIds: [],
-    createdDateTime: new Date(),
-    updatedDateTime: new Date(),
-  },
-];
-
-const EXERCISE_TYPES = ["Default", "Dropset", "Superset"];
-
-const getRandomInt = (max: number): number => Math.floor(Math.random() * max);
-
-const createDefaultValue = (
+export const createDefaultValue = (
   orderNumber: number,
   exercises: Exercise[],
-): NewWorkoutExercise => {
-  const randomExercise = exercises[getRandomInt(exercises.length)];
+): WorkoutExerciseWrapper => {
+  let randomExercise: Exercise;
+  if (exercises.length >= orderNumber) {
+    randomExercise = exercises[orderNumber - 1];
+  } else {
+    randomExercise = exercises[getRandomInt(exercises.length)];
+  }
 
   return {
-    id: getRandomInt(100000000).toString(),
+    id: getRandomInt(100000000).toString(), // This ID doesn't matter, only used as a key for rendering.
     name: randomExercise.name,
     orderNumber: orderNumber,
     exerciseId: randomExercise.id,
@@ -77,30 +33,38 @@ const createDefaultValue = (
     minReps: 0,
     maxReps: 0,
     exerciseType: EXERCISE_TYPES[0],
+    muscleGroupIds: [],
+    muscleIds: [],
   };
 };
 
-const TestWorkouts = () => {
-  console.log(
-    "Note: Remember to disable React.StrictMode when using ShiftUp & ShiftDown.",
-    "React.StrictMode will sometimes call functions twice.",
-    "Since ShiftUp & ShiftDown are not pure functions the functionality will break.",
-  );
+type Props = {
+  exercises: Exercise[];
+  workoutExercises: WorkoutExerciseWrapper[];
+  setWorkoutExercises: React.Dispatch<
+    React.SetStateAction<WorkoutExerciseWrapper[]>
+  >;
+};
 
-  const [exercises, setExercises] = useState<NewWorkoutExercise[]>(TEMP_DATA);
-
+const EditableWorkoutExerciseTable = ({
+  exercises,
+  workoutExercises,
+  setWorkoutExercises,
+}: Props) => {
   const onRemove = (orderNumber: number) =>
-    setExercises((prev) => prev.filter((e) => e.orderNumber != orderNumber));
+    setWorkoutExercises((prev) =>
+      prev.filter((e) => e.orderNumber != orderNumber),
+    );
 
-  const onChange = (updatedExercise: NewWorkoutExercise) =>
-    setExercises((prev) =>
+  const onChange = (updatedExercise: WorkoutExerciseWrapper) =>
+    setWorkoutExercises((prev) =>
       prev.map((ex) =>
         ex.orderNumber === updatedExercise.orderNumber ? updatedExercise : ex,
       ),
     );
 
   const shiftDown = (orderNumber: number) =>
-    setExercises((prev) => {
+    setWorkoutExercises((prev) => {
       if (orderNumber - 1 >= 1) {
         const target = prev.find((e) => e.orderNumber === orderNumber - 1);
         const current = prev.find((e) => e.orderNumber === orderNumber);
@@ -127,8 +91,8 @@ const TestWorkouts = () => {
     });
 
   const shiftUp = (orderNumber: number) =>
-    setExercises((prev) => {
-      if (orderNumber + 1 <= Object.values(exercises).length) {
+    setWorkoutExercises((prev) => {
+      if (orderNumber + 1 <= Object.values(workoutExercises).length) {
         const current = prev.find((e) => e.orderNumber === orderNumber);
         const target = prev.find((e) => e.orderNumber === orderNumber + 1);
 
@@ -174,7 +138,7 @@ const TestWorkouts = () => {
         <></>
       </div>
 
-      {exercises
+      {workoutExercises
         .sort((e1, e2) => (e1.orderNumber < e2.orderNumber ? -1 : 1))
         .map((ex) => (
           <Row
@@ -184,16 +148,16 @@ const TestWorkouts = () => {
             onChange={onChange}
             onShiftDown={shiftDown}
             onShiftUp={shiftUp}
-            exercises={TEMP_EXERCISES}
+            exercises={exercises}
           />
         ))}
       <button
         type="button"
         className="mt-1 font-bold bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg px-2 flex justify-center items-center"
         onClick={() =>
-          setExercises((prev) => [
+          setWorkoutExercises((prev) => [
             ...prev,
-            createDefaultValue(exercises.length + 1, TEMP_EXERCISES),
+            createDefaultValue(workoutExercises.length + 1, exercises),
           ])
         }
       >
@@ -205,9 +169,9 @@ const TestWorkouts = () => {
 
 type RowProps = {
   exercises: Exercise[];
-  workoutExercise: NewWorkoutExercise;
+  workoutExercise: WorkoutExerciseWrapper;
   onRemove: (orderNumber: number) => void;
-  onChange: (exercise: NewWorkoutExercise) => void;
+  onChange: (exercise: WorkoutExerciseWrapper) => void;
   onShiftDown: (orderNumber: number) => void;
   onShiftUp: (orderNumber: number) => void;
 };
@@ -240,6 +204,10 @@ const Row = ({
   const [selectedType, setSelectedType] = useState(
     workoutExercise.exerciseType,
   );
+  const [muscleIds, setMuscleIds] = useState<string[]>(exercise.muscleIds);
+  const [muscleGroupIds, setMuscleGroupIds] = useState<string[]>(
+    exercise.muscleGroupIds,
+  );
 
   const [nameQuery, setNameQuery] = useState("");
   const filteredExercises =
@@ -266,6 +234,8 @@ const Row = ({
       minReps: minReps,
       maxReps: maxReps,
       exerciseType: selectedType,
+      muscleIds: muscleIds,
+      muscleGroupIds: muscleGroupIds,
     });
   }, [name, exerciseId, sets, minReps, maxReps, selectedType]);
 
@@ -279,6 +249,8 @@ const Row = ({
             setSelectedExercise(exercise);
             setName(exercise.name);
             setExerciseId(exercise.id);
+            setMuscleIds(exercise.muscleIds);
+            setMuscleGroupIds(exercise.muscleGroupIds);
           }}
         >
           <div className="relative col-span-4">
@@ -304,7 +276,7 @@ const Row = ({
               leaveTo="opacity-0"
               afterLeave={() => setNameQuery("")}
             >
-              <Combobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
+              <Combobox.Options className="z-10 absolute mt-1 max-h-40 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
                 {filteredExercises.length === 0 && typeQuery !== "" ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     Nothing found.
@@ -399,7 +371,7 @@ const Row = ({
               leaveTo="opacity-0"
               afterLeave={() => setTypeQuery("")}
             >
-              <Combobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
+              <Combobox.Options className="z-10 absolute mt-1 max-h-40 w-full overflow-auto bg-black py-1 px-1 text-base shadow-lg sm:text-sm border border-gray rounded-lg">
                 {filteredTypes.length === 0 && typeQuery !== "" ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     Nothing found.
@@ -433,7 +405,7 @@ const Row = ({
             </Transition>
           </div>
         </Combobox>
-        <div className="relative align-middle pl-2">
+        <div className="relative align-middle pl-1.5">
           <button
             type="button"
             className="font-bold bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-2 flex justify-center items-center"
@@ -441,17 +413,15 @@ const Row = ({
           >
             &times;
           </button>
-          {/* decrease ordernumber */}
           <button
-            className="absolute top-0 right-0"
+            className="absolute top-0 right-1 hover:text-blue"
             type="button"
             onClick={() => onShiftDown(workoutExercise.orderNumber)}
           >
             <HiChevronUp />
           </button>
-          {/* increase ordernumber */}
           <button
-            className="absolute bottom-0 right-0"
+            className="absolute bottom-0 right-1 hover:text-blue"
             type="button"
             onClick={() => onShiftUp(workoutExercise.orderNumber)}
           >
@@ -463,7 +433,7 @@ const Row = ({
   );
 };
 
-export default TestWorkouts;
+export default EditableWorkoutExerciseTable;
 
 // Change reps
 // IRepetitions

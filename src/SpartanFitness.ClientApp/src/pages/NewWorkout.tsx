@@ -1,24 +1,104 @@
 import { FormEvent, useState } from "react";
-import { TbGhost2Filled } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import EditableWorkoutExerciseTable, {
+  WorkoutExerciseWrapper,
+  createDefaultValue as createDefaultWorkoutExercise,
+} from "../components/EditableWorkoutExerciseTable";
 import LoadingIcon from "../components/Icons/LoadingIcon";
-import Select from "../components/Select";
-import TestWorkouts from "../components/TestWorkouts";
+import useExercises from "../hooks/useExercises";
+import axios from "axios";
+import Workout, { WorkoutExercise } from "../types/domain/Workout";
+import { toast } from "react-toastify";
+import Exception from "../types/domain/Exception";
+
+const WORKOUT_ENDPOINT = `${import.meta.env.VITE_API_BASE}/workouts/create`;
 
 const NewWorkoutPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const [, setError] = useState<Exception>();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [muscleIds, setMuscleIds] = useState<string[]>();
-  const [muscleGroupIds, setMuscleGroupIds] = useState<string[]>();
+  const [exercises, , exercisesLoading] = useExercises();
+
+  const defaultOrderNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
+  const defaultWorkoutExercises = defaultOrderNumbers.map((n) =>
+    createDefaultWorkoutExercise(n, exercises ?? []),
+  );
+  const [workoutExercises, setWorkoutExercises] = useState<
+    WorkoutExerciseWrapper[]
+  >(defaultWorkoutExercises);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsLoading(true);
+
+    try {
+      await axios
+        .post<Workout>(
+          WORKOUT_ENDPOINT,
+          {
+            name: name,
+            description: description,
+            workoutExercises: workoutExercises.map(
+              (we) => we as WorkoutExercise,
+            ),
+            image: image,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        )
+        .then((res) => {
+          toast.success("Workout has been created", {
+            toastId: "workout-created",
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+          setIsLoading(false);
+
+          navigate(`/workouts/${res.data.id}`);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          setError({
+            message: err.message,
+            code: err.code,
+          });
+          toast.error(
+            err.code == "ERR_NETWORK"
+              ? "Unable to reach the server"
+              : err.response.statusText,
+            {
+              toastId: err.code,
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            },
+          );
+        });
+    } catch {
+      /* empty */
+    }
   };
 
   return (
@@ -70,7 +150,11 @@ const NewWorkoutPage = () => {
           </div>
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
 
-          <TestWorkouts />
+          <EditableWorkoutExerciseTable
+            exercises={exercises ?? []}
+            workoutExercises={workoutExercises}
+            setWorkoutExercises={setWorkoutExercises}
+          />
 
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
           <div className="w-full relative mt-6">

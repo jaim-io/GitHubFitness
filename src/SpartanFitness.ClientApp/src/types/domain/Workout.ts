@@ -21,4 +21,6 @@ export type WorkoutExercise = {
   exerciseType: string;
 };
 
+export const EXERCISE_TYPES = ["Default", "Dropset", "Superset"];
+
 export default Workout;
