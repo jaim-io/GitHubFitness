@@ -37,7 +37,7 @@ const WorkoutDetailPage = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
-    Object.values(auth.user!.savedExerciseIds ?? []).includes(workout.id),
+    Object.values(auth.user!.savedWorkoutIds ?? []).includes(workout.id),
   );
 
   let musclesAreLoading = false;
@@ -99,7 +99,7 @@ const WorkoutDetailPage = () => {
       .patch(
         `${USER_ENDPOINT}/${auth.user?.id}/saved/workouts/${action}`,
         {
-          exerciseId: workout.id,
+          workoutId: workout.id,
         },
         {
           headers: {
@@ -117,6 +117,8 @@ const WorkoutDetailPage = () => {
         }
       })
       .catch((err) => {
+        console.log(auth.user);
+
         toast.error(
           err.code == "ERR_NETWORK"
             ? "Unable to reach the server"

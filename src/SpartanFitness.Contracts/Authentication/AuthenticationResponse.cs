@@ -10,6 +10,7 @@ public record AuthenticationResponse(
   List<string> SavedExerciseIds,
   List<string> SavedMuscleIds,
   List<string> SavedMuscleGroupIds,
+  List<string> SavedWorkoutIds,
   string Token,
   string RefreshToken);
 
