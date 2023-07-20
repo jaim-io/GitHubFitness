@@ -23,11 +23,17 @@ import Muscle from "../types/domain/Muscle";
 import MuscleGroup from "../types/domain/MuscleGroup";
 import Workout, { WorkoutExercise } from "../types/domain/Workout";
 import useExercisesByIds from "../hooks/useExercisesByIds";
+import WorkoutExerciseTable from "../components/WorkoutExerciseTable";
+import moment from "moment";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
 const WorkoutDetailPage = () => {
   const workout = useLoaderData() as Workout;
+  const updatedDateTime = moment(workout.updatedDateTime).format(
+    "MMMM Do YYYY, h:mm:ss a",
+  );
+
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
@@ -215,6 +221,13 @@ const WorkoutDetailPage = () => {
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
             <p className="pt-4 whitespace-pre-line">{workout.description}</p>
           </div>
+
+          {workoutExercises && (
+            <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6  mt-4">
+              <WorkoutExerciseTable workoutExercises={workoutExercises} />
+            </div>
+          )}
+
           <div className="mt-4">
             <div className="absolute left-0 w-[30%] flex items-start">
               <button
@@ -236,6 +249,10 @@ const WorkoutDetailPage = () => {
                 </Link>
               )}
             </div>
+            <div className="absolute right-0 py-1 px-3 border border-gray rounded-lg flex items-center text-light-gray ml-2 justify-center">
+              Last updated:{" "}
+              <span className="text-blue ml-1">{updatedDateTime}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -249,7 +266,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   // Will raise an AxiosError if fetching fails
 
   const response = await axios.get<Workout>(
-    `${import.meta.env.VITE_API_BASE}/workouts/${params.workoutId}`,
+    `${import.meta.env.VITE_API_BASE}/coaches/${params.coachId}/workouts/${
+      params.workoutId
+    }`,
     {
       headers: {
         Accept: "application/json",

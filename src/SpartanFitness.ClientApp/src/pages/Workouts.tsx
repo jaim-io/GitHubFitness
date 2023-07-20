@@ -1,6 +1,11 @@
 import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import LoadingIcon from "../components/Icons/LoadingIcon";
 import ListBox from "../components/ListBox";
 import NewButton from "../components/NewButton";
@@ -38,6 +43,15 @@ const SORT_OPTIONS = [
 
 const WorkoutsPage = () => {
   const { auth } = useAuth();
+  const params = useParams();
+  const location = useLocation();
+  const routeValidator = new RegExp(`/all/workouts$`);
+
+  const isAllWorkoutsRoute = routeValidator.test(location.pathname);
+  const isAuthorizedCoach =
+    params.coachId &&
+    auth.user?.roles.find((r) => r.name === "Coach")?.id == params.coachId;
+  const showNewWorkoutsButton = isAllWorkoutsRoute || isAuthorizedCoach;
 
   // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,7 +143,7 @@ const WorkoutsPage = () => {
             buttonText={"Sort by:"}
             onChange={handleSort}
           />
-          {auth.user && <NewButton />}
+          {auth.user && showNewWorkoutsButton && <NewButton />}
         </ul>
 
         <ul className="relative min-h-[10rem]">
@@ -139,7 +153,7 @@ const WorkoutsPage = () => {
             }`}
           >
             {workoutPage &&
-              workoutPage.exercises.map((w) => (
+              workoutPage.workouts.map((w) => (
                 <WorkoutCard workout={w} key={w.id} />
               ))}
           </div>
@@ -152,7 +166,7 @@ const WorkoutsPage = () => {
           )}
         </ul>
 
-        {workoutPage && workoutPage.exercises.length >= 1 && (
+        {workoutPage && workoutPage.workouts.length >= 1 && (
           <PageNavigation
             pageNumber={workoutPage.pageNumber}
             pageCount={workoutPage.pageCount}
@@ -161,9 +175,9 @@ const WorkoutsPage = () => {
           />
         )}
 
-        {workoutPage && workoutPage.exercises.length === 0 && (
+        {workoutPage && workoutPage.workouts.length === 0 && (
           <p className="flex justify-center items-center">
-            No exercises found <TbGhost2Filled className="ml-1" size={20} />
+            No workouts found <TbGhost2Filled className="ml-1" size={20} />
           </p>
         )}
       </div>

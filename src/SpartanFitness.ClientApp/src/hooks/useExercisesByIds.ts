@@ -6,6 +6,16 @@ import Exercise from "../types/domain/Exercise";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 
+const createQueryString = (ids: string[]): string => {
+  const params: string[] = [];
+
+  ids.forEach((id) => params.push(`id=${id}`));
+
+  const queryString = `?${params.join("&")}`;
+
+  return ids.length == 0 ? "" : queryString;
+};
+
 const useExercisesByIds = (
   ids: string[],
 ): [Exercise[] | undefined, Exception | undefined, boolean] => {
@@ -13,13 +23,15 @@ const useExercisesByIds = (
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const queryString = createQueryString(ids);
+
   useEffect(() => {
     const fetchExercise = async () => {
       setIsLoading(true);
 
       try {
         await axios
-          .get<Exercise[]>(`${EXERCISE_ENDPOINT}/${ids}`, {
+          .get<Exercise[]>(`${EXERCISE_ENDPOINT}/${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,

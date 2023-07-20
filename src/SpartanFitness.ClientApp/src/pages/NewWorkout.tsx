@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EditableWorkoutExerciseTable, {
   WorkoutExerciseWrapper,
@@ -10,10 +10,12 @@ import axios from "axios";
 import Workout, { WorkoutExercise } from "../types/domain/Workout";
 import { toast } from "react-toastify";
 import Exception from "../types/domain/Exception";
-
-const WORKOUT_ENDPOINT = `${import.meta.env.VITE_API_BASE}/workouts/create`;
+import useAuth from "../hooks/useAuth";
 
 const NewWorkoutPage = () => {
+  const { auth } = useAuth();
+  const coachRole = auth.user!.roles.find((r) => r.name === "Coach")!;
+
   const navigate = useNavigate();
   const [, setError] = useState<Exception>();
 
@@ -23,14 +25,21 @@ const NewWorkoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [exercises, , exercisesLoading] = useExercises();
-
+  // TODO: Fetch all muscles & muscleGroups
+  // TODO: Fix exercise loading
   const defaultOrderNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
-  const defaultWorkoutExercises = defaultOrderNumbers.map((n) =>
-    createDefaultWorkoutExercise(n, exercises ?? []),
-  );
   const [workoutExercises, setWorkoutExercises] = useState<
     WorkoutExerciseWrapper[]
-  >(defaultWorkoutExercises);
+  >([]);
+
+  useEffect(() => {
+    if (exercises) {
+      const defaultWorkoutExercises = defaultOrderNumbers.map((n) =>
+        createDefaultWorkoutExercise(n, exercises),
+      );
+      setWorkoutExercises(defaultWorkoutExercises);
+    }
+  }, [exercises]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +49,9 @@ const NewWorkoutPage = () => {
     try {
       await axios
         .post<Workout>(
-          WORKOUT_ENDPOINT,
+          `${import.meta.env.VITE_API_BASE}/coaches/${
+            coachRole.id
+          }/workouts/create`,
           {
             name: name,
             description: description,
@@ -71,7 +82,11 @@ const NewWorkoutPage = () => {
 
           setIsLoading(false);
 
-          navigate(`/workouts/${res.data.id}`);
+          navigate(
+            `${import.meta.env.VITE_API_BASE}/coaches/${
+              res.data.coachId
+            }/workouts/${res.data.id}`,
+          );
         })
         .catch((err) => {
           setIsLoading(false);
@@ -150,11 +165,18 @@ const NewWorkoutPage = () => {
           </div>
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
 
-          <EditableWorkoutExerciseTable
-            exercises={exercises ?? []}
-            workoutExercises={workoutExercises}
-            setWorkoutExercises={setWorkoutExercises}
-          />
+          {exercisesLoading || exercisesLoading == undefined ? (
+            <div className="flex items-center justify-center animate-pulse">
+              <LoadingIcon classNames="mr-2 text-white fill-white w-5 h-5" />
+              <p>Exercises are loading...</p>
+            </div>
+          ) : (
+            <EditableWorkoutExerciseTable
+              exercises={exercises ?? []}
+              workoutExercises={workoutExercises}
+              setWorkoutExercises={setWorkoutExercises}
+            />
+          )}
 
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
           <div className="w-full relative mt-6">

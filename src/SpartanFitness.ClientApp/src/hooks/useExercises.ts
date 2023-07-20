@@ -16,7 +16,7 @@ const useExercises = (): [
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchExercise = async () => {
+    const fetchExercisesAsync = async () => {
       setIsLoading(true);
 
       try {
@@ -59,7 +59,7 @@ const useExercises = (): [
       }
     };
 
-    fetchExercise();
+    fetchExercisesAsync();
   }, []);
 
   return [exercises, error, isLoading];

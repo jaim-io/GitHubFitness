@@ -120,19 +120,19 @@ const EditableWorkoutExerciseTable = ({
   return (
     <>
       <div className="grid grid-cols-13 gap-1 ">
-        <span className="border border-x-0 border-t-0 col-span-4 mx-1.5">
+        <span className="border border-x-0 border-t-0 border-blue col-span-4 mx-1.5">
           Exercise
         </span>
-        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+        <span className="border border-x-0 border-t-0 border-blue col-span-2 mx-1.5">
           Sets
         </span>
-        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+        <span className="border border-x-0 border-t-0 border-blue col-span-2 mx-1.5">
           Reps-min
         </span>
-        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+        <span className="border border-x-0 border-t-0 border-blue col-span-2 mx-1.5">
           Reps-max
         </span>
-        <span className="border border-x-0 border-t-0 col-span-2 mx-1.5">
+        <span className="border border-x-0 border-t-0 border-blue col-span-2 mx-1.5">
           Type
         </span>
         <></>

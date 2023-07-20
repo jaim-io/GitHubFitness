@@ -97,15 +97,39 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "workouts",
-            element: <WorkoutLayout />,
+            path: "coaches",
             children: [
-              { index: true, element: <WorkoutsPage /> },
-              { path: "new", element: <NewWorkoutPage /> },
+              // { index: true, element: <CoachesPage /> },
               {
-                path: ":workoutId",
-                element: <WorkoutDetailPage />,
-                loader: workoutDetailLoader,
+                path: ":coachId",
+                // element: <CoachDetailPage />,
+                // loader: coachDetailLoader,
+                children: [
+                  {
+                    path: "workouts",
+                    element: <WorkoutLayout />,
+                    children: [
+                      // { index: true, element: <CoachWorkoutsPage /> }, // All workouts of a coach with given id
+                      { path: "new", element: <NewWorkoutPage /> },
+                      {
+                        path: ":workoutId",
+                        element: <WorkoutDetailPage />,
+                        loader: workoutDetailLoader,
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                path: "all",
+                // element: <CoachesPage />,
+                children: [
+                  {
+                    path: "workouts",
+                    element: <WorkoutLayout />,
+                    children: [{ index: true, element: <WorkoutsPage /> }],
+                  },
+                ],
               },
             ],
           },

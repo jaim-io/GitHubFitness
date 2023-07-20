@@ -189,7 +189,7 @@ const ExerciseDetailPage = () => {
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
             <p className="pt-4 whitespace-pre-line">{exercise.description}</p>
           </div>
-          <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4 ">
+          <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4">
             <iframe
               className="w-full h-[18.125rem]"
               src={exercise.video}

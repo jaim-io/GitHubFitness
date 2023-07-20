@@ -6,9 +6,11 @@ import Exception from "../types/domain/Exception";
 import Page from "../types/domain/Page";
 import Workout from "../types/domain/Workout";
 
-const WORKOUT_ENDPOINT = `${import.meta.env.VITE_API_BASE}/workouts/page`;
+const WORKOUT_ENDPOINT = `${
+  import.meta.env.VITE_API_BASE
+}/coaches/all/workouts/page`;
 
-export type WorkoutsPage = { exercises: Workout[] } & Page;
+export type WorkoutsPage = { workouts: Workout[] } & Page;
 
 type PageArguments = {
   page?: number;

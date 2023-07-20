@@ -29,7 +29,7 @@ const WorkoutCard = ({ workout }: Props) => {
         {workout.description}
       </p>
       <Link
-        to={workout.id}
+        to={`/coaches/${workout.coachId}/workouts/${workout.id}`}
         className="bg-dark-green hover:bg-light-green text-white py-1.5 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full block text-center mt-3 text-sm border border-gray"
       >
         View
