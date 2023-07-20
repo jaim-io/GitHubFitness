@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
+using SpartanFitness.Application.Workouts.Queries.GetAllWorkouts;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutById;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutPage;
 using SpartanFitness.Contracts.Common;
@@ -43,7 +44,18 @@ public class WorkoutsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  [HttpGet("/api/v{version:apiVersion}/coaches/all/[controller]")]
+  public async Task<IActionResult> GetAllWorkouts()
+  {
+    var query = new GetAllWorkoutsQuery();
+    ErrorOr<List<Workout>> workoutResult = await _mediator.Send(query);
+
+    return workoutResult.Match(
+      workout => Ok(_mapper.Map<List<WorkoutResponse>>(workout)),
+      errors => Problem(errors));
+  }
+
+  [HttpGet("/api/v{version:apiVersion}/coaches/all/[controller]/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
   public async Task<IActionResult> GetWorkoutsPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetWorkoutPageQuery>(request);

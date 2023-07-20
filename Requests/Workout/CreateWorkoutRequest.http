@@ -1,6 +1,6 @@
 @host=http://localhost:8001
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyODk2NmY3MC03OGI0LTQxNjQtYTk1ZS1lYjVjOGMxZTdmYTYiLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6IjAxOTBmMDkwLTU5Y2YtNDUyNy04YTIyLTlkMTdmZTMwNDkwYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giXSwiZXhwIjoxNjc5MTY3MjI4LCJpc3MiOiJTcGFydGFuRml0bmVzcyIsImF1ZCI6IlNwYXJ0YW5GaXRuZXNzIn0.eTSJNbDqsTQz3SSJRCo0NEcRepswShKsxQ5oKUC0ctc
-@coachId=26081544-1d9f-4297-a297-fa87232c5155
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMjUxNDQ0MC0yZTBmLTQwZTQtYjJmNC05MmM4NTEyZDYzNDciLCJnaXZlbl9uYW1lIjoiSmFtZXkiLCJmYW1pbHlfbmFtZSI6IlNjaGFhcCIsImp0aSI6ImQ2OWZmYzllLWE4MWMtNGZjNi1hZWQyLTkwZWVmMzg3MmEyZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJVc2VyIiwiQ29hY2giLCJBZG1pbmlzdHJhdG9yIl0sIlVzZXJJZCI6ImUyNTE0NDQwLTJlMGYtNDBlNC1iMmY0LTkyYzg1MTJkNjM0NyIsIkNvYWNoSWQiOiI0YzQ1Njc1Yy1kY2JhLTRjNDMtYjZmYi1hNzk3NTYwMWM3MTkiLCJBZG1pbmlzdHJhdG9ySWQiOiIwNWZmNTBlNS0zMWNkLTRlNjUtOTM0ZC03ZDAwMjRhMjZmOWEiLCJleHAiOjE2ODk4NDcxNzUsImlzcyI6IlNwYXJ0YW5GaXRuZXNzIiwiYXVkIjoiU3BhcnRhbkZpdG5lc3MifQ.Gf7Ykr6to1qV9DanasqieDz6--Tclr6Bju3OVvt3bZw
+@coachId=4c45675c-dcba-4c43-b6fb-a7975601c719
 
 ### Create without exercises
 POST {{host}}/api/v1/coaches/{{coachId}}/workouts/create
@@ -24,7 +24,7 @@ Authorization: bearer {{token}}
     "image": "https://google.com",
     "workoutExercises": [
         {
-            "exerciseId": "afd93519-4e8a-4d46-bf56-5f164907044b",
+            "exerciseId": "786208e6-b602-4d52-85ef-510f1fecd987",
             "orderNumber": "1",
             "sets": "3",
             "minReps": "8",
@@ -32,7 +32,7 @@ Authorization: bearer {{token}}
             "exerciseType": "Default"
         },
           {
-            "exerciseId": "b7bb2b57-bb25-4472-a594-d2288331f8e9",
+            "exerciseId": "6681582f-ff14-4d73-9007-583975947ab6",
             "orderNumber": "2",
             "sets": "2",
             "minReps": "8",

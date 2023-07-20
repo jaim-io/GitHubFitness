@@ -19,9 +19,6 @@ public class GetAllExercisesQueryHandler : IRequestHandler<GetAllExercisesQuery,
   public async Task<ErrorOr<List<Exercise>>> Handle(GetAllExercisesQuery request, CancellationToken cancellationToken)
   {
     var exercises = await _exerciseRepository.GetAllAsync();
-
-    return exercises.Count() > 0
-      ? exercises.ToList()
-      : new();
+    return exercises.ToList();
   }
 }

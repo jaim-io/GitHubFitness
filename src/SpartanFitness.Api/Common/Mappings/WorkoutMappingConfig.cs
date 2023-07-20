@@ -26,6 +26,7 @@ public class WorkoutMappingConfig : IRegister
 
     config.NewConfig<WorkoutExercise, WorkoutExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.ExerciseId, src => src.ExerciseId.Value.ToString())
       .Map(dest => dest.MinReps, src => src.RepRange.MinReps)
       .Map(dest => dest.MaxReps, src => src.RepRange.MaxReps)
       .Map(dest => dest.ExerciseType, src => src.ExerciseType.Name);
@@ -48,6 +49,7 @@ public class WorkoutMappingConfig : IRegister
 
     config.NewConfig<WorkoutExercise, WorkoutPageWorkoutExerciseResponse>()
       .Map(dest => dest.Id, src => src.Id.Value.ToString())
+      .Map(dest => dest.ExerciseId, src => src.ExerciseId.Value.ToString())
       .Map(dest => dest.MinReps, src => src.RepRange.MinReps)
       .Map(dest => dest.MaxReps, src => src.RepRange.MaxReps)
       .Map(dest => dest.ExerciseType, src => src.ExerciseType.Name);
