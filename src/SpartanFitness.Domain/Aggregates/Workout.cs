@@ -70,4 +70,33 @@ public sealed class Workout : AggregateRoot<WorkoutId, Guid>
       DateTime.UtcNow,
       DateTime.UtcNow);
   }
+
+  public void SetName(string name)
+  {
+    Name = name;
+  }
+
+  public void SetDescription(string description)
+  {
+    Description = description;
+  }
+
+  public void SetMuscleGroupIds(List<MuscleGroupId> ids)
+  {
+    _muscleGroupIds = ids;
+  }
+
+  public void SetMuscleIds(List<MuscleId> ids)
+  {
+    _muscleIds = ids;
+  }
+
+  public void SetImage(string image)
+  {
+    Image = image;
+  }
+
+  public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
+
+  public void SetWorkoutExercises(List<WorkoutExercise> workoutExercises) => _workoutExercises = workoutExercises;
 }

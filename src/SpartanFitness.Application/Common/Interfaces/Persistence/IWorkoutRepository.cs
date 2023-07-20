@@ -9,4 +9,5 @@ public interface IWorkoutRepository
   Task<Workout?> GetByIdAsync(WorkoutId id);
   Task<IEnumerable<Workout>> GetAllAsync();
   Task<List<Workout>> GetBySearchQueryAsync(string searchQuery);
+  Task UpdateAsync(Workout workout);
 }

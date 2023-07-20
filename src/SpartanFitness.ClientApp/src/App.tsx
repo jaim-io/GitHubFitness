@@ -31,6 +31,7 @@ import WorkoutDetailPage, {
   loader as workoutDetailLoader,
 } from "./pages/WorkoutDetail";
 import NewWorkoutPage from "./pages/NewWorkout";
+import EditWorkoutPage from "./pages/EditWorkout";
 
 const router = createBrowserRouter([
   {
@@ -114,6 +115,11 @@ const router = createBrowserRouter([
                       {
                         path: ":workoutId",
                         element: <WorkoutDetailPage />,
+                        loader: workoutDetailLoader,
+                      },
+                      {
+                        path: ":workoutId/edit",
+                        element: <EditWorkoutPage />,
                         loader: workoutDetailLoader,
                       },
                     ],

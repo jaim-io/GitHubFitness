@@ -214,7 +214,7 @@ const WorkoutDetailPage = () => {
           </div>
         </div>
         <div className="relative">
-          <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6">
+          <div className="border border-gray w-[45rem] h-fit rounded-lg px-6 py-6">
             <h1 className="text-light-gray flex items-center">
               <BiDumbbell className="mr-1" size={16} />
               Exercise<span className="mx-1">/</span>
@@ -225,7 +225,7 @@ const WorkoutDetailPage = () => {
           </div>
 
           {workoutExercises && (
-            <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6  mt-4">
+            <div className="border border-gray w-[45rem] h-fit rounded-lg px-6 py-6  mt-4">
               <WorkoutExerciseTable workoutExercises={workoutExercises} />
             </div>
           )}
@@ -245,7 +245,7 @@ const WorkoutDetailPage = () => {
               ) && (
                 <Link
                   className="bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg px-3 h-[30px] flex items-center"
-                  to={"edit"}
+                  to={`/coaches/${workout.coachId}/workouts/${workout.id}/edit`}
                 >
                   <AiFillEdit className="mr-1" size={18} />
                 </Link>

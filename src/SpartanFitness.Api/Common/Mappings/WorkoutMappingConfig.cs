@@ -1,6 +1,7 @@
 using Mapster;
 
 using SpartanFitness.Application.Workouts.Commands.CreateWorkout;
+using SpartanFitness.Application.Workouts.Commands.UpdateWorkout;
 using SpartanFitness.Application.Workouts.Queries.GetWorkoutPage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Workouts;
@@ -15,6 +16,10 @@ public class WorkoutMappingConfig : IRegister
   public void Register(TypeAdapterConfig config)
   {
     config.NewConfig<(CreateWorkoutRequest Request, string CoachId), CreateWorkoutCommand>()
+      .Map(dest => dest.CoachId, src => src.CoachId)
+      .Map(dest => dest, src => src.Request);
+
+    config.NewConfig<(UpdateWorkoutRequest Request, string CoachId), UpdateWorkoutCommand>()
       .Map(dest => dest.CoachId, src => src.CoachId)
       .Map(dest => dest, src => src.Request);
 

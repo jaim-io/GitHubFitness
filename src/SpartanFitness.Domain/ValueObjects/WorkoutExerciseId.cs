@@ -16,6 +16,11 @@ public sealed class WorkoutExerciseId : ValueObject
         return new(value);
     }
 
+    public static WorkoutExerciseId Create(string value)
+    {
+        return new(Guid.Parse(value));
+    }
+
     public static WorkoutExerciseId CreateUnique()
     {
         return new(Guid.NewGuid());

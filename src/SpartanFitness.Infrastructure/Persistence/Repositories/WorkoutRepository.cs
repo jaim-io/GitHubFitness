@@ -41,4 +41,10 @@ public class WorkoutRepository
       .Where(w => (w.Name.ToLower().Contains(query) || w.Description.ToLower().Contains(query)))
       .ToListAsync();
   }
+
+  public async Task UpdateAsync(Workout workout)
+  {
+    _dbContext.Update(workout);
+    await _dbContext.SaveChangesAsync();
+  }
 }

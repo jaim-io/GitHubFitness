@@ -24,8 +24,12 @@ export const createDefaultValue = (
     randomExercise = exercises[getRandomInt(exercises.length)];
   }
 
+  const randomNumbers: number[] = [];
+  for (let i = 0; i < 12; i++) {
+    randomNumbers.push(getRandomInt(10));
+  }
   return {
-    id: getRandomInt(100000000).toString(), // This ID doesn't matter, only used as a key for rendering.
+    id: `00000000-0000-0000-0000-${randomNumbers.join("")}`, // This ID doesn't matter, only used as a key for rendering.
     name: randomExercise.name,
     orderNumber: orderNumber,
     exerciseId: randomExercise.id,
@@ -51,10 +55,21 @@ const EditableWorkoutExerciseTable = ({
   workoutExercises,
   setWorkoutExercises,
 }: Props) => {
-  const onRemove = (orderNumber: number) =>
-    setWorkoutExercises((prev) =>
-      prev.filter((e) => e.orderNumber != orderNumber),
-    );
+  const onRemove = (orderNumber: number) => {
+    setWorkoutExercises((prev) => {
+      const result: WorkoutExerciseWrapper[] = [];
+      prev.forEach((we) => {
+        if (we.orderNumber === orderNumber) {
+          return;
+        }
+        if (we.orderNumber > orderNumber) {
+          we.orderNumber--;
+        }
+        result.push(we);
+      });
+      return result;
+    });
+  };
 
   const onChange = (updatedExercise: WorkoutExerciseWrapper) =>
     setWorkoutExercises((prev) =>
@@ -119,6 +134,9 @@ const EditableWorkoutExerciseTable = ({
 
   return (
     <>
+      <button type="button" onClick={() => console.log(workoutExercises)}>
+        x
+      </button>
       <div className="grid grid-cols-13 gap-1 ">
         <span className="border border-x-0 border-t-0 border-blue col-span-4 mx-1.5">
           Exercise

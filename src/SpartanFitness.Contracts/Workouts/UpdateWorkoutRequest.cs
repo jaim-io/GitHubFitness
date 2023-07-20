@@ -1,12 +1,14 @@
 namespace SpartanFitness.Contracts.Workouts;
 
-public record CreateWorkoutRequest(
+public record UpdateWorkoutRequest(
+  string Id,
   string Name,
   string Description,
   string Image,
-  List<CreateWorkoutExerciseRequest>? WorkoutExercises);
+  List<UpdateWorkoutExerciseRequest>? WorkoutExercises);
 
-public record CreateWorkoutExerciseRequest(
+public record UpdateWorkoutExerciseRequest(
+  string Id,
   string ExerciseId,
   uint OrderNumber,
   uint Sets,

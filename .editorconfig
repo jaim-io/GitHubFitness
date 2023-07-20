@@ -363,6 +363,9 @@ dotnet_naming_style.s_camelcase.word_separator =
 dotnet_naming_style.s_camelcase.capitalization = camel_case
 
 [*.cs]
+# SA1005: Single line comment should begin with a space
+dotnet_diagnostic.SA1005.severity = none
+
 # SA1028: Code should not contain trailing whitespace
 dotnet_diagnostic.SA1028.severity = none
 
@@ -436,6 +439,14 @@ dotnet_diagnostic.SA1402.severity = none
 [CreateWorkoutCommandHandler.cs]
 # SA1118: The parameter spans multiple lines
 dotnet_diagnostic.SA1118.severity = none
+
+[UpdateWorkoutCommandHandler.cs]
+# SA1009: Closing parenthesis should not be preceded by a space 
+dotnet_diagnostic.SA1009.severity = none
+
+# SA1118: The parameter spans multiple lines
+dotnet_diagnostic.SA1118.severity = none
+
 
 [*cshtml*]
 # SA1649: File name should match first type name

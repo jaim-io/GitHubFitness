@@ -42,7 +42,7 @@ public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseComman
     exercise.SetName(command.Name);
     exercise.SetDescription(command.Description);
     exercise.SetLastUpdater(lastUpdaterId);
-    exercise.SetMuscleGroups(muscleGroupIds ?? new());
+    exercise.SetMuscleGroupIds(muscleGroupIds ?? new());
     exercise.SetMuscleIds(muscleIds ?? new());
     exercise.SetImage(command.Image);
     exercise.SetVideo(command.Video);
