@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
-import { BiDumbbell } from "react-icons/bi";
+import { IoFitnessSharp } from "react-icons/io5";
 import {
   MdBookmarkAdded,
   MdFitbit,
@@ -216,8 +216,8 @@ const WorkoutDetailPage = () => {
         <div className="relative">
           <div className="border border-gray w-[45rem] h-fit rounded-lg px-6 py-6">
             <h1 className="text-light-gray flex items-center">
-              <BiDumbbell className="mr-1" size={16} />
-              Exercise<span className="mx-1">/</span>
+              <IoFitnessSharp className="mr-1" size={16} />
+              Workout<span className="mx-1">/</span>
               <span className="text-blue">{workout.name}</span>
             </h1>
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />

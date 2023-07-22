@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Muscle from "../types/domain/Muscle";
+import { SiElectron } from "react-icons/si";
 
 type Props = {
   muscle: Muscle;
@@ -10,8 +11,9 @@ const MuscleCard = ({ muscle }: Props) => {
     <div className="px-10 pt-6 pb-6 border border-gray w-[24rem] rounded-lg">
       <Link
         to={muscle.id}
-        className="text-blue hover:underline hover:underline-blue font-semibold"
+        className="text-blue hover:underline hover:underline-blue font-semibold flex items-center"
       >
+        <SiElectron className="mr-1 text-light-gray" size={16} />
         {muscle.name}
       </Link>
       <div className="pb-2"></div>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import MuscleGroup from "../types/domain/MuscleGroup";
+import { MdFitbit } from "react-icons/md";
 
 type Props = {
   muscleGroup: MuscleGroup;
@@ -10,8 +11,9 @@ const MuscleGroupCard = ({ muscleGroup }: Props) => {
     <div className="px-10 pt-6 pb-6 border border-gray w-[24rem] rounded-lg">
       <Link
         to={muscleGroup.id}
-        className="text-blue hover:underline hover:underline-blue font-semibold"
+        className="text-blue hover:underline hover:underline-blue font-semibold flex items-center"
       >
+        <MdFitbit className="mr-1 text-light-gray" size={16} />
         {muscleGroup.name}
       </Link>
       <div className="pb-2"></div>

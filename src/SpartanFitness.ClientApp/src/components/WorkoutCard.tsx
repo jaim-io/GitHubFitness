@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Workout from "../types/domain/Workout";
+import { IoFitnessSharp } from "react-icons/io5";
 
 type Props = {
   workout: Workout;
@@ -10,8 +11,9 @@ const WorkoutCard = ({ workout }: Props) => {
     <div className="px-10 pt-6 pb-6 border border-gray w-[24rem] rounded-lg">
       <Link
         to={workout.id}
-        className="text-blue hover:underline hover:underline-blue font-semibold"
+        className="text-blue hover:underline hover:underline-blue font-semibold flex items-center"
       >
+        <IoFitnessSharp className="mr-1 text-light-gray" size={16} />
         {workout.name}
       </Link>
       <div className="pb-2"></div>

@@ -11,6 +11,13 @@ import Workout, { WorkoutExercise } from "../types/domain/Workout";
 import { toast } from "react-toastify";
 import Exception from "../types/domain/Exception";
 import useAuth from "../hooks/useAuth";
+import useMuscles from "../hooks/useMuscles";
+import useMuscleGroup from "../hooks/useMuscleGroup";
+import useMuscleGroups from "../hooks/useMuscleGroups";
+import Muscle from "../types/domain/Muscle";
+import MuscleGroup from "../types/domain/MuscleGroup";
+import { SiElectron } from "react-icons/si";
+import { MdFitbit } from "react-icons/md";
 
 const NewWorkoutPage = () => {
   const { auth } = useAuth();
@@ -25,6 +32,9 @@ const NewWorkoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [exercises, , exercisesLoading] = useExercises();
+  const [muscles, , musclesLoading] = useMuscles();
+  const [muscleGroups, muscleGroupsLoading] = useMuscleGroups();
+
   // TODO: Fetch all muscles & muscleGroups
   // TODO: Fix exercise loading
   const defaultOrderNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
@@ -40,6 +50,20 @@ const NewWorkoutPage = () => {
       setWorkoutExercises(defaultWorkoutExercises);
     }
   }, [exercises]);
+
+  const activeMuscleIds = [
+    ...new Set(workoutExercises.map((we) => we.muscleIds).flat()),
+  ];
+  const activeMuscleGroupIds = [
+    ...new Set(workoutExercises.map((we) => we.muscleGroupIds).flat()),
+  ];
+
+  const activeMuscles = muscles
+    ? activeMuscleIds.map((id) => muscles.find((m) => m.id === id)!)
+    : undefined;
+  const activeMuscleGroups = muscleGroups
+    ? activeMuscleGroupIds.map((id) => muscleGroups.find((m) => m.id === id)!)
+    : undefined;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -150,7 +174,6 @@ const NewWorkoutPage = () => {
               autoComplete="off"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-white mb-2 ml-1">Image URL *</label>
             <input
@@ -165,20 +188,101 @@ const NewWorkoutPage = () => {
           </div>
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
 
-          {exercisesLoading || exercisesLoading == undefined ? (
-            <div className="flex items-center justify-center animate-pulse">
-              <LoadingIcon classNames="mr-2 text-white fill-white w-5 h-5" />
-              <p>Exercises are loading...</p>
-            </div>
-          ) : (
-            <EditableWorkoutExerciseTable
-              exercises={exercises ?? []}
-              workoutExercises={workoutExercises}
-              setWorkoutExercises={setWorkoutExercises}
-            />
-          )}
-
+          <div className="mb-4">
+            <label className="block text-white mb-2 ml-1">Exercises</label>
+            {exercisesLoading || exercisesLoading == undefined ? (
+              <div className="flex items-center justify-center animate-pulse">
+                <LoadingIcon classNames="mr-2 text-white fill-white w-5 h-5" />
+                <p>Exercises are loading...</p>
+              </div>
+            ) : (
+              <EditableWorkoutExerciseTable
+                exercises={exercises ?? []}
+                workoutExercises={workoutExercises}
+                setWorkoutExercises={setWorkoutExercises}
+              />
+            )}
+          </div>
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
+
+          <div className="mb-4">
+            <label className="block text-white mb-2 ml-1">
+              Muscles used in the exercises
+            </label>
+            {!musclesLoading ? (
+              activeMuscleGroups ? (
+                <div className="flex flex-wrap">
+                  {activeMuscleGroups.length > 0 ? (
+                    activeMuscleGroups.map((mg) => (
+                      <Link
+                        key={mg.id}
+                        className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                        to={`/muscles/${mg.id}`}
+                      >
+                        <MdFitbit className="mr-1" />
+                        {mg.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="ml-1">No muscles specified</p>
+                  )}
+                </div>
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the muscles.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-2 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
+          </div>
+          <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
+
+          <div className="mb-4">
+            <label className="block text-white mb-2 ml-1">
+              Muscle groups used in the exercises
+            </label>
+            {!muscleGroupsLoading ? (
+              activeMuscles ? (
+                <div className="flex flex-wrap">
+                  {activeMuscles.length > 0 ? (
+                    activeMuscles.map((m) => (
+                      <Link
+                        key={m.id}
+                        className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                        to={`/muscles/${m.id}`}
+                      >
+                        <SiElectron className="mr-1" />
+                        {m.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="ml-1">No muscles specified</p>
+                  )}
+                </div>
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the muscles.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-2 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
+          </div>
+          <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
+
           <div className="w-full relative mt-6">
             <Link
               className="absolute left-0 bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.MuscleGroups.Commands.CreateMuscleGroup;
 using SpartanFitness.Application.MuscleGroups.Commands.UpdateMuscleGroup;
+using SpartanFitness.Application.MuscleGroups.Queries.GetAllMuscleGroups;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupById;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupPage;
 using SpartanFitness.Application.MuscleGroups.Queries.GetMuscleGroupsById;
@@ -53,6 +54,17 @@ public class MuscleGroupsController : ApiController
     ErrorOr<List<MuscleGroup>> muscleGroupsResult = await _mediator.Send(query);
 
     return muscleGroupsResult.Match(
+      muscleGroups => Ok(_mapper.Map<MuscleGroupResponse[]>(muscleGroups)),
+      Problem);
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> GetAllMuscleGroups()
+  {
+    var query = new GetAllMuscleGroupsQuery();
+    ErrorOr<List<MuscleGroup>> result = await _mediator.Send(query);
+
+    return result.Match(
       muscleGroups => Ok(_mapper.Map<MuscleGroupResponse[]>(muscleGroups)),
       Problem);
   }

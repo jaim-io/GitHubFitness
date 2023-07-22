@@ -134,9 +134,6 @@ const EditableWorkoutExerciseTable = ({
 
   return (
     <>
-      <button type="button" onClick={() => console.log(workoutExercises)}>
-        x
-      </button>
       <div className="grid grid-cols-13 gap-1 ">
         <span className="border border-x-0 border-t-0 border-blue col-span-4 mx-1.5">
           Exercise

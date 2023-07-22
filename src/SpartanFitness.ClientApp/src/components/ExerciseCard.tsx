@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Exercise from "../types/domain/Exercise";
+import { BiDumbbell } from "react-icons/bi";
 
 type Props = {
   exercise: Exercise;
@@ -10,8 +11,9 @@ const ExerciseCard = ({ exercise }: Props) => {
     <div className="px-10 pt-6 pb-6 border border-gray w-[24rem] rounded-lg">
       <Link
         to={exercise.id}
-        className="text-blue hover:underline hover:underline-blue font-semibold"
+        className="text-blue hover:underline hover:underline-blue font-semibold flex items-center"
       >
+        <BiDumbbell className="mr-1 text-light-gray" size={16} />
         {exercise.name}
       </Link>
       <div className="pb-2"></div>
