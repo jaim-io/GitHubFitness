@@ -22,6 +22,16 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [persist, setPersist] = useState<boolean>(
+    JSON.parse(localStorage.getItem("persist") ?? "false") || false,
+  );
+
+  const togglePersist = () =>
+    setPersist((prev) => {
+      localStorage.setItem("persist", String(!prev));
+      return !prev;
+    });
+
   useEffect(() => {
     if (emailRef.current) {
       emailRef.current.focus();
@@ -48,9 +58,6 @@ const LoginPage = () => {
         )
         .then((res) => {
           if (res.data.id) {
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("refreshToken", res.data.refreshToken);
-            localStorage.setItem("uid", res.data.id);
             setAuth(res.data);
             navigate("/");
           }
@@ -120,7 +127,7 @@ const LoginPage = () => {
               autoComplete="off"
             />
           </div>
-          <div className="mb-1">
+          <div className="">
             <div className="relative">
               <label className="block text-white mb-2 ml-1">Password</label>
               <NavLink to="/temp" className="absolute top-0 right-0 text-blue">
@@ -137,6 +144,22 @@ const LoginPage = () => {
               required
             />
           </div>
+
+          <div className="mb-3">
+            <div className="flex items-center ml-0.5" onClick={togglePersist}>
+              <input
+                type="checkbox"
+                checked={persist}
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                onChange={() => {}}
+                className="w-4 h-4 border-gray rounded-xl accent-blue"
+              />
+              <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 hover:underline select-none cursor-pointer">
+                Keep me signed in
+              </label>
+            </div>
+          </div>
+
           <div className="flex items-center justify-between pb-1">
             <button
               className="bg-dark-green hover:bg-light-green text-white py-1.5 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full block"

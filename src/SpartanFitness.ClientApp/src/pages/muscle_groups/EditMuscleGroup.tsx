@@ -1,35 +1,47 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
 import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
 import { BsCloudUploadFill } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
+import { TbGhost2Filled } from "react-icons/tb";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import useAuth from "../hooks/useAuth";
-import Muscle from "../types/domain/Muscle";
-import useMuscleGroupsByMuscleId from "../hooks/useMuscleGroupsByMuscleId";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
+import Select, { SelectOption } from "../../components/Select";
+import useAuth from "../../hooks/useAuth";
+import useMusclesByMuscleGroupId from "../../hooks/useMusclesByMuscleGroupId";
+import Muscle from "../../types/domain/Muscle";
+import MuscleGroup from "../../types/domain/MuscleGroup";
+import useMuscles from "../../hooks/useMuscles";
 
-const MUSCLE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles`;
+const MUSCLEGROUP_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscle-groups`;
 
-const EditMusclePage = () => {
-  const navigate = useNavigate();
-  const muscle = useLoaderData() as Muscle;
+const EditMuscleGroupPage = () => {
+  const muscleGroup = useLoaderData() as MuscleGroup;
   const { auth } = useAuth();
+
+  const muscleSelectorRef = useRef<HTMLDivElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [name, setName] = useState(muscle.name);
-  const [description, setDescription] = useState(muscle.description);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const [image, setImage] = useState<string>(muscle.image);
-  const [previewImage, setPreviewImage] = useState<string>(muscle.image);
-  const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
+  const [initialMuscles, , initialMusclesAreLoading] =
+    useMusclesByMuscleGroupId(muscleGroup.id);
 
-  const [muscleGroups, , muscleGroupsAreLoading] = useMuscleGroupsByMuscleId(
-    muscle.id,
+  const [name, setName] = useState(muscleGroup.name);
+  const [description, setDescription] = useState(muscleGroup.description);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [image, setImage] = useState<string>(muscleGroup.image);
+  const [previewImage, setPreviewImage] = useState<string>(muscleGroup.image);
+
+  const [selectedMuscles, setSelectedMuscles] = useState<
+    SelectOption<string>[]
+  >(
+    initialMuscles
+      ? initialMuscles?.map((m) => ({ label: m.name, value: m.id }))
+      : [],
   );
 
   const setDescriptionAreaHeight = () => {
@@ -41,17 +53,45 @@ const EditMusclePage = () => {
     setDescriptionAreaHeight();
   }, []);
 
-  const popupActive = () => showImageUrlInputBar;
+  const navigate = useNavigate();
+
+  const [muscles, , musclesAreLoading] = useMuscles();
+
+  useEffect(() => {
+    if (
+      Object.values(selectedMuscles).length == 0 &&
+      initialMuscles !== undefined
+    ) {
+      setSelectedMuscles(
+        initialMuscles.map((m) => ({ label: m.name, value: m.id })),
+      );
+    }
+  }, [initialMuscles]);
+
+  const displayedMuscles = muscles?.filter((mg) =>
+    Object.values(selectedMuscles).find((smg) => mg.id === smg.value),
+  );
+
+  const muscleOptions = muscles?.map((m: Muscle) => ({
+    label: m.name,
+    value: m.id,
+  }));
+
+  const [showMuscleSelector, setShowMuscleSelector] = useState(false);
+  const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
+
+  const popupActive = () => showMuscleSelector || showImageUrlInputBar;
 
   const handleSaveChanges = async () => {
     setIsLoading(true);
 
     await axios
       .put(
-        `${MUSCLE_ENDPOINT}/${muscle.id}/update`,
+        `${MUSCLEGROUP_ENDPOINT}/${muscleGroup.id}/update`,
         {
-          id: muscle.id,
+          id: muscleGroup.id,
           name: name,
+          muscleIds: displayedMuscles?.map((m) => m.id),
           description: description,
           image: image,
         },
@@ -75,7 +115,7 @@ const EditMusclePage = () => {
           progress: undefined,
           theme: "colored",
         });
-        navigate(`/muscles/${muscle.id}`);
+        navigate(`/muscle-groups/${muscleGroup.id}`);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -141,7 +181,7 @@ const EditMusclePage = () => {
           >
             <img
               src={previewImage}
-              alt={`${muscle.name} image`}
+              alt={`${muscleGroup.name} image`}
               className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
             />
             <div
@@ -167,9 +207,9 @@ const EditMusclePage = () => {
           </button>
 
           <div className="mt-4">
-            {muscleGroups && (
+            {displayedMuscles && (
               <div className="flex flex-wrap">
-                {muscleGroups.map((mg) => (
+                {displayedMuscles.map((mg) => (
                   <span
                     key={mg.id}
                     className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center cursor-not-allowed"
@@ -178,9 +218,16 @@ const EditMusclePage = () => {
                     {mg.name}{" "}
                   </span>
                 ))}
+                <button
+                  type="button"
+                  className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-2 mb-2 hover:border-hover-gray flex items-center"
+                  onClick={() => setShowMuscleSelector((prev) => !prev)}
+                >
+                  <AiFillEdit size={16} />
+                </button>
               </div>
             )}
-            {muscleGroupsAreLoading && <p>Muscles are loading</p>}
+            {initialMusclesAreLoading && <p>Muscles are loading</p>}
           </div>
         </div>
 
@@ -278,8 +325,53 @@ const EditMusclePage = () => {
           />
         </div>
       </div>
+
+      <Draggable nodeRef={muscleSelectorRef}>
+        <div
+          className={`absolute top-[40%] left-[35%] border border-blue rounded-lg pt-2 z-10 bg-black w-[40rem] ${
+            showMuscleSelector ? "" : "hidden"
+          }`}
+          ref={muscleSelectorRef}
+        >
+          <p className="text-center mb-1 cursor-move">Muscle selection</p>
+          <button
+            type="button"
+            onClick={() => setShowMuscleSelector(false)}
+            className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+          >
+            <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+              &times;
+            </span>
+          </button>
+          <Select
+            id={"muscles"}
+            searchBar={true}
+            multiple={true}
+            value={selectedMuscles}
+            options={muscleOptions ?? []}
+            onChange={(selected) => {
+              setSelectedMuscles(selected);
+            }}
+            isLoading={musclesAreLoading}
+            ifEmpty={
+              <p className="flex justify-center items-center py-1 cursor-default">
+                No muscles found <TbGhost2Filled className="ml-1" size={20} />
+              </p>
+            }
+            ifLoading={
+              <div
+                role="status"
+                className="py-5 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-8 h-8" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            }
+          />
+        </div>
+      </Draggable>
     </>
   );
 };
 
-export default EditMusclePage;
+export default EditMuscleGroupPage;

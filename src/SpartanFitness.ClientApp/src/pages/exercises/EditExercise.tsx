@@ -10,15 +10,15 @@ import { SiElectron } from "react-icons/si";
 import { TbGhost2Filled } from "react-icons/tb";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import Select, { SelectOption } from "../components/Select";
-import useAuth from "../hooks/useAuth";
-import useMuscleGroupsByIds from "../hooks/useMuscleGroupsByIds";
-import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
-import useMusclesByIds from "../hooks/useMusclesByIds";
-import Exercise from "../types/domain/Exercise";
-import Muscle from "../types/domain/Muscle";
-import MuscleGroup from "../types/domain/MuscleGroup";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
+import Select, { SelectOption } from "../../components/Select";
+import useAuth from "../../hooks/useAuth";
+import useMuscleGroupsByIds from "../../hooks/useMuscleGroupsByIds";
+import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
+import useMusclesByIds from "../../hooks/useMusclesByIds";
+import Exercise from "../../types/domain/Exercise";
+import Muscle from "../../types/domain/Muscle";
+import MuscleGroup from "../../types/domain/MuscleGroup";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 const MUSCLES_ENDPOINT = `${

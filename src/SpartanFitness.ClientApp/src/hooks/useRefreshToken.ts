@@ -28,9 +28,6 @@ const useRefreshToken = () => {
         )
         .then((res) => {
           setAuth(res.data);
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("refreshToken", res.data.refreshToken);
-          localStorage.setItem("uid", res.data.id);
         })
         .catch((err) => {
           setError({

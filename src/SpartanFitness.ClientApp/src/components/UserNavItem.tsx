@@ -8,7 +8,7 @@ import DefaultProfileSvg from "../assets/default-profile.svg";
 import AuthContext from "../contexts/AuthProvider";
 
 const UserNavItem = ({ ...props }) => {
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
 
   return (
     <Menu as="div" className="relative inline-block text-left z-20" {...props}>
@@ -44,7 +44,7 @@ const UserNavItem = ({ ...props }) => {
               <div className="py-2">
                 <Menu.Item>
                   <NavLink
-                    to="/user-settings"
+                    to="/user/settings"
                     className={
                       "flex w-full items-center px-3 py-1 hover:bg-blue"
                     }
@@ -58,10 +58,11 @@ const UserNavItem = ({ ...props }) => {
               <div className="py-2">
                 <Menu.Item>
                   <NavLink
-                    to="/"
+                    to="/login"
                     className={
                       "flex w-full items-center px-3 py-1 hover:bg-blue"
                     }
+                    onClick={logout}
                     end
                   >
                     <FiLogOut className="mr-2" />

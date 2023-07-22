@@ -6,12 +6,11 @@ import AuthenticationResponse from "../types/authentication/AuthenticationRespon
 type AuthContextType = {
   auth: Authentication;
   setAuth: (response: AuthenticationResponse) => void;
-  setPersist: (toggle: boolean) => void;
+  logout: () => void;
 };
 
 const defaultAuthentication: Authentication = {
   user: undefined,
-  persist: true,
   accessToken: undefined,
   refreshToken: undefined,
 };
@@ -21,7 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   setAuth: (_response: AuthenticationResponse) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  setPersist: (_toggle: boolean) => {},
+  logout: () => {},
 });
 
 type Props = {
@@ -32,14 +31,10 @@ export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User>();
   const [accessToken, setAccessToken] = useState<string>();
   const [refreshToken, setRefreshToken] = useState<string>();
-  const [persist, setPersist] = useState(
-    JSON.parse(localStorage.getItem("persist") ?? "false") || false,
-  );
 
   const authContext: AuthContextType = {
     auth: {
       user: user,
-      persist: persist,
       accessToken: accessToken,
       refreshToken: refreshToken,
     },
@@ -47,10 +42,18 @@ export const AuthProvider = ({ children }: Props) => {
       setUser(response);
       setAccessToken(response.token);
       setRefreshToken(response.refreshToken);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("refreshToken", response.refreshToken);
+      localStorage.setItem("uid", response.id);
     },
-    setPersist: (toggle) => {
-      localStorage.setItem("persist", String(toggle));
-      setPersist(toggle);
+    logout: () => {
+      setUser(undefined);
+      setAccessToken("");
+      setRefreshToken("");
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("uid");
+      localStorage.removeItem("persist");
     },
   };
 

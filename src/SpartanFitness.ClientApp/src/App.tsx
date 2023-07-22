@@ -4,34 +4,41 @@ import LoginPersistance from "./components/LoginPersistance";
 import ExerciseLayout from "./layouts/ExerciseLayout";
 import LoginLayout from "./layouts/LoginLayout";
 import MainLayout from "./layouts/MainLayout";
-import EditExercisePage from "./pages/EditExercise";
+import EditExercisePage from "./pages/exercises/EditExercise";
 import ErrorPage from "./pages/Error";
 import ExerciseDetailPage, {
   loader as exerciseDetailLoader,
-} from "./pages/ExerciseDetail";
-import ExercisesPage from "./pages/Exercises";
+} from "./pages/exercises/ExerciseDetail";
+import ExercisesPage from "./pages/exercises/Exercises";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
-import NewExercisePage from "./pages/NewExercise";
+import NewExercisePage from "./pages/exercises/NewExercise";
 import MuscleGroupLayout from "./layouts/MuscleGroupLayout";
-import MuscleGroupsPage from "./pages/MuscleGroups";
+import MuscleGroupsPage from "./pages/muscle_groups/MuscleGroups";
 import MuscleGroupDetailPage, {
   loader as muscleGroupDetailLoader,
-} from "./pages/MuscleGroupDetail";
+} from "./pages/muscle_groups/MuscleGroupDetail";
 import MuscleLayout from "./layouts/MuscleLayout";
-import MusclesPage from "./pages/Muscles";
+import MusclesPage from "./pages/muscles/Muscles";
 import MuscleDetailPage, {
   loader as muscleDetailLoader,
-} from "./pages/MuscleDetail";
-import EditMuscleGroupPage from "./pages/EditMuscleGroup";
-import EditMusclePage from "./pages/EditMuscle";
+} from "./pages/muscles/MuscleDetail";
+import EditMuscleGroupPage from "./pages/muscle_groups/EditMuscleGroup";
+import EditMusclePage from "./pages/muscles/EditMuscle";
 import WorkoutLayout from "./layouts/WorkoutLayout";
-import WorkoutsPage from "./pages/Workouts";
+import WorkoutsPage from "./pages/workout/Workouts";
 import WorkoutDetailPage, {
   loader as workoutDetailLoader,
-} from "./pages/WorkoutDetail";
-import NewWorkoutPage from "./pages/NewWorkout";
-import EditWorkoutPage from "./pages/EditWorkout";
+} from "./pages/workout/WorkoutDetail";
+import NewWorkoutPage from "./pages/workout/NewWorkout";
+import EditWorkoutPage from "./pages/workout/EditWorkout";
+import UserSettingsPage from "./pages/users/UserSettings";
+import UserDetailPage from "./pages/users/UserDetail";
+import CoachesPage from "./pages/coaches/Coaches";
+import CoachDetailPage, {
+  loader as coachDetailLoader,
+} from "./pages/coaches/CoachDetail";
+import CoachWorkoutsPage from "./pages/coaches/CoachWorkouts";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +52,13 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           { index: true, element: <HomePage /> },
+          {
+            path: "user",
+            children: [
+              { index: true, element: <UserDetailPage /> },
+              { path: "settings", element: <UserSettingsPage /> },
+            ],
+          },
           {
             path: "exercises",
             element: <ExerciseLayout />,
@@ -100,17 +114,28 @@ const router = createBrowserRouter([
           {
             path: "coaches",
             children: [
-              // { index: true, element: <CoachesPage /> },
+              { index: true, element: <CoachesPage /> },
+              {
+                path: "all",
+                children: [
+                  { index: true, element: <CoachesPage /> },
+                  {
+                    path: "workouts",
+                    element: <WorkoutLayout />,
+                    children: [{ index: true, element: <WorkoutsPage /> }],
+                  },
+                ],
+              },
               {
                 path: ":coachId",
-                // element: <CoachDetailPage />,
-                // loader: coachDetailLoader,
+                element: <CoachDetailPage />,
+                loader: coachDetailLoader,
                 children: [
                   {
                     path: "workouts",
                     element: <WorkoutLayout />,
                     children: [
-                      // { index: true, element: <CoachWorkoutsPage /> }, // All workouts of a coach with given id
+                      { index: true, element: <CoachWorkoutsPage /> },
                       { path: "new", element: <NewWorkoutPage /> },
                       {
                         path: ":workoutId",
@@ -123,17 +148,6 @@ const router = createBrowserRouter([
                         loader: workoutDetailLoader,
                       },
                     ],
-                  },
-                ],
-              },
-              {
-                path: "all",
-                // element: <CoachesPage />,
-                children: [
-                  {
-                    path: "workouts",
-                    element: <WorkoutLayout />,
-                    children: [{ index: true, element: <WorkoutsPage /> }],
                   },
                 ],
               },
@@ -154,7 +168,6 @@ const router = createBrowserRouter([
 const App = () => {
   // TODO: Create a popup where the user can choose to perist their login or not
   // TODO: Loading bar
-  localStorage.setItem("persist", "true");
 
   return (
     <>

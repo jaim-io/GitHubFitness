@@ -1,13 +1,20 @@
 import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
-import { Link, useSearchParams } from "react-router-dom";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import ListBox from "../components/ListBox";
-import MuscleCard from "../components/MuscleCard";
-import PageNavigation from "../components/PageNavigation";
-import SearchBar from "../components/SearchBar";
-import useMusclesPage from "../hooks/useMusclesPage";
-import CurrentSearchParams from "../types/CurrentSearchParams";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
+import ListBox from "../../components/ListBox";
+import NewButton from "../../components/NewButton";
+import PageNavigation from "../../components/PageNavigation";
+import SearchBar from "../../components/SearchBar";
+import WorkoutCard from "../../components/WorkoutCard";
+import useAuth from "../../hooks/useAuth";
+import useWorkoutsPage from "../../hooks/useWorkoutsPage";
+import CurrentSearchParams from "../../types/CurrentSearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -34,7 +41,18 @@ const SORT_OPTIONS = [
   },
 ];
 
-const MusclesPage = () => {
+const WorkoutsPage = () => {
+  const { auth } = useAuth();
+  const params = useParams();
+  const location = useLocation();
+  const routeValidator = new RegExp(`/all/workouts$`);
+
+  const isAllWorkoutsRoute = routeValidator.test(location.pathname);
+  const isAuthorizedCoach =
+    params.coachId &&
+    auth.user?.roles.find((r) => r.name === "Coach")?.id == params.coachId;
+  const showNewWorkoutsButton = isAllWorkoutsRoute || isAuthorizedCoach;
+
   // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();
   const currentParams = new CurrentSearchParams(searchParams);
@@ -54,13 +72,13 @@ const MusclesPage = () => {
   const [query, setQuery] = useState("");
   // ------------------------
 
-  const [musclesPage, , isLoading] = useMusclesPage(
-    currentPage,
-    pageSize,
-    SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
-    order,
-    query,
-  );
+  const [workoutPage, , isLoading] = useWorkoutsPage({
+    page: currentPage,
+    size: pageSize,
+    sort: SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
+    order: order,
+    query: query,
+  });
 
   const paginate = (page: number) => {
     setCurrentPage(page);
@@ -109,7 +127,7 @@ const MusclesPage = () => {
         to=""
         className="text-xl font-semibold text-blue hover:underline hover:underline-blue max-w-[8rem]"
       >
-        All muscles
+        All exercises
       </Link>
 
       <div>
@@ -125,6 +143,7 @@ const MusclesPage = () => {
             buttonText={"Sort by:"}
             onChange={handleSort}
           />
+          {auth.user && showNewWorkoutsButton && <NewButton />}
         </ul>
 
         <ul className="relative min-h-[10rem]">
@@ -133,9 +152,9 @@ const MusclesPage = () => {
               isLoading ? "opacity-60 animate-pulse" : ""
             }`}
           >
-            {musclesPage &&
-              musclesPage.muscles.map((m) => (
-                <MuscleCard muscle={m} key={m.id} />
+            {workoutPage &&
+              workoutPage.workouts.map((w) => (
+                <WorkoutCard workout={w} key={w.id} />
               ))}
           </div>
 
@@ -147,18 +166,18 @@ const MusclesPage = () => {
           )}
         </ul>
 
-        {musclesPage && musclesPage.muscles.length >= 1 && (
+        {workoutPage && workoutPage.workouts.length >= 1 && (
           <PageNavigation
-            pageNumber={musclesPage.pageNumber}
-            pageCount={musclesPage.pageCount}
+            pageNumber={workoutPage.pageNumber}
+            pageCount={workoutPage.pageCount}
             paginate={paginate}
             className={` ${isLoading ? "opacity-60 animate-pulse" : ""}`}
           />
         )}
 
-        {musclesPage && musclesPage.muscles.length === 0 && (
+        {workoutPage && workoutPage.workouts.length === 0 && (
           <p className="flex justify-center items-center">
-            No muscles found <TbGhost2Filled className="ml-1" size={20} />
+            No workouts found <TbGhost2Filled className="ml-1" size={20} />
           </p>
         )}
       </div>
@@ -166,4 +185,4 @@ const MusclesPage = () => {
   );
 };
 
-export default MusclesPage;
+export default WorkoutsPage;

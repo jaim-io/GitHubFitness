@@ -1,23 +1,20 @@
+import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
+import { MdFitbit } from "react-icons/md";
+import { SiElectron } from "react-icons/si";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import EditableWorkoutExerciseTable, {
   WorkoutExerciseWrapper,
   createDefaultValue as createDefaultWorkoutExercise,
-} from "../components/EditableWorkoutExerciseTable";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import useExercises from "../hooks/useExercises";
-import axios from "axios";
-import Workout, { WorkoutExercise } from "../types/domain/Workout";
-import { toast } from "react-toastify";
-import Exception from "../types/domain/Exception";
-import useAuth from "../hooks/useAuth";
-import useMuscles from "../hooks/useMuscles";
-import useMuscleGroup from "../hooks/useMuscleGroup";
-import useMuscleGroups from "../hooks/useMuscleGroups";
-import Muscle from "../types/domain/Muscle";
-import MuscleGroup from "../types/domain/MuscleGroup";
-import { SiElectron } from "react-icons/si";
-import { MdFitbit } from "react-icons/md";
+} from "../../components/EditableWorkoutExerciseTable";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
+import useAuth from "../../hooks/useAuth";
+import useExercises from "../../hooks/useExercises";
+import useMuscleGroups from "../../hooks/useMuscleGroups";
+import useMuscles from "../../hooks/useMuscles";
+import Exception from "../../types/domain/Exception";
+import Workout, { WorkoutExercise } from "../../types/domain/Workout";
 
 const NewWorkoutPage = () => {
   const { auth } = useAuth();
@@ -35,8 +32,6 @@ const NewWorkoutPage = () => {
   const [muscles, , musclesLoading] = useMuscles();
   const [muscleGroups, muscleGroupsLoading] = useMuscleGroups();
 
-  // TODO: Fetch all muscles & muscleGroups
-  // TODO: Fix exercise loading
   const defaultOrderNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
   const [workoutExercises, setWorkoutExercises] = useState<
     WorkoutExerciseWrapper[]

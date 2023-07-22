@@ -13,11 +13,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAuth from "../hooks/useAuth";
-import useMusclesByMuscleGroupId from "../hooks/useMusclesByMuscleGroupId";
-import MuscleGroup from "../types/domain/MuscleGroup";
+import useAuth from "../../hooks/useAuth";
+import useMusclesByMuscleGroupId from "../../hooks/useMusclesByMuscleGroupId";
+import MuscleGroup from "../../types/domain/MuscleGroup";
 import { AiFillEdit } from "react-icons/ai";
-import LoadingIcon from "../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 

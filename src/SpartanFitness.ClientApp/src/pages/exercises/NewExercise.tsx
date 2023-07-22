@@ -3,13 +3,13 @@ import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import Select, { SelectOption } from "../components/Select";
-import useMuscleGroupsPage from "../hooks/useMuscleGroupsPage";
-import Exception from "../types/domain/Exception";
-import Exercise from "../types/domain/Exercise";
-import Muscle from "../types/domain/Muscle";
-import MuscleGroup from "../types/domain/MuscleGroup";
+import LoadingIcon from "../../components/Icons/LoadingIcon";
+import Select, { SelectOption } from "../../components/Select";
+import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
+import Exception from "../../types/domain/Exception";
+import Exercise from "../../types/domain/Exercise";
+import Muscle from "../../types/domain/Muscle";
+import MuscleGroup from "../../types/domain/MuscleGroup";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 const MUSCLES_ENDPOINT = `${
