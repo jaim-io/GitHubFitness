@@ -17,6 +17,7 @@ import useAuth from "../hooks/useAuth";
 import Muscle from "../types/domain/Muscle";
 import useMuscleGroupsByMuscleId from "../hooks/useMuscleGroupsByMuscleId";
 import { AiFillEdit } from "react-icons/ai";
+import LoadingIcon from "../components/Icons/LoadingIcon";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -106,25 +107,38 @@ const MuscleDetailPage = () => {
           </button>
 
           <div className="mt-4">
-            {muscleGroups && (
-              <div className="flex flex-wrap">
-                {muscleGroups.length != 0 ? (
-                  muscleGroups.map((mg) => (
-                    <Link
-                      key={mg.id}
-                      className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
-                      to={`/muscle-groups/${mg.id}`}
-                    >
-                      <MdFitbit className="mr-1" />
-                      {mg.name}
-                    </Link>
-                  ))
-                ) : (
-                  <p>No muscle groups specified</p>
-                )}
+            {!muscleGroupsAreLoading || muscleGroupsAreLoading === undefined ? (
+              muscleGroups ? (
+                <div className="flex flex-wrap">
+                  {muscleGroups.length != 0 ? (
+                    muscleGroups.map((mg) => (
+                      <Link
+                        key={mg.id}
+                        className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center"
+                        to={`/muscle-groups/${mg.id}`}
+                      >
+                        <MdFitbit className="mr-1" />
+                        {mg.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="ml-1">No muscle groups specified</p>
+                  )}
+                </div>
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the muscle groups.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-2 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
               </div>
             )}
-            {muscleGroupsAreLoading && <p>Muscle groups are loading</p>}
           </div>
         </div>
 

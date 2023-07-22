@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
 import { BsCloudUploadFill } from "react-icons/bs";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +14,9 @@ import LoadingIcon from "../components/Icons/LoadingIcon";
 import useAuth from "../hooks/useAuth";
 import useExercises from "../hooks/useExercises";
 import Workout, { WorkoutExercise } from "../types/domain/Workout";
+import useMuscleGroups from "../hooks/useMuscleGroups";
+import useMuscles from "../hooks/useMuscles";
+import { SiElectron } from "react-icons/si";
 
 const EditWorkoutPage = () => {
   const { auth } = useAuth();
@@ -28,8 +31,12 @@ const EditWorkoutPage = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [image, setImage] = useState<string>(workout.image);
   const [previewImage, setPreviewImage] = useState<string>(workout.image);
+  const navigate = useNavigate();
+  const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
 
   const [exercises, , exercisesLoading] = useExercises();
+  const [muscles, , musclesLoading] = useMuscles();
+  const [muscleGroups, muscleGroupsLoading] = useMuscleGroups();
   const [workoutExercises, setWorkoutExercises] = useState<
     WorkoutExerciseWrapper[]
   >([]);
@@ -53,6 +60,20 @@ const EditWorkoutPage = () => {
     }
   }, [exercises]);
 
+  const activeMuscleIds = [
+    ...new Set(workoutExercises.map((we) => we.muscleIds).flat()),
+  ];
+  const activeMuscleGroupIds = [
+    ...new Set(workoutExercises.map((we) => we.muscleGroupIds).flat()),
+  ];
+
+  const activeMuscles = muscles
+    ? activeMuscleIds.map((id) => muscles.find((m) => m.id === id)!)
+    : undefined;
+  const activeMuscleGroups = muscleGroups
+    ? activeMuscleGroupIds.map((id) => muscleGroups.find((m) => m.id === id)!)
+    : undefined;
+
   const setDescriptionAreaHeight = () => {
     descriptionRef.current!.style.height =
       descriptionRef.current!.scrollHeight + "px";
@@ -61,10 +82,6 @@ const EditWorkoutPage = () => {
   useEffect(() => {
     setDescriptionAreaHeight();
   }, []);
-
-  const navigate = useNavigate();
-
-  const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
 
   const handleSaveChanges = async () => {
     setIsLoading(true);
@@ -189,6 +206,78 @@ const EditWorkoutPage = () => {
               Save
             </>
           </button>
+
+          <div className="mt-4">
+            {!muscleGroupsLoading || muscleGroupsLoading === undefined ? (
+              activeMuscleGroups ? (
+                <div className="flex flex-wrap">
+                  {activeMuscleGroups.length > 0 ? (
+                    activeMuscleGroups.map((mg) => (
+                      <span
+                        key={mg.id}
+                        className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center cursor-not-allowed"
+                      >
+                        <MdFitbit className="mr-1" />
+                        {mg.name}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="ml-1">No muscle groups specified</p>
+                  )}
+                </div>
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the muscle groups.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-2 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
+          </div>
+
+          {muscles?.length !== 0 && muscleGroups?.length !== 0 && (
+            <div className="self-stretch border border-gray rounded-lg my-2 h-[1px]" />
+          )}
+
+          <div className="mt-4">
+            {!musclesLoading || musclesLoading === undefined ? (
+              activeMuscles ? (
+                <div className="flex flex-wrap">
+                  {activeMuscles.length > 0 ? (
+                    activeMuscles.map((m) => (
+                      <span
+                        key={m.id}
+                        className="rounded-full border border-[rgba(240,246,252,0.1)] mr-2 px-2 py-1 mb-2 hover:border-hover-gray flex items-center cursor-not-allowed"
+                      >
+                        <SiElectron className="mr-1" />
+                        {m.name}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="ml-1">No muscles specified</p>
+                  )}
+                </div>
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the muscles.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-2 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative">
@@ -225,11 +314,27 @@ const EditWorkoutPage = () => {
           </div>
 
           <div className="border border-gray w-[55rem] h-fit rounded-lg px-6 py-6  mt-4">
-            <EditableWorkoutExerciseTable
-              workoutExercises={workoutExercises}
-              exercises={exercises ?? []}
-              setWorkoutExercises={setWorkoutExercises}
-            />
+            {!exercisesLoading || exercisesLoading === undefined ? (
+              exercises ? (
+                <EditableWorkoutExerciseTable
+                  workoutExercises={workoutExercises}
+                  exercises={exercises}
+                  setWorkoutExercises={setWorkoutExercises}
+                />
+              ) : (
+                <span className="ml-1">
+                  An error occured while loading the exercises.
+                </span>
+              )
+            ) : (
+              <div
+                role="status"
+                className="py-5 flex justify-center items-center"
+              >
+                <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
           </div>
 
           <div className="mt-4">
