@@ -3,7 +3,7 @@ import Coach from "../../types/domain/Coach";
 import axios from "axios";
 
 const CoachDetailPage = () => {
-  return <></>;
+  return <>CoachDetailPage</>;
 };
 
 export default CoachDetailPage;

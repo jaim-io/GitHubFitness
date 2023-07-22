@@ -128,9 +128,12 @@ const router = createBrowserRouter([
               },
               {
                 path: ":coachId",
-                element: <CoachDetailPage />,
-                loader: coachDetailLoader,
                 children: [
+                  {
+                    index: true,
+                    element: <CoachDetailPage />,
+                    loader: coachDetailLoader,
+                  },
                   {
                     path: "workouts",
                     element: <WorkoutLayout />,

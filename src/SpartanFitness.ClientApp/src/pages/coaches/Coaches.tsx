@@ -1,5 +1,5 @@
 const CoachesPage = () => {
-  return <></>;
+  return <>CoachesPage</>;
 };
 
 export default CoachesPage;
