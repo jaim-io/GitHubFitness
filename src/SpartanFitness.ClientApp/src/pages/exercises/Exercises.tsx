@@ -9,7 +9,7 @@ import PageNavigation from "../../components/PageNavigation";
 import SearchBar from "../../components/SearchBar";
 import useAuth from "../../hooks/useAuth";
 import useExercisesPage from "../../hooks/useExercisesPage";
-import CurrentSearchParams from "../../types/CurrentSearchParams";
+import CurrentSearchParams from "../../utils/CurrentSearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;

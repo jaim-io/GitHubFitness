@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Page from "../types/domain/Page";
 import Exception from "../types/domain/Exception";
 import Muscle from "../types/domain/Muscle";
-import SearchParamsFactory from "../types/SearchParamsFactory";
+import SearchParamsFactory from "../utils/SearchParamsFactory";
 
 const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles/page`;
 

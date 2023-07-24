@@ -12,6 +12,7 @@ export default {
         black: "#0d1117",
         "light-green": "#2EA043",
         "dark-green": "#238636",
+        red: "#ee4f48",
       },
       gridTemplateColumns: {
         13: "repeat(13, minmax(0, 1fr))",

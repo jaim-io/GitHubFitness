@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import SearchParamsFactory from "../types/SearchParamsFactory";
+import SearchParamsFactory from "../utils/SearchParamsFactory";
 import Exception from "../types/domain/Exception";
 import Page from "../types/domain/Page";
 import Workout from "../types/domain/Workout";

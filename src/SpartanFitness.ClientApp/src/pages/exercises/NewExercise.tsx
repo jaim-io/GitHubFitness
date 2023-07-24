@@ -10,6 +10,13 @@ import Exception from "../../types/domain/Exception";
 import Exercise from "../../types/domain/Exercise";
 import Muscle from "../../types/domain/Muscle";
 import MuscleGroup from "../../types/domain/MuscleGroup";
+import {
+  validateDefaultUrl,
+  validateDescription,
+  validateName,
+  validateYoutubeUrl,
+} from "../../utils/Validations";
+import InputField from "../../components/inputField";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 const MUSCLES_ENDPOINT = `${
@@ -28,15 +35,23 @@ const createQueryString = (ids: string[]): string => {
 
 const NewExercisePage = () => {
   const [name, setName] = useState("");
+  const [isValidName, setIsValidName] = useState(false);
+
   const [description, setDescription] = useState("");
+  const [isValidDescription, setIsValidDescription] = useState(true); // true since the field is optional
+
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
     SelectOption<string>[]
   >([]);
   const [selectedMuscles, setSelectedMuscles] = useState<
     SelectOption<string>[]
   >([]);
+
   const [image, setImage] = useState("");
+  const [isValidImage, setIsValidImage] = useState(false);
   const [video, setVideo] = useState("");
+  const [isValidVideo, setIsValidVideo] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [, setError] = useState<Exception>();
   const navigate = useNavigate();
@@ -115,8 +130,15 @@ const NewExercisePage = () => {
     value: m.id,
   }));
 
+  const isValidForm =
+    isValidName && isValidDescription && isValidImage && isValidVideo;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isValidForm) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -191,35 +213,36 @@ const NewExercisePage = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-white mb-2 ml-1">
-              Exercise name *
-            </label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              id="exercise-name"
-              type="text"
-              placeholder="Barbell bench press"
+            <InputField
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="off"
+              onChange={setName}
+              placeholder="Barbell bench press"
+              label="Exercise name *"
+              validator={validateName}
+              validatorProps={{ minLength: 5, maxLength: 100 }}
+              setIsValid={setIsValidName}
             />
           </div>
+
           <div className="mb-4">
-            <label className="flex text-white mb-2 ml-1 items-center">
-              Description
-              <p className="ml-1 text-light-gray text-sm">(optional)</p>
-            </label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              id="description"
-              type="text"
-              placeholder="A chest exercise which involves chest, delts and triceps..."
+            <InputField
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              autoComplete="off"
+              onChange={setDescription}
+              placeholder="A chest exercise which involves chest, delts and triceps..."
+              label={
+                <span>
+                  Description
+                  <span className="ml-1 text-light-gray text-sm">
+                    (optional)
+                  </span>
+                </span>
+              }
+              validator={validateDescription}
+              validatorProps={{ maxLength: 2048 }}
+              setIsValid={setIsValidDescription}
             />
           </div>
+
           <div className="mb-4">
             <label className="flex text-white mb-2 ml-1 items-center">
               Muscle groups
@@ -290,30 +313,31 @@ const NewExercisePage = () => {
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
 
           <div className="mb-4">
-            <label className="block text-white mb-2 ml-1">Image URL *</label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              type="text"
-              placeholder="https://google.com/exercise-image"
+            <InputField
               value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-              autoComplete="off"
+              onChange={setImage}
+              placeholder="https://google.com/exercise-image"
+              label={"Image URL *"}
+              validator={validateDefaultUrl}
+              validatorProps={{ maxLength: 2048 }}
+              setIsValid={setIsValidImage}
             />
           </div>
+
           <div className="mb-4">
-            <label className="block text-white mb-2 ml-1">Video URL *</label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              type="text"
-              placeholder="https://youtube.com/exercise-video"
+            <InputField
               value={video}
-              onChange={(e) => setVideo(e.target.value)}
-              required
-              autoComplete="off"
+              onChange={setVideo}
+              placeholder="https://www.youtube-nocookie.com/embed/exercise-video"
+              label={"Video URL *"}
+              validator={validateYoutubeUrl}
+              validatorProps={{ maxLength: 2048 }}
+              setIsValid={setIsValidVideo}
             />
           </div>
+
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />
+
           <div className="w-full relative mt-6">
             <Link
               className="absolute left-0 bg-gray hover:border-hover-gray border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"
@@ -322,8 +346,11 @@ const NewExercisePage = () => {
               Cancel
             </Link>
             <button
-              className="absolute right-0 bg-dark-green hover:bg-light-green border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"
+              className={`absolute right-0 bg-dark-green hover:bg-light-green border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center ${
+                !isValidForm ? "cursor-not-allowed opacity-50" : ""
+              }`}
               type="submit"
+              disabled={!isValidForm}
             >
               {!isLoading && <p>Create exercise</p>}
               {(isLoading || isLoading == undefined) && (

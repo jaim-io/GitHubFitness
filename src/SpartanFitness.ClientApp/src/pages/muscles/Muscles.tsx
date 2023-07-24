@@ -7,7 +7,7 @@ import MuscleCard from "../../components/MuscleCard";
 import PageNavigation from "../../components/PageNavigation";
 import SearchBar from "../../components/SearchBar";
 import useMusclesPage from "../../hooks/useMusclesPage";
-import CurrentSearchParams from "../../types/CurrentSearchParams";
+import CurrentSearchParams from "../../utils/CurrentSearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;

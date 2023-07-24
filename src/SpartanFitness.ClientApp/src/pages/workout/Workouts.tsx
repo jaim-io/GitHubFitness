@@ -14,7 +14,7 @@ import SearchBar from "../../components/SearchBar";
 import WorkoutCard from "../../components/WorkoutCard";
 import useAuth from "../../hooks/useAuth";
 import useWorkoutsPage from "../../hooks/useWorkoutsPage";
-import CurrentSearchParams from "../../types/CurrentSearchParams";
+import CurrentSearchParams from "../../utils/CurrentSearchParams";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
