@@ -35,6 +35,7 @@ public class ExercisesController : ApiController
   }
 
   [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetExercisesPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetExercisePageQuery>(request);
@@ -46,6 +47,7 @@ public class ExercisesController : ApiController
   }
 
   [HttpGet("{exerciseId}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetExercise(string exerciseId)
   {
     var query = new GetExerciseByIdQuery(exerciseId);
@@ -57,6 +59,7 @@ public class ExercisesController : ApiController
   }
 
   [HttpGet]
+  [AllowAnonymous]
   public async Task<IActionResult> GetAllExercises()
   {
     var query = new GetAllExercisesQuery();

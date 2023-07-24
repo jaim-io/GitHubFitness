@@ -1,5 +1,5 @@
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../contexts/AuthProvider";
@@ -14,6 +14,7 @@ const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/auth/login`;
 const LoginPage = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const emailRef = useRef<HTMLInputElement>();
+  const location = useLocation();
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +38,11 @@ const LoginPage = () => {
       emailRef.current.focus();
     }
     if (auth.user != null) {
-      navigate("/");
+      if (location.key === "default") {
+        navigate("/");
+      } else {
+        navigate(-1);
+      }
     }
   });
 
@@ -59,7 +64,11 @@ const LoginPage = () => {
         .then((res) => {
           if (res.data.id) {
             setAuth(res.data);
-            navigate("/");
+            if (location.key === "default") {
+              navigate("/");
+            } else {
+              navigate(-1);
+            }
           }
         })
         .catch((err) => {

@@ -1,5 +1,27 @@
-Forgot password;
-Email notifications;
-User dashboard;
+--Auth--
+Refactor login requirement;
+2FA;
 
-Coach profile page
+--/create/edit/login/settings/--
+verify urls frontend;
+verify all fields frontend;
+
+--Coach backend--
+Coach image;
+Coach social media;
+
+--Coach profile--
+Profile page;
+
+--Login--
+Sign Up;
+Forgot password;
+
+--User settings--
+Passord change;
+Email change;
+Email notifications;
+
+--User profile--
+view saves;
+remove save;

@@ -30,6 +30,7 @@ public class CoachesController : ApiController
   }
 
   [HttpGet("{coachId}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetCoach(string coachId)
   {
     var query = new GetCoachByIdQuery(coachId);

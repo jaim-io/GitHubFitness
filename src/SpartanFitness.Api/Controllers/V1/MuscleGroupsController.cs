@@ -37,6 +37,7 @@ public class MuscleGroupsController : ApiController
   }
 
   [HttpGet("page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetMuscleGroupsPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetMuscleGroupPageQuery>(request);
@@ -48,6 +49,7 @@ public class MuscleGroupsController : ApiController
   }
 
   [HttpGet("ids/{id?}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetMuscleGroupsByIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMuscleGroupsByIdQuery(ids);
@@ -59,6 +61,7 @@ public class MuscleGroupsController : ApiController
   }
 
   [HttpGet]
+  [AllowAnonymous]
   public async Task<IActionResult> GetAllMuscleGroups()
   {
     var query = new GetAllMuscleGroupsQuery();
@@ -70,6 +73,7 @@ public class MuscleGroupsController : ApiController
   }
 
   [HttpGet("muscle-ids/{id?}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetMuscleGroupsByMuscleIds([FromQuery(Name = "id")] List<string> ids)
   {
     var query = new GetMuscleGroupsByMuscleIdsQuery(ids);
@@ -81,6 +85,7 @@ public class MuscleGroupsController : ApiController
   }
 
   [HttpGet("{muscleGroupId}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetMuscleGroup(string muscleGroupId)
   {
     var query = new GetMuscleGroupByIdQuery(muscleGroupId);

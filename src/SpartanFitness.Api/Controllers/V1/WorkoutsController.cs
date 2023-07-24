@@ -35,6 +35,7 @@ public class WorkoutsController : ApiController
   }
 
   [HttpGet("{workoutId}")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetWorkout(string coachId, string workoutId)
   {
     var query = new GetWorkoutByIdQuery(coachId, workoutId);
@@ -46,6 +47,7 @@ public class WorkoutsController : ApiController
   }
 
   [HttpGet("/api/v{version:apiVersion}/coaches/all/[controller]")]
+  [AllowAnonymous]
   public async Task<IActionResult> GetAllWorkouts()
   {
     var query = new GetAllWorkoutsQuery();
@@ -57,6 +59,8 @@ public class WorkoutsController : ApiController
   }
 
   [HttpGet("/api/v{version:apiVersion}/coaches/all/[controller]/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  [AllowAnonymous]
+
   public async Task<IActionResult> GetWorkoutsPage([FromQuery] PagingRequest request)
   {
     var query = _mapper.Map<GetWorkoutPageQuery>(request);

@@ -39,6 +39,7 @@ import CoachDetailPage, {
   loader as coachDetailLoader,
 } from "./pages/coaches/CoachDetail";
 import CoachWorkoutsPage from "./pages/coaches/CoachWorkouts";
+import LoginRequired from "./components/LoginRequired";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
           { index: true, element: <HomePage /> },
           {
             path: "user",
+            element: <LoginRequired />,
             children: [
               { index: true, element: <UserDetailPage /> },
               { path: "settings", element: <UserSettingsPage /> },
@@ -72,8 +74,14 @@ const router = createBrowserRouter([
               },
               {
                 path: ":exerciseId/edit",
-                element: <EditExercisePage />,
-                loader: exerciseDetailLoader,
+                element: <LoginRequired />,
+                children: [
+                  {
+                    index: true,
+                    element: <EditExercisePage />,
+                    loader: exerciseDetailLoader,
+                  },
+                ],
               },
             ],
           },
@@ -89,8 +97,14 @@ const router = createBrowserRouter([
               },
               {
                 path: ":muscleGroupId/edit",
-                element: <EditMuscleGroupPage />,
-                loader: muscleGroupDetailLoader,
+                element: <LoginRequired />,
+                children: [
+                  {
+                    index: true,
+                    element: <EditMuscleGroupPage />,
+                    loader: muscleGroupDetailLoader,
+                  },
+                ],
               },
             ],
           },
@@ -106,8 +120,14 @@ const router = createBrowserRouter([
               },
               {
                 path: ":muscleId/edit",
-                element: <EditMusclePage />,
-                loader: muscleDetailLoader,
+                element: <LoginRequired />,
+                children: [
+                  {
+                    index: true,
+                    element: <EditMusclePage />,
+                    loader: muscleDetailLoader,
+                  },
+                ],
               },
             ],
           },
@@ -147,8 +167,14 @@ const router = createBrowserRouter([
                       },
                       {
                         path: ":workoutId/edit",
-                        element: <EditWorkoutPage />,
-                        loader: workoutDetailLoader,
+                        element: <LoginRequired />,
+                        children: [
+                          {
+                            index: true,
+                            element: <EditWorkoutPage />,
+                            loader: workoutDetailLoader,
+                          },
+                        ],
                       },
                     ],
                   },
