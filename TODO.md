@@ -3,7 +3,6 @@ Refactor login requirement;
 2FA;
 
 --/create/edit/login/settings/--
-verify urls frontend;
 verify all fields frontend;
 
 --Coach backend--

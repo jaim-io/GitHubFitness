@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import useRefreshToken from "../hooks/useRefreshToken";
-import useAuth from "../hooks/useAuth";
 import { Outlet } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useRefreshToken from "../hooks/useRefreshToken";
 import LoadingIcon from "./Icons/LoadingIcon";
-import LoginPage from "../pages/Login";
 
 const LoginPersistance = () => {
   const { auth } = useAuth();
@@ -22,18 +21,6 @@ const LoginPersistance = () => {
     !auth.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
-  // return !persist && auth.user === undefined ? (
-  //   <LoginPage />
-  // ) : isLoading ? (
-  //   <div className="absolute left-[50%] top-[50%]">
-  //     <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-8 h-8" />
-  //   </div>
-  // ) : auth.user === undefined ? (
-  //   <LoginPage />
-  // ) : (
-  //   <Outlet />
-  // );
-
   return !persist ? (
     <Outlet />
   ) : isLoading ? (
@@ -46,11 +33,3 @@ const LoginPersistance = () => {
 };
 
 export default LoginPersistance;
-
-// if (!auth.user) {
-//   redirect("/login");
-// }
-
-// if (auth.user === undefined) {
-//   return redirect("/login");
-// }

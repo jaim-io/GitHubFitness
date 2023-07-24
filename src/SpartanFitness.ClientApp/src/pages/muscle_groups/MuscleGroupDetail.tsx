@@ -26,7 +26,7 @@ const MuscleGroupDetailPage = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(
-    Object.values(auth.user!.savedMuscleGroupIds ?? []).includes(
+    Object.values(auth.user?.savedMuscleGroupIds ?? []).includes(
       muscleGroup.id,
     ),
   );
@@ -93,22 +93,24 @@ const MuscleGroupDetailPage = () => {
             className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
           />
 
-          <button
-            className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
-            onClick={handleSaving}
-          >
-            {saved ? (
-              <>
-                <MdBookmarkAdded className="mr-1 fill-[#e3b341]" size={16} />
-                Saved
-              </>
-            ) : (
-              <>
-                <MdOutlineBookmarkAdd className="mr-1" size={16} />
-                Save
-              </>
-            )}
-          </button>
+          {auth.user && (
+            <button
+              className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
+              onClick={handleSaving}
+            >
+              {saved ? (
+                <>
+                  <MdBookmarkAdded className="mr-1 fill-[#e3b341]" size={16} />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <MdOutlineBookmarkAdd className="mr-1" size={16} />
+                  Save
+                </>
+              )}
+            </button>
+          )}
 
           <div className="mt-4">
             {!musclesAreLoading || musclesAreLoading === undefined ? (
