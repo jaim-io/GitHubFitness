@@ -240,6 +240,7 @@ const WorkoutDetailPage = () => {
             )}
           </div>
         </div>
+
         <div className="relative">
           <div className="border border-gray w-[45rem] h-fit rounded-lg px-6 py-6">
             <h1 className="text-light-gray flex items-center">

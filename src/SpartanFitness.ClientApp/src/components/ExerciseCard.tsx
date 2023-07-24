@@ -31,7 +31,7 @@ const ExerciseCard = ({ exercise }: Props) => {
         {exercise.description}
       </p>
       <Link
-        to={exercise.id}
+        to={`/exercises/${exercise.id}`}
         className="bg-dark-green hover:bg-light-green text-white py-1.5 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full block text-center mt-3 text-sm border border-gray"
       >
         View
