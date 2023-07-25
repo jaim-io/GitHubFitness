@@ -23,7 +23,9 @@ const MainNavigation = () => {
           <MainNavItem path="/">Home</MainNavItem>
           <div className="bg-gray self-stretch w-[1px]" />
           <MainNavItem path="/exercises">Exercises</MainNavItem>
-          <MainNavItem path="/coaches/all/workouts">Workouts</MainNavItem>
+          <MainNavItem path="/coaches/all/workouts" relatedPath="/workouts">
+            Workouts
+          </MainNavItem>
           <div className="bg-gray self-stretch w-[1px]" />
           <MainNavItem path="/muscles">Muscles</MainNavItem>
           <MainNavItem path="/muscle-groups">Muscle groups</MainNavItem>

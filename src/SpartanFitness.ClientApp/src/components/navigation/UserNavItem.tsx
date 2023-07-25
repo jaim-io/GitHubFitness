@@ -45,8 +45,10 @@ const UserNavItem = ({ ...props }) => {
                 <Menu.Item>
                   <NavLink
                     to="/user/settings"
-                    className={
-                      "flex w-full items-center px-3 py-1 hover:bg-blue"
+                    className={({ isActive }) =>
+                      `flex w-full items-center px-3 py-1 hover:bg-blue ${
+                        isActive ? "bg-blue hover:bg-opacity-80" : ""
+                      }`
                     }
                     end
                   >
