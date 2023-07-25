@@ -116,6 +116,10 @@ const EditWorkoutPage = () => {
   }, []);
 
   const handleSaveChanges = async () => {
+    if (!isValidForm) {
+      return;
+    }
+
     setIsLoading(true);
 
     await axios

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
-import { BsCloudUploadFill } from "react-icons/bs";
+import { BsCloudUploadFill, BsExclamationCircle } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { TbGhost2Filled } from "react-icons/tb";
@@ -16,6 +16,12 @@ import useMusclesByMuscleGroupId from "../../hooks/useMusclesByMuscleGroupId";
 import Muscle from "../../types/domain/Muscle";
 import MuscleGroup from "../../types/domain/MuscleGroup";
 import useMuscles from "../../hooks/useMuscles";
+import {
+  StringValidatonProps,
+  validateDefaultUrl,
+  validateDescription,
+  validateName,
+} from "../../utils/StringValidations";
 
 const MUSCLEGROUP_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscle-groups`;
 
@@ -31,10 +37,30 @@ const EditMuscleGroupPage = () => {
     useMusclesByMuscleGroupId(muscleGroup.id);
 
   const [name, setName] = useState(muscleGroup.name);
+  const [isValidName, setIsValidName] = useState(true);
+  const [nameError, setNameError] = useState<string>();
+  const nameValidationProps: StringValidatonProps = {
+    minLength: 5,
+    maxLength: 100,
+  };
+
   const [description, setDescription] = useState(muscleGroup.description);
+  const [isValidDescription, setIsValidDescription] = useState(true);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [descriptionError, setDescriptionError] = useState<string>();
+  const descriptionValidationProps: StringValidatonProps = {
+    maxLength: 2048,
+  };
+
   const [image, setImage] = useState<string>(muscleGroup.image);
   const [previewImage, setPreviewImage] = useState<string>(muscleGroup.image);
+  const [isValidImage, setIsValidImage] = useState(true);
+  const [imageError, setImageError] = useState<string>();
+  const imageValidationProps: StringValidatonProps = {
+    maxLength: 2048,
+  };
+
+  const isValidForm = isValidName && isValidDescription && isValidImage;
 
   const [selectedMuscles, setSelectedMuscles] = useState<
     SelectOption<string>[]
@@ -83,6 +109,10 @@ const EditMuscleGroupPage = () => {
   const popupActive = () => showMuscleSelector || showImageUrlInputBar;
 
   const handleSaveChanges = async () => {
+    if (!isValidForm) {
+      return;
+    }
+
     setIsLoading(true);
 
     await axios
@@ -152,10 +182,12 @@ const EditMuscleGroupPage = () => {
         </button>
         <button
           className={`px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
-            popupActive() ? "hover:cursor-not-allowed opacity-50" : ""
+            popupActive() || !isValidForm
+              ? "hover:cursor-not-allowed opacity-50"
+              : ""
           }`}
           onClick={handleSaveChanges}
-          disabled={popupActive()}
+          disabled={popupActive() || !isValidForm}
         >
           {isLoading || isLoading == undefined ? (
             <div className="flex items-center justify-center animate-pulse">
@@ -243,10 +275,32 @@ const EditMuscleGroupPage = () => {
                   }`}
                   value={name}
                   spellCheck={false}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    const validation = validateName(
+                      e.target.value,
+                      nameValidationProps,
+                    );
+
+                    if (validation.isValid) {
+                      setNameError(undefined);
+                    } else {
+                      setNameError(validation.errorMsg);
+                    }
+                    setIsValidName(validation.isValid);
+                    setName(e.target.value);
+                  }}
                 />
               </span>
             </h1>
+            {nameError && (
+              <div className="pt-2">
+                <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+                  <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+                  {nameError}
+                </p>
+              </div>
+            )}
+
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
             <p className="pt-4">
               <textarea
@@ -257,12 +311,33 @@ const EditMuscleGroupPage = () => {
                 value={description}
                 spellCheck={false}
                 onChange={(e) => {
+                  const validation = validateDescription(
+                    e.target.value,
+                    descriptionValidationProps,
+                  );
+
+                  if (validation.isValid) {
+                    setDescriptionError(undefined);
+                  } else {
+                    setDescriptionError(validation.errorMsg);
+                  }
+                  setIsValidDescription(validation.isValid);
+
                   setDescriptionAreaHeight();
                   setDescription(e.target.value);
                 }}
               />
             </p>
+            {descriptionError && (
+              <div className="pt-2">
+                <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+                  <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+                  {descriptionError}
+                </p>
+              </div>
+            )}
           </div>
+
           <div className="mt-4">
             <button
               type="button"
@@ -292,6 +367,18 @@ const EditMuscleGroupPage = () => {
         <button
           type="button"
           onClick={() => {
+            // Resets to the previous value
+            const validation = validateDefaultUrl(
+              previewImage,
+              imageValidationProps,
+            );
+            if (validation.isValid) {
+              setImageError(undefined);
+            } else {
+              setImageError(validation.errorMsg);
+            }
+
+            setIsValidImage(validation.isValid);
             setShowImageUrlInputBar(false);
             setImage(previewImage);
           }}
@@ -317,13 +404,35 @@ const EditMuscleGroupPage = () => {
 
         <div className="flex w-full items-center justify-center">
           <input
-            onChange={(e) => setImage(e.target.value)}
+            onChange={(e) => {
+              const validation = validateDefaultUrl(
+                e.target.value,
+                imageValidationProps,
+              );
+
+              if (validation.isValid) {
+                setImageError(undefined);
+              } else {
+                setImageError(validation.errorMsg);
+              }
+              setIsValidImage(validation.isValid);
+              setImage(e.target.value);
+            }}
             value={image}
             className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
             autoComplete="off"
             placeholder="https://example.com/your-image"
           />
         </div>
+
+        {imageError && (
+          <div className="pt-2">
+            <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+              <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+              {imageError}
+            </p>
+          </div>
+        )}
       </div>
 
       <Draggable nodeRef={muscleSelectorRef}>
