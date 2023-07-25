@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
-import { BsCloudUploadFill } from "react-icons/bs";
+import { BsCloudUploadFill, BsExclamationCircle } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -10,13 +10,19 @@ import { toast } from "react-toastify";
 import EditableWorkoutExerciseTable, {
   WorkoutExerciseWrapper,
 } from "../../components/EditableWorkoutExerciseTable";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import useExercises from "../../hooks/useExercises";
 import Workout, { WorkoutExercise } from "../../types/domain/Workout";
 import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscles from "../../hooks/useMuscles";
 import { SiElectron } from "react-icons/si";
+import {
+  StringValidatonProps,
+  validateDefaultUrl,
+  validateDescription,
+  validateName,
+} from "../../utils/StringValidations";
 
 const EditWorkoutPage = () => {
   const { auth } = useAuth();
@@ -27,10 +33,29 @@ const EditWorkoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [name, setName] = useState(workout.name);
+  const [isValidName, setIsValidName] = useState(true);
+  const [nameError, setNameError] = useState<string>();
+  const nameValidationProps: StringValidatonProps = {
+    minLength: 5,
+    maxLength: 100,
+  };
+
   const [description, setDescription] = useState(workout.description);
+  const [isValidDescription, setIsValidDescription] = useState(true);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [descriptionError, setDescriptionError] = useState<string>();
+  const descriptionValidationProps: StringValidatonProps = {
+    maxLength: 2048,
+  };
+
   const [image, setImage] = useState<string>(workout.image);
+  const [isValidImage, setIsValidImage] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>(workout.image);
+  const [imageError, setImageError] = useState<string>();
+  const imageValidationProps: StringValidatonProps = {
+    maxLength: 2048,
+  };
+
   const navigate = useNavigate();
   const [showImageUrlInputBar, setShowImageUrlInputBar] = useState(false);
 
@@ -41,6 +66,12 @@ const EditWorkoutPage = () => {
     WorkoutExerciseWrapper[]
   >([]);
 
+  const validExercises = !workoutExercises
+    .map((we) => we.isValid)
+    .includes(false);
+  const isValidForm =
+    isValidName && isValidDescription && isValidImage && validExercises;
+
   useEffect(() => {
     if (exercises) {
       const initialWorkoutExercises: WorkoutExerciseWrapper[] = [];
@@ -50,6 +81,7 @@ const EditWorkoutPage = () => {
           initialWorkoutExercises!.push({
             ...we,
             ...exercise,
+            isValid: true,
             id: we.id,
             exerciseId: exercise.id,
           });
@@ -155,10 +187,12 @@ const EditWorkoutPage = () => {
         </button>
         <button
           className={`px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
-            showImageUrlInputBar ? "hover:cursor-not-allowed opacity-50" : ""
+            showImageUrlInputBar || !isValidForm
+              ? "hover:cursor-not-allowed opacity-50"
+              : ""
           }`}
           onClick={handleSaveChanges}
-          disabled={showImageUrlInputBar}
+          disabled={showImageUrlInputBar || !isValidForm}
         >
           {isLoading || isLoading == undefined ? (
             <div className="flex items-center justify-center animate-pulse">
@@ -292,10 +326,32 @@ const EditWorkoutPage = () => {
                   }`}
                   value={name}
                   spellCheck={false}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    const validation = validateName(
+                      e.target.value,
+                      nameValidationProps,
+                    );
+
+                    if (validation.isValid) {
+                      setNameError(undefined);
+                    } else {
+                      setNameError(validation.errorMsg);
+                    }
+                    setIsValidName(validation.isValid);
+                    setName(e.target.value);
+                  }}
                 />
               </span>
             </h1>
+            {nameError && (
+              <div className="pt-2">
+                <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+                  <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+                  {nameError}
+                </p>
+              </div>
+            )}
+
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
             <p className="pt-4">
               <textarea
@@ -306,11 +362,32 @@ const EditWorkoutPage = () => {
                 value={description}
                 spellCheck={false}
                 onChange={(e) => {
+                  const validation = validateDescription(
+                    e.target.value,
+                    descriptionValidationProps,
+                  );
+
+                  if (validation.isValid) {
+                    setDescriptionError(undefined);
+                  } else {
+                    setDescriptionError(validation.errorMsg);
+                  }
+                  setIsValidDescription(validation.isValid);
+
                   setDescriptionAreaHeight();
                   setDescription(e.target.value);
                 }}
               />
             </p>
+
+            {descriptionError && (
+              <div className="pt-2">
+                <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+                  <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+                  {descriptionError}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="border border-gray w-[55rem] h-fit rounded-lg px-6 py-6  mt-4">
@@ -364,12 +441,24 @@ const EditWorkoutPage = () => {
         <button
           type="button"
           onClick={() => {
+            // Resets to the previous value
+            const validation = validateDefaultUrl(
+              previewImage,
+              imageValidationProps,
+            );
+            if (validation.isValid) {
+              setImageError(undefined);
+            } else {
+              setImageError(validation.errorMsg);
+            }
+
+            setIsValidImage(validation.isValid);
             setShowImageUrlInputBar(false);
             setImage(previewImage);
           }}
           className="absolute top-1 left-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
         >
-          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+          <span className="bg-none text-white border-none outline-none text-lg px-3">
             &times;
           </span>
         </button>
@@ -377,25 +466,52 @@ const EditWorkoutPage = () => {
         <button
           type="button"
           onClick={() => {
-            setShowImageUrlInputBar(false);
-            setPreviewImage(image);
+            if (isValidImage) {
+              setShowImageUrlInputBar(false);
+              setPreviewImage(image);
+            }
           }}
-          className="absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center cursor-pointer"
+          disabled={!isValidImage}
+          className={`absolute top-1 right-1 rounded-lg flex items-center hover:bg-gray justify-center text-white ${
+            !isValidImage ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
         >
-          <span className="bg-none text-white border-none outline-none cursor-pointer text-lg px-3">
+          <span className="bg-none border-none outline-none text-lg px-3">
             &#x2713;
           </span>
         </button>
 
         <div className="flex w-full items-center justify-center">
           <input
-            onChange={(e) => setImage(e.target.value)}
+            onChange={(e) => {
+              const validation = validateDefaultUrl(
+                e.target.value,
+                imageValidationProps,
+              );
+
+              if (validation.isValid) {
+                setImageError(undefined);
+              } else {
+                setImageError(validation.errorMsg);
+              }
+              setIsValidImage(validation.isValid);
+              setImage(e.target.value);
+            }}
             value={image}
             className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
             autoComplete="off"
             placeholder="https://example.com/your-image"
           />
         </div>
+
+        {imageError && (
+          <div className="pt-2">
+            <p className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center">
+              <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+              {imageError}
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

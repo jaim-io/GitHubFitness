@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
-import LoadingIcon from "./Icons/LoadingIcon";
+import LoadingIcon from "./icons/LoadingIcon";
 
 const LoginPersistance = () => {
   const { auth } = useAuth();

@@ -17,7 +17,7 @@ import useAuth from "../../hooks/useAuth";
 import Muscle from "../../types/domain/Muscle";
 import useMuscleGroupsByMuscleId from "../../hooks/useMuscleGroupsByMuscleId";
 import { AiFillEdit } from "react-icons/ai";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 

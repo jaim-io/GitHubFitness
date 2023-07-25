@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Workout from "../types/domain/Workout";
+import Workout from "../../types/domain/Workout";
 import { IoFitnessSharp } from "react-icons/io5";
 
 type Props = {

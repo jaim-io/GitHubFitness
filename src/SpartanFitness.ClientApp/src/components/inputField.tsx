@@ -15,7 +15,7 @@ type Props = {
   setIsValid: (value: boolean) => void;
 };
 
-const inputField = ({
+const InputField = ({
   value,
   placeholder = "",
   label,
@@ -59,4 +59,4 @@ const inputField = ({
   );
 };
 
-export default inputField;
+export default InputField;

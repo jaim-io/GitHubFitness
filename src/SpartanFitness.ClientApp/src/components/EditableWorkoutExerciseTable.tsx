@@ -43,9 +43,9 @@ export const createDefaultValue = (
     name: randomExercise.name,
     orderNumber: orderNumber,
     exerciseId: randomExercise.id,
-    sets: 0,
-    minReps: 0,
-    maxReps: 0,
+    sets: 1,
+    minReps: 1,
+    maxReps: 1,
     exerciseType: EXERCISE_TYPES[0],
     isValid: false,
     muscleGroupIds: [],
@@ -253,12 +253,18 @@ const Row = ({
   const [setsIsValid, setSetsIsValid] = useState(
     validateSets(sets, setsValidationProps).isValid,
   );
+
+  const minRepsValidation = validateMinReps(minReps, repsValidationProps);
+  const maxRepsvalidation = validateMaxReps(maxReps, repsValidationProps);
+  const ratioValidation = validateRepsRatio(minReps, maxReps);
+
   const [minRepsIsValid, setMinRepsIsValid] = useState(
-    validateMinReps(minReps, repsValidationProps).isValid,
+    minRepsValidation.isValid && ratioValidation.isValid,
   );
   const [maxRepsIsValid, setMaxRepsIsValid] = useState(
-    validateMaxReps(maxReps, repsValidationProps).isValid,
+    maxRepsvalidation.isValid && ratioValidation.isValid,
   );
+
   const [errors, setErrors] = useState<InputError[]>([]);
 
   const updateErrors = (id: string, validation: ValidationResult) => {

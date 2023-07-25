@@ -4,8 +4,8 @@ import { AiFillSetting } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
-import DefaultProfileSvg from "../assets/default-profile.svg";
-import AuthContext from "../contexts/AuthProvider";
+import DefaultProfileSvg from "../../assets/default-profile.svg";
+import AuthContext from "../../contexts/AuthProvider";
 
 const UserNavItem = ({ ...props }) => {
   const { auth, logout } = useContext(AuthContext);

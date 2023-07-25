@@ -9,7 +9,7 @@ import { RxExit } from "react-icons/rx";
 import { TbGhost2Filled } from "react-icons/tb";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import Select, { SelectOption } from "../../components/Select";
 import useAuth from "../../hooks/useAuth";
 import useMusclesByMuscleGroupId from "../../hooks/useMusclesByMuscleGroupId";

@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useSearchParams } from "react-router-dom";
-import ExerciseCard from "../../components/ExerciseCard";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import ExerciseCard from "../../components/cards/ExerciseCard";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import ListBox from "../../components/ListBox";
 import NewButton from "../../components/NewButton";
-import PageNavigation from "../../components/PageNavigation";
+import PageNavigation from "../../components/navigation/PageNavigation";
 import SearchBar from "../../components/SearchBar";
 import useAuth from "../../hooks/useAuth";
 import useExercisesPage from "../../hooks/useExercisesPage";

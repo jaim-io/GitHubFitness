@@ -15,7 +15,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import useCoach from "../../hooks/useCoach";
 import useMuscleGroupsByIds from "../../hooks/useMuscleGroupsByIds";

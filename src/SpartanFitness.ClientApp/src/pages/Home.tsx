@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import useExercisesPage from "../hooks/useExercisesPage";
-import LoadingIcon from "../components/Icons/LoadingIcon";
-import ExerciseCard from "../components/ExerciseCard";
+import LoadingIcon from "../components/icons/LoadingIcon";
+import ExerciseCard from "../components/cards/ExerciseCard";
 import useWorkoutsPage from "../hooks/useWorkoutsPage";
-import WorkoutCard from "../components/WorkoutCard";
+import WorkoutCard from "../components/cards/WorkoutCard";
 
 const HomePage = () => {
   const [exercisesPage, , exercisesPageIsLoading] = useExercisesPage({

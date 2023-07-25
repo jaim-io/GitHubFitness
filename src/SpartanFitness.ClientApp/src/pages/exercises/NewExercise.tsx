@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import Select, { SelectOption } from "../../components/Select";
 import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
 import Exception from "../../types/domain/Exception";
@@ -16,7 +16,7 @@ import {
   validateName,
   validateYoutubeUrl,
 } from "../../utils/StringValidations";
-import InputField from "../../components/inputField";
+import InputField from "../../components/InputField";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 const MUSCLES_ENDPOINT = `${

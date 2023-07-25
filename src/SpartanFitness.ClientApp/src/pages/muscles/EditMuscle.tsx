@@ -7,7 +7,7 @@ import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import Muscle from "../../types/domain/Muscle";
 import useMuscleGroupsByMuscleId from "../../hooks/useMuscleGroupsByMuscleId";

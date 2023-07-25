@@ -8,14 +8,14 @@ import EditableWorkoutExerciseTable, {
   WorkoutExerciseWrapper,
   createDefaultValue as createDefaultWorkoutExercise,
 } from "../../components/EditableWorkoutExerciseTable";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import useExercises from "../../hooks/useExercises";
 import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscles from "../../hooks/useMuscles";
 import Exception from "../../types/domain/Exception";
 import Workout, { WorkoutExercise } from "../../types/domain/Workout";
-import InputField from "../../components/inputField";
+import InputField from "../../components/InputField";
 import {
   validateDefaultUrl,
   validateDescription,
@@ -37,8 +37,8 @@ const NewWorkoutPage = () => {
 
   const [image, setImage] = useState("");
   const [isValidImage, setIsValidImage] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [exercises, , exercisesLoading] = useExercises();
   const [muscles, , musclesLoading] = useMuscles();
   const [muscleGroups, muscleGroupsLoading] = useMuscleGroups();
@@ -71,7 +71,11 @@ const NewWorkoutPage = () => {
     ? activeMuscleGroupIds.map((id) => muscleGroups.find((m) => m.id === id)!)
     : undefined;
 
-  const isValidForm = isValidName && isValidDescription && isValidImage;
+  const validExercises = !workoutExercises
+    .map((we) => we.isValid)
+    .includes(false);
+  const isValidForm =
+    isValidName && isValidDescription && isValidImage && validExercises;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -159,9 +163,9 @@ const NewWorkoutPage = () => {
               value={name}
               onChange={setName}
               placeholder="Push"
-              label="Exercise name *"
+              label="Workout name *"
               validator={validateName}
-              validationProps={{ minLength: 0, maxLength: 100 }}
+              validationProps={{ minLength: 5, maxLength: 100 }}
               setIsValid={setIsValidName}
             />
           </div>
@@ -301,8 +305,11 @@ const NewWorkoutPage = () => {
               Cancel
             </Link>
             <button
-              className="absolute right-0 bg-dark-green hover:bg-light-green border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center"
+              className={`absolute right-0 bg-dark-green hover:bg-light-green border border-[rgba(240,246,252,0.1)] rounded-lg py-1 px-3 flex justify-center items-center ${
+                !isValidForm ? "cursor-not-allowed opacity-50" : ""
+              }`}
               type="submit"
+              disabled={!isValidForm}
             >
               {!isLoading && <p>Create workout</p>}
               {(isLoading || isLoading == undefined) && (

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import LoadingIcon from "./Icons/LoadingIcon";
+import LoadingIcon from "./icons/LoadingIcon";
 
 const LoginRequired = () => {
   const { auth } = useAuth();

@@ -6,12 +6,12 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import ListBox from "../../components/ListBox";
 import NewButton from "../../components/NewButton";
-import PageNavigation from "../../components/PageNavigation";
+import PageNavigation from "../../components/navigation/PageNavigation";
 import SearchBar from "../../components/SearchBar";
-import WorkoutCard from "../../components/WorkoutCard";
+import WorkoutCard from "../../components/cards/WorkoutCard";
 import useAuth from "../../hooks/useAuth";
 import useWorkoutsPage from "../../hooks/useWorkoutsPage";
 import CurrentSearchParams from "../../utils/CurrentSearchParams";

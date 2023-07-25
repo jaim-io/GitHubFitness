@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LogoSvg from "../assets/logo.svg";
-import LoadingIcon from "../components/Icons/LoadingIcon";
+import LoadingIcon from "../components/icons/LoadingIcon";
 import AuthContext from "../contexts/AuthProvider";
 import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 import Exception from "../types/domain/Exception";

@@ -25,7 +25,7 @@ import Workout, { WorkoutExercise } from "../../types/domain/Workout";
 import useExercisesByIds from "../../hooks/useExercisesByIds";
 import WorkoutExerciseTable from "../../components/WorkoutExerciseTable";
 import moment from "moment";
-import LoadingIcon from "../../components/Icons/LoadingIcon";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
