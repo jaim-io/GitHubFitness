@@ -15,7 +15,7 @@ import {
   validateDescription,
   validateName,
   validateYoutubeUrl,
-} from "../../utils/Validations";
+} from "../../utils/StringValidations";
 import InputField from "../../components/inputField";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
@@ -219,7 +219,7 @@ const NewExercisePage = () => {
               placeholder="Barbell bench press"
               label="Exercise name *"
               validator={validateName}
-              validatorProps={{ minLength: 5, maxLength: 100 }}
+              validationProps={{ minLength: 5, maxLength: 100 }}
               setIsValid={setIsValidName}
             />
           </div>
@@ -238,7 +238,7 @@ const NewExercisePage = () => {
                 </span>
               }
               validator={validateDescription}
-              validatorProps={{ maxLength: 2048 }}
+              validationProps={{ maxLength: 2048 }}
               setIsValid={setIsValidDescription}
             />
           </div>
@@ -319,7 +319,7 @@ const NewExercisePage = () => {
               placeholder="https://google.com/exercise-image"
               label={"Image URL *"}
               validator={validateDefaultUrl}
-              validatorProps={{ maxLength: 2048 }}
+              validationProps={{ maxLength: 2048 }}
               setIsValid={setIsValidImage}
             />
           </div>
@@ -331,7 +331,7 @@ const NewExercisePage = () => {
               placeholder="https://www.youtube-nocookie.com/embed/exercise-video"
               label={"Video URL *"}
               validator={validateYoutubeUrl}
-              validatorProps={{ maxLength: 2048 }}
+              validationProps={{ maxLength: 2048 }}
               setIsValid={setIsValidVideo}
             />
           </div>

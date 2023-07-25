@@ -1,24 +1,18 @@
 import { ReactNode, useState } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
-import { ValidationResult } from "../utils/Validations";
+import {
+  ValidationResult,
+  StringValidatonProps,
+} from "../utils/StringValidations";
 
 type Props = {
   value: string;
   placeholder: string;
   label: string | ReactNode;
   onChange: (value: string) => void;
-  validator: (
-    value: string,
-    minLength?: number,
-    maxLength?: number,
-  ) => ValidationResult;
-  validatorProps: ValidorProps;
+  validator: (value: string, props: StringValidatonProps) => ValidationResult;
+  validationProps: StringValidatonProps;
   setIsValid: (value: boolean) => void;
-};
-
-type ValidorProps = {
-  minLength?: number;
-  maxLength?: number;
 };
 
 const inputField = ({
@@ -27,7 +21,7 @@ const inputField = ({
   label,
   onChange,
   validator,
-  validatorProps,
+  validationProps,
   setIsValid,
 }: Props) => {
   const [error, setError] = useState<string>();
@@ -41,11 +35,7 @@ const inputField = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => {
-          const validation = validator(
-            e.target.value,
-            validatorProps.minLength,
-            validatorProps.maxLength,
-          );
+          const validation = validator(e.target.value, validationProps);
 
           if (validation.isValid) {
             setError(undefined);

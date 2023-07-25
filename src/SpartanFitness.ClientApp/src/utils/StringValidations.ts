@@ -1,4 +1,5 @@
-export type ValidatonProps = {
+export type StringValidatonProps = {
+  minLength?: number;
   maxLength?: number;
 };
 
@@ -8,22 +9,21 @@ export type ValidationResult =
 
 export const validateName = (
   name: string,
-  minLength?: number,
-  maxLength?: number,
+  props: StringValidatonProps,
 ): ValidationResult => {
   let result: ValidationResult = { isValid: true };
 
-  if (minLength && name.length < minLength) {
+  if (props.minLength && name.length < props.minLength) {
     result = {
       isValid: false,
-      errorMsg: `Name has to be longer then ${minLength} characters.`,
+      errorMsg: `Name has to be longer than ${props.minLength} characters`,
     };
   }
 
-  if (maxLength && name.length > maxLength) {
+  if (props.maxLength && name.length > props.maxLength) {
     result = {
       isValid: false,
-      errorMsg: `Name cannot be longer then ${maxLength} characters.`,
+      errorMsg: `Name cannot be longer than ${props.maxLength} characters`,
     };
   }
 
@@ -32,22 +32,21 @@ export const validateName = (
 
 export const validateDescription = (
   description: string,
-  minLength?: number,
-  maxLength?: number,
+  props: StringValidatonProps,
 ): ValidationResult => {
   let result: ValidationResult = { isValid: true };
 
-  if (minLength && description.length < minLength) {
+  if (props.minLength && description.length < props.minLength) {
     result = {
       isValid: false,
-      errorMsg: `Description has to be longer then ${minLength} characters.`,
+      errorMsg: `Description has to be longer than ${props.minLength} characters`,
     };
   }
 
-  if (maxLength && description.length > maxLength) {
+  if (props.maxLength && description.length > props.maxLength) {
     result = {
       isValid: false,
-      errorMsg: `Description cannot be longer then ${maxLength} characters.`,
+      errorMsg: `Description cannot be longer than ${props.maxLength} characters`,
     };
   }
 
@@ -57,21 +56,21 @@ export const validateDescription = (
 const defaultUrlRegex = new RegExp("^https://");
 export const validateDefaultUrl = (
   url: string,
-  maxLength?: number,
+  props: StringValidatonProps,
 ): ValidationResult => {
   let result: ValidationResult = defaultUrlRegex.test(url)
     ? { isValid: true }
     : {
         isValid: false,
-        errorMsg: "URL has to start with 'https://'.",
+        errorMsg: "URL has to start with 'https://'",
       };
 
-  if (maxLength && url.length > maxLength) {
+  if (props.maxLength && url.length > props.maxLength) {
     result = {
       isValid: false,
       errorMsg: result.isValid
-        ? `URL cannot be longer then ${maxLength} characters.`
-        : `${result.errorMsg} URL cannot be longer then ${maxLength} characters.`,
+        ? `URL cannot be longer than ${props.maxLength} characters.`
+        : `${result.errorMsg} URL cannot be longer than ${props.maxLength} characters`,
     };
   }
 
@@ -81,22 +80,22 @@ export const validateDefaultUrl = (
 const youtubeUrlRegex = new RegExp("^https://www.youtube-nocookie.com/embed/");
 export const validateYoutubeUrl = (
   url: string,
-  maxLength?: number,
+  props: StringValidatonProps,
 ): ValidationResult => {
   let result: ValidationResult = youtubeUrlRegex.test(url)
     ? { isValid: true }
     : {
         isValid: false,
         errorMsg:
-          "URL has to start with 'https://www.youtube-nocookie.com/embed/'.",
+          "URL has to start with 'https://www.youtube-nocookie.com/embed/'",
       };
 
-  if (maxLength && url.length > maxLength) {
+  if (props.maxLength && url.length > props.maxLength) {
     result = {
       isValid: false,
       errorMsg: result.isValid
-        ? `URL cannot be longer then ${maxLength} characters.`
-        : `${result.errorMsg} URL cannot be longer then ${maxLength} characters.`,
+        ? `URL cannot be longer than ${props.maxLength} characters.`
+        : `${result.errorMsg} and cannot be longer than ${props.maxLength} characters`,
     };
   }
 

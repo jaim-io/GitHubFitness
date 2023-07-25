@@ -66,7 +66,11 @@ const router = createBrowserRouter([
             element: <ExerciseLayout />,
             children: [
               { index: true, element: <ExercisesPage /> },
-              { path: "new", element: <NewExercisePage /> },
+              {
+                path: "new",
+                element: <LoginRequired />,
+                children: [{ index: true, element: <NewExercisePage /> }],
+              },
               {
                 path: ":exerciseId",
                 element: <ExerciseDetailPage />,
@@ -159,7 +163,13 @@ const router = createBrowserRouter([
                     element: <WorkoutLayout />,
                     children: [
                       { index: true, element: <CoachWorkoutsPage /> },
-                      { path: "new", element: <NewWorkoutPage /> },
+                      {
+                        path: "new",
+                        element: <LoginRequired />,
+                        children: [
+                          { index: true, element: <NewWorkoutPage /> },
+                        ],
+                      },
                       {
                         path: ":workoutId",
                         element: <WorkoutDetailPage />,

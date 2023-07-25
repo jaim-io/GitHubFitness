@@ -1,13 +1,23 @@
-import { Fragment, useEffect, useState } from "react";
-import { EXERCISE_TYPES, WorkoutExercise } from "../types/domain/Workout";
 import { Combobox, Transition } from "@headlessui/react";
-import { HiChevronUpDown, HiChevronUp, HiChevronDown } from "react-icons/hi2";
+import { Fragment, useEffect, useState } from "react";
+import { BsExclamationCircle } from "react-icons/bs";
+import { HiChevronDown, HiChevronUp, HiChevronUpDown } from "react-icons/hi2";
 import Exercise from "../types/domain/Exercise";
+import { EXERCISE_TYPES, WorkoutExercise } from "../types/domain/Workout";
+import {
+  NumberValidatonProps,
+  ValidationResult,
+  validateMaxReps,
+  validateMinReps,
+  validateRepsRatio,
+  validateSets,
+} from "../utils/NumberValidation";
 
 export type WorkoutExerciseWrapper = WorkoutExercise & {
   name: string;
   muscleGroupIds: string[];
   muscleIds: string[];
+  isValid: boolean;
 };
 
 export const getRandomInt = (max: number): number =>
@@ -37,6 +47,7 @@ export const createDefaultValue = (
     minReps: 0,
     maxReps: 0,
     exerciseType: EXERCISE_TYPES[0],
+    isValid: false,
     muscleGroupIds: [],
     muscleIds: [],
   };
@@ -191,6 +202,11 @@ type RowProps = {
   onShiftUp: (orderNumber: number) => void;
 };
 
+type InputError = {
+  id: string;
+  errorMsg: string;
+};
+
 const Row = ({
   exercises,
   workoutExercise,
@@ -224,6 +240,73 @@ const Row = ({
     exercise.muscleGroupIds,
   );
 
+  const setsValidationProps: NumberValidatonProps = {
+    minValue: 1,
+    maxValue: 51,
+  };
+  const repsValidationProps: NumberValidatonProps = {
+    minValue: 1,
+    maxValue: 51,
+  };
+
+  // SHOW ERROR? //val RATIo
+  const [setsIsValid, setSetsIsValid] = useState(
+    validateSets(sets, setsValidationProps).isValid,
+  );
+  const [minRepsIsValid, setMinRepsIsValid] = useState(
+    validateMinReps(minReps, repsValidationProps).isValid,
+  );
+  const [maxRepsIsValid, setMaxRepsIsValid] = useState(
+    validateMaxReps(maxReps, repsValidationProps).isValid,
+  );
+  const [errors, setErrors] = useState<InputError[]>([]);
+
+  const updateErrors = (id: string, validation: ValidationResult) => {
+    if (validation.isValid) {
+      setErrors((prev) => prev.filter((e) => e.id !== id));
+    } else {
+      setErrors((prev) => {
+        const error = prev.find((e) => e.id === id);
+        if (!error) {
+          return [...prev, { id: id, errorMsg: validation.errorMsg }];
+        }
+        return prev;
+      });
+    }
+  };
+
+  const updateMinReps = (value: number): void => {
+    const minRepsValidation = validateMinReps(value, repsValidationProps);
+    updateErrors("Min-Reps", minRepsValidation);
+
+    if (minReps === maxReps) {
+      const maxRepsvalidation = validateMaxReps(value, repsValidationProps);
+      updateErrors("Max-Reps", maxRepsvalidation);
+      setMaxRepsIsValid(maxRepsvalidation.isValid);
+      setMaxReps(value);
+    }
+
+    const ratioValidation = validateRepsRatio(
+      value,
+      minReps === maxReps ? value : maxReps,
+    );
+    updateErrors("Rep-Ratio", ratioValidation);
+
+    setMinRepsIsValid(minRepsValidation.isValid && ratioValidation.isValid);
+    setMinReps(value);
+  };
+
+  const updateMaxReps = (value: number): void => {
+    const maxRepsvalidation = validateMaxReps(value, repsValidationProps);
+    updateErrors("Max-Reps", maxRepsvalidation);
+
+    const ratioValidation = validateRepsRatio(minReps, value);
+    updateErrors("Rep-Ratio", ratioValidation);
+
+    setMaxRepsIsValid(maxRepsvalidation.isValid && ratioValidation.isValid);
+    setMaxReps(value);
+  };
+
   const [nameQuery, setNameQuery] = useState("");
   const filteredExercises =
     nameQuery === ""
@@ -249,13 +332,14 @@ const Row = ({
       minReps: minReps,
       maxReps: maxReps,
       exerciseType: selectedType,
+      isValid: setsIsValid && minRepsIsValid && maxRepsIsValid,
       muscleIds: muscleIds,
       muscleGroupIds: muscleGroupIds,
     });
   }, [name, exerciseId, sets, minReps, maxReps, selectedType]);
 
   return (
-    <div className="flex">
+    <>
       <div className="grid grid-cols-13 py-1 gap-1">
         {/* Exercise selection */}
         <Combobox
@@ -332,21 +416,21 @@ const Row = ({
           onChange={(e) => {
             const value = Number(e.target.value);
             if (!isNaN(value)) {
+              const validation = validateSets(value, setsValidationProps);
+              updateErrors("Sets", validation);
+              setSetsIsValid(validation.isValid);
               setSets(value);
             }
           }}
         />
+
         <input
           value={minReps}
           className="col-span-2 shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
           onChange={(e) => {
             const value = Number(e.target.value);
             if (!isNaN(value)) {
-              // Error minReps > maxReps
-              if (minReps === maxReps) {
-                setMaxReps(value);
-              }
-              setMinReps(value);
+              updateMinReps(value);
             }
           }}
         />
@@ -356,8 +440,7 @@ const Row = ({
           onChange={(e) => {
             const value = Number(e.target.value);
             if (!isNaN(value)) {
-              // Error maxReps < minReps
-              setMaxReps(value);
+              updateMaxReps(value);
             }
           }}
         />
@@ -444,7 +527,17 @@ const Row = ({
           </button>
         </div>
       </div>
-    </div>
+      {errors.length > 0 &&
+        errors.map((e) => (
+          <p
+            key={e.id}
+            className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center"
+          >
+            <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
+            {e.errorMsg}
+          </p>
+        ))}
+    </>
   );
 };
 

@@ -1,9 +1,9 @@
+--New ...--
+Change description field
+
 --Auth--
 Refactor login requirement;
 2FA;
-
---/create/edit/login/settings/--
-verify all fields frontend;
 
 --Coach backend--
 Coach image;

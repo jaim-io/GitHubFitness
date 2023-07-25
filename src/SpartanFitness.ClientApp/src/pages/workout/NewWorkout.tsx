@@ -15,6 +15,12 @@ import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscles from "../../hooks/useMuscles";
 import Exception from "../../types/domain/Exception";
 import Workout, { WorkoutExercise } from "../../types/domain/Workout";
+import InputField from "../../components/inputField";
+import {
+  validateDefaultUrl,
+  validateDescription,
+  validateName,
+} from "../../utils/StringValidations";
 
 const NewWorkoutPage = () => {
   const { auth } = useAuth();
@@ -24,8 +30,13 @@ const NewWorkoutPage = () => {
   const [, setError] = useState<Exception>();
 
   const [name, setName] = useState("");
+  const [isValidName, setIsValidName] = useState(false);
+
   const [description, setDescription] = useState("");
+  const [isValidDescription, setIsValidDescription] = useState(true); // true since the field is optional
+
   const [image, setImage] = useState("");
+  const [isValidImage, setIsValidImage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [exercises, , exercisesLoading] = useExercises();
@@ -60,8 +71,14 @@ const NewWorkoutPage = () => {
     ? activeMuscleGroupIds.map((id) => muscleGroups.find((m) => m.id === id)!)
     : undefined;
 
+  const isValidForm = isValidName && isValidDescription && isValidImage;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isValidForm) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -101,11 +118,7 @@ const NewWorkoutPage = () => {
 
           setIsLoading(false);
 
-          navigate(
-            `${import.meta.env.VITE_API_BASE}/coaches/${
-              res.data.coachId
-            }/workouts/${res.data.id}`,
-          );
+          navigate(`/coaches/${res.data.coachId}/workouts/${res.data.id}`);
         })
         .catch((err) => {
           setIsLoading(false);
@@ -142,43 +155,45 @@ const NewWorkoutPage = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-white mb-2 ml-1">Workout name *</label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              id="workout-name"
-              type="text"
-              placeholder="Barbell bench press"
+            <InputField
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="off"
+              onChange={setName}
+              placeholder="Push"
+              label="Exercise name *"
+              validator={validateName}
+              validationProps={{ minLength: 0, maxLength: 100 }}
+              setIsValid={setIsValidName}
             />
           </div>
+
           <div className="mb-4">
-            <label className="flex text-white mb-2 ml-1 items-center">
-              Description
-              <p className="ml-1 text-light-gray text-sm">(optional)</p>
-            </label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              id="description"
-              type="text"
-              placeholder="A chest workout which involves chest, delts and triceps..."
+            <InputField
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              autoComplete="off"
+              onChange={setDescription}
+              placeholder="A workout which involves chest, delts and triceps..."
+              label={
+                <span>
+                  Description
+                  <span className="ml-1 text-light-gray text-sm">
+                    (optional)
+                  </span>
+                </span>
+              }
+              validator={validateDescription}
+              validationProps={{ maxLength: 2048 }}
+              setIsValid={setIsValidDescription}
             />
           </div>
+
           <div className="mb-4">
-            <label className="block text-white mb-2 ml-1">Image URL *</label>
-            <input
-              className="shadow appearance-none border border-gray hover:border-hover-gray rounded-lg w-full py-1.5 px-3 text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
-              type="text"
-              placeholder="https://google.com/workout-image"
+            <InputField
               value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-              autoComplete="off"
+              onChange={setImage}
+              placeholder="https://google.com/exercise-image"
+              label={"Image URL *"}
+              validator={validateDefaultUrl}
+              validationProps={{ maxLength: 2048 }}
+              setIsValid={setIsValidImage}
             />
           </div>
           <div className="bg-gray self-stretch w-full h-[1px] mb-4 mt-6" />

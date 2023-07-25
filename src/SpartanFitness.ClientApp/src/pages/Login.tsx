@@ -1,20 +1,19 @@
+import axios from "axios";
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AuthContext from "../contexts/AuthProvider";
-import axios from "axios";
 import LogoSvg from "../assets/logo.svg";
-import Exception from "../types/domain/Exception";
-import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 import LoadingIcon from "../components/Icons/LoadingIcon";
+import AuthContext from "../contexts/AuthProvider";
+import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
+import Exception from "../types/domain/Exception";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/auth/login`;
 
 const LoginPage = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const emailRef = useRef<HTMLInputElement>();
-  const location = useLocation();
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +37,7 @@ const LoginPage = () => {
       emailRef.current.focus();
     }
     if (auth.user != null) {
-      if (location.key === "default") {
-        navigate("/");
-      } else {
-        navigate(-1);
-      }
+      navigate("/");
     }
   });
 
@@ -64,11 +59,7 @@ const LoginPage = () => {
         .then((res) => {
           if (res.data.id) {
             setAuth(res.data);
-            if (location.key === "default") {
-              navigate("/");
-            } else {
-              navigate(-1);
-            }
+            navigate(-1);
           }
         })
         .catch((err) => {
