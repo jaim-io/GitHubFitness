@@ -17,6 +17,7 @@ import {
   validateYoutubeUrl,
 } from "../../utils/StringValidations";
 import InputField from "../../components/InputField";
+import TexAreaField from "../../components/TextAreaField";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
 const MUSCLES_ENDPOINT = `${
@@ -225,7 +226,7 @@ const NewExercisePage = () => {
           </div>
 
           <div className="mb-4">
-            <InputField
+            <TexAreaField
               value={description}
               onChange={setDescription}
               placeholder="A chest exercise which involves chest, delts and triceps..."

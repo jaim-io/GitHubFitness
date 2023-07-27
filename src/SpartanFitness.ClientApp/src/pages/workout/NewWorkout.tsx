@@ -8,6 +8,8 @@ import EditableWorkoutExerciseTable, {
   WorkoutExerciseWrapper,
   createDefaultValue as createDefaultWorkoutExercise,
 } from "../../components/EditableWorkoutExerciseTable";
+import InputField from "../../components/InputField";
+import TexAreaField from "../../components/TextAreaField";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import useExercises from "../../hooks/useExercises";
@@ -15,7 +17,6 @@ import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscles from "../../hooks/useMuscles";
 import Exception from "../../types/domain/Exception";
 import Workout, { WorkoutExercise } from "../../types/domain/Workout";
-import InputField from "../../components/InputField";
 import {
   validateDefaultUrl,
   validateDescription,
@@ -171,7 +172,7 @@ const NewWorkoutPage = () => {
           </div>
 
           <div className="mb-4">
-            <InputField
+            <TexAreaField
               value={description}
               onChange={setDescription}
               placeholder="A workout which involves chest, delts and triceps..."
