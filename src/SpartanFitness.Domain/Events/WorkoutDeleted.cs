@@ -3,6 +3,6 @@ using SpartanFitness.Domain.Common.Models;
 
 namespace SpartanFitness.Domain.Events;
 
-public sealed record CoachApplicationApproved(CoachApplication coachApplication) : IDomainEvent
+public sealed record WorkoutDeleted(Workout Workout) : IDomainEvent
 {
 }

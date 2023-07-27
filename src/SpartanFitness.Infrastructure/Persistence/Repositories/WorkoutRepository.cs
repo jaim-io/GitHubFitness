@@ -23,6 +23,12 @@ public class WorkoutRepository
     await _dbContext.SaveChangesAsync();
   }
 
+  public async Task RemoveAsync(Workout workout)
+  {
+    _dbContext.Remove(workout);
+    await _dbContext.SaveChangesAsync();
+  }
+
   public async Task<IEnumerable<Workout>> GetAllAsync()
   {
     return await _dbContext.Workouts.ToListAsync();
@@ -46,5 +52,12 @@ public class WorkoutRepository
   {
     _dbContext.Update(workout);
     await _dbContext.SaveChangesAsync();
+  }
+
+  public Task<List<User>> GetSubscribers(WorkoutId id)
+  {
+    return _dbContext.Users
+      .Where(u => u.SavedWorkoutIds.Contains(id))
+      .ToListAsync();
   }
 }

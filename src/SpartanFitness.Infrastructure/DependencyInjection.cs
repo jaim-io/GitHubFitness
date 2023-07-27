@@ -26,84 +26,97 @@ namespace SpartanFitness.Infrastructure;
 /// </summary>
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Adds the Infrastructure layer [Clean Architecture Layers].
-    /// </summary>
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        ConfigurationManager configuration)
+  /// <summary>
+  /// Adds the Infrastructure layer [Clean Architecture Layers].
+  /// </summary>
+  public static IServiceCollection AddInfrastructure(
+      this IServiceCollection services,
+      ConfigurationManager configuration)
+  {
+    services
+      .AddAuth(configuration)
+      .AddPersistence()
+      .AddServices(configuration);
+
+    return services;
+  }
+
+  public static IServiceCollection AddPersistence(
+    this IServiceCollection services)
+  {
+    services.AddDbContext<SpartanFitnessDbContext>(options =>
+      options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
+
+    services.AddScoped<PublishDomainEventsInterceptor>();
+    services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<ICoachRepository, CoachRepository>();
+    services.AddScoped<IRoleRepository, RoleRepository>();
+    services.AddScoped<IAdministratorRepository, AdministratorRepository>();
+    services.AddScoped<ICoachApplicationRepository, CoachApplicationRepository>();
+    services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
+    services.AddScoped<IExerciseRepository, ExerciseRepository>();
+    services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+    services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+    services.AddScoped<IMuscleRepository, MuscleRepository>();
+
+    return services;
+  }
+
+  public static IServiceCollection AddAuth(
+    this IServiceCollection services,
+    ConfigurationManager configuration)
+  {
+    var jwtSettings = new JwtSettings();
+    configuration.Bind(JwtSettings.SectionName, jwtSettings);
+
+    services.AddSingleton(Options.Create(jwtSettings));
+    services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+    services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+    var tokenValidationParameters = new TokenValidationParameters
     {
-        services
-            .AddAuth(configuration)
-            .AddPersistence();
+      ValidateIssuer = true,
+      ValidateAudience = true,
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true,
+      ValidIssuer = jwtSettings.Issuer,
+      ValidAudience = jwtSettings.Audience,
+      IssuerSigningKey = new SymmetricSecurityKey(
+        Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+    };
 
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+    services.AddSingleton(tokenValidationParameters);
 
-        return services;
-    }
+    services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
 
-    public static IServiceCollection AddPersistence(
-        this IServiceCollection services)
+    services.ConfigureSwaggerGen(options =>
     {
-        services.AddDbContext<SpartanFitnessDbContext>(options =>
-            options.UseSqlServer("Name=ConnectionStrings:SpartanFitness"));
+      options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+      {
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+      });
 
-        services.AddScoped<PublishDomainEventsInterceptor>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ICoachRepository, CoachRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IAdministratorRepository, AdministratorRepository>();
-        services.AddScoped<ICoachApplicationRepository, CoachApplicationRepository>();
-        services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
-        services.AddScoped<IExerciseRepository, ExerciseRepository>();
-        services.AddScoped<IWorkoutRepository, WorkoutRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IMuscleRepository, MuscleRepository>();
+      options.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
 
-        return services;
-    }
+    return services;
+  }
 
-    public static IServiceCollection AddAuth(
-        this IServiceCollection services,
-        ConfigurationManager configuration)
-    {
-        var jwtSettings = new JwtSettings();
-        configuration.Bind(JwtSettings.SectionName, jwtSettings);
+  public static IServiceCollection AddServices(
+    this IServiceCollection services,
+    ConfigurationManager configuration)
+  {
+    var emailSettings = new EmailSettings();
+    configuration.Bind(EmailSettings.SectionName, emailSettings);
 
-        services.AddSingleton(Options.Create(jwtSettings));
-        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+    services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+    services.AddSingleton<IEmailProvider, EmailProvider>();
+    services.AddSingleton(Options.Create(emailSettings));
 
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuer = true,
-          ValidateAudience = true,
-          ValidateLifetime = true,
-          ValidateIssuerSigningKey = true,
-          ValidIssuer = jwtSettings.Issuer,
-          ValidAudience = jwtSettings.Audience,
-          IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-        };
-
-        services.AddSingleton(tokenValidationParameters);
-
-        services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
-
-        services.ConfigureSwaggerGen(options =>
-        {
-            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            {
-                Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                In = ParameterLocation.Header,
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-            });
-
-            options.OperationFilter<SecurityRequirementsOperationFilter>();
-        });
-
-        return services;
-    }
+    return services;
+  }
 }

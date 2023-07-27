@@ -6,6 +6,7 @@
 **/*.env
 **/node_modules
 **/appsettings.Production.json
+**/appsettings.Development.json
 
 scripts/setup-db.ps1
 

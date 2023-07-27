@@ -3,16 +3,16 @@ import { ImCancelCircle } from "react-icons/im";
 
 type Props = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>, value: string) => void;
+  query?: string;
 };
 
-const SearchBar = ({ onSubmit }: Props) => {
-  const [value, setValue] = useState("");
+const SearchBar = ({ onSubmit, query }: Props) => {
+  const [value, setValue] = useState(query ? query : "");
 
   return (
     <form
       onSubmit={(e) => {
         onSubmit(e, value);
-        setValue("");
       }}
     >
       <label
@@ -52,9 +52,11 @@ const SearchBar = ({ onSubmit }: Props) => {
           autoComplete="off"
         />
         <button
-          type="reset"
+          type="submit"
           className="absolute top-0 right-[0.125rem] p-[0.625rem] pl-1 text-sm font-medium text-[#8B949E] rounded-r-lg hover:text-blue z-3"
-          onClick={() => setValue("")}
+          onClick={() => {
+            setValue("");
+          }}
         >
           <ImCancelCircle className="bg-[#262c31]" size={14} />
           <span className="sr-only">Cancel</span>
