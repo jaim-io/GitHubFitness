@@ -18,7 +18,7 @@ namespace SpartanFitness.Api.Controllers.V1;
 /// <summary>
 /// This controller handles the authentication and registration.
 /// </summary>
-[Route("v{version:apiVersion}/auth")]
+[Route("api/v{version:apiVersion}/auth")]
 [AllowAnonymous]
 public class AuthenticationController : ApiController
 {

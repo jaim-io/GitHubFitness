@@ -4,7 +4,9 @@ import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
 import { BsCloudUploadFill, BsExclamationCircle } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 import { RxExit } from "react-icons/rx";
+import { SiElectron } from "react-icons/si";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import EditableWorkoutExerciseTable, {
@@ -13,10 +15,9 @@ import EditableWorkoutExerciseTable, {
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
 import useExercises from "../../hooks/useExercises";
-import Workout, { WorkoutExercise } from "../../types/domain/Workout";
 import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscles from "../../hooks/useMuscles";
-import { SiElectron } from "react-icons/si";
+import Workout, { WorkoutExercise } from "../../types/domain/Workout";
 import {
   StringValidatonProps,
   validateDefaultUrl,
@@ -177,11 +178,64 @@ const EditWorkoutPage = () => {
       });
   };
 
+  const handleDelete = async () => {
+    // are you sure?
+
+    setIsLoading(true);
+
+    await axios
+      .delete(
+        `${import.meta.env.VITE_API_BASE}/coaches/${coachRole.id}/workouts/${
+          workout.id
+        }/delete`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      )
+      .then(() => {
+        setIsLoading(false);
+        toast.success("Workout has been deleted", {
+          toastId: "Workout-deleted",
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        navigate(`/coaches/all/workouts`);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        toast.error(
+          err.code == "ERR_NETWORK"
+            ? "Unable to reach the server"
+            : err.response.statusText,
+          {
+            toastId: err.code,
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          },
+        );
+      });
+  };
+
   return (
     <>
       <div className="flex justify-center pt-6 h-full">
         <button
-          className={`bg-gray px-20 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3 ${
+          className={`bg-gray px-10 py-2 rounded-lg hover:border-hover-gray border border-[rgba(240,246,252,0.1)] flex items-center cursor-pointer mr-3 ${
             showImageUrlInputBar ? "opacity-50 hover:cursor-not-allowed" : ""
           }`}
           type="button"
@@ -189,8 +243,21 @@ const EditWorkoutPage = () => {
         >
           <RxExit className="mr-1" /> Leave edit mode
         </button>
+
+        {workout.coachId === coachRole.id && (
+          <button
+            className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
+              showImageUrlInputBar ? "opacity-50 hover:cursor-not-allowed" : ""
+            }`}
+            type="button"
+            onClick={handleDelete}
+          >
+            <RiDeleteBin5Fill className="mr-1" /> Delete workout
+          </button>
+        )}
+
         <button
-          className={`px-20 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
+          className={`px-10 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
             showImageUrlInputBar || !isValidForm
               ? "hover:cursor-not-allowed opacity-50"
               : ""

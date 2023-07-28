@@ -1,7 +1,4 @@
 -------------------------------------------
---New Exercise & Workout--
-Change description field
-
 --Remove Exercise & Workout-
 if coach id matches or admin
 
@@ -10,12 +7,10 @@ if coach id matches or admin
     - coaches whoms workouts use the exercise
     - subscribers of said workout
 
-  Workout DELETE => Notify all
-    - subscribers of the workout
-
 --User profile--
 view saves;
 remove saves within the view;
+simplify user saves with {action}?;
 
 --Login--
 Sign Up;

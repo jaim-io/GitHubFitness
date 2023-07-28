@@ -9,7 +9,7 @@ import AuthContext from "../contexts/AuthProvider";
 import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
 import Exception from "../types/domain/Exception";
 
-const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/auth/login`;
+const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
 
 const LoginPage = () => {
   const { auth, setAuth } = useContext(AuthContext);

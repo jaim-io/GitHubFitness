@@ -50,6 +50,5 @@ public sealed class EmailProvider : IEmailProvider
     request.Method = Method.Post;
 
     var response = await client.PostAsync(request, cancellationToken);
-    // Return if succeeded?
   }
 }

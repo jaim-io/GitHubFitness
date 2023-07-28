@@ -57,7 +57,7 @@ public class WorkoutRepository
   public Task<List<User>> GetSubscribers(WorkoutId id)
   {
     return _dbContext.Users
-      .Where(u => u.SavedWorkoutIds.Contains(id))
+      .Where(u => u.SavedWorkoutIds.Any(workouId => workouId.Value == id.Value))
       .ToListAsync();
   }
 }

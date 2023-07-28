@@ -1,4 +1,4 @@
-@host=http://localhost:8001
+@host=http://localhost:8001/api/v1
 
 POST {{host}}/auth/register
 Content-Type: application/json
@@ -7,6 +7,6 @@ Content-Type: application/json
     "firstName": "Jamey",
     "lastName": "Schaap",
     "profileImage": "https://picsum.photos/200",
-    "email": "test@gmail.com",
+    "email": "jameyschaap06@gmail.com",
     "password": "jamey123!"
 }
