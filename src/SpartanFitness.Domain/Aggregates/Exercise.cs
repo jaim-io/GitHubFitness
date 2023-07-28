@@ -1,4 +1,5 @@
 using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Domain.Events;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
@@ -109,4 +110,6 @@ public sealed class Exercise : AggregateRoot<ExerciseId, Guid>
   }
 
   public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
+  
+  public void Delete() => AddDomainEvent(new ExerciseDeleted(this));
 }

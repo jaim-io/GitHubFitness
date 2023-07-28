@@ -57,7 +57,28 @@ public class WorkoutRepository
   public Task<List<User>> GetSubscribers(WorkoutId id)
   {
     return _dbContext.Users
-      .Where(u => u.SavedWorkoutIds.Any(workouId => workouId.Value == id.Value))
+      .Where(u => u.SavedWorkoutIds.Any(workoutId => workoutId.Value == id.Value))
       .ToListAsync();
+  }
+
+  public Task<List<User>> GetSubscribers(List<WorkoutId> ids)
+  {
+    return _dbContext.Users
+      .Where(u => u.SavedWorkoutIds.Any(workoutId => ids.Any(id => workoutId.Value == id.Value)))
+      .ToListAsync();
+  }
+
+  public async Task<List<(User CoachProfile, WorkoutId WorkoutId)>>
+    GetCoachesAndWorkoutIdsByExerciseId(ExerciseId id)
+  {
+    var query = from workout in _dbContext.Workouts
+      join coach in _dbContext.Coaches
+        on workout.CoachId equals coach.Id
+      join user in _dbContext.Users
+        on coach.UserId equals user.Id
+      where workout.WorkoutExercises.Any(we => we.ExerciseId == id)
+      select new Tuple<User, WorkoutId>(user, WorkoutId.Create(workout.Id.Value)).ToValueTuple();
+
+    return await query.ToListAsync();
   }
 }

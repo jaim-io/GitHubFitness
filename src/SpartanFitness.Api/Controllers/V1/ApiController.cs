@@ -72,6 +72,7 @@ public class ApiController : ControllerBase
   {
     public static bool UserIdMatchesClaim(HttpContext context, string userId)
       => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == userId;
+
     public static bool CoachIdMatchesClaim(HttpContext context, string coachId)
     {
       var claim = context.User.Claims.FirstOrDefault(c => c.Type == $"{RoleTypes.Coach}Id");
@@ -83,7 +84,11 @@ public class ApiController : ControllerBase
 
     public static string GetUserId(HttpContext context)
       => context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
     public static string GetCoachId(HttpContext context)
       => context.User.Claims.First(c => c.Type == $"{RoleTypes.Coach}Id").Value;
+
+    public static string GetAdminId(HttpContext context)
+      => context.User.Claims.First(c => c.Type == $"{RoleTypes.Administrator}Id").Value;
   }
 }

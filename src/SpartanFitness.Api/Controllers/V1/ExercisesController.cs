@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Exercises.Commands.CreateExercise;
+using SpartanFitness.Application.Exercises.Commands.DeleteExercise;
 using SpartanFitness.Application.Exercises.Commands.UpdateExercise;
 using SpartanFitness.Application.Exercises.Queries.GetAllExercises;
 using SpartanFitness.Application.Exercises.Queries.GetExerciseById;
@@ -103,6 +104,24 @@ public class ExercisesController : ApiController
 
     return updatedExerciseResult.Match(
       exercise => Ok(_mapper.Map<ExerciseResponse>(exercise)),
+      Problem);
+  }
+
+  [HttpDelete("{workoutId}/delete")]
+  [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
+  public async Task<IActionResult> DeleteExercise([FromRoute] string exerciseId)
+  {
+    var coachId = Authorization.GetCoachId(HttpContext);
+    var adminId = Authorization.GetAdminId(HttpContext);
+
+    var command = new DeleteExerciseCommand(
+      CoachId: coachId,
+      AdminId: adminId,
+      ExerciseId: exerciseId);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      (_) => NoContent(),
       Problem);
   }
 }

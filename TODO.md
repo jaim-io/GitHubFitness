@@ -2,10 +2,12 @@
 --Remove Exercise & Workout-
 if coach id matches or admin
 
-  Exercise DELETE => Notify all
-    - 'subscribed' users
-    - coaches whoms workouts use the exercise
-    - subscribers of said workout
+Exercise DELETE => Notify all
+- 'subscribed' users
+- coaches whoms workouts use the exercise
+- subscribers of said workout
+
+review   return Errors.Authentication.UnAuthorized;
 
 --User profile--
 view saves;

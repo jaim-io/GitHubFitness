@@ -82,6 +82,19 @@ public class ExerciseRepository
     await _dbContext.SaveChangesAsync();
   }
 
+  public async Task RemoveAsync(Exercise exercise)
+  {
+    _dbContext.Remove(exercise);
+    await _dbContext.SaveChangesAsync();
+  }
+
+  public Task<List<User>> GetSubscribers(ExerciseId id)
+  {
+    return _dbContext.Users
+      .Where(u => u.SavedExerciseIds.Any(exerciseId => exerciseId.Value == id.Value))
+      .ToListAsync();
+  }
+
   public async Task<IEnumerable<MuscleId>> GetMuscleIds(IEnumerable<ExerciseId> exerciseIds)
   {
     var muscleIds = new List<MuscleId>();
@@ -89,8 +102,8 @@ public class ExerciseRepository
     foreach (var exerciseId in exerciseIds)
     {
       if (await _dbContext.Exercises
-        .AsNoTrackingWithIdentityResolution()
-        .FirstOrDefaultAsync(e => e.Id == exerciseId) is Exercise exercise)
+            .AsNoTrackingWithIdentityResolution()
+            .FirstOrDefaultAsync(e => e.Id == exerciseId) is Exercise exercise)
       {
         muscleIds.AddRange(exercise.MuscleIds.ToList());
       }

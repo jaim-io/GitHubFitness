@@ -7,7 +7,7 @@ using SpartanFitness.Domain.Events;
 using SpartanFitness.Domain.ValueObjects;
 
 public sealed class WorkoutDeletedDomainEventHandler
- : INotificationHandler<WorkoutDeleted>
+  : INotificationHandler<WorkoutDeleted>
 {
   private readonly IWorkoutRepository _workoutRepository;
   private readonly IEmailProvider _emailProvider;
@@ -40,19 +40,14 @@ public sealed class WorkoutDeletedDomainEventHandler
     }
     else
     {
-      if (await _userRepository.GetByIdAsync(coach.UserId) is not User user)
-      {
-        subject = $"{notification.Workout.Name} workout has been deleted";
-      }
-      else
-      {
-        subject = $"{user.FirstName} {user.LastName}'s {notification.Workout.Name} workout has been deleted";
-      }
+      subject = await _userRepository.GetByIdAsync(coach.UserId) is not User user
+        ? $"{notification.Workout.Name} workout has been deleted"
+        : $"{user.FirstName} {user.LastName}'s {notification.Workout.Name} workout has been deleted";
     }
 
-    var pathToTemplate = $".{Path.PathSeparator}Templates{Path.PathSeparator}Email{Path.PathSeparator}Workout_Deleted.html";
+    var pathToTemplate =
+      $".{Path.PathSeparator}Templates{Path.PathSeparator}Email{Path.PathSeparator}Workout_Deleted.html";
 
-    // subject = $"xxx's {notification.Workout.Name} workout has been deleted";
     await _emailProvider.SendAsync(subscribers, subject, "test", cancellationToken);
   }
 }

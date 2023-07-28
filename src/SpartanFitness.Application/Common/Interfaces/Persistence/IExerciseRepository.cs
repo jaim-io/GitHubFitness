@@ -16,4 +16,6 @@ public interface IExerciseRepository
   Task<IEnumerable<MuscleGroupId>> GetMuscleGroupIds(IEnumerable<ExerciseId> exerciseIds);
   Task<IEnumerable<MuscleId>> GetMuscleIds(IEnumerable<ExerciseId> exerciseIds);
   Task UpdateAsync(Exercise exercise);
+  Task RemoveAsync(Exercise exercise);
+  Task<List<User>> GetSubscribers(ExerciseId id);
 }

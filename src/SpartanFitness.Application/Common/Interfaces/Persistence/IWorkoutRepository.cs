@@ -12,4 +12,6 @@ public interface IWorkoutRepository
   Task UpdateAsync(Workout workout);
   Task RemoveAsync(Workout workout);
   Task<List<User>> GetSubscribers(WorkoutId id);
+  Task<List<User>> GetSubscribers(List<WorkoutId> ids);
+  Task<List<(User CoachProfile, WorkoutId WorkoutId)>> GetCoachesAndWorkoutIdsByExerciseId(ExerciseId id);
 }
