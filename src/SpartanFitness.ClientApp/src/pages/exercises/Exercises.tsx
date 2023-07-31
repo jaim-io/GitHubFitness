@@ -39,6 +39,11 @@ const SORT_OPTIONS = [
 const ExercisesPage = () => {
   const { auth } = useAuth();
 
+  const isCoach =
+    auth.user?.roles.find((r) => r.name === "Coach") !== undefined;
+  const isAdmin =
+    auth.user?.roles.find((r) => r.name === "Admin") !== undefined;
+
   // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();
   const currentParams = new CurrentSearchParams(searchParams);
@@ -129,7 +134,7 @@ const ExercisesPage = () => {
             buttonText={"Sort by:"}
             onChange={handleSort}
           />
-          {auth.user && <NewButton />}
+          {auth.user && (isCoach || isAdmin) && <NewButton />}
         </ul>
 
         <ul className="relative min-h-[10rem]">

@@ -47,7 +47,11 @@ const createQueryString = (ids: string[]): string => {
 const EditExercisePage = () => {
   const exercise = useLoaderData() as Exercise;
   const { auth } = useAuth();
-  const coachRole = auth.user!.roles.find((r) => r.name === "Coach")!;
+
+  const isCoach =
+    auth.user!.roles.find((r) => r.name === "Coach") !== undefined;
+  const isAdmin =
+    auth.user!.roles.find((r) => r.name === "Admin") !== undefined;
 
   const muscleGroupSelectorRef = useRef<HTMLDivElement>(null);
   const muscleSelectorRef = useRef<HTMLDivElement>(null);
@@ -397,17 +401,20 @@ const EditExercisePage = () => {
           <RxExit className="mr-1" /> Leave edit mode
         </button>
 
-        {exercise.creatorId === coachRole.id && (
-          <button
-            className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
-              showImageUrlInputBar ? "opacity-50 hover:cursor-not-allowed" : ""
-            }`}
-            type="button"
-            onClick={handleDelete}
-          >
-            <RiDeleteBin5Fill className="mr-1" /> Delete exercise
-          </button>
-        )}
+        {isCoach ||
+          (isAdmin && (
+            <button
+              className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
+                showImageUrlInputBar
+                  ? "opacity-50 hover:cursor-not-allowed"
+                  : ""
+              }`}
+              type="button"
+              onClick={handleDelete}
+            >
+              <RiDeleteBin5Fill className="mr-1" /> Delete exercise
+            </button>
+          ))}
 
         <button
           className={`px-10 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${

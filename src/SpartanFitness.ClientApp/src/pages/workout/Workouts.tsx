@@ -51,7 +51,10 @@ const WorkoutsPage = () => {
   const isAuthorizedCoach =
     params.coachId &&
     auth.user?.roles.find((r) => r.name === "Coach")?.id == params.coachId;
-  const showNewWorkoutsButton = isAllWorkoutsRoute || isAuthorizedCoach;
+  const isAdmin =
+    auth.user?.roles.find((r) => r.name === "Admin") !== undefined;
+  const showNewWorkoutsButton =
+    isAllWorkoutsRoute || isAuthorizedCoach || isAdmin;
 
   // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();

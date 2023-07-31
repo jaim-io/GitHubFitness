@@ -1,11 +1,5 @@
 #
 
-## Delete
-
-- Delete exercise-saves when exercise deleted
-- Delete workout-exercise when exercise deleted
-- On delete remove frontend state
-
 ## User profile
 
 - view saves;
