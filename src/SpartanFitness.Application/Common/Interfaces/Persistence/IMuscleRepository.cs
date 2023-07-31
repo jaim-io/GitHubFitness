@@ -5,7 +5,7 @@ namespace SpartanFitness.Application.Common.Interfaces.Persistence;
 
 public interface IMuscleRepository
 {
-  Task AddAsync(Muscle muscle);
+  Task AddAsync(Muscle muscle, MuscleGroupId muscleGroupId);
   Task<IEnumerable<Muscle>> GetAllAsync();
   Task<List<Muscle>> GetBySearchQueryAsync(string searchQuery);
   Task<Muscle?> GetByIdAsync(MuscleId id);

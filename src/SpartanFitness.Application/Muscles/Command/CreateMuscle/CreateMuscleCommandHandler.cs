@@ -32,7 +32,7 @@ public class CreateMuscleCommandHandler : IRequestHandler<CreateMuscleCommand, E
       command.Description,
       command.Image);
 
-    await _muscleRepository.AddAsync(muscle);
+    await _muscleRepository.AddAsync(muscle, muscleGroupId);
 
     return muscle;
   }

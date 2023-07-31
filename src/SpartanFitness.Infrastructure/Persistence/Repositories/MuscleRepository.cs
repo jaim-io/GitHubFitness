@@ -15,10 +15,15 @@ public class MuscleRepository : IMuscleRepository
     _dbContext = dbContext;
   }
 
-  public async Task AddAsync(Muscle muscle)
+  public async Task AddAsync(Muscle muscle, MuscleGroupId muscleGroupId)
   {
     _dbContext.Add(muscle);
     await _dbContext.SaveChangesAsync();
+
+    // Adds the muscle to the muscleGroup
+    await _dbContext.Database.ExecuteSqlAsync($@"
+      INSERT INTO MuscleGroupMuscleIds (MuscleId, MuscleGroupId)
+      VALUES ({muscle.Id.Value}, {muscleGroupId.Value})");
   }
 
   public async Task<IEnumerable<Muscle>> GetAllAsync()

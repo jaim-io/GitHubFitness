@@ -4,6 +4,7 @@ import LoadingIcon from "../components/icons/LoadingIcon";
 import ExerciseCard from "../components/cards/ExerciseCard";
 import useWorkoutsPage from "../hooks/useWorkoutsPage";
 import WorkoutCard from "../components/cards/WorkoutCard";
+import { TbGhost2Filled } from "react-icons/tb";
 
 const HomePage = () => {
   const [exercisesPage, , exercisesPageIsLoading] = useExercisesPage({
@@ -54,10 +55,16 @@ const HomePage = () => {
                 workoutsPageIsLoading ? "opacity-60 animate-pulse" : ""
               }`}
             >
-              {workoutsPage &&
+              {workoutsPage && workoutsPage.workouts.length > 0 ? (
                 workoutsPage.workouts.map((w) => (
                   <WorkoutCard workout={w} key={w.id} />
-                ))}
+                ))
+              ) : (
+                <p className="flex justify-center items-center">
+                  No workouts found{" "}
+                  <TbGhost2Filled className="ml-1" size={20} />
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -88,10 +95,16 @@ const HomePage = () => {
                 exercisesPageIsLoading ? "opacity-60 animate-pulse" : ""
               }`}
             >
-              {exercisesPage &&
+              {exercisesPage && exercisesPage.exercises.length > 0 ? (
                 exercisesPage.exercises.map((e) => (
                   <ExerciseCard exercise={e} key={e.id} />
-                ))}
+                ))
+              ) : (
+                <p className="flex justify-center items-center">
+                  No exercises found{" "}
+                  <TbGhost2Filled className="ml-1" size={20} />
+                </p>
+              )}
             </div>
           )}
         </div>
