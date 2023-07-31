@@ -48,6 +48,6 @@ public sealed class WorkoutDeletedDomainEventHandler
     var pathToTemplate =
       $".{Path.PathSeparator}Templates{Path.PathSeparator}Email{Path.PathSeparator}Workout_Deleted.html";
 
-    await _emailProvider.SendAsync(subscribers, subject, "test", cancellationToken);
+    // await _emailProvider.SendAsync(subscribers, subject, "test", cancellationToken);
   }
 }

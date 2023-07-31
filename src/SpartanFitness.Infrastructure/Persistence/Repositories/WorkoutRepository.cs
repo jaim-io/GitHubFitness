@@ -1,7 +1,9 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Persistence.Repositories;
@@ -27,6 +29,11 @@ public class WorkoutRepository
   {
     _dbContext.Remove(workout);
     await _dbContext.SaveChangesAsync();
+
+    // Removes the leftover workout saves from users
+    await _dbContext.Database.ExecuteSqlAsync($@"
+      DELETE FROM UserSavedWorkoutIds
+      WHERE WorkoutId = {workout.Id.Value}");
   }
 
   public async Task<IEnumerable<Workout>> GetAllAsync()
@@ -34,9 +41,9 @@ public class WorkoutRepository
     return await _dbContext.Workouts.ToListAsync();
   }
 
-  public Task<Workout?> GetByIdAsync(WorkoutId id)
+  public async Task<Workout?> GetByIdAsync(WorkoutId id)
   {
-    return _dbContext.Workouts.FirstOrDefaultAsync(w => w.Id == id);
+    return await _dbContext.Workouts.FirstOrDefaultAsync(w => w.Id == id);
   }
 
   public async Task<List<Workout>> GetBySearchQueryAsync(string searchQuery)
@@ -54,31 +61,46 @@ public class WorkoutRepository
     await _dbContext.SaveChangesAsync();
   }
 
-  public Task<List<User>> GetSubscribers(WorkoutId id)
+  public async Task<List<User>> GetSubscribers(WorkoutId id)
   {
-    return _dbContext.Users
+    return await _dbContext.Users
       .Where(u => u.SavedWorkoutIds.Any(workoutId => workoutId.Value == id.Value))
       .ToListAsync();
   }
 
-  public Task<List<User>> GetSubscribers(List<WorkoutId> ids)
+  public async Task<List<User>> GetSubscribers(List<WorkoutId> ids)
   {
-    return _dbContext.Users
-      .Where(u => u.SavedWorkoutIds.Any(workoutId => ids.Any(id => workoutId.Value == id.Value)))
-      .ToListAsync();
+    if (ids.Count() == 0)
+    {
+      return new();
+    }
+
+    var parameters = string.Join(",", ids.Select((_, i) => $"@p{i}"));
+    var query = $@"
+      SELECT DISTINCT u.*
+      FROM Users as u
+        JOIN UserSavedWorkoutIds as swi
+        ON u.Id = swi.UserId
+      WHERE swi.WorkoutId IN ({parameters})";
+    var sqlParameters = ids
+      .Select((id, i) => new SqlParameter($"@p{i}", id.Value))
+      .ToArray();
+
+    return await _dbContext.Users
+       .FromSqlRaw(query, sqlParameters)
+       .ToListAsync();
   }
 
-  public async Task<List<(User CoachProfile, WorkoutId WorkoutId)>>
-    GetCoachesAndWorkoutIdsByExerciseId(ExerciseId id)
+  public async Task<List<Workout>> GetByExerciseId(ExerciseId id)
   {
-    var query = from workout in _dbContext.Workouts
-      join coach in _dbContext.Coaches
-        on workout.CoachId equals coach.Id
-      join user in _dbContext.Users
-        on coach.UserId equals user.Id
-      where workout.WorkoutExercises.Any(we => we.ExerciseId == id)
-      select new Tuple<User, WorkoutId>(user, WorkoutId.Create(workout.Id.Value)).ToValueTuple();
-
-    return await query.ToListAsync();
+    return await _dbContext.Workouts
+      .FromSql($"""
+        SELECT DISTINCT w.*
+        FROM WorkoutExercises as we
+          JOIN Workouts AS w
+          ON we.WorkoutId = w.Id
+        WHERE we.ExerciseId = {id.Value}
+      """)
+      .ToListAsync();
   }
 }

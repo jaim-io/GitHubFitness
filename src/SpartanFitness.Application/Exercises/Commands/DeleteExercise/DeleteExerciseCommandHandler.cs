@@ -42,7 +42,7 @@ public class DeleteExerciseCommandHandler : IRequestHandler<DeleteExerciseComman
 
     if (!isAuthorized)
     {
-      return Errors.Authentication.UnAuthorized;
+      return Errors.Authorization.UnAuthorized;
     }
 
     var exerciseId = ExerciseId.Create(command.ExerciseId);

@@ -197,6 +197,9 @@ const EditWorkoutPage = () => {
       )
       .then(() => {
         setIsLoading(false);
+        auth.user!.savedWorkoutIds = auth.user!.savedWorkoutIds.filter(
+          (id) => id !== workout.id,
+        );
         toast.success("Workout has been deleted", {
           toastId: "Workout-deleted",
           position: "bottom-right",

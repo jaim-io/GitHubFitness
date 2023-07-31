@@ -27,6 +27,13 @@ public class CoachRepository : ICoachRepository
     return await _dbContext.Coaches.FirstOrDefaultAsync(c => c.Id == id);
   }
 
+  public async Task<List<Coach>> GetByIdAsync(List<CoachId> ids)
+  {
+    return await _dbContext.Coaches
+      .Where(c => ids.Any(id => c.Id.Value == id.Value))
+      .ToListAsync();
+  }
+
   public async Task<Coach?> GetByUserIdAsync(UserId id)
   {
     return await _dbContext.Coaches.FirstOrDefaultAsync(c => c.UserId == id);

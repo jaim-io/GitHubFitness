@@ -9,6 +9,8 @@ public interface IUserRepository
 {
   Task<User?> GetByEmailAsync(string email);
   Task<User?> GetByIdAsync(UserId id);
+  Task<List<User>> GetByIdAsync(List<UserId> ids);
+  Task<List<User>> GetByCoachIdAsync(List<CoachId> ids);
   Task<bool> ExistsAsync(UserId id);
   Task AddAsync(User user);
   Task UpdateAsync(User user);

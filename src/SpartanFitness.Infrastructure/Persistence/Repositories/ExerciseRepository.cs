@@ -86,6 +86,16 @@ public class ExerciseRepository
   {
     _dbContext.Remove(exercise);
     await _dbContext.SaveChangesAsync();
+
+    // Removes the leftover exercise-saves from users
+    await _dbContext.Database.ExecuteSqlAsync($@"
+      DELETE FROM UserSavedExerciseIds
+      WHERE ExerciseId = {exercise.Id.Value}");
+
+    // Removes the leftover workout-exercises which use the given exercise
+    await _dbContext.Database.ExecuteSqlAsync($@"
+      DELETE FROM WorkoutExercises
+      WHERE ExerciseId = {exercise.Id.Value}");
   }
 
   public Task<List<User>> GetSubscribers(ExerciseId id)

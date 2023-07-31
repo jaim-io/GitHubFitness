@@ -35,15 +35,11 @@ public class ExerciseDeletedDomainEventHandler : INotificationHandler<ExerciseDe
     var exerciseId = ExerciseId.Create(notification.Exercise.Id.Value);
     var exerciseSubscribers = await _exerciseRepository.GetSubscribers(exerciseId);
 
-    /*
-     Gets the coaches and workout IDs of coaches whom use the given exercise in their workout
-     and the workout IDs of said workout.
-     */
-    var coachesAndWorkoutIds = await _workoutRepository.GetCoachesAndWorkoutIdsByExerciseId(exerciseId);
-    var workoutIds = coachesAndWorkoutIds.Select(cw => cw.WorkoutId);
-    var workoutSubscribers = await _workoutRepository.GetSubscribers(workoutIds.ToList());
+    var workouts = await _workoutRepository.GetByExerciseId(exerciseId) ?? new();
+    var coachProfiles = await _userRepository.GetByCoachIdAsync(workouts.ConvertAll(w => w.CoachId)) ?? new();
+    var workoutSubscribers = await _workoutRepository.GetSubscribers(workouts.ConvertAll(w => (WorkoutId)w.Id)) ?? new();
 
-    var notifyees = coachesAndWorkoutIds.Select(cw => cw.CoachProfile)
+    var notifyees = coachProfiles
       .Concat(exerciseSubscribers)
       .Concat(workoutSubscribers)
       .DistinctBy(u => u.Id)
@@ -64,6 +60,6 @@ public class ExerciseDeletedDomainEventHandler : INotificationHandler<ExerciseDe
     var pathToTemplate =
       $".{Path.PathSeparator}Templates{Path.PathSeparator}Email{Path.PathSeparator}Exercise_Deleted.html";
 
-    await _emailProvider.SendAsync(notifyees, subject, "test", cancellationToken);
+    // await _emailProvider.SendAsync(notifyees, subject, "test", cancellationToken);
   }
 }

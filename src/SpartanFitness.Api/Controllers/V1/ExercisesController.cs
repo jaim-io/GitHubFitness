@@ -107,7 +107,7 @@ public class ExercisesController : ApiController
       Problem);
   }
 
-  [HttpDelete("{workoutId}/delete")]
+  [HttpDelete("{exerciseId}/delete")]
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> DeleteExercise([FromRoute] string exerciseId)
   {

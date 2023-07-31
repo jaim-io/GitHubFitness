@@ -347,6 +347,9 @@ const EditExercisePage = () => {
       )
       .then(() => {
         setIsLoading(false);
+        auth.user!.savedExerciseIds = auth.user!.savedExerciseIds.filter(
+          (id) => id !== exercise.id,
+        );
         toast.success("Exercise has been deleted", {
           toastId: "Exercise-deleted",
           position: "bottom-right",

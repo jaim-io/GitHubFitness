@@ -1,37 +1,41 @@
--------------------------------------------
---Remove Exercise & Workout-
-if coach id matches or admin
+#
 
-Exercise DELETE => Notify all
-- 'subscribed' users
-- coaches whoms workouts use the exercise
-- subscribers of said workout
+## Delete
 
-review   return Errors.Authentication.UnAuthorized;
+- Delete exercise-saves when exercise deleted
+- Delete workout-exercise when exercise deleted
+- On delete remove frontend state
 
---User profile--
-view saves;
-remove saves within the view;
-simplify user saves with {action}?;
+## User profile
 
---Login--
-Sign Up;
-Forgot password;
+- view saves;
+- remove saves within the view;
+- simplify user saves with {action}?;
 
---User settings--
-Passord change;
-Email change;
-Email notifications;
+## Email Templates
 
--------------------------------------------
+- Workout deleted
+- Exercise deleted
+- Signup
+- Forgot password
 
---Auth--
-Refactor login requirement;
-2FA;
+## Auth
 
---Coach backend--
-Coach image;
-Coach social media;
+- Sign Up;
+- Forgot password;
+- 2FA;
+- Invalidate refreshTokens when ...;
 
---Coach profile--
-Profile page;
+## User settings
+
+- Passord change;
+- Email change;
+
+## Coach backend
+
+- Coach image;
+- Coach social media;
+
+## Coach profile
+
+- Profile page;

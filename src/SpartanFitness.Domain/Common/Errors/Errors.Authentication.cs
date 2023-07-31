@@ -10,10 +10,6 @@ public static partial class Errors
       code: "Auth.InvalidCredentials",
       description: "Invalid credentials.");
 
-    public static Error UnAuthorized => Error.Validation(
-      code: "Auth.Unauthorized",
-      description: "Unauthorized.");
-
     public static Error InvalidToken => Error.Validation(
       code: "Auth.InvalidToken",
       description: "Invalid token.");
