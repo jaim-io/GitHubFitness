@@ -15,7 +15,6 @@
 
 ## Auth
 
-- Sign Up;
 - Forgot password;
 - 2FA;
 - Invalidate refreshTokens when ...;

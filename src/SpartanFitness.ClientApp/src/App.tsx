@@ -11,7 +11,7 @@ import ExerciseDetailPage, {
 } from "./pages/exercises/ExerciseDetail";
 import ExercisesPage from "./pages/exercises/Exercises";
 import HomePage from "./pages/Home";
-import LoginPage from "./pages/Login";
+import LoginPage from "./pages/auth/Login";
 import NewExercisePage from "./pages/exercises/NewExercise";
 import MuscleGroupLayout from "./layouts/MuscleGroupLayout";
 import MuscleGroupsPage from "./pages/muscle_groups/MuscleGroups";
@@ -40,6 +40,7 @@ import CoachDetailPage, {
 } from "./pages/coaches/CoachDetail";
 import CoachWorkoutsPage from "./pages/coaches/CoachWorkouts";
 import LoginRequired from "./components/LoginRequired";
+import SignUpPage from "./pages/auth/SignUp";
 
 const router = createBrowserRouter([
   {
@@ -198,7 +199,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <LoginLayout />,
         errorElement: <ErrorPage />,
-        children: [{ path: "login", element: <LoginPage /> }],
+        children: [
+          { path: "login", element: <LoginPage /> },
+          { path: "signup", element: <SignUpPage /> },
+        ],
       },
     ],
   },

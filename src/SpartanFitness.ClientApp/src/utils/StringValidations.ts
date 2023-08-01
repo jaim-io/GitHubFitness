@@ -69,7 +69,7 @@ export const validateDefaultUrl = (
     result = {
       isValid: false,
       errorMsg: result.isValid
-        ? `URL cannot be longer than ${props.maxLength} characters.`
+        ? `URL cannot be longer than ${props.maxLength} characters`
         : `${result.errorMsg} URL cannot be longer than ${props.maxLength} characters`,
     };
   }
@@ -94,10 +94,90 @@ export const validateYoutubeUrl = (
     result = {
       isValid: false,
       errorMsg: result.isValid
-        ? `URL cannot be longer than ${props.maxLength} characters.`
+        ? `URL cannot be longer than ${props.maxLength} characters`
         : `${result.errorMsg} and cannot be longer than ${props.maxLength} characters`,
     };
   }
 
   return result;
+};
+
+const emailRegex = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
+export const validateEmail = (
+  email: string,
+  props: StringValidatonProps,
+): ValidationResult => {
+  let result: ValidationResult = emailRegex.test(email)
+    ? { isValid: true }
+    : {
+        isValid: false,
+        errorMsg: "Invalid e-mail adress",
+      };
+
+  if (props.maxLength && email.length > props.maxLength) {
+    result = {
+      isValid: false,
+      errorMsg: result.isValid
+        ? `E-mail adress cannot be longer than ${props.maxLength} characters`
+        : `${result.errorMsg} and e-mail adress cannot be longer than ${props.maxLength} characters`,
+    };
+  }
+
+  return result;
+};
+
+const passwordRegex = new RegExp(
+  "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{0,}$",
+);
+export const validatePassword = (
+  password: string,
+  props: StringValidatonProps,
+): ValidationResult => {
+  let result: ValidationResult = passwordRegex.test(password)
+    ? { isValid: true }
+    : {
+        isValid: false,
+        errorMsg:
+          "Password has to at least contain one uppercase letter, lowercase letter, number and special character",
+      };
+
+  if (!result.isValid) {
+    return result;
+  }
+
+  if (props.minLength && password.length < props.minLength) {
+    result = {
+      isValid: false,
+      errorMsg: `Password has to be longer than ${props.minLength} characters`,
+      // errorMsg: result.isValid
+      //   ? `Password has to be longer than ${props.minLength} characters`
+      //   : `${result.errorMsg} and has to be longer than ${props.minLength} characters`,
+    };
+    return result;
+  }
+
+  if (props.maxLength && password.length > props.maxLength) {
+    result = {
+      isValid: false,
+      errorMsg: `Password cannot be longer than ${props.maxLength} characters`,
+      // errorMsg: result.isValid
+      //   ? `Password cannot be longer than ${props.maxLength} characters`
+      //   : `${result.errorMsg} and cannot be longer than ${props.maxLength} characters`,
+    };
+    return result;
+  }
+
+  return result;
+};
+
+export const validateConfirmedPassword = (
+  password: string,
+  confirmedPassword: string,
+) => {
+  return password === confirmedPassword
+    ? { isValid: true }
+    : {
+        isValid: false,
+        errorMsg: "Confirmed password does not match the password",
+      };
 };

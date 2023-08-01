@@ -35,7 +35,7 @@ const MainNavigation = () => {
             {auth.user && <UserNavItem />}
             {!auth.user && <AuthNavItem path="/login">Sign in</AuthNavItem>}
             {!auth.user && (
-              <AuthNavItem path="/register" border={true}>
+              <AuthNavItem path="/signup" border={true}>
                 Sign up
               </AuthNavItem>
             )}

@@ -3,11 +3,11 @@ import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LogoSvg from "../assets/logo.svg";
-import LoadingIcon from "../components/icons/LoadingIcon";
-import AuthContext from "../contexts/AuthProvider";
-import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
-import Exception from "../types/domain/Exception";
+import LogoSvg from "../../assets/logo.svg";
+import LoadingIcon from "../../components/icons/LoadingIcon";
+import AuthContext from "../../contexts/AuthProvider";
+import AuthenticationResponse from "../../types/authentication/AuthenticationResponse";
+import Exception from "../../types/domain/Exception";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
 
@@ -98,12 +98,14 @@ const LoginPage = () => {
   return (
     <>
       <div className="flex justify-center pt-28 pb-10">
-        <div className="">
-          <img
-            src={LogoSvg}
-            className="w-[10rem] h-[10rem] mx-auto"
-            alt={"SpartanFitness Logo"}
-          />
+        <div>
+          <Link to={"/"}>
+            <img
+              src={LogoSvg}
+              className="w-[10rem] h-[10rem] mx-auto hover:rotate-8 hover:transition duration-150 ease-in-out"
+              alt={"SpartanFitness Logo"}
+            />
+          </Link>
           <p>Sign in to SpartanFitness</p>
         </div>
       </div>
@@ -180,9 +182,9 @@ const LoginPage = () => {
       </div>
 
       <div className="flex justify-center">
-        <p className="px-10 pt-6 pb-5 mb-4 border border-gray max-w-sm rounded-lg">
+        <p className="px-10 pt-5 pb-5 mb-4 border border-gray max-w-sm rounded-lg">
           Not a Spartan yet?{" "}
-          <Link to="/register" className="text-blue">
+          <Link to="/signup" className="text-blue">
             Create an account
           </Link>
           .
