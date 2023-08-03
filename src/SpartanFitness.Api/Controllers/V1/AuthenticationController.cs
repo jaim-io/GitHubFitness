@@ -7,10 +7,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using SpartanFitness.Application.Authentication.Commands.ConfirmEmail;
 using SpartanFitness.Application.Authentication.Commands.RefreshJwtToken;
 using SpartanFitness.Application.Authentication.Commands.Register;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Authentication.Queries.Login;
+using SpartanFitness.Application.Common.Results;
 using SpartanFitness.Contracts.Authentication;
 
 namespace SpartanFitness.Api.Controllers.V1;
@@ -43,11 +45,11 @@ public class AuthenticationController : ApiController
   public async Task<IActionResult> Register(RegisterRequest request)
   {
     var command = _mapper.Map<RegisterCommand>(request);
-    ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+    ErrorOr<MessageResult> authResult = await _mediator.Send(command);
 
     return authResult.Match(
-      authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
-      errors => Problem(errors));
+      Ok,
+      Problem);
   }
 
   /// <summary>
@@ -78,5 +80,18 @@ public class AuthenticationController : ApiController
     return authResult.Match(
       authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
       errors => Problem(errors));
+  }
+
+  [HttpGet("confirm-email")]
+  public async Task<IActionResult> ConfirmEmail(
+    [FromQuery(Name = "id")] string userId,
+    [FromQuery] string token)
+  {
+    var command = new ConfirmEmailCommand(UserId: userId, Token: token);
+
+    ErrorOr<MessageResult> result = await _mediator.Send(command);
+    return result.Match(
+      Ok,
+      Problem);
   }
 }

@@ -33,6 +33,7 @@ const SignUpPage = () => {
   const [, setError] = useState<Exception>();
   const [confirmedPasswordError, setConfirmedPasswordError] =
     useState<string>();
+  const [passwordError, setPasswordError] = useState<string>();
 
   const [firstNameIsValid, setFirstNameIsValid] = useState(false);
   const [lastNameIsValid, setLastNameIsValid] = useState(false);
@@ -83,6 +84,7 @@ const SignUpPage = () => {
         )
         .then((res) => {
           if (res.data.id) {
+            // Email verification & 2FA
             setAuth(res.data);
             navigate("/");
           }
@@ -120,7 +122,37 @@ const SignUpPage = () => {
     setConfirmedPassword("");
   };
 
-  const handleConfirmedPassword = (value: string): void => {
+  const handlePasswordChange = (value: string) => {
+    const passwordValidation = validatePassword(value, {
+      minLength: 10,
+      maxLength: 50,
+    });
+
+    if (passwordValidation.isValid) {
+      setPasswordError(undefined);
+    } else {
+      setPasswordError(passwordValidation.errorMsg);
+    }
+    setPasswordIsValid(passwordValidation.isValid);
+
+    if (confirmedPassword !== "") {
+      const confirmedPasswordValidation = validateConfirmedPassword(
+        value,
+        confirmedPassword,
+      );
+
+      if (confirmedPasswordValidation.isValid) {
+        setConfirmedPasswordError(undefined);
+      } else {
+        setConfirmedPasswordError(confirmedPasswordValidation.errorMsg);
+      }
+      setConfirmedPasswordIsValid(confirmedPasswordValidation.isValid);
+    }
+
+    setPassword(value);
+  };
+
+  const handleConfirmedPasswordChange = (value: string): void => {
     const validation = validateConfirmedPassword(password, value);
 
     if (validation.isValid) {
@@ -221,7 +253,7 @@ const SignUpPage = () => {
           <div className="px-4">
             <InputField
               value={password}
-              onChange={setPassword}
+              onChange={handlePasswordChange}
               placeholder="******************"
               type={showPassword ? "text" : "password"}
               label={
@@ -235,9 +267,7 @@ const SignUpPage = () => {
                   </span>
                 </p>
               }
-              validator={validatePassword}
-              validationProps={{ minLength: 10, maxLength: 50 }}
-              setIsValid={setPasswordIsValid}
+              error={passwordError}
             />
           </div>
         </div>
@@ -246,7 +276,7 @@ const SignUpPage = () => {
           <div className="px-4">
             <InputField
               value={confirmedPassword}
-              onChange={handleConfirmedPassword}
+              onChange={handleConfirmedPasswordChange}
               placeholder="******************"
               type={showConfirmedPassword ? "text" : "password"}
               label={

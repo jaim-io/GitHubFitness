@@ -12,7 +12,7 @@ using SpartanFitness.Domain.ValueObjects;
 namespace SpartanFitness.Application.Authentication.Queries.Login;
 
 public class LoginQueryHandler
-    : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
+  : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
 {
   private readonly IUserRepository _userRepository;
   private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -35,8 +35,8 @@ public class LoginQueryHandler
   }
 
   public async Task<ErrorOr<AuthenticationResult>> Handle(
-      LoginQuery query,
-      CancellationToken cancellationToken)
+    LoginQuery query,
+    CancellationToken cancellationToken)
   {
     if (await _userRepository.GetByEmailAsync(query.Email) is not User user)
     {
@@ -46,6 +46,11 @@ public class LoginQueryHandler
     if (!_passwordHasher.VerifyPassword(query.Password, user.Password, user.Salt))
     {
       return Errors.Authentication.InvalidCredentials;
+    }
+
+    if (!user.EmailConfirmed)
+    {
+      return Errors.Authentication.EmailNotConfirmed;
     }
 
     var userId = UserId.Create(user.Id.Value);

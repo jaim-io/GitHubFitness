@@ -72,6 +72,7 @@ public static class DependencyInjection
     services.AddSingleton(Options.Create(jwtSettings));
     services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
     services.AddSingleton<IPasswordHasher, PasswordHasher>();
+    services.AddSingleton<IEmailConfirmationTokenProvider, EmailConfirmationTokenProvider>();
 
     var tokenValidationParameters = new TokenValidationParameters
     {
@@ -113,9 +114,9 @@ public static class DependencyInjection
     var emailSettings = new EmailSettings();
     configuration.Bind(EmailSettings.SectionName, emailSettings);
 
-    services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-    services.AddSingleton<IEmailProvider, EmailProvider>();
     services.AddSingleton(Options.Create(emailSettings));
+    services.AddSingleton<IEmailProvider, EmailProvider>();
+    services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
     return services;
   }

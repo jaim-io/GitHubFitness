@@ -173,7 +173,7 @@ export const validatePassword = (
 export const validateConfirmedPassword = (
   password: string,
   confirmedPassword: string,
-) => {
+): ValidationResult => {
   return password === confirmedPassword
     ? { isValid: true }
     : {

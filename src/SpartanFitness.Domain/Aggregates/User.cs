@@ -1,19 +1,20 @@
-using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.Common.Models;
+using SpartanFitness.Domain.Events;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Domain.Aggregates;
 
 public sealed class User : AggregateRoot<UserId, Guid>
 {
-  private List<ExerciseId> _savedExerciseIds = new();
-  private List<MuscleId> _savedMuscleIds = new();
-  private List<MuscleGroupId> _savedMuscleGroupIds = new();
-  private List<WorkoutId> _savedWorkoutIds = new();
+  private readonly List<ExerciseId> _savedExerciseIds = new();
+  private readonly List<MuscleId> _savedMuscleIds = new();
+  private readonly List<MuscleGroupId> _savedMuscleGroupIds = new();
+  private readonly List<WorkoutId> _savedWorkoutIds = new();
   public string FirstName { get; private set; }
   public string LastName { get; private set; }
   public string ProfileImage { get; private set; }
   public string Email { get; private set; }
+  public bool EmailConfirmed { get; private set; }
   public string Password { get; private set; }
   public byte[] Salt { get; private set; }
   public IReadOnlyList<ExerciseId> SavedExerciseIds => _savedExerciseIds.AsReadOnly();
@@ -86,9 +87,13 @@ public sealed class User : AggregateRoot<UserId, Guid>
       savedMuscleGroupIds ?? new(),
       savedWorkoutIds ?? new());
 
-    // user.AddDomainEvent(new ...);
-
     return user;
+  }
+
+  public void ConfirmEmail()
+  {
+    // this.AddDomainEvent(new UserCreated()); ---> Send welcome email;
+    EmailConfirmed = true;
   }
 
   public void SaveExercise(Exercise exercise)
