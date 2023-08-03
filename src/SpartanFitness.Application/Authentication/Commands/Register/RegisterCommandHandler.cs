@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 
-using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
@@ -25,19 +24,22 @@ public class RegisterCommandHandler
   private readonly IEmailConfirmationTokenProvider _emailConfirmationTokenProvider;
   private readonly IServer _server;
   private readonly IEmailProvider _emailProvider;
+  private readonly IFrontendProvider _frontendProvider;
 
   public RegisterCommandHandler(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
     IEmailConfirmationTokenProvider emailConfirmationTokenProvider,
     IServer server,
-    IEmailProvider emailProvider)
+    IEmailProvider emailProvider,
+    IFrontendProvider frontendProvider)
   {
     _userRepository = userRepository;
     _passwordHasher = passwordHasher;
     _emailConfirmationTokenProvider = emailConfirmationTokenProvider;
     _server = server;
     _emailProvider = emailProvider;
+    _frontendProvider = frontendProvider;
   }
 
   public async Task<ErrorOr<MessageResult>> Handle(
@@ -50,8 +52,7 @@ public class RegisterCommandHandler
       return Errors.User.DuplicateEmail;
     }
 
-    byte[] salt;
-    var hashedPassword = _passwordHasher.HashPassword(command.Password, out salt);
+    var hashedPassword = _passwordHasher.HashPassword(command.Password, out byte[] salt);
 
     var user = User.Create(
       command.FirstName,
@@ -64,25 +65,13 @@ public class RegisterCommandHandler
     await _userRepository.AddAsync(user);
 
     // Send verification email;
-    var addressesFeature = _server.Features.Get<IServerAddressesFeature>()
-      ?? throw new NullReferenceException(
-        "[UserCreatedDomainEventHandler] addressesFeature is null, no email could be send.");
-
-    if (addressesFeature.Addresses.Count is 0)
-    {
-      throw new ArgumentException(
-        "[UserCreatedDomainEventHandler] addressesFeature.Addresses.Count is 0, no email could be send.");
-    }
-
-    var httpsUrl = addressesFeature.Addresses.FirstOrDefault(a => a.StartsWith("https"));
-    var httpUrl = addressesFeature.Addresses.FirstOrDefault(a => a.StartsWith("http"));
-
+    var frontendBaseUrl = _frontendProvider.GetApplicationUrl();
     try
     {
       var emailConfirmationToken = _emailConfirmationTokenProvider.GenerateToken(user.Email);
 
       var callbackUrl =
-        $"{httpsUrl ?? httpUrl}/auth/v1/confirm-email?id={user.Id.Value}&token={emailConfirmationToken}";
+        $"{frontendBaseUrl}/confirm-email?id={user.Id.Value}&token={emailConfirmationToken}";
       callbackUrl = HtmlEncoder.Default.Encode(callbackUrl);
 
       var emailBody =
@@ -102,9 +91,9 @@ public class RegisterCommandHandler
     }
     catch
     {
-      var callbackUrl = $"{httpsUrl ?? httpUrl}/auth/v1/request-confirmation-email?email={user.Email}";
-      var message = $"Please request a verification email at a later time, by clicking on <a href=\"{callbackUrl}\">this</a> link.";
-      return new MessageResult(callbackUrl);
+      var callbackUrl = $"{frontendBaseUrl}/request-confirmation-email";
+      var message = $"Please request a verification email at a later time, by clicking on <a href=\"{callbackUrl}\">this</a> link and submitting your e-mail address.";
+      return new MessageResult(message);
     }
   }
 }

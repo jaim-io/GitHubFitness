@@ -67,8 +67,12 @@ The `appsettings.json`, `appsettings.Development.json` or `appsettings.Productio
     "SpartanFitness": "Server=<SERVER>;Database=<DATABASE>;User Id=<UID>;Password=<PWD>;TrustServerCertificate=true;"
   },
   "EmailSettings": {
+    "Secret": "<SUPER-SECRET-KEY>",
     "MailGunApiKey": "<MAIL-GUN-API-KEY>",
     "MailGunDomain": "<MAIL-GUN-DOMAIN>"
+  },
+  "FrontendSettings": {
+    "ApplicationUrl": "<APPLICATION_URL>"
   }
 }
 ```

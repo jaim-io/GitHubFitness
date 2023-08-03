@@ -12,6 +12,7 @@ using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Infrastructure.Authentication;
+using SpartanFitness.Infrastructure.Common.Frontend;
 using SpartanFitness.Infrastructure.Persistence;
 using SpartanFitness.Infrastructure.Persistence.Interceptors;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
@@ -114,8 +115,13 @@ public static class DependencyInjection
     var emailSettings = new EmailSettings();
     configuration.Bind(EmailSettings.SectionName, emailSettings);
 
+    var frontendSettings = new FrontendSettings();
+    configuration.Bind(FrontendSettings.SectionName, frontendSettings);
+
     services.AddSingleton(Options.Create(emailSettings));
+    services.AddSingleton(Options.Create(frontendSettings));
     services.AddSingleton<IEmailProvider, EmailProvider>();
+    services.AddSingleton<IFrontendProvider, FrontendProvider>();
     services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
     return services;

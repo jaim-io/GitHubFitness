@@ -10,7 +10,8 @@
 
 - Workout deleted
 - Exercise deleted
-- Signup
+- Email confirmation
+- Welcome
 - Forgot password
 
 ## Auth
@@ -32,3 +33,7 @@
 ## Coach profile
 
 - Profile page;
+
+## Login / Signup frontend
+
+- return-to param like on github
