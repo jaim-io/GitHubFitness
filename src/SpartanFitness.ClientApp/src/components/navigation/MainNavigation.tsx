@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import MainNavItem from "./MainNavItem";
 import UserNavItem from "./UserNavItem";
 import LogoWhiteNoCircle from "../../assets/logo-white-no-circle.svg";
@@ -8,6 +8,7 @@ import AuthNavItem from "./AuthNavItem";
 
 const MainNavigation = () => {
   const { auth } = useContext(AuthContext);
+  const location = useLocation();
 
   return (
     <nav className="bg-semi-black py-3 px-24">
@@ -33,7 +34,15 @@ const MainNavigation = () => {
         <div className="w-full md:block md:w-auto">
           <ul className="flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-4 md:mt-0 md:border-0 items-center">
             {auth.user && <UserNavItem />}
-            {!auth.user && <AuthNavItem path="/login">Sign in</AuthNavItem>}
+            {!auth.user && (
+              <AuthNavItem
+                path={`/login?return_to=${encodeURIComponent(
+                  location.pathname,
+                )}`}
+              >
+                Sign in
+              </AuthNavItem>
+            )}
             {!auth.user && (
               <AuthNavItem path="/signup" border={true}>
                 Sign up

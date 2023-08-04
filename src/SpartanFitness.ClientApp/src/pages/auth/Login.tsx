@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LogoSvg from "../../assets/logo.svg";
@@ -13,6 +13,8 @@ const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
 
 const LoginPage = () => {
   const { auth, setAuth } = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
+  const returnToPath = searchParams.get("return_to") ?? "/";
   const emailRef = useRef<HTMLInputElement>();
 
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const LoginPage = () => {
       emailRef.current.focus();
     }
     if (auth.user != null) {
-      navigate("/");
+      navigate(returnToPath);
     }
   });
 
@@ -59,7 +61,7 @@ const LoginPage = () => {
         .then((res) => {
           if (res.data.id) {
             setAuth(res.data);
-            navigate(-1);
+            navigate(returnToPath);
           }
         })
         .catch((err) => {

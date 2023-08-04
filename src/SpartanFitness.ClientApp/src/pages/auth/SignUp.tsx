@@ -190,7 +190,7 @@ const SignUpPage = () => {
                   ) : (
                     <>
                       Proceed to{" "}
-                      <Link to="/" className="text-blue">
+                      <Link to="/" className="text-blue animate-pulse">
                         home
                       </Link>
                       .
@@ -203,12 +203,13 @@ const SignUpPage = () => {
         </div>
 
         {serverMessage ? (
-          <div className="w-full max-w-[34rem] bg-semi-black shadow-xl rounded-lg px-4 pt-3 pb-5 mb-4 ml-10 border border-gray">
+          <div className="w-full max-w-[34rem] bg-semi-black shadow-xl rounded-lg px-4 py-8 mb-4 ml-10 border border-gray">
             Hi {firstName} {lastName},
             <br />
             <br />
             Thank your for signing up at Spartan Fitness!{" "}
-            <span className="break-words">{serverMessage}</span>
+            <span className="break-words">{serverMessage}</span> We hope you
+            will enjoy the Spartan experience. Until soon!
             <br />
             <br />
             Kind regards,

@@ -1,15 +1,18 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import LoadingIcon from "./icons/LoadingIcon";
 
 const LoginRequired = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    console.log("TESt");
+
     if (auth.user === undefined) {
-      navigate("/login");
+      navigate(`/login?return_to=${encodeURIComponent(location.pathname)}`);
     }
   }, []);
 

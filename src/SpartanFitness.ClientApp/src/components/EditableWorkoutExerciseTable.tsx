@@ -1,6 +1,5 @@
 import { Combobox, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { BsExclamationCircle } from "react-icons/bs";
 import { HiChevronDown, HiChevronUp, HiChevronUpDown } from "react-icons/hi2";
 import Exercise from "../types/domain/Exercise";
 import { EXERCISE_TYPES, WorkoutExercise } from "../types/domain/Workout";
@@ -539,7 +538,6 @@ const Row = ({
             key={e.id}
             className="shadow appearance-none border border-red rounded-lg w-full py-1 px-3 text-whiteas bg-black font-medium flex items-center"
           >
-            <BsExclamationCircle className="text-red mr-1" size={14} />{" "}
             {e.errorMsg}
           </p>
         ))}
