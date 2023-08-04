@@ -4,9 +4,6 @@ using ErrorOr;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
@@ -22,7 +19,6 @@ public class RegisterCommandHandler
   private readonly IUserRepository _userRepository;
   private readonly IPasswordHasher _passwordHasher;
   private readonly IEmailConfirmationTokenProvider _emailConfirmationTokenProvider;
-  private readonly IServer _server;
   private readonly IEmailProvider _emailProvider;
   private readonly IFrontendProvider _frontendProvider;
 
@@ -30,14 +26,12 @@ public class RegisterCommandHandler
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
     IEmailConfirmationTokenProvider emailConfirmationTokenProvider,
-    IServer server,
     IEmailProvider emailProvider,
     IFrontendProvider frontendProvider)
   {
     _userRepository = userRepository;
     _passwordHasher = passwordHasher;
     _emailConfirmationTokenProvider = emailConfirmationTokenProvider;
-    _server = server;
     _emailProvider = emailProvider;
     _frontendProvider = frontendProvider;
   }
@@ -46,7 +40,6 @@ public class RegisterCommandHandler
     RegisterCommand command,
     CancellationToken cancellationToken)
   {
-    // User registration
     if (await _userRepository.GetByEmailAsync(command.Email) is not null)
     {
       return Errors.User.DuplicateEmail;
@@ -64,7 +57,6 @@ public class RegisterCommandHandler
 
     await _userRepository.AddAsync(user);
 
-    // Send verification email;
     var frontendBaseUrl = _frontendProvider.GetApplicationUrl();
     try
     {
@@ -92,7 +84,7 @@ public class RegisterCommandHandler
     catch
     {
       var callbackUrl = $"{frontendBaseUrl}/request-confirmation-email";
-      var message = $"Please request a verification email at a later time, by clicking on <a href=\"{callbackUrl}\">this</a> link and submitting your e-mail address.";
+      var message = $"Please request a verification email at a later time, by following <a href=\"{callbackUrl}\">this</a> link and submitting your e-mail address.";
       return new MessageResult(message);
     }
   }

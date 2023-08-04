@@ -7,7 +7,7 @@ import LogoSvg from "../../assets/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import AuthContext from "../../contexts/AuthProvider";
 import AuthenticationResponse from "../../types/authentication/AuthenticationResponse";
-import Exception from "../../types/domain/Exception";
+import { extractErrors } from "../../utils/ExtractErrors";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
 
@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [, setError] = useState<Exception | null>(null);
+  const [errors, setErrors] = useState<string[] | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,7 +45,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     setIsLoading(true);
-    setError(null);
+    setErrors(null);
 
     try {
       await axios
@@ -63,17 +63,10 @@ const LoginPage = () => {
           }
         })
         .catch((err) => {
-          setError({
-            message: err.message,
-            code: err.code,
-          });
-          toast.error(
-            err.code == "ERR_NETWORK"
-              ? "Unable to reach the server"
-              : err.response.status == 400
-              ? "Invalid credentials."
-              : err.response.statusText,
-            {
+          setIsLoading(false);
+
+          if (err.response.status === 500) {
+            toast.error("Unable to reach the server", {
               toastId: err.code,
               position: "bottom-right",
               autoClose: 5000,
@@ -83,8 +76,16 @@ const LoginPage = () => {
               draggable: true,
               progress: undefined,
               theme: "colored",
-            },
-          );
+            });
+            setErrors([
+              "The server is unreachable, please try again at a later time.",
+            ]);
+            return;
+          }
+
+          if (err.response.status === 400) {
+            setErrors(extractErrors(err.response.data.errors));
+          }
         });
     } catch {
       /* empty */
@@ -180,6 +181,16 @@ const LoginPage = () => {
           </div>
         </form>
       </div>
+
+      {errors && (
+        <div className="flex justify-center pb-4">
+          <div className="shadow appearance-none border border-red rounded-lg w-full py-3 px-3 text-whiteas bg-black font-medium max-w-sm text-center">
+            {errors.map((e, i) => (
+              <p key={`error-${i}`}>{e}</p>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex justify-center">
         <p className="px-10 pt-5 pb-5 mb-4 border border-gray max-w-sm rounded-lg">
