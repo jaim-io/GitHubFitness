@@ -17,14 +17,13 @@ public class CreateWorkoutCommandValidator
 
     RuleFor(x => x.Image)
       .NotEmpty()
-      .MaximumLength(2048);
+      .MaximumLength(2048)
+      .Must(x => x.StartsWith("https://"))
+      .WithMessage("Image url has to start with 'https://'.");
 
     RuleFor(x => x.CoachId)
       .Must(x => Guid.TryParse(x, out _))
       .WithMessage("The coach ID must be a valid GUID");
-
-    RuleFor(x => x.Image)
-      .NotEmpty();
 
     RuleForEach(x => x.WorkoutExercises)
       .SetValidator(new CreateWorkoutExerciseCommandValidator());

@@ -24,10 +24,9 @@ public class UpdateWorkoutCommandValidator : AbstractValidator<UpdateWorkoutComm
 
     RuleFor(x => x.Image)
       .NotEmpty()
-      .MaximumLength(2048);
-
-    RuleFor(x => x.Image)
-      .NotEmpty();
+      .MaximumLength(2048)
+      .Must(x => x.StartsWith("https://"))
+      .WithMessage("Image url has to start with 'https://'.");
 
     RuleForEach(x => x.WorkoutExercises)
       .SetValidator(new UpdateWorkoutExerciseCommandValidator());

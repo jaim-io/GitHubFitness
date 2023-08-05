@@ -16,7 +16,9 @@ public class CreateMuscleCommandValidator : AbstractValidator<CreateMuscleComman
 
     RuleFor(x => x.Image)
       .NotEmpty()
-      .MaximumLength(2048);
+      .MaximumLength(2048)
+      .Must(x => x.StartsWith("https://"))
+      .WithMessage("Image url has to start with 'https://'.");
 
     RuleFor(x => x.MuscleGroupId)
       .Must(x => Guid.TryParse(x, out _))

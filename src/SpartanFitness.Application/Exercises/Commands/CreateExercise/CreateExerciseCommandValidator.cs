@@ -36,10 +36,14 @@ public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCo
 
     RuleFor(x => x.Image)
       .NotEmpty()
-      .MaximumLength(2048);
+      .MaximumLength(2048)
+      .Must(x => x.StartsWith("https://"))
+      .WithMessage("Image url has to start with 'https://'.");
 
     RuleFor(x => x.Video)
       .NotEmpty()
-      .MaximumLength(2048);
+      .MaximumLength(2048)
+      .Must(x => x.StartsWith("https://www.youtube-nocookie.com/embed/"))
+      .WithMessage("Video url has to start with 'https://www.youtube-nocookie.com/embed/'.");
   }
 }

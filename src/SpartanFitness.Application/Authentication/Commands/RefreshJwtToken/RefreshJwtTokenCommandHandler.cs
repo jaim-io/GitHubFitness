@@ -84,8 +84,6 @@ public class RefreshJwtTokenCommandHandler
     if (storedRefreshToken.Used)
     {
       // Refresh token has already been used
-      // TODO: invalidate all access tokens
-
       var tokens = await _refreshTokenRepository.GetByUserIdAsync(userId);
       tokens.ForEach(t => t.Invalidate());
       await _refreshTokenRepository.UpdateRangeAsync(tokens);
