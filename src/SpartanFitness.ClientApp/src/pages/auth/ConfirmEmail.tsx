@@ -16,7 +16,7 @@ const ConfirmEmailPage = () => {
   const token = searchParams.get("token");
 
   if (id === null || token === null) {
-    throw new Error("Invalid URL for the confirm-email page.");
+    throw new Error("Invalid URL for the email confirmation page.");
   }
 
   const [isLoading, setIsLoading] = useState(true);
