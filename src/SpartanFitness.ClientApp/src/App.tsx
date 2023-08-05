@@ -41,6 +41,7 @@ import CoachDetailPage, {
 import CoachWorkoutsPage from "./pages/coaches/CoachWorkouts";
 import LoginRequired from "./components/LoginRequired";
 import SignUpPage from "./pages/auth/SignUp";
+import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
 
 const router = createBrowserRouter([
   {
@@ -202,6 +203,7 @@ const router = createBrowserRouter([
         children: [
           { path: "login", element: <LoginPage /> },
           { path: "signup", element: <SignUpPage /> },
+          { path: "confirm-email", element: <ConfirmEmailPage /> },
         ],
       },
     ],

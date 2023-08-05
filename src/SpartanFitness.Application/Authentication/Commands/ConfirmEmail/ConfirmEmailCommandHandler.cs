@@ -42,12 +42,12 @@ public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, E
 
     if (user.EmailConfirmed)
     {
-      return new MessageResult($"Hi {user.FirstName} {user.LastName}, your e-mail address ({user.Email}) has already been confirmed.");
+      return new MessageResult($"Your e-mail address ({user.Email}) has already been confirmed.");
     }
 
     user.ConfirmEmail();
     await _userRepository.UpdateAsync(user);
 
-    return new MessageResult($"Hi {user.FirstName} {user.LastName}, your e-mail address ({user.Email}) has been confirmed.");
+    return new MessageResult($"Your e-mail address ({user.Email}) has been confirmed. You can now log into your account.");
   }
 }

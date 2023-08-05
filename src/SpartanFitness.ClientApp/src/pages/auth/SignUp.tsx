@@ -111,6 +111,7 @@ const SignUpPage = () => {
 
           if (err.response.status === 400) {
             setErrors(extractErrors(err.response.data.errors));
+            return;
           }
         });
     } catch {
@@ -179,19 +180,19 @@ const SignUpPage = () => {
             {
               <div className="flex justify-center">
                 <p className="px-10 pt-5 pb-5 mb-4 border border-gray max-w-sm rounded-lg">
-                  {serverMessage === undefined ? (
+                  {serverMessage && formIsValid ? (
                     <>
-                      Already a Spartan?{" "}
-                      <Link to="/login" className="text-blue">
-                        Sign in
+                      Proceed to{" "}
+                      <Link to="/" className="text-blue animate-pulse">
+                        home
                       </Link>
                       .
                     </>
                   ) : (
                     <>
-                      Proceed to{" "}
-                      <Link to="/" className="text-blue animate-pulse">
-                        home
+                      Already a Spartan?{" "}
+                      <Link to="/login" className="text-blue">
+                        Sign in
                       </Link>
                       .
                     </>
@@ -202,7 +203,7 @@ const SignUpPage = () => {
           </div>
         </div>
 
-        {serverMessage ? (
+        {serverMessage && formIsValid ? (
           <div className="w-full max-w-[34rem] bg-semi-black shadow-xl rounded-lg px-4 py-8 mb-4 ml-10 border border-gray">
             Hi {firstName} {lastName},
             <br />
