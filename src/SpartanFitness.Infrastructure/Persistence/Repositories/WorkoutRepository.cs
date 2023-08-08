@@ -46,6 +46,13 @@ public class WorkoutRepository
     return await _dbContext.Workouts.FirstOrDefaultAsync(w => w.Id == id);
   }
 
+  public async Task<List<Workout>> GetByIdAsync(List<WorkoutId> ids)
+  {
+    return await _dbContext.Workouts
+      .Where(w => ids.Contains(w.Id))
+      .ToListAsync();
+  }
+
   public async Task<List<Workout>> GetBySearchQueryAsync(string searchQuery)
   {
     string query = searchQuery.ToLower();
@@ -87,8 +94,8 @@ public class WorkoutRepository
       .ToArray();
 
     return await _dbContext.Users
-       .FromSqlRaw(query, sqlParameters)
-       .ToListAsync();
+      .FromSqlRaw(query, sqlParameters)
+      .ToListAsync();
   }
 
   public async Task<List<Workout>> GetByExerciseId(ExerciseId id)

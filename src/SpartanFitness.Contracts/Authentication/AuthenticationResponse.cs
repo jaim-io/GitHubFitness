@@ -11,6 +11,8 @@ public record AuthenticationResponse(
   List<string> SavedMuscleIds,
   List<string> SavedMuscleGroupIds,
   List<string> SavedWorkoutIds,
+  DateTime CreatedDateTime,
+  DateTime UpdatedDateTime,
   string Token,
   string RefreshToken);
 

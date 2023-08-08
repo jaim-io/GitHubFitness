@@ -24,6 +24,13 @@ public class ExerciseRepository
     await _dbContext.SaveChangesAsync();
   }
 
+  public async Task<List<Exercise>> GetByIdAsync(List<ExerciseId> ids)
+  {
+    return await _dbContext.Exercises
+      .Where(e => ids.Contains(e.Id))
+      .ToListAsync();
+  }
+
   public async Task<Exercise?> GetByNameAsync(string name)
   {
     return await _dbContext.Exercises.FirstOrDefaultAsync(e => e.Name == name);

@@ -1,5 +1,6 @@
 using Mapster;
 
+using SpartanFitness.Application.Common.Results;
 using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
@@ -56,7 +57,7 @@ public class UserMappingConfig : IRegister
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.MuscleId, src => src.Request.MuscleId)
       .Map(dest => dest, src => src);
-    
+
     config.NewConfig<(SaveWorkoutRequest Request, string UserId), SaveWorkoutCommand>()
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.WorkoutId, src => src.Request.WorkoutId)
@@ -66,5 +67,7 @@ public class UserMappingConfig : IRegister
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.WorkoutId, src => src.Request.WorkoutId)
       .Map(dest => dest, src => src);
+
+    config.NewConfig<UserSavesResult, UserSavesResponse>();
   }
 }

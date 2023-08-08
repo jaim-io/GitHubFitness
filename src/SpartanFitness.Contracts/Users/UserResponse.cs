@@ -9,4 +9,6 @@ public record UserResponse(
   List<string> SavedExerciseIds,
   List<string> SavedMuscleIds,
   List<string> SavedMuscleGroupIds,
-  List<string> SavedWorkoutIds);
+  List<string> SavedWorkoutIds,
+  DateTime CreatedDateTime,
+  DateTime UpdatedDateTime);
