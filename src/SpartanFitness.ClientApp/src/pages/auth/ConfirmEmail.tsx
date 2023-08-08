@@ -1,16 +1,19 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import LogoSvg from "../../assets/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import { ReactNode, useEffect, useState } from "react";
 import axios from "axios";
 import { MessageResult } from "../../types/results/MessageResult";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
 
 const CONFIRM_EMAIL_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
 }/auth/confirm-email`;
 
 const ConfirmEmailPage = () => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const token = searchParams.get("token");
@@ -79,6 +82,10 @@ const ConfirmEmailPage = () => {
           throw new Error("An unexpected error occured.");
         });
     };
+
+    if (auth.user) {
+      navigate("/");
+    }
 
     confirmEmail();
   }, []);

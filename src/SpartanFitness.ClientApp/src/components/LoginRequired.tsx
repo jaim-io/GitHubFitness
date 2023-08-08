@@ -9,8 +9,6 @@ const LoginRequired = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("TESt");
-
     if (auth.user === undefined) {
       navigate(`/login?return_to=${encodeURIComponent(location.pathname)}`);
     }

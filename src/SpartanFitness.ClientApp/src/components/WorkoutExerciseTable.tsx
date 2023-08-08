@@ -45,7 +45,7 @@ type RowProps = {
 
 const Row = ({ workoutExercise }: RowProps) => {
   return (
-    <div className="grid grid-cols-12 py-1 gap-1">
+    <div className="grid grid-cols-12 py-[0.125rem] gap-1">
       <span className="col-span-4 shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 bg-black text-white leading-tight focus:outline focus:outline-blue focus:shadow-outline cursor-default">
         {workoutExercise.name}
       </span>

@@ -9,6 +9,8 @@ type User = {
   savedMuscleIds: string[];
   savedMuscleGroupIds: string[];
   savedWorkoutIds: string[];
+  createdDateTime: Date;
+  updatedDateTime: Date;
 };
 
 type Role = {

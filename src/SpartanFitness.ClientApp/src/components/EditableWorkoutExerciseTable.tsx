@@ -345,7 +345,7 @@ const Row = ({
 
   return (
     <>
-      <div className="grid grid-cols-13 py-1 gap-1">
+      <div className="grid grid-cols-13 py-[0.125rem] gap-1">
         {/* Exercise selection */}
         <Combobox
           value={selectedExercise}

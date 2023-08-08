@@ -10,7 +10,7 @@ const ExerciseCard = ({ exercise }: Props) => {
   return (
     <div className="px-10 pt-6 pb-6 border border-gray w-[24rem] rounded-lg">
       <Link
-        to={exercise.id}
+        to={`/exercises/${exercise.id}`}
         className="text-blue hover:underline hover:underline-blue font-semibold flex items-center"
       >
         <BiDumbbell className="mr-1 text-light-gray" size={16} />
