@@ -54,13 +54,13 @@ const MuscleGroupsPage = () => {
   const [query, setQuery] = useState("");
   // ------------------------
 
-  const [muscleGroupsPage, , isLoading] = useMuscleGroupsPage(
-    currentPage,
-    pageSize,
-    SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
-    order,
-    query,
-  );
+  const [muscleGroupsPage, , isLoading] = useMuscleGroupsPage({
+    page: currentPage,
+    size: pageSize,
+    sort: SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
+    order: order,
+    query: query,
+  });
 
   const paginate = (page: number) => {
     setCurrentPage(page);
@@ -134,7 +134,7 @@ const MuscleGroupsPage = () => {
             }`}
           >
             {muscleGroupsPage &&
-              muscleGroupsPage.muscleGroups.map((mg) => (
+              muscleGroupsPage.values.map((mg) => (
                 <MuscleGroupCard muscleGroup={mg} key={mg.id} />
               ))}
           </div>
@@ -147,7 +147,7 @@ const MuscleGroupsPage = () => {
           )}
         </ul>
 
-        {muscleGroupsPage && muscleGroupsPage.muscleGroups.length >= 1 && (
+        {muscleGroupsPage && muscleGroupsPage.values.length >= 1 && (
           <PageNavigation
             pageNumber={muscleGroupsPage.pageNumber}
             pageCount={muscleGroupsPage.pageCount}
@@ -156,7 +156,7 @@ const MuscleGroupsPage = () => {
           />
         )}
 
-        {muscleGroupsPage && muscleGroupsPage.muscleGroups.length === 0 && (
+        {muscleGroupsPage && muscleGroupsPage.values.length === 0 && (
           <p className="flex justify-center items-center">
             No muscle groups found <TbGhost2Filled className="ml-1" size={20} />
           </p>

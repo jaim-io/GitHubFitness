@@ -42,7 +42,7 @@ const ExercisesPage = () => {
   const isCoach =
     auth.user?.roles.find((r) => r.name === "Coach") !== undefined;
   const isAdmin =
-    auth.user?.roles.find((r) => r.name === "Admin") !== undefined;
+    auth.user?.roles.find((r) => r.name === "Administrator") !== undefined;
 
   // ---Pagination states---
   const [searchParams, setSearchParams] = useSearchParams();
@@ -144,7 +144,7 @@ const ExercisesPage = () => {
             }`}
           >
             {exercisePage &&
-              exercisePage.exercises.map((e) => (
+              exercisePage.values.map((e) => (
                 <ExerciseCard exercise={e} key={e.id} />
               ))}
           </div>
@@ -157,7 +157,7 @@ const ExercisesPage = () => {
           )}
         </ul>
 
-        {exercisePage && exercisePage.exercises.length >= 1 && (
+        {exercisePage && exercisePage.values.length >= 1 && (
           <PageNavigation
             pageNumber={exercisePage.pageNumber}
             pageCount={exercisePage.pageCount}
@@ -166,7 +166,7 @@ const ExercisesPage = () => {
           />
         )}
 
-        {exercisePage && exercisePage.exercises.length === 0 && (
+        {exercisePage && exercisePage.values.length === 0 && (
           <p className="flex justify-center items-center">
             No exercises found <TbGhost2Filled className="ml-1" size={20} />
           </p>

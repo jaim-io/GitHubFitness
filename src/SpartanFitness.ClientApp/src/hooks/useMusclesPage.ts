@@ -8,16 +8,30 @@ import SearchParamsFactory from "../utils/SearchParamsFactory";
 
 const MUSCLES_ENDPOINT = `${import.meta.env.VITE_API_BASE}/muscles/page`;
 
-export type MusclePage = { muscles: Muscle[] } & Page;
+type ApiResponse = Omit<Page<Muscle>, "values"> & {
+  muscles: Muscle[];
+};
 
-const useMusclesPage = (
-  page?: number,
-  size?: number,
-  sort?: string,
-  order?: string,
-  query?: string,
-): [MusclePage | undefined, Exception | undefined, boolean] => {
-  const [musclePage, setMusclePage] = useState<MusclePage>();
+type PageArguments = {
+  page?: number;
+  size?: number;
+  sort?: string;
+  order?: string;
+  query?: string;
+};
+
+const useMusclesPage = ({
+  page,
+  size,
+  sort,
+  order,
+  query,
+}: PageArguments): [
+  Page<Muscle> | undefined,
+  Exception | undefined,
+  boolean,
+] => {
+  const [musclePage, setMusclePage] = useState<Page<Muscle>>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,14 +49,14 @@ const useMusclesPage = (
 
       try {
         await axios
-          .get<MusclePage>(`${MUSCLES_ENDPOINT}${queryString}`, {
+          .get<ApiResponse>(`${MUSCLES_ENDPOINT}${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setMusclePage(res.data);
+            setMusclePage({ ...res.data, values: res.data.muscles });
             setIsLoading(false);
           })
           .catch((err) => {

@@ -52,7 +52,7 @@ const WorkoutsPage = () => {
     params.coachId &&
     auth.user?.roles.find((r) => r.name === "Coach")?.id == params.coachId;
   const isAdmin =
-    auth.user?.roles.find((r) => r.name === "Admin") !== undefined;
+    auth.user?.roles.find((r) => r.name === "Administrator") !== undefined;
   const showNewWorkoutsButton =
     isAllWorkoutsRoute || isAuthorizedCoach || isAdmin;
 
@@ -156,7 +156,7 @@ const WorkoutsPage = () => {
             }`}
           >
             {workoutPage &&
-              workoutPage.workouts.map((w) => (
+              workoutPage.values.map((w) => (
                 <WorkoutCard workout={w} key={w.id} />
               ))}
           </div>
@@ -169,7 +169,7 @@ const WorkoutsPage = () => {
           )}
         </ul>
 
-        {workoutPage && workoutPage.workouts.length >= 1 && (
+        {workoutPage && workoutPage.values.length >= 1 && (
           <PageNavigation
             pageNumber={workoutPage.pageNumber}
             pageCount={workoutPage.pageCount}
@@ -178,7 +178,7 @@ const WorkoutsPage = () => {
           />
         )}
 
-        {workoutPage && workoutPage.workouts.length === 0 && (
+        {workoutPage && workoutPage.values.length === 0 && (
           <p className="flex justify-center items-center">
             No workouts found <TbGhost2Filled className="ml-1" size={20} />
           </p>

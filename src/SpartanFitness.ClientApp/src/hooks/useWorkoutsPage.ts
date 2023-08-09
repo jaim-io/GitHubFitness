@@ -10,7 +10,9 @@ const WORKOUT_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
 }/coaches/all/workouts/page`;
 
-export type WorkoutsPage = { workouts: Workout[] } & Page;
+type ApiResponse = Omit<Page<Workout>, "values"> & {
+  workouts: Workout[];
+};
 
 type PageArguments = {
   page?: number;
@@ -27,11 +29,11 @@ const useWorkoutsPage = ({
   order,
   query,
 }: PageArguments): [
-  WorkoutsPage | undefined,
+  Page<Workout> | undefined,
   Exception | undefined,
   boolean,
 ] => {
-  const [workoutsPage, setWorkoutsPage] = useState<WorkoutsPage>();
+  const [workoutsPage, setWorkoutsPage] = useState<Page<Workout>>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,14 +51,14 @@ const useWorkoutsPage = ({
 
       try {
         await axios
-          .get<WorkoutsPage>(`${WORKOUT_ENDPOINT}${queryString}`, {
+          .get<ApiResponse>(`${WORKOUT_ENDPOINT}${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setWorkoutsPage(res.data);
+            setWorkoutsPage({ ...res.data, values: res.data.workouts });
             setIsLoading(false);
           })
           .catch((err) => {

@@ -8,7 +8,7 @@ import SearchParamsFactory from "../utils/SearchParamsFactory";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/page`;
 
-export type ExercisesPage = { exercises: Exercise[] } & Page;
+type ApiResponse = Omit<Page<Exercise>, "values"> & { exercises: Exercise[] };
 
 type PageArguments = {
   page?: number;
@@ -25,11 +25,11 @@ const useExercisesPage = ({
   order,
   query,
 }: PageArguments): [
-  ExercisesPage | undefined,
+  Page<Exercise> | undefined,
   Exception | undefined,
   boolean,
 ] => {
-  const [exercisesPage, setExercisePage] = useState<ExercisesPage>();
+  const [exercisesPage, setExercisePage] = useState<Page<Exercise>>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,14 +47,14 @@ const useExercisesPage = ({
 
       try {
         await axios
-          .get<ExercisesPage>(`${EXERCISE_ENDPOINT}${queryString}`, {
+          .get<ApiResponse>(`${EXERCISE_ENDPOINT}${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setExercisePage(res.data);
+            setExercisePage({ ...res.data, values: res.data.exercises });
             setIsLoading(false);
           })
           .catch((err) => {

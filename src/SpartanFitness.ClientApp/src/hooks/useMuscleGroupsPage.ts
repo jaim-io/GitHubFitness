@@ -10,16 +10,30 @@ const MUSCLEGROUP_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
 }/muscle-groups/page`;
 
-export type MuscleGroupPage = { muscleGroups: MuscleGroup[] } & Page;
+type ApiResponse = Omit<Page<MuscleGroup>, "values"> & {
+  muscleGroups: MuscleGroup[];
+};
 
-const useMuscleGroupsPage = (
-  page?: number,
-  size?: number,
-  sort?: string,
-  order?: string,
-  query?: string,
-): [MuscleGroupPage | undefined, Exception | undefined, boolean] => {
-  const [muscleGroupPage, setMuscleGroupPage] = useState<MuscleGroupPage>();
+type PageArguments = {
+  page?: number;
+  size?: number;
+  sort?: string;
+  order?: string;
+  query?: string;
+};
+
+const useMuscleGroupsPage = ({
+  page,
+  size,
+  sort,
+  order,
+  query,
+}: PageArguments): [
+  Page<MuscleGroup> | undefined,
+  Exception | undefined,
+  boolean,
+] => {
+  const [muscleGroupPage, setMuscleGroupPage] = useState<Page<MuscleGroup>>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,14 +51,14 @@ const useMuscleGroupsPage = (
 
       try {
         await axios
-          .get<MuscleGroupPage>(`${MUSCLEGROUP_ENDPOINT}${queryString}`, {
+          .get<ApiResponse>(`${MUSCLEGROUP_ENDPOINT}${queryString}`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,
             },
           })
           .then((res) => {
-            setMuscleGroupPage(res.data);
+            setMuscleGroupPage({ ...res.data, values: res.data.muscleGroups });
             setIsLoading(false);
           })
           .catch((err) => {

@@ -33,7 +33,7 @@ const EditWorkoutPage = () => {
 
   const isAuthorizedCoach = coachRole.id === workout.coachId;
   const isAdmin =
-    auth.user!.roles.find((r) => r.name === "Admin") !== undefined;
+    auth.user!.roles.find((r) => r.name === "Administrator") !== undefined;
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -251,20 +251,17 @@ const EditWorkoutPage = () => {
           <RxExit className="mr-1" /> Leave edit mode
         </button>
 
-        {isAuthorizedCoach ||
-          (isAdmin && (
-            <button
-              className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
-                showImageUrlInputBar
-                  ? "opacity-50 hover:cursor-not-allowed"
-                  : ""
-              }`}
-              type="button"
-              onClick={handleDelete}
-            >
-              <RiDeleteBin5Fill className="mr-1" /> Delete workout
-            </button>
-          ))}
+        {(isAuthorizedCoach || isAdmin) && (
+          <button
+            className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
+              showImageUrlInputBar ? "opacity-50 hover:cursor-not-allowed" : ""
+            }`}
+            type="button"
+            onClick={handleDelete}
+          >
+            <RiDeleteBin5Fill className="mr-1" /> Delete workout
+          </button>
+        )}
 
         <button
           className={`px-10 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${

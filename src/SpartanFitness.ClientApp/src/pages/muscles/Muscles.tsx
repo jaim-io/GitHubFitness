@@ -54,13 +54,13 @@ const MusclesPage = () => {
   const [query, setQuery] = useState("");
   // ------------------------
 
-  const [musclesPage, , isLoading] = useMusclesPage(
-    currentPage,
-    pageSize,
-    SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
-    order,
-    query,
-  );
+  const [musclesPage, , isLoading] = useMusclesPage({
+    page: currentPage,
+    size: pageSize,
+    sort: SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
+    order: order,
+    query: query,
+  });
 
   const paginate = (page: number) => {
     setCurrentPage(page);
@@ -134,7 +134,7 @@ const MusclesPage = () => {
             }`}
           >
             {musclesPage &&
-              musclesPage.muscles.map((m) => (
+              musclesPage.values.map((m) => (
                 <MuscleCard muscle={m} key={m.id} />
               ))}
           </div>
@@ -147,7 +147,7 @@ const MusclesPage = () => {
           )}
         </ul>
 
-        {musclesPage && musclesPage.muscles.length >= 1 && (
+        {musclesPage && musclesPage.values.length >= 1 && (
           <PageNavigation
             pageNumber={musclesPage.pageNumber}
             pageCount={musclesPage.pageCount}
@@ -156,7 +156,7 @@ const MusclesPage = () => {
           />
         )}
 
-        {musclesPage && musclesPage.muscles.length === 0 && (
+        {musclesPage && musclesPage.values.length === 0 && (
           <p className="flex justify-center items-center">
             No muscles found <TbGhost2Filled className="ml-1" size={20} />
           </p>

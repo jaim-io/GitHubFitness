@@ -3,18 +3,19 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { AiFillEdit } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
-import { BsCloudUploadFill } from "react-icons/bs";
+import { BsCloudUploadFill, BsExclamationCircle } from "react-icons/bs";
 import { MdFitbit, MdOutlineBookmarkAdd } from "react-icons/md";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 import { RxExit } from "react-icons/rx";
 import { SiElectron } from "react-icons/si";
 import { TbGhost2Filled } from "react-icons/tb";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/icons/LoadingIcon";
 import Select, { SelectOption } from "../../components/Select";
+import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAuth from "../../hooks/useAuth";
+import useMuscleGroups from "../../hooks/useMuscleGroups";
 import useMuscleGroupsByIds from "../../hooks/useMuscleGroupsByIds";
-import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
 import useMusclesByIds from "../../hooks/useMusclesByIds";
 import Exercise from "../../types/domain/Exercise";
 import Muscle from "../../types/domain/Muscle";
@@ -26,8 +27,6 @@ import {
   validateName,
   validateYoutubeUrl,
 } from "../../utils/StringValidations";
-import { BsExclamationCircle } from "react-icons/bs";
-import { RiDeleteBin5Fill } from "react-icons/ri";
 
 const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 const MUSCLES_ENDPOINT = `${
@@ -51,7 +50,7 @@ const EditExercisePage = () => {
   const isCoach =
     auth.user!.roles.find((r) => r.name === "Coach") !== undefined;
   const isAdmin =
-    auth.user!.roles.find((r) => r.name === "Admin") !== undefined;
+    auth.user!.roles.find((r) => r.name === "Administrator") !== undefined;
 
   const muscleGroupSelectorRef = useRef<HTMLDivElement>(null);
   const muscleSelectorRef = useRef<HTMLDivElement>(null);
@@ -127,7 +126,7 @@ const EditExercisePage = () => {
 
   const navigate = useNavigate();
 
-  const [muscleGroupPage, , muscleGroupPageIsLoading] = useMuscleGroupsPage();
+  const [muscleGroups, , muscleGroupPageIsLoading] = useMuscleGroups();
   const [muscles, setMuscles] = useState<Muscle[]>(initialMuscles ?? []);
   const [musclesAreLoading, setMusclesAreLoading] = useState(false);
 
@@ -192,9 +191,7 @@ const EditExercisePage = () => {
     // MuscleGroups
     const mgs: MuscleGroup[] = [];
     Object.values(changedMuscleGroups).forEach((smg) => {
-      const muscleGroup = muscleGroupPage?.muscleGroups.find(
-        (mg) => mg.id === smg.value,
-      );
+      const muscleGroup = muscleGroups?.find((mg) => mg.id === smg.value);
       if (muscleGroup) mgs.push(muscleGroup);
     });
 
@@ -243,12 +240,12 @@ const EditExercisePage = () => {
     setMuscles(muscles);
   };
 
-  const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({
+  const muscleGroupOptions = muscleGroups?.map((mg) => ({
     label: mg.name,
     value: mg.id,
   }));
 
-  const displayedMuscleGroups = muscleGroupPage?.muscleGroups.filter((mg) =>
+  const displayedMuscleGroups = muscleGroups?.filter((mg) =>
     Object.values(selectedMuscleGroups).find((smg) => mg.id === smg.value),
   );
 
@@ -401,20 +398,17 @@ const EditExercisePage = () => {
           <RxExit className="mr-1" /> Leave edit mode
         </button>
 
-        {isCoach ||
-          (isAdmin && (
-            <button
-              className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
-                showImageUrlInputBar
-                  ? "opacity-50 hover:cursor-not-allowed"
-                  : ""
-              }`}
-              type="button"
-              onClick={handleDelete}
-            >
-              <RiDeleteBin5Fill className="mr-1" /> Delete exercise
-            </button>
-          ))}
+        {(isCoach || isAdmin) && (
+          <button
+            className={`text-[#e8473f] bg-gray px-10 py-2 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer mr-3 ${
+              showImageUrlInputBar ? "opacity-50 hover:cursor-not-allowed" : ""
+            }`}
+            type="button"
+            onClick={handleDelete}
+          >
+            <RiDeleteBin5Fill className="mr-1" /> Delete exercise
+          </button>
+        )}
 
         <button
           className={`px-10 py-2 rounded-lg bg-dark-green hover:bg-light-green text-white flex items-center cursor-pointer ${
