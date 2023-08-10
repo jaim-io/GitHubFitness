@@ -72,7 +72,7 @@ public class WorkoutsController : ApiController
      Problem);
   }
 
-  [HttpPost("create")]
+  [HttpPost]
   [Authorize(Roles = RoleTypes.Coach)]
   public async Task<IActionResult> CreateWorkout(CreateWorkoutRequest request, string coachId)
   {
@@ -93,7 +93,7 @@ public class WorkoutsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpPut("{workoutId}/update")]
+  [HttpPut("{workoutId}")]
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> UpdateWorkout([FromRoute] string coachId, [FromRoute] string workoutId, [FromBody] UpdateWorkoutRequest request)
   {
@@ -116,7 +116,7 @@ public class WorkoutsController : ApiController
       Problem);
   }
 
-  [HttpDelete("{workoutId}/delete")]
+  [HttpDelete("{workoutId}")]
   [Authorize(Roles = $"{RoleTypes.Coach}, {RoleTypes.Administrator}")]
   public async Task<IActionResult> DeleteWorkout([FromRoute] string coachId, [FromRoute] string workoutId)
   {

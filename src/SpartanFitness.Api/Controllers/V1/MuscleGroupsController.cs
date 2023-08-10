@@ -96,7 +96,7 @@ public class MuscleGroupsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpPost("create")]
+  [HttpPost]
   [Authorize(Roles = RoleTypes.Administrator)]
   public async Task<IActionResult> CreateMuscleGroup(
     CreateMuscleGroupRequest request)
@@ -112,7 +112,7 @@ public class MuscleGroupsController : ApiController
       errors => Problem(errors));
   }
 
-  [HttpPut("{muscleGroupId}/update")]
+  [HttpPut("{muscleGroupId}")]
   [Authorize(Roles = $"{RoleTypes.Administrator}")]
   public async Task<IActionResult> UpdateMuscleGroup(
   [FromBody] UpdateMuscleGroupRequest request,

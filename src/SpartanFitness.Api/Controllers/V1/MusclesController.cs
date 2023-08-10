@@ -94,7 +94,7 @@ public class MusclesController : ApiController
       Problem);
   }
 
-  [HttpPost("create")]
+  [HttpPost]
   public async Task<IActionResult> CreateMuscle([FromBody] CreateMuscleRequest request)
   {
     var command = _mapper.Map<CreateMuscleCommand>(request);
@@ -108,7 +108,7 @@ public class MusclesController : ApiController
       Problem);
   }
 
-  [HttpPut("{muscleId}/update")]
+  [HttpPut("{muscleId}")]
   [Authorize(Roles = $"{RoleTypes.Administrator}")]
   public async Task<IActionResult> UpdateMuscle(
     [FromBody] UpdateMuscleRequest request,

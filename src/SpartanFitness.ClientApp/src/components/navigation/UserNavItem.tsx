@@ -1,11 +1,12 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useContext } from "react";
-import { AiFillSetting } from "react-icons/ai";
+import { AiOutlineSetting, AiOutlineUser } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 import DefaultProfileSvg from "../../assets/default-profile.svg";
 import AuthContext from "../../contexts/AuthProvider";
+import { BsBookmark } from "react-icons/bs";
 
 const UserNavItem = ({ ...props }) => {
   const { auth, logout } = useContext(AuthContext);
@@ -41,18 +42,51 @@ const UserNavItem = ({ ...props }) => {
               className="absolute right-0 mt-2 w-44 origin-top-right divide-y divide-gray rounded-md border border-gray bg-semi-black shadow-lg ring-1 ring-semi-black ring-opacity-5 focus:outline-none"
             >
               <p className="px-3 py-2">Signed in as {auth.user.firstName}</p>
+
               <div className="py-2">
                 <Menu.Item>
                   <NavLink
-                    to="/user/settings"
+                    to="/user/profile"
                     className={({ isActive }) =>
-                      `flex w-full items-center px-3 py-1 hover:bg-blue ${
+                      `flex w-full items-center px-3 py-1 hover:bg-blue rounded-lg ${
                         isActive ? "bg-blue hover:bg-opacity-80" : ""
                       }`
                     }
                     end
                   >
-                    <AiFillSetting className="mr-2" />
+                    <AiOutlineUser className="mr-2" />
+                    Profile
+                  </NavLink>
+                </Menu.Item>
+                <div className="pt-1" />
+
+                <Menu.Item>
+                  <NavLink
+                    to="/user/saved"
+                    className={({ isActive }) =>
+                      `flex w-full items-center px-3 py-1 hover:bg-blue rounded-lg ${
+                        isActive ? "bg-blue hover:bg-opacity-80" : ""
+                      }`
+                    }
+                    end
+                  >
+                    <BsBookmark className="mr-2" />
+                    Saved
+                  </NavLink>
+                </Menu.Item>
+                <div className="pt-1" />
+
+                <Menu.Item>
+                  <NavLink
+                    to="/user/settings"
+                    className={({ isActive }) =>
+                      `flex w-full items-center px-3 py-1 hover:bg-blue rounded-lg ${
+                        isActive ? "bg-blue hover:bg-opacity-80" : ""
+                      }`
+                    }
+                    end
+                  >
+                    <AiOutlineSetting className="mr-2" />
                     Settings
                   </NavLink>
                 </Menu.Item>
@@ -62,7 +96,7 @@ const UserNavItem = ({ ...props }) => {
                   <NavLink
                     to="/login"
                     className={
-                      "flex w-full items-center px-3 py-1 hover:bg-blue"
+                      "flex w-full items-center px-3 py-1 hover:bg-blue rounded-lg"
                     }
                     onClick={logout}
                     end

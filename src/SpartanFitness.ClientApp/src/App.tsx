@@ -42,6 +42,7 @@ import CoachWorkoutsPage from "./pages/coaches/CoachWorkouts";
 import LoginRequired from "./components/LoginRequired";
 import SignUpPage from "./pages/auth/SignUp";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
+import UserSavesPage from "./pages/users/UserSaves";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
             element: <LoginRequired />,
             children: [
               { path: "profile", element: <UserDetailPage /> },
+              { path: "saved", element: <UserSavesPage /> },
               { path: "settings", element: <UserSettingsPage /> },
             ],
           },

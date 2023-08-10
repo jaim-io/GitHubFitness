@@ -1,4 +1,4 @@
-﻿namespace SpartanFitness.Contracts.Users.Saves.Requests;
+﻿namespace SpartanFitness.Contracts.Users.Saves;
 
 public record SaveMuscleGroupRequest(
   string MuscleGroupId);
