@@ -10,6 +10,7 @@ public interface IExerciseRepository
   Task AddAsync(Exercise exercise);
   Task<IEnumerable<Exercise>> GetAllAsync();
   Task<List<Exercise>> GetBySearchQueryAsync(string searchQuery);
+  Task<List<Exercise>> GetBySearchQueryAndIdsAsync(string searchQuery, List<ExerciseId> ids);
   Task<Exercise?> GetByIdAsync(ExerciseId id);
   Task<List<Exercise>> GetByIdAsync(List<ExerciseId> ids);
   Task<Exercise?> GetByNameAsync(string name);

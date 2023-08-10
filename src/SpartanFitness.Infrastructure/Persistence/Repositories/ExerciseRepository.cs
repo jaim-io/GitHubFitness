@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Infrastructure.Persistence.Repositories;
@@ -63,6 +65,34 @@ public class ExerciseRepository
 
     return await _dbContext.Exercises
       .Where(e => (e.Name.ToLower().Contains(query) || e.Description.ToLower().Contains(query)))
+      .ToListAsync();
+  }
+
+  public async Task<List<Exercise>> GetBySearchQueryAndIdsAsync(string searchQuery, List<ExerciseId> ids)
+  {
+    if (ids.Count() == 0)
+    {
+      return new();
+    }
+
+    var searchQueryParam = $"@p{0}";
+    var idParameters = string.Join(", ", ids.Select((_, i) => $"@p{i + 1}"));
+    var query = $@"
+      SELECT *
+      FROM Exercises 
+      WHERE Id in ({idParameters}) 
+        and (LOWER(Name) LIKE '%' + {searchQueryParam} + '%' 
+          or LOWER(Description) LIKE '%' + {searchQueryParam} + '%')
+    ";
+
+    var sqlSearchParameter = new SqlParameter($"@p{0}", searchQuery.ToLower());
+    var sqlParameters = ids
+      .Select((id, i) => new SqlParameter($"@p{i + 1}", id.Value))
+      .ToList();
+    sqlParameters.Add(sqlSearchParameter);
+
+    return await _dbContext.Exercises
+      .FromSqlRaw(query, sqlParameters.ToArray())
       .ToListAsync();
   }
 

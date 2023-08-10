@@ -5,6 +5,8 @@ using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.SaveWorkout;
+using SpartanFitness.Application.Users.Queries.GetSavedExercisePage;
+using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
 using SpartanFitness.Domain.Aggregates;
@@ -57,5 +59,12 @@ public class UserMappingConfig : IRegister
 
     config.NewConfig<List<WorkoutId>, SavedWorkoutIdsResponse>()
       .Map(dest => dest.Ids, src => src.Select(id => id.Value.ToString()));
+
+    config.NewConfig<(PagingRequest Request, string UserId), GetSavedExercisePageQuery>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.PageNumber, src => src.Request.Page)
+      .Map(dest => dest.PageSize, src => src.Request.Size)
+      .Map(dest => dest.SearchQuery, src => src.Request.Query)
+      .Map(dest => dest, src => src.Request);
   }
 }

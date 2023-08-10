@@ -24,9 +24,14 @@ using SpartanFitness.Application.Users.Queries.GetAllSavedExerciseIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleGroupIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedWorkoutIds;
+using SpartanFitness.Application.Users.Queries.GetSavedExercisePage;
 using SpartanFitness.Application.Users.Queries.GetUserSaves;
+using SpartanFitness.Contracts.Common;
+using SpartanFitness.Contracts.Exercises;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
+using SpartanFitness.Domain.Aggregates;
+using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.Enums;
 using SpartanFitness.Domain.ValueObjects;
 
@@ -80,6 +85,17 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpGet("exercises/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetSavedExercisePage([FromRoute] string userId, [FromQuery] PagingRequest request)
+  {
+    var query = _mapper.Map<GetSavedExercisePageQuery>((request, userId));
+    ErrorOr<Pagination<Exercise>> result = await _mediator.Send(query);
+
+    return result.Match(
+      page => Ok(_mapper.Map<ExercisePageResponse>(page)),
+      Problem);
+  }
+
   [HttpPatch("exercises")]
   public async Task<IActionResult> SaveExercise([FromRoute] string userId, [FromBody] SaveExerciseRequest request)
   {
@@ -114,9 +130,9 @@ public class UserSavesController : ApiController
       Problem);
   }
 
-  [HttpDelete("exercises/{id?}")]
+  [HttpDelete("exercises/ids/{id?}")]
   public async Task<IActionResult> UnSaveExercises(
-    [FromQuery] string userId,
+    [FromRoute] string userId,
     [FromQuery(Name = "id")] List<string> exerciseIds)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
@@ -186,9 +202,9 @@ public class UserSavesController : ApiController
       Problem);
   }
 
-  [HttpDelete("muscle-groups/{id?}")]
+  [HttpDelete("muscle-groups/ids/{id?}")]
   public async Task<IActionResult> UnSaveMuscleGroups(
-    [FromQuery] string userId,
+    [FromRoute] string userId,
     [FromQuery(Name = "id")] List<string> muscleGroupIds)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
@@ -256,9 +272,9 @@ public class UserSavesController : ApiController
       Problem);
   }
 
-  [HttpDelete("muscles/{id?}")]
+  [HttpDelete("muscles/ids/{id?}")]
   public async Task<IActionResult> UnSaveMuscles(
-    [FromQuery] string userId,
+    [FromRoute] string userId,
     [FromQuery(Name = "id")] List<string> muscleIds)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
@@ -326,9 +342,9 @@ public class UserSavesController : ApiController
       Problem);
   }
 
-  [HttpDelete("workouts/{id?}")]
+  [HttpDelete("workouts/ids/{id?}")]
   public async Task<IActionResult> UnSaveWorkouts(
-    [FromQuery] string userId,
+    [FromRoute] string userId,
     [FromQuery(Name = "id")] List<string> workoutIds)
   {
     var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
