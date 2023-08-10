@@ -13,6 +13,7 @@ public interface IExerciseRepository
   Task<Exercise?> GetByIdAsync(ExerciseId id);
   Task<List<Exercise>> GetByIdAsync(List<ExerciseId> ids);
   Task<Exercise?> GetByNameAsync(string name);
+  Task<bool> ExistsAsync(ExerciseId id);
   Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids);
   Task<IEnumerable<MuscleGroupId>> GetMuscleGroupIds(IEnumerable<ExerciseId> exerciseIds);
   Task<IEnumerable<MuscleId>> GetMuscleIds(IEnumerable<ExerciseId> exerciseIds);

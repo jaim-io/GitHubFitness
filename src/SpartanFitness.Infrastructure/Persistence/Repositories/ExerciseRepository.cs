@@ -36,6 +36,11 @@ public class ExerciseRepository
     return await _dbContext.Exercises.FirstOrDefaultAsync(e => e.Name == name);
   }
 
+  public async Task<bool> ExistsAsync(ExerciseId id)
+  {
+    return await _dbContext.Exercises.AnyAsync(e => e.Id == id);
+  }
+
   public async Task<bool> ExistsAsync(IEnumerable<ExerciseId> ids)
   {
     var results = new List<bool>();

@@ -29,12 +29,12 @@ public class SaveExerciseCommandHandler : IRequestHandler<SaveExerciseCommand, E
     }
 
     var exerciseId = ExerciseId.Create(command.ExerciseId);
-    if (await _exerciseRepository.GetByIdAsync(exerciseId) is not Exercise exercise)
+    if (!await _exerciseRepository.ExistsAsync(exerciseId))
     {
       return Errors.Exercise.NotFound;
     }
 
-    user.SaveExercise(exercise);
+    user.SaveExercise(exerciseId);
     await _userRepository.UpdateAsync(user);
     
     return Unit.Value;

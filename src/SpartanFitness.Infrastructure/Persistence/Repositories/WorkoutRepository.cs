@@ -36,6 +36,11 @@ public class WorkoutRepository
       WHERE WorkoutId = {workout.Id.Value}");
   }
 
+  public async Task<bool> ExistsAsync(WorkoutId id)
+  {
+    return await _dbContext.Workouts.AnyAsync(w => w.Id == id);
+  }
+
   public async Task<IEnumerable<Workout>> GetAllAsync()
   {
     return await _dbContext.Workouts.ToListAsync();

@@ -29,12 +29,12 @@ public class UnSaveExerciseCommandHandler : IRequestHandler<UnSaveExerciseComman
     }
 
     var exerciseId = ExerciseId.Create(command.ExerciseId);
-    if (await _exerciseRepository.GetByIdAsync(exerciseId) is not Exercise exercise)
+    if (!await _exerciseRepository.ExistsAsync(exerciseId))
     {
       return Errors.Exercise.NotFound;
     }
 
-    user.UnSaveExercise(exercise);
+    user.UnSaveExercise(exerciseId);
     await _userRepository.UpdateAsync(user);
 
     return Unit.Value;

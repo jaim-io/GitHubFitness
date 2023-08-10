@@ -29,12 +29,12 @@ public class SaveMuscleGroupCommandHandler : IRequestHandler<SaveMuscleGroupComm
     }
 
     var muscleGroupId = MuscleGroupId.Create(command.MuscleGroupId);
-    if (await _muscleGroupRepository.GetByIdAsync(muscleGroupId) is not MuscleGroup muscleGroup)
+    if (!await _muscleGroupRepository.ExistsAsync(muscleGroupId))
     {
       return Errors.MuscleGroup.NotFound;
     }
 
-    user.SaveMuscleGroup(muscleGroup);
+    user.SaveMuscleGroup(muscleGroupId);
 
     await _userRepository.UpdateAsync(user);
 

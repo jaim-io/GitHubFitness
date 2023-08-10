@@ -29,12 +29,12 @@ public class SaveMuscleCommandHandler : IRequestHandler<SaveMuscleCommand, Error
     }
 
     var muscleId = MuscleId.Create(command.MuscleId);
-    if (await _muscleRepository.GetByIdAsync(muscleId) is not Muscle muscle)
+    if (!await _muscleRepository.ExistsAsync(muscleId))
     {
       return Errors.Muscle.NotFound;
     }
 
-    user.SaveMuscle(muscle);
+    user.SaveMuscle(muscleId);
     await _userRepository.UpdateAsync(user);
 
     return Unit.Value;

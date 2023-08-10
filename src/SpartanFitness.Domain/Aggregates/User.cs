@@ -96,63 +96,55 @@ public sealed class User : AggregateRoot<UserId, Guid>
     EmailConfirmed = true;
   }
 
-  public void SaveExercise(Exercise exercise)
+  public void SaveExercise(ExerciseId id)
   {
-    var id = ExerciseId.Create(exercise.Id.Value);
     if (!_savedExerciseIds.Contains(id))
     {
       _savedExerciseIds.Add(id);
     }
   }
 
-  public void UnSaveExercise(Exercise exercise)
+  public void UnSaveExercise(ExerciseId id)
   {
-    var id = ExerciseId.Create(exercise.Id.Value);
     _savedExerciseIds.Remove(id);
   }
 
-  public void SaveMuscleGroup(MuscleGroup muscleGroup)
+  public void SaveMuscleGroup(MuscleGroupId id)
   {
-    var id = MuscleGroupId.Create(muscleGroup.Id.Value);
     if (!_savedMuscleGroupIds.Contains(id))
     {
       _savedMuscleGroupIds.Add(id);
     }
   }
 
-  public void UnSaveMuscleGroup(MuscleGroup muscleGroup)
+  public void UnSaveMuscleGroup(MuscleGroupId id)
   {
-    var id = MuscleGroupId.Create(muscleGroup.Id.Value);
     _savedMuscleGroupIds.Remove(id);
   }
 
-  public void SaveMuscle(Muscle muscle)
+  public void SaveMuscle(MuscleId id)
   {
-    var id = MuscleId.Create(muscle.Id.Value);
     if (!_savedMuscleIds.Contains(id))
     {
       _savedMuscleIds.Add(id);
     }
   }
 
-  public void UnSaveMuscle(Muscle muscle)
+  public void UnSaveMuscle(MuscleId id)
   {
-    var id = MuscleId.Create(muscle.Id.Value);
     _savedMuscleIds.Remove(id);
   }
 
-  public void SaveWorkout(Workout workout)
+  public void SaveWorkout(WorkoutId id)
   {
-    var id = WorkoutId.Create(workout.Id.Value);
     if (!_savedWorkoutIds.Contains(id))
     {
       _savedWorkoutIds.Add(id);
     }
   }
 
-  public void UnSaveWorkout(Workout workout)
+  public void UnSaveWorkout(WorkoutId id)
   {
-    var id = WorkoutId.Create(workout.Id.Value);
     _savedWorkoutIds.Remove(id);
   }
 }

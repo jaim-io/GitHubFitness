@@ -29,12 +29,12 @@ public class UnSaveMuscleGroupCommandHandler : IRequestHandler<UnSaveMuscleGroup
     }
 
     var muscleGroupId = MuscleGroupId.Create(command.MuscleGroupId);
-    if (await _muscleGroupRepository.GetByIdAsync(muscleGroupId) is not MuscleGroup muscleGroup)
+    if (!await _muscleGroupRepository.ExistsAsync(muscleGroupId))
     {
       return Errors.MuscleGroup.NotFound;
     }
 
-    user.UnSaveMuscleGroup(muscleGroup);
+    user.UnSaveMuscleGroup(muscleGroupId);
     await _userRepository.UpdateAsync(user);
 
     return Unit.Value;

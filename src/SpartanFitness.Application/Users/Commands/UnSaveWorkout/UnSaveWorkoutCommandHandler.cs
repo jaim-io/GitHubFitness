@@ -29,12 +29,12 @@ public class UnSaveWorkoutCommandHandler : IRequestHandler<UnSaveWorkoutCommand,
     }
 
     var workoutId = WorkoutId.Create(command.WorkoutId);
-    if (await _workoutRepository.GetByIdAsync(workoutId) is not Workout workout)
+    if (!await _workoutRepository.ExistsAsync(workoutId))
     {
       return Errors.Workout.NotFound;
     }
 
-    user.SaveWorkout(workout);
+    user.SaveWorkout(workoutId);
     await _userRepository.UpdateAsync(user);
 
     return Unit.Value;
