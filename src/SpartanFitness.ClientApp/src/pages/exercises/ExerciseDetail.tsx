@@ -57,51 +57,71 @@ const ExerciseDetailPage = () => {
 
   const [lastUpdater] = useCoach(exercise.lastUpdaterId);
 
+  // Axios Error
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (err: any) =>
+    toast.error(
+      err.code == "ERR_NETWORK"
+        ? "Unable to reach the server"
+        : err.response.statusText,
+      {
+        toastId: err.code,
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      },
+    );
+
   const handleSaving = async () => {
     setSaved((prev) => !prev);
 
-    const action = saved ? "remove" : "add";
-
-    await axios
-      .patch(
-        `${USER_ENDPOINT}/${auth.user?.id}/saved/exercises/${action}`,
-        {
-          exerciseId: exercise.id,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
+    if (saved) {
+      // Remove exercise
+      await axios
+        .delete(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/exercises/${exercise.id}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
           },
-        },
-      )
-      .then(() => {
-        if (action == "add") {
-          auth.user!.savedExerciseIds.push(exercise.id);
-        } else {
+        )
+        .then(() => {
           auth.user!.savedExerciseIds =
             auth.user?.savedExerciseIds.filter((id) => id !== exercise.id) ??
             [];
-        }
-      })
-      .catch((err) => {
-        toast.error(
-          err.code == "ERR_NETWORK"
-            ? "Unable to reach the server"
-            : err.response.statusText,
+        })
+        .catch((err) => {
+          onError(err);
+        });
+    } else {
+      // Add exercise
+      await axios
+        .patch(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/exercises`,
           {
-            toastId: err.code,
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
+            exerciseId: exercise.id,
           },
-        );
-      });
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        )
+        .then(() => {
+          auth.user!.savedExerciseIds.push(exercise.id);
+        })
+        .catch((err) => {
+          onError(err);
+        });
+    }
   };
 
   return (

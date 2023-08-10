@@ -131,7 +131,7 @@ const EditWorkoutPage = () => {
       .put(
         `${import.meta.env.VITE_API_BASE}/coaches/${coachRole.id}/workouts/${
           workout.id
-        }/update`,
+        }`,
         {
           id: workout.id,
           name: name,
@@ -191,7 +191,7 @@ const EditWorkoutPage = () => {
       .delete(
         `${import.meta.env.VITE_API_BASE}/coaches/${coachRole.id}/workouts/${
           workout.id
-        }/delete`,
+        }`,
         {
           headers: {
             Accept: "application/json",

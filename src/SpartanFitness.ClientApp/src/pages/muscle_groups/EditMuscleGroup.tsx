@@ -117,7 +117,7 @@ const EditMuscleGroupPage = () => {
 
     await axios
       .put(
-        `${MUSCLEGROUP_ENDPOINT}/${muscleGroup.id}/update`,
+        `${MUSCLEGROUP_ENDPOINT}/${muscleGroup.id}`,
         {
           id: muscleGroup.id,
           name: name,

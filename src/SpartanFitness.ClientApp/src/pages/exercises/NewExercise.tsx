@@ -3,9 +3,11 @@ import { FormEvent, useState } from "react";
 import { TbGhost2Filled } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingIcon from "../../components/icons/LoadingIcon";
+import InputField from "../../components/InputField";
 import Select, { SelectOption } from "../../components/Select";
-import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
+import TexAreaField from "../../components/TextAreaField";
+import LoadingIcon from "../../components/icons/LoadingIcon";
+import useMuscleGroups from "../../hooks/useMuscleGroups";
 import Exception from "../../types/domain/Exception";
 import Exercise from "../../types/domain/Exercise";
 import Muscle from "../../types/domain/Muscle";
@@ -16,10 +18,8 @@ import {
   validateName,
   validateYoutubeUrl,
 } from "../../utils/StringValidations";
-import InputField from "../../components/InputField";
-import TexAreaField from "../../components/TextAreaField";
 
-const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises/create`;
+const EXERCISE_ENDPOINT = `${import.meta.env.VITE_API_BASE}/exercises`;
 const MUSCLES_ENDPOINT = `${
   import.meta.env.VITE_API_BASE
 }/muscles/muscle-group-ids`;
@@ -57,7 +57,7 @@ const NewExercisePage = () => {
   const [, setError] = useState<Exception>();
   const navigate = useNavigate();
 
-  const [muscleGroupPage, , muscleGroupPageIsLoading] = useMuscleGroupsPage();
+  const [muscleGroups, , muscleGroupsLoading] = useMuscleGroups();
   const [muscles, setMuscles] = useState<Muscle[]>([]);
   const [musclesAreLoading, setMusclesAreLoading] = useState(false);
 
@@ -70,9 +70,7 @@ const NewExercisePage = () => {
     // MuscleGroups
     const mgs: MuscleGroup[] = [];
     Object.values(changedMuscleGroups).forEach((smg) => {
-      const muscleGroup = muscleGroupPage?.muscleGroups.find(
-        (mg) => mg.id === smg.value,
-      );
+      const muscleGroup = muscleGroups?.find((mg) => mg.id === smg.value);
       if (muscleGroup) mgs.push(muscleGroup);
     });
 
@@ -121,7 +119,7 @@ const NewExercisePage = () => {
     setMuscles(muscles);
   };
 
-  const muscleGroupOptions = muscleGroupPage?.muscleGroups.map((mg) => ({
+  const muscleGroupOptions = muscleGroups?.map((mg) => ({
     label: mg.name,
     value: mg.id,
   }));
@@ -260,7 +258,7 @@ const NewExercisePage = () => {
                 setSelectedMuscleGroups(selected);
                 onMuscleGroupSelectionChange(selected);
               }}
-              isLoading={muscleGroupPageIsLoading}
+              isLoading={muscleGroupsLoading}
               ifEmpty={
                 <p className="flex justify-center items-center py-1 cursor-default">
                   No muscle groups found{" "}

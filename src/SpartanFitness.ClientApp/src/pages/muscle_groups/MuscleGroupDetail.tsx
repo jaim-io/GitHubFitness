@@ -35,52 +35,69 @@ const MuscleGroupDetailPage = () => {
     muscleGroup.id,
   );
 
+  // Axios Error
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (err: any) =>
+    toast.error(
+      err.code == "ERR_NETWORK"
+        ? "Unable to reach the server"
+        : err.response.statusText,
+      {
+        toastId: err.code,
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      },
+    );
+
   const handleSaving = async () => {
     setSaved((prev) => !prev);
 
-    const action = saved ? "remove" : "add";
-
-    await axios
-      .patch(
-        `${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups/${action}`,
-        {
-          muscleGroupId: muscleGroup.id,
-        },
-        {
+    if (saved) {
+      // Remove MuscleGroup
+      await axios
+        .delete(`${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups`, {
           headers: {
             Accept: "application/json",
             Authorization: `bearer ${localStorage.getItem("token")}`,
           },
-        },
-      )
-      .then(() => {
-        if (action == "add") {
-          auth.user!.savedMuscleGroupIds.push(muscleGroup.id);
-        } else {
+        })
+        .then(() => {
           auth.user!.savedMuscleGroupIds =
             auth.user?.savedMuscleGroupIds.filter(
               (id) => id !== muscleGroup.id,
             ) ?? [];
-        }
-      })
-      .catch((err) => {
-        toast.error(
-          err.code == "ERR_NETWORK"
-            ? "Unable to reach the server"
-            : err.response.statusText,
+        })
+        .catch((err) => {
+          onError(err);
+        });
+    } else {
+      // Add MuscleGroup
+      await axios
+        .patch(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups`,
           {
-            toastId: err.code,
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
+            muscleGroupId: muscleGroup.id,
           },
-        );
-      });
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        )
+        .then(() => {
+          auth.user!.savedMuscleGroupIds.push(muscleGroup.id);
+        })
+        .catch((err) => {
+          onError(err);
+        });
+    }
   };
 
   return (

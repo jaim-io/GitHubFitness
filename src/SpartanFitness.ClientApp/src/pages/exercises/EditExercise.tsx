@@ -278,7 +278,7 @@ const EditExercisePage = () => {
 
     await axios
       .put(
-        `${EXERCISE_ENDPOINT}/${exercise.id}/update`,
+        `${EXERCISE_ENDPOINT}/${exercise.id}`,
         {
           id: exercise.id,
           name: name,
@@ -337,15 +337,12 @@ const EditExercisePage = () => {
     setIsLoading(true);
 
     await axios
-      .delete(
-        `${import.meta.env.VITE_API_BASE}/exercises/${exercise.id}/delete`,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
-          },
+      .delete(`${import.meta.env.VITE_API_BASE}/exercises/${exercise.id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `bearer ${localStorage.getItem("token")}`,
         },
-      )
+      })
       .then(() => {
         setIsLoading(false);
         auth.user!.savedExerciseIds = auth.user!.savedExerciseIds.filter(

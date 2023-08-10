@@ -90,9 +90,7 @@ const NewWorkoutPage = () => {
     try {
       await axios
         .post<Workout>(
-          `${import.meta.env.VITE_API_BASE}/coaches/${
-            coachRole.id
-          }/workouts/create`,
+          `${import.meta.env.VITE_API_BASE}/coaches/${coachRole.id}/workouts`,
           {
             name: name,
             description: description,
