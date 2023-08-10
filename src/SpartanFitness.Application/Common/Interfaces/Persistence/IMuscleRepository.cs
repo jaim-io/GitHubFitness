@@ -8,6 +8,7 @@ public interface IMuscleRepository
   Task AddAsync(Muscle muscle, MuscleGroupId muscleGroupId);
   Task<IEnumerable<Muscle>> GetAllAsync();
   Task<List<Muscle>> GetBySearchQueryAsync(string searchQuery);
+  Task<List<Muscle>> GetBySearchQueryAndIdsAsync(string searchQuery, List<MuscleId> ids);
   Task<Muscle?> GetByIdAsync(MuscleId id);
   Task<List<Muscle>> GetByIdAsync(List<MuscleId> ids);
   Task<Muscle?> GetByNameAsync(string name);

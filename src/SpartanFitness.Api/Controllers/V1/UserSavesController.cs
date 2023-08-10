@@ -25,11 +25,17 @@ using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleGroupIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedWorkoutIds;
 using SpartanFitness.Application.Users.Queries.GetSavedExercisePage;
+using SpartanFitness.Application.Users.Queries.GetSavedMuscleGroupPage;
+using SpartanFitness.Application.Users.Queries.GetSavedMusclePage;
+using SpartanFitness.Application.Users.Queries.GetSavedWorkoutPage;
 using SpartanFitness.Application.Users.Queries.GetUserSaves;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Exercises;
+using SpartanFitness.Contracts.MuscleGroups;
+using SpartanFitness.Contracts.Muscles;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
+using SpartanFitness.Contracts.Workouts;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Models;
 using SpartanFitness.Domain.Enums;
@@ -149,6 +155,17 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpGet("muscle-groups/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetSavedMuscleGroupPage([FromRoute] string userId, [FromQuery] PagingRequest request)
+  {
+    var query = _mapper.Map<GetSavedMuscleGroupPageQuery>((request, userId));
+    ErrorOr<Pagination<MuscleGroup>> result = await _mediator.Send(query);
+
+    return result.Match(
+      page => Ok(_mapper.Map<MuscleGroupPageResponse>(page)),
+      Problem);
+  }
+
   [HttpGet("muscle-groups/all/ids")]
   public async Task<IActionResult> GetAllSavedMuscleGroupIds([FromRoute] string userId)
   {
@@ -238,6 +255,17 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpGet("muscles/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetSavedMusclePage([FromRoute] string userId, [FromQuery] PagingRequest request)
+  {
+    var query = _mapper.Map<GetSavedMusclePageQuery>((request, userId));
+    ErrorOr<Pagination<Muscle>> result = await _mediator.Send(query);
+
+    return result.Match(
+      page => Ok(_mapper.Map<MusclePageResponse>(page)),
+      Problem);
+  }
+
   [HttpPatch("muscles")]
   public async Task<IActionResult> SaveMuscle([FromRoute] string userId, [FromBody] SaveMuscleRequest request)
   {
@@ -305,6 +333,17 @@ public class UserSavesController : ApiController
 
     return result.Match(
       ids => Ok(_mapper.Map<SavedWorkoutIdsResponse>(ids)),
+      Problem);
+  }
+
+  [HttpGet("workouts/page/{p:int?}/{ls:int?}/{s?}/{o?}/{q?}")]
+  public async Task<IActionResult> GetSavedWorkoutPage([FromRoute] string userId, [FromQuery] PagingRequest request)
+  {
+    var query = _mapper.Map<GetSavedWorkoutPageQuery>((request, userId));
+    ErrorOr<Pagination<Workout>> result = await _mediator.Send(query);
+
+    return result.Match(
+      page => Ok(_mapper.Map<WorkoutPageResponse>(page)),
       Problem);
   }
 

@@ -6,6 +6,9 @@ using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.SaveWorkout;
 using SpartanFitness.Application.Users.Queries.GetSavedExercisePage;
+using SpartanFitness.Application.Users.Queries.GetSavedMuscleGroupPage;
+using SpartanFitness.Application.Users.Queries.GetSavedMusclePage;
+using SpartanFitness.Application.Users.Queries.GetSavedWorkoutPage;
 using SpartanFitness.Contracts.Common;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
@@ -61,6 +64,27 @@ public class UserMappingConfig : IRegister
       .Map(dest => dest.Ids, src => src.Select(id => id.Value.ToString()));
 
     config.NewConfig<(PagingRequest Request, string UserId), GetSavedExercisePageQuery>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.PageNumber, src => src.Request.Page)
+      .Map(dest => dest.PageSize, src => src.Request.Size)
+      .Map(dest => dest.SearchQuery, src => src.Request.Query)
+      .Map(dest => dest, src => src.Request);
+
+    config.NewConfig<(PagingRequest Request, string UserId), GetSavedMuscleGroupPageQuery>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.PageNumber, src => src.Request.Page)
+      .Map(dest => dest.PageSize, src => src.Request.Size)
+      .Map(dest => dest.SearchQuery, src => src.Request.Query)
+      .Map(dest => dest, src => src.Request);
+
+    config.NewConfig<(PagingRequest Request, string UserId), GetSavedMusclePageQuery>()
+      .Map(dest => dest.UserId, src => src.UserId)
+      .Map(dest => dest.PageNumber, src => src.Request.Page)
+      .Map(dest => dest.PageSize, src => src.Request.Size)
+      .Map(dest => dest.SearchQuery, src => src.Request.Query)
+      .Map(dest => dest, src => src.Request);
+    
+    config.NewConfig<(PagingRequest Request, string UserId), GetSavedWorkoutPageQuery>()
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.PageNumber, src => src.Request.Page)
       .Map(dest => dest.PageSize, src => src.Request.Size)

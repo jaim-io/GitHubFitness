@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Domain.Aggregates;
@@ -42,6 +43,34 @@ public class MuscleRepository : IMuscleRepository
 
     return await _dbContext.Muscles
       .Where(m => (m.Name.ToLower().Contains(query) || m.Description.ToLower().Contains(query)))
+      .ToListAsync();
+  }
+
+  public async Task<List<Muscle>> GetBySearchQueryAndIdsAsync(string searchQuery, List<MuscleId> ids)
+  {
+    if (!ids.Any())
+    {
+      return new();
+    }
+
+    var searchQueryParam = $"@p{0}";
+    var idParameters = string.Join(", ", ids.Select((_, i) => $"@p{i + 1}"));
+    var query = $@"
+      SELECT *
+      FROM Muscles 
+      WHERE Id in ({idParameters}) 
+        and (LOWER(Name) LIKE '%' + {searchQueryParam} + '%' 
+          or LOWER(Description) LIKE '%' + {searchQueryParam} + '%')
+    ";
+
+    var sqlSearchParameter = new SqlParameter($"@p{0}", searchQuery.ToLower());
+    var sqlParameters = ids
+      .Select((id, i) => new SqlParameter($"@p{i + 1}", id.Value))
+      .ToList();
+    sqlParameters.Add(sqlSearchParameter);
+
+    return await _dbContext.Muscles
+      .FromSqlRaw(query, sqlParameters.ToArray())
       .ToListAsync();
   }
 

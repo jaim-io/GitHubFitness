@@ -192,7 +192,7 @@ const UserSavesPage = () => {
                 handleUnsaveRange={unSaveExerciseRange}
                 fetchAllIds={fetchAllSavedExerciseIds}
                 errorMessage="You've got no exercises saved!"
-                generateUrl={(e) => `/exercises/${e.id}`}
+                generateUrl={(e) => `/${exerciseRouteArgs.route}/${e.id}`}
                 iconType={BiDumbbell}
                 pageState={exercisePageState}
                 setPageState={setExercisePageState}

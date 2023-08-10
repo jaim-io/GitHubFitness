@@ -11,6 +11,7 @@ public interface IMuscleGroupRepository
   Task<MuscleGroup?> GetByNameAsync(string name);
   Task<IEnumerable<MuscleGroup>> GetAllAsync();
   Task<List<MuscleGroup>> GetBySearchQueryAsync(string searchQuery);
+  Task<List<MuscleGroup>> GetBySearchQueryAndIdsAsync(string searchQuery, List<MuscleGroupId> ids);
   Task<List<MuscleGroup>> GetByMuscleIdAsync(MuscleId id);
   Task<List<MuscleGroup>> GetByMuscleIdAsync(List<MuscleId> ids);
   Task<bool> ExistsAsync(MuscleGroupId id);

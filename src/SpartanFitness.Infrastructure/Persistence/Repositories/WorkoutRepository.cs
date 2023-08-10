@@ -78,6 +78,34 @@ public class WorkoutRepository
       .ToListAsync();
   }
 
+  public async Task<List<Workout>> GetBySearchQueryAndIdsAsync(string searchQuery, List<WorkoutId> ids)
+  {
+    if (!ids.Any())
+    {
+      return new();
+    }
+
+    var searchQueryParam = $"@p{0}";
+    var idParameters = string.Join(", ", ids.Select((_, i) => $"@p{i + 1}"));
+    var query = $@"
+      SELECT *
+      FROM Workouts 
+      WHERE Id in ({idParameters}) 
+        and (LOWER(Name) LIKE '%' + {searchQueryParam} + '%' 
+          or LOWER(Description) LIKE '%' + {searchQueryParam} + '%')
+    ";
+
+    var sqlSearchParameter = new SqlParameter($"@p{0}", searchQuery.ToLower());
+    var sqlParameters = ids
+      .Select((id, i) => new SqlParameter($"@p{i + 1}", id.Value))
+      .ToList();
+    sqlParameters.Add(sqlSearchParameter);
+
+    return await _dbContext.Workouts
+      .FromSqlRaw(query, sqlParameters.ToArray())
+      .ToListAsync();
+  }
+
   public async Task UpdateAsync(Workout workout)
   {
     _dbContext.Update(workout);

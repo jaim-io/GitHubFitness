@@ -70,7 +70,7 @@ public class ExerciseRepository
 
   public async Task<List<Exercise>> GetBySearchQueryAndIdsAsync(string searchQuery, List<ExerciseId> ids)
   {
-    if (ids.Count() == 0)
+    if (!ids.Any())
     {
       return new();
     }
