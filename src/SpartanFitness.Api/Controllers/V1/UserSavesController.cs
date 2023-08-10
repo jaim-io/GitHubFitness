@@ -4,8 +4,10 @@ using MapsterMapper;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using SpartanFitness.Application.Common.Results;
 using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
@@ -14,7 +16,17 @@ using SpartanFitness.Application.Users.Commands.UnSaveExercise;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscle;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.UnSaveWorkout;
+using SpartanFitness.Application.Users.Queries.GetAllSavedExerciseIds;
+using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleGroupIds;
+using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleIds;
+using SpartanFitness.Application.Users.Queries.GetAllSavedWorkoutIds;
+using SpartanFitness.Application.Users.Queries.GetUserSaves;
+using SpartanFitness.Contracts.Users;
 using SpartanFitness.Contracts.Users.Saves;
+using SpartanFitness.Contracts.Users.Saves.Requests;
+using SpartanFitness.Contracts.Users.Saves.Responses;
+using SpartanFitness.Domain.Enums;
+using SpartanFitness.Domain.ValueObjects;
 
 namespace SpartanFitness.Api.Controllers.V1;
 
@@ -28,6 +40,42 @@ public class UserSavesController : ApiController
   {
     _mediator = mediator;
     _mapper = mapper;
+  }
+
+  [HttpGet("all")]
+  [Authorize(Roles = $"{RoleTypes.User}, {RoleTypes.Administrator}")]
+  public async Task<IActionResult> GetAllSaves([FromRoute] string userId)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    var isAdmin = Authorization.IsAdmin(HttpContext);
+    if (!(isUser || isAdmin))
+    {
+      return Unauthorized();
+    }
+
+    var query = new GetUserSavesQuery(userId);
+    ErrorOr<UserSavesResult> result = await _mediator.Send(query);
+
+    return result.Match(
+      saves => Ok(_mapper.Map<UserSavesResponse>(saves)),
+      Problem);
+  }
+
+  [HttpGet("exercises/all/ids")]
+  public async Task<IActionResult> GetAllSavedExerciseIds([FromRoute] string userId)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var query = new GetAllSavedExerciseIdsQuery(userId);
+    ErrorOr<List<ExerciseId>> result = await _mediator.Send(query);
+
+    return result.Match(
+      ids => Ok(_mapper.Map<SavedExerciseIdsResponse>(ids)),
+      Problem);
   }
 
   [HttpPatch("exercises/add")]
@@ -61,6 +109,23 @@ public class UserSavesController : ApiController
 
     return result.Match(
       _ => NoContent(),
+      Problem);
+  }
+
+  [HttpGet("muscle-groups/all/ids")]
+  public async Task<IActionResult> GetAllSavedMuscleGroupIds([FromRoute] string userId)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var query = new GetAllSavedMuscleGroupIdsQuery(userId);
+    ErrorOr<List<MuscleGroupId>> result = await _mediator.Send(query);
+
+    return result.Match(
+      ids => Ok(_mapper.Map<SavedMuscleGroupIdsResponse>(ids)),
       Problem);
   }
 
@@ -100,6 +165,23 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpGet("muscles/all/ids")]
+  public async Task<IActionResult> GetAllSavedMuscleIds([FromRoute] string userId)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var query = new GetAllSavedMuscleIdsQuery(userId);
+    ErrorOr<List<MuscleId>> result = await _mediator.Send(query);
+
+    return result.Match(
+      ids => Ok(_mapper.Map<SavedMuscleIdsResponse>(ids)),
+      Problem);
+  }
+  
   [HttpPatch("muscles/add")]
   public async Task<IActionResult> SaveMuscle([FromRoute] string userId, [FromBody] SaveMuscleRequest request)
   {
@@ -131,6 +213,23 @@ public class UserSavesController : ApiController
 
     return result.Match(
       _ => NoContent(),
+      Problem);
+  }
+  
+  [HttpGet("workouts/all/ids")]
+  public async Task<IActionResult> GetAllSavedWorkoutIds([FromRoute] string userId)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var query = new GetAllSavedWorkoutIdsQuery(userId);
+    ErrorOr<List<WorkoutId>> result = await _mediator.Send(query);
+
+    return result.Match(
+      ids => Ok(_mapper.Map<SavedWorkoutIdsResponse>(ids)),
       Problem);
   }
 
