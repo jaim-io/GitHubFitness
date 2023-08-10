@@ -117,12 +117,15 @@ const WorkoutDetailPage = () => {
     if (saved) {
       // Remove workout
       await axios
-        .delete(`${USER_ENDPOINT}/${auth.user?.id}/saved/workouts`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
+        .delete(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/workouts/${workout.id}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
           },
-        })
+        )
         .then(() => {
           auth.user!.savedWorkoutIds =
             auth.user?.savedWorkoutIds.filter((id) => id !== workout.id) ?? [];

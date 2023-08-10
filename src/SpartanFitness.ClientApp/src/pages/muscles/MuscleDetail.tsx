@@ -59,12 +59,15 @@ const MuscleDetailPage = () => {
     if (saved) {
       // Remove muscle
       await axios
-        .delete(`${USER_ENDPOINT}/${auth.user?.id}/saved/muscles`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
+        .delete(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/muscles/${muscle.id}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
           },
-        })
+        )
         .then(() => {
           auth.user!.savedMuscleIds =
             auth.user?.savedMuscleIds.filter((id) => id !== muscle.id) ?? [];

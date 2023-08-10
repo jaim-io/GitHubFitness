@@ -61,12 +61,15 @@ const MuscleGroupDetailPage = () => {
     if (saved) {
       // Remove MuscleGroup
       await axios
-        .delete(`${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `bearer ${localStorage.getItem("token")}`,
+        .delete(
+          `${USER_ENDPOINT}/${auth.user?.id}/saved/muscle-groups/${muscleGroup.id}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `bearer ${localStorage.getItem("token")}`,
+            },
           },
-        })
+        )
         .then(() => {
           auth.user!.savedMuscleGroupIds =
             auth.user?.savedMuscleGroupIds.filter(

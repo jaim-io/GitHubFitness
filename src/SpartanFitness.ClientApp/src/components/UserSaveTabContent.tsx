@@ -18,7 +18,7 @@ import SearchBar from "./SearchBar";
 import GenericCard from "./cards/GenericCard";
 import LoadingIcon from "./icons/LoadingIcon";
 import PageNavigation from "./navigation/PageNavigation";
-import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 8;
@@ -53,6 +53,8 @@ type Entity = {
 };
 
 type PageArguments = {
+  userId: string;
+  forceRefreshValue: boolean | undefined;
   page: number | undefined;
   size: number | undefined;
   sort: string | undefined;
@@ -67,16 +69,28 @@ type Props = {
     sort,
     order,
     query,
+    userId,
   }: PageArguments) => [
     Page<Entity> | undefined,
     Exception | undefined,
     boolean,
   ];
+  handleUnsave: (
+    id: string,
+    userId: string,
+    forceRefresh: Dispatch<SetStateAction<boolean>>,
+  ) => Promise<void>;
+  handleUnsaveRange: (
+    ids: string[],
+    userId: string,
+    forceRefresh: Dispatch<SetStateAction<boolean>>,
+  ) => Promise<void>;
+  fetchAllIds: (userId: string) => Promise<string[]>;
   generateUrl: (entity: Entity) => string;
+  errorMessage: string;
   iconType: IconType;
   pageState?: PageState;
   setPageState?: Dispatch<SetStateAction<PageState | undefined>>;
-  // fetchAllIds: () => Promise<string[]>;
 };
 
 export type PageState = {
@@ -89,11 +103,17 @@ export type PageState = {
 
 const UserSavesTabPanel = ({
   usePage,
+  handleUnsave,
+  handleUnsaveRange,
+  fetchAllIds,
+  errorMessage,
   generateUrl,
   iconType,
   pageState,
   setPageState,
 }: Props) => {
+  const { auth } = useAuth();
+
   const [currentPage, setCurrentPage] = useState<number>(
     pageState?.page ?? DEFAULT_PAGE_NUMBER,
   );
@@ -115,12 +135,16 @@ const UserSavesTabPanel = ({
     }, [currentPage, sortName, order, query]);
   }
 
+  const [forceRefreshValue, setForceRefreshValue] = useState(false);
+
   const [page, , isLoading] = usePage({
+    userId: auth.user!.id,
     page: currentPage,
     size: DEFAULT_PAGE_SIZE,
     sort: SORT_OPTIONS.find((o) => o.name == sortName)?.sort,
     order: order,
     query: query,
+    forceRefreshValue: forceRefreshValue,
   });
 
   const handleSort = (value: string) => {
@@ -157,12 +181,19 @@ const UserSavesTabPanel = ({
       return;
     }
 
-    // const x = await fetchAllIds();
-    // fetch all ids, and set them as selected;
+    const allIds = await fetchAllIds(auth.user!.id);
+    setSelected(allIds);
   };
 
-  const handleUnsave = (id: string) => {};
-  const handleUnsaveSelected = () => {};
+  const handleUnsaveAll = async () => {
+    const allIds = await fetchAllIds(auth.user!.id);
+    handleUnsaveRange(allIds, auth.user!.id, setForceRefreshValue);
+  };
+
+  const handleUnsaveSelected = () => {
+    handleUnsaveRange(selected, auth.user!.id, setForceRefreshValue);
+    setSelected([]);
+  };
 
   return (
     <Tab.Panel className={"pt-4"}>
@@ -188,9 +219,10 @@ const UserSavesTabPanel = ({
         <button
           className={`text-[#e8473f] bg-gray py-1 px-3 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer`}
           type="button"
-          onClick={handleUnsaveSelected}
+          onClick={selected.length > 0 ? handleUnsaveSelected : handleUnsaveAll}
         >
-          <RiDeleteBin5Fill className="mr-1 flex" /> Delete
+          <RiDeleteBin5Fill className="mr-1 flex" />{" "}
+          {selected.length > 0 ? "Delete selected" : "Delete all"}
         </button>
       </ul>
 
@@ -231,7 +263,9 @@ const UserSavesTabPanel = ({
                 <button
                   className="absolute right-3 top-3 w-8 h-8 flex items-center justify-center rounded-lg border border-[rgba(240,246,252,0.1)] bg-[#262c31] hover:border-[#8B949E] hover:bg-gray cursor-pointer"
                   type="button"
-                  onClick={() => handleUnsave(obj.id)}
+                  onClick={() => {
+                    handleUnsave(obj.id, auth.user!.id, setForceRefreshValue);
+                  }}
                 >
                   <RiDeleteBin5Fill className="fill-white" size={13} />
                 </button>
@@ -258,7 +292,7 @@ const UserSavesTabPanel = ({
 
       {page && page.values.length === 0 && (
         <p className="flex justify-center items-center">
-          No TEMP found <TbGhost2Filled className="ml-1" size={20} />
+          {errorMessage} <TbGhost2Filled className="ml-1" size={20} />
         </p>
       )}
     </Tab.Panel>
