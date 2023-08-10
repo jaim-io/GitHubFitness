@@ -105,9 +105,10 @@ public sealed class User : AggregateRoot<UserId, Guid>
   }
 
   public void UnSaveExercise(ExerciseId id)
-  {
-    _savedExerciseIds.Remove(id);
-  }
+    => _savedExerciseIds.Remove(id);
+
+  public void UnSaveExerciseRange(List<ExerciseId> ids)
+    => _savedExerciseIds.RemoveAll(ids.Contains);
 
   public void SaveMuscleGroup(MuscleGroupId id)
   {
@@ -118,9 +119,10 @@ public sealed class User : AggregateRoot<UserId, Guid>
   }
 
   public void UnSaveMuscleGroup(MuscleGroupId id)
-  {
-    _savedMuscleGroupIds.Remove(id);
-  }
+    => _savedMuscleGroupIds.Remove(id);
+
+  public void UnSaveMuscleGroupRange(List<MuscleGroupId> ids)
+    => _savedMuscleGroupIds.RemoveAll(ids.Contains);
 
   public void SaveMuscle(MuscleId id)
   {
@@ -131,9 +133,10 @@ public sealed class User : AggregateRoot<UserId, Guid>
   }
 
   public void UnSaveMuscle(MuscleId id)
-  {
-    _savedMuscleIds.Remove(id);
-  }
+    => _savedMuscleIds.Remove(id);
+  
+  public void UnSaveMuscleRange(List<MuscleId> ids)
+    => _savedMuscleIds.RemoveAll(ids.Contains);
 
   public void SaveWorkout(WorkoutId id)
   {
@@ -144,7 +147,8 @@ public sealed class User : AggregateRoot<UserId, Guid>
   }
 
   public void UnSaveWorkout(WorkoutId id)
-  {
-    _savedWorkoutIds.Remove(id);
-  }
+    => _savedWorkoutIds.Remove(id);
+  
+  public void UnSaveWorkoutRange(List<WorkoutId> ids)
+    => _savedWorkoutIds.RemoveAll(ids.Contains);
 }

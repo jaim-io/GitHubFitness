@@ -10,6 +10,7 @@ public interface IWorkoutRepository
   Task<List<Workout>> GetByIdAsync(List<WorkoutId> ids);
   Task<List<Workout>> GetByExerciseId(ExerciseId id);
   Task<bool> ExistsAsync(WorkoutId id);
+  Task<bool> ExistsAsync(List<WorkoutId> ids);
   Task<IEnumerable<Workout>> GetAllAsync();
   Task<List<Workout>> GetBySearchQueryAsync(string searchQuery);
   Task UpdateAsync(Workout workout);

@@ -41,6 +41,17 @@ public class WorkoutRepository
     return await _dbContext.Workouts.AnyAsync(w => w.Id == id);
   }
 
+  public async Task<bool> ExistsAsync(List<WorkoutId> ids)
+  {
+    var results = new List<bool>();
+    foreach (var id in ids)
+    {
+      results.Add(await _dbContext.Workouts.AnyAsync(e => e.Id == id));
+    }
+
+    return !results.Contains(false);
+  }
+
   public async Task<IEnumerable<Workout>> GetAllAsync()
   {
     return await _dbContext.Workouts.ToListAsync();

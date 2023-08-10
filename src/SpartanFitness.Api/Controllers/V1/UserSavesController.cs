@@ -13,9 +13,13 @@ using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.SaveWorkout;
 using SpartanFitness.Application.Users.Commands.UnSaveExercise;
+using SpartanFitness.Application.Users.Commands.UnSaveExerciseRange;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscle;
 using SpartanFitness.Application.Users.Commands.UnSaveMuscleGroup;
+using SpartanFitness.Application.Users.Commands.UnSaveMuscleGroupRange;
+using SpartanFitness.Application.Users.Commands.UnSaveMuscleRange;
 using SpartanFitness.Application.Users.Commands.UnSaveWorkout;
+using SpartanFitness.Application.Users.Commands.UnSaveWorkoutRange;
 using SpartanFitness.Application.Users.Queries.GetAllSavedExerciseIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleGroupIds;
 using SpartanFitness.Application.Users.Queries.GetAllSavedMuscleIds;
@@ -110,6 +114,25 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpDelete("exercises/{id?}")]
+  public async Task<IActionResult> UnSaveExercises(
+    [FromQuery] string userId,
+    [FromQuery(Name = "id")] List<string> exerciseIds)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = new UnSaveExerciseRangeCommand(UserId: userId, ExerciseIds: exerciseIds);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => Ok(),
+      Problem);
+  }
+
   [HttpGet("muscle-groups/all/ids")]
   public async Task<IActionResult> GetAllSavedMuscleGroupIds([FromRoute] string userId)
   {
@@ -160,6 +183,25 @@ public class UserSavesController : ApiController
 
     return result.Match(
       _ => NoContent(),
+      Problem);
+  }
+
+  [HttpDelete("muscle-groups/{id?}")]
+  public async Task<IActionResult> UnSaveMuscleGroups(
+    [FromQuery] string userId,
+    [FromQuery(Name = "id")] List<string> muscleGroupIds)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = new UnSaveMuscleGroupRangeCommand(UserId: userId, MuscleGroupIds: muscleGroupIds);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => Ok(),
       Problem);
   }
 
@@ -214,6 +256,25 @@ public class UserSavesController : ApiController
       Problem);
   }
 
+  [HttpDelete("muscles/{id?}")]
+  public async Task<IActionResult> UnSaveMuscles(
+    [FromQuery] string userId,
+    [FromQuery(Name = "id")] List<string> muscleIds)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = new UnSaveMuscleRangeCommand(UserId: userId, MuscleIds: muscleIds);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => Ok(),
+      Problem);
+  }
+
   [HttpGet("workouts/all/ids")]
   public async Task<IActionResult> GetAllSavedWorkoutIds([FromRoute] string userId)
   {
@@ -262,6 +323,25 @@ public class UserSavesController : ApiController
 
     return result.Match(
       _ => NoContent(),
+      Problem);
+  }
+
+  [HttpDelete("workouts/{id?}")]
+  public async Task<IActionResult> UnSaveWorkouts(
+    [FromQuery] string userId,
+    [FromQuery(Name = "id")] List<string> workoutIds)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, userId);
+    if (!isUser)
+    {
+      return Unauthorized();
+    }
+
+    var command = new UnSaveWorkoutRangeCommand(UserId: userId, WorkoutIds: workoutIds);
+    ErrorOr<Unit> result = await _mediator.Send(command);
+
+    return result.Match(
+      _ => Ok(),
       Problem);
   }
 }
