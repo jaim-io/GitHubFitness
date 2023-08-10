@@ -7,6 +7,12 @@ import UserSavesTabPanel, {
   PageState,
 } from "../../components/UserSaveTabContent";
 import useSavedExercisesPage from "../../hooks/useSavedExercisesPage";
+import { SiElectron } from "react-icons/si";
+import { MdFitbit } from "react-icons/md";
+import { IoFitnessSharp } from "react-icons/io5";
+import useSavedMusclesPage from "../../hooks/useSavedMusclesPage";
+import useSavedMuscleGroupsPage from "../../hooks/useSavedMuscleGroupsPage";
+import useSavedWorkoutsPage from "../../hooks/useSavedWorkoutsPage";
 
 const TABS = ["Muscles", "Muscle Groups", "Exercises", "Workouts"];
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
@@ -140,6 +146,22 @@ const UserSavesPage = () => {
   const [exercisePageState, setExercisePageState] = useState<PageState>();
   const [workoutPageState, setWorkoutPageState] = useState<PageState>();
 
+  const muscleRouteArgs: RouteArguments = {
+    route: "muscles",
+    entity: "Muscle",
+  };
+  const unSaveMuscle = unSave(muscleRouteArgs);
+  const unSaveMuscleRange = unSaveRange(muscleRouteArgs);
+  const fetchAllSavedMuscleIds = fetchAllIds(muscleRouteArgs);
+
+  const muscleGroupRouteArgs: RouteArguments = {
+    route: "muscle-groups",
+    entity: "Muscle group",
+  };
+  const unSaveMuscleGroup = unSave(muscleGroupRouteArgs);
+  const unSaveMuscleGroupRange = unSaveRange(muscleGroupRouteArgs);
+  const fetchAllSavedMuscleGroupIds = fetchAllIds(muscleGroupRouteArgs);
+
   const exerciseRouteArgs: RouteArguments = {
     route: "exercises",
     entity: "Exercise",
@@ -147,6 +169,14 @@ const UserSavesPage = () => {
   const unSaveExercise = unSave(exerciseRouteArgs);
   const unSaveExerciseRange = unSaveRange(exerciseRouteArgs);
   const fetchAllSavedExerciseIds = fetchAllIds(exerciseRouteArgs);
+
+  const workoutRouteArgs: RouteArguments = {
+    route: "workouts",
+    entity: "Workout",
+  };
+  const unSaveWorkout = unSave(workoutRouteArgs);
+  const unSaveWorkoutRange = unSaveRange(workoutRouteArgs);
+  const fetchAllSavedWorkoutIds = fetchAllIds(workoutRouteArgs);
 
   return (
     <>
@@ -170,8 +200,12 @@ const UserSavesPage = () => {
               ))}
             </Tab.List>
             <Tab.Panels className="mt-2 min-h-[42rem]">
-              {/* <UserSavesTabPanel
-                usePage={useMusclesPage}
+              <UserSavesTabPanel
+                usePage={useSavedMusclesPage}
+                handleUnsave={unSaveMuscle}
+                handleUnsaveRange={unSaveMuscleRange}
+                fetchAllIds={fetchAllSavedMuscleIds}
+                errorMessage="You've got no muscles saved!"
                 generateUrl={(m) => `/muscles/${m.id}`}
                 iconType={SiElectron}
                 pageState={musclePageState}
@@ -179,12 +213,16 @@ const UserSavesPage = () => {
               />
 
               <UserSavesTabPanel
-                usePage={useMuscleGroupsPage}
+                usePage={useSavedMuscleGroupsPage}
+                handleUnsave={unSaveMuscleGroup}
+                handleUnsaveRange={unSaveMuscleGroupRange}
+                fetchAllIds={fetchAllSavedMuscleGroupIds}
+                errorMessage="You've got no muscle groups saved!"
                 generateUrl={(mg) => `/muscle-groups/${mg.id}`}
                 iconType={MdFitbit}
                 pageState={muscleGroupPageState}
                 setPageState={setMuscleGroupPageState}
-              /> */}
+              />
 
               <UserSavesTabPanel
                 usePage={useSavedExercisesPage}
@@ -192,19 +230,23 @@ const UserSavesPage = () => {
                 handleUnsaveRange={unSaveExerciseRange}
                 fetchAllIds={fetchAllSavedExerciseIds}
                 errorMessage="You've got no exercises saved!"
-                generateUrl={(e) => `/${exerciseRouteArgs.route}/${e.id}`}
+                generateUrl={(e) => `/exercises/${e.id}`}
                 iconType={BiDumbbell}
                 pageState={exercisePageState}
                 setPageState={setExercisePageState}
               />
 
-              {/* <UserSavesTabPanel
-                usePage={useWorkoutsPage}
+              <UserSavesTabPanel
+                usePage={useSavedWorkoutsPage}
+                handleUnsave={unSaveWorkout}
+                handleUnsaveRange={unSaveWorkoutRange}
+                fetchAllIds={fetchAllSavedWorkoutIds}
+                errorMessage="You've got no workouts saved!"
                 generateUrl={(w) => `/coaches/${w.coachId}/workouts/${w.id}`}
                 iconType={IoFitnessSharp}
                 pageState={workoutPageState}
                 setPageState={setWorkoutPageState}
-              /> */}
+              />
             </Tab.Panels>
           </Tab.Group>
         </div>
