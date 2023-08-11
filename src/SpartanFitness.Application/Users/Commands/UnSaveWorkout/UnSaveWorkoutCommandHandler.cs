@@ -34,7 +34,7 @@ public class UnSaveWorkoutCommandHandler : IRequestHandler<UnSaveWorkoutCommand,
       return Errors.Workout.NotFound;
     }
 
-    user.SaveWorkout(workoutId);
+    user.UnSaveWorkout(workoutId);
     await _userRepository.UpdateAsync(user);
 
     return Unit.Value;

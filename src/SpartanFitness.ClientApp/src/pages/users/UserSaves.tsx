@@ -1,17 +1,17 @@
 import { Tab } from "@headlessui/react";
 import axios, { AxiosError } from "axios";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { BiDumbbell } from "react-icons/bi";
+import { IoFitnessSharp } from "react-icons/io5";
+import { MdFitbit } from "react-icons/md";
+import { SiElectron } from "react-icons/si";
 import { toast } from "react-toastify";
 import UserSavesTabPanel, {
   PageState,
 } from "../../components/UserSaveTabContent";
 import useSavedExercisesPage from "../../hooks/useSavedExercisesPage";
-import { SiElectron } from "react-icons/si";
-import { MdFitbit } from "react-icons/md";
-import { IoFitnessSharp } from "react-icons/io5";
-import useSavedMusclesPage from "../../hooks/useSavedMusclesPage";
 import useSavedMuscleGroupsPage from "../../hooks/useSavedMuscleGroupsPage";
+import useSavedMusclesPage from "../../hooks/useSavedMusclesPage";
 import useSavedWorkoutsPage from "../../hooks/useSavedWorkoutsPage";
 
 const TABS = ["Muscles", "Muscle Groups", "Exercises", "Workouts"];
@@ -51,7 +51,7 @@ const handleUnsave = async (
   url: string,
   succesMessage: string,
   toastId: string,
-  forceRefresh: Dispatch<SetStateAction<boolean>>,
+  onSucces: () => void,
 ) => {
   await axios
     .delete(url, {
@@ -62,7 +62,7 @@ const handleUnsave = async (
     })
     .then(() => {
       handleSucces(succesMessage, toastId);
-      forceRefresh((prev) => !prev);
+      onSucces();
     })
     .catch((err) => handleError(err));
 };
@@ -78,34 +78,26 @@ const createQueryString = (ids: string[]): string => {
 
 const unSave =
   (routeArgs: RouteArguments) =>
-  async (
-    id: string,
-    userId: string,
-    forceRefresh: Dispatch<SetStateAction<boolean>>,
-  ) => {
+  async (id: string, userId: string, onSucces: () => void) => {
     const url = `${USER_ENDPOINT}/${userId}/saved/${routeArgs.route}/${id}`;
     handleUnsave(
       url,
       `${routeArgs.entity} deleted`,
       `${routeArgs.entity}-deleted`,
-      forceRefresh,
+      onSucces,
     );
   };
 
 const unSaveRange =
   (routeArgs: RouteArguments) =>
-  async (
-    ids: string[],
-    userId: string,
-    forceRefresh: Dispatch<SetStateAction<boolean>>,
-  ) => {
+  async (ids: string[], userId: string, onSucces: () => void) => {
     const queryString = createQueryString(ids);
     const url = `${USER_ENDPOINT}/${userId}/saved/${routeArgs.route}/ids${queryString}`;
     handleUnsave(
       url,
       `${routeArgs.entity}s deleted`,
       `${routeArgs.entity}s-deleted`,
-      forceRefresh,
+      onSucces,
     );
   };
 

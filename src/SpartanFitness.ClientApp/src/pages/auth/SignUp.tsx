@@ -105,7 +105,6 @@ const SignUpPage = () => {
           if (err.response.status === 409) {
             setErrors(["This e-mail address is already in use."]);
             setEmail("");
-            console.log(err);
             return;
           }
 

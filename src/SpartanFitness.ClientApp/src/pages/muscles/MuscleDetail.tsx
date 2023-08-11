@@ -1,5 +1,5 @@
-import axios from "axios";
-import { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import {
   MdBookmarkAdded,
   MdFitbit,
@@ -18,6 +18,7 @@ import Muscle from "../../types/domain/Muscle";
 import useMuscleGroupsByMuscleId from "../../hooks/useMuscleGroupsByMuscleId";
 import { AiFillEdit } from "react-icons/ai";
 import LoadingIcon from "../../components/icons/LoadingIcon";
+import useUserSavedIds from "../../hooks/useUserSavedIds";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -25,21 +26,31 @@ const MuscleDetailPage = () => {
   const muscle = useLoaderData() as Muscle;
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(
-    Object.values(auth.user?.savedMuscleIds ?? []).includes(muscle.id),
-  );
+
+  let [savedIds, savedIdsLoading]: [string[] | undefined, boolean] = [
+    [],
+    false,
+  ];
+  if (auth.user) {
+    [savedIds, , savedIdsLoading] = useUserSavedIds(auth.user.id, "muscles");
+  }
+
+  const [saved, setSaved] = useState(savedIds?.includes(muscle.id) ?? false);
+  useEffect(() => {
+    if (savedIds) {
+      setSaved(savedIds.includes(muscle.id));
+    }
+  }, [savedIds]);
 
   const [muscleGroups, , muscleGroupsAreLoading] = useMuscleGroupsByMuscleId(
     muscle.id,
   );
 
-  // Axios Error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (err: any) =>
+  const onError = (err: AxiosError) =>
     toast.error(
       err.code == "ERR_NETWORK"
         ? "Unable to reach the server"
-        : err.response.statusText,
+        : err.response?.statusText ?? "An unexpected error occured",
       {
         toastId: err.code,
         position: "bottom-right",
@@ -109,7 +120,15 @@ const MuscleDetailPage = () => {
             className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
           />
 
-          {auth.user && (
+          {auth.user && savedIdsLoading ? (
+            <div
+              role="status"
+              className="pt-5 flex justify-center items-center"
+            >
+              <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
             <button
               className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
               onClick={handleSaving}

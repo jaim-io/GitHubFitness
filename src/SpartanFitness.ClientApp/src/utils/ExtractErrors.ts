@@ -3,8 +3,6 @@ export const extractErrors = (object: any): any[] => {
   return Object.entries(object)
     .map(([, value]) => {
       if (value instanceof Array) {
-        console.log(value);
-
         return value;
       }
       return [value];

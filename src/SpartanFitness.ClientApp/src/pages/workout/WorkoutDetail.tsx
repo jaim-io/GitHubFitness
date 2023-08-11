@@ -1,5 +1,5 @@
-import axios from "axios";
-import { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { IoFitnessSharp } from "react-icons/io5";
 import {
@@ -26,6 +26,7 @@ import useExercisesByIds from "../../hooks/useExercisesByIds";
 import WorkoutExerciseTable from "../../components/WorkoutExerciseTable";
 import moment from "moment";
 import LoadingIcon from "../../components/icons/LoadingIcon";
+import useUserSavedIds from "../../hooks/useUserSavedIds";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -37,9 +38,21 @@ const WorkoutDetailPage = () => {
 
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(
-    Object.values(auth.user?.savedWorkoutIds ?? []).includes(workout.id),
-  );
+
+  let [savedIds, savedIdsLoading]: [string[] | undefined, boolean] = [
+    [],
+    false,
+  ];
+  if (auth.user) {
+    [savedIds, , savedIdsLoading] = useUserSavedIds(auth.user.id, "workouts");
+  }
+
+  const [saved, setSaved] = useState(savedIds?.includes(workout.id) ?? false);
+  useEffect(() => {
+    if (savedIds) {
+      setSaved(savedIds.includes(workout.id));
+    }
+  }, [savedIds]);
 
   let musclesAreLoading = false;
   let muscles: Muscle[] | undefined = undefined;
@@ -91,13 +104,11 @@ const WorkoutDetailPage = () => {
     workoutExercises = [];
   }
 
-  // Axios Error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (err: any) =>
+  const onError = (err: AxiosError) =>
     toast.error(
       err.code == "ERR_NETWORK"
         ? "Unable to reach the server"
-        : err.response.statusText,
+        : err.response?.statusText ?? "An unexpected error occured",
       {
         toastId: err.code,
         position: "bottom-right",
@@ -167,7 +178,15 @@ const WorkoutDetailPage = () => {
             className="rounded-full border border-gray w-[18rem] h-[18rem] flex text-center leading-[9.5rem]"
           />
 
-          {auth.user && (
+          {auth.user && savedIdsLoading ? (
+            <div
+              role="status"
+              className="pt-5 flex justify-center items-center"
+            >
+              <LoadingIcon classNames="mr-2 fill-blue text-gray w-6 h-6" />
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
             <button
               className="w-full border border-[rgba(240,246,252,0.1)] rounded-lg mt-4 py-1 flex items-center justify-center hover:border-hover-gray bg-gray"
               onClick={handleSaving}

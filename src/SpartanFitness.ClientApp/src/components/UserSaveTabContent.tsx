@@ -78,12 +78,12 @@ type Props = {
   handleUnsave: (
     id: string,
     userId: string,
-    forceRefresh: Dispatch<SetStateAction<boolean>>,
+    onSucces: () => void,
   ) => Promise<void>;
   handleUnsaveRange: (
     ids: string[],
     userId: string,
-    forceRefresh: Dispatch<SetStateAction<boolean>>,
+    onSucces: () => void,
   ) => Promise<void>;
   fetchAllIds: (userId: string) => Promise<string[]>;
   generateUrl: (entity: Entity) => string;
@@ -185,13 +185,27 @@ const UserSavesTabPanel = ({
     setSelected(allIds);
   };
 
+  const updateCurrentPage = () => {
+    if (page) {
+      if (page.pageNumber > 1) {
+        setCurrentPage(1);
+      } else {
+        setForceRefreshValue((prev) => !prev);
+      }
+    }
+  };
+
+  const handleUnsaveObject = (objectId: string) => {
+    handleUnsave(objectId, auth.user!.id, updateCurrentPage);
+  };
+
   const handleUnsaveAll = async () => {
     const allIds = await fetchAllIds(auth.user!.id);
-    handleUnsaveRange(allIds, auth.user!.id, setForceRefreshValue);
+    handleUnsaveRange(allIds, auth.user!.id, updateCurrentPage);
   };
 
   const handleUnsaveSelected = () => {
-    handleUnsaveRange(selected, auth.user!.id, setForceRefreshValue);
+    handleUnsaveRange(selected, auth.user!.id, updateCurrentPage);
     setSelected([]);
   };
 
@@ -216,6 +230,7 @@ const UserSavesTabPanel = ({
         >
           {selected.length > 0 ? "Unselect all" : "Select all"}
         </button>
+        {/* Disable button if page.values = 0 || undefined */}
         <button
           className={`text-[#e8473f] bg-gray py-1 px-3 rounded-lg hover:bg-red hover:border-[#f85149] hover:text-white border border-red flex items-center cursor-pointer`}
           type="button"
@@ -263,9 +278,7 @@ const UserSavesTabPanel = ({
                 <button
                   className="absolute right-3 top-3 w-8 h-8 flex items-center justify-center rounded-lg border border-[rgba(240,246,252,0.1)] bg-[#262c31] hover:border-[#8B949E] hover:bg-gray cursor-pointer"
                   type="button"
-                  onClick={() => {
-                    handleUnsave(obj.id, auth.user!.id, setForceRefreshValue);
-                  }}
+                  onClick={() => handleUnsaveObject(obj.id)}
                 >
                   <RiDeleteBin5Fill className="fill-white" size={13} />
                 </button>
