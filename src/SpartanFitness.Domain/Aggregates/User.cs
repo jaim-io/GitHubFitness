@@ -92,7 +92,7 @@ public sealed class User : AggregateRoot<UserId, Guid>
 
   public void ConfirmEmail()
   {
-    // this.AddDomainEvent(new UserCreated()); ---> Send welcome email;
+    this.AddDomainEvent(new EmailConfirmed(this));
     EmailConfirmed = true;
   }
 
@@ -134,7 +134,7 @@ public sealed class User : AggregateRoot<UserId, Guid>
 
   public void UnSaveMuscle(MuscleId id)
     => _savedMuscleIds.Remove(id);
-  
+
   public void UnSaveMuscleRange(List<MuscleId> ids)
     => _savedMuscleIds.RemoveAll(ids.Contains);
 
@@ -148,7 +148,7 @@ public sealed class User : AggregateRoot<UserId, Guid>
 
   public void UnSaveWorkout(WorkoutId id)
     => _savedWorkoutIds.Remove(id);
-  
+
   public void UnSaveWorkoutRange(List<WorkoutId> ids)
     => _savedWorkoutIds.RemoveAll(ids.Contains);
 }
