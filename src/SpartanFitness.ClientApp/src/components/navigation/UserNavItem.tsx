@@ -4,7 +4,7 @@ import { AiOutlineSetting, AiOutlineUser } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
-import DefaultProfileSvg from "../../assets/default-profile.svg";
+import DefaultProfileSvg from "../../../../../assets/logos/svgs/default-profile.svg";
 import AuthContext from "../../contexts/AuthProvider";
 import { BsBookmark } from "react-icons/bs";
 

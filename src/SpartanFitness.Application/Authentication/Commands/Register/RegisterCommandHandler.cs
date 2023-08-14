@@ -66,17 +66,28 @@ public class RegisterCommandHandler
         $"{frontendBaseUrl}/confirm-email?id={user.Id.Value}&token={emailConfirmationToken}";
       callbackUrl = HtmlEncoder.Default.Encode(callbackUrl);
 
-      var emailBody =
-        string.Format(
-          "Hi {0} {1}, please confirm your e-mail address. Click <a href=\"{2}\">here</a> to confirm your e-mail address.",
-          user.FirstName,
-          user.LastName,
-          callbackUrl);
+      var assetsPath = Directory.GetCurrentDirectory() + $"{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}assets";
+      var templatePath = $"{assetsPath}{Path.DirectorySeparatorChar}templates{Path.DirectorySeparatorChar}email{Path.DirectorySeparatorChar}general-email.html";
+      if (!File.Exists(templatePath))
+      {
+        throw new Exception($"[RegisterCommandHandler] Email template not found, path: {templatePath}");
+      }
+
+      var template = await File.ReadAllTextAsync(templatePath);
+
+      var message = $"You are almost done with creating your account. The only thing left is to verify you e-mail address. Click <a href=\"{callbackUrl}\" style=\"color: #2f81f7;\">here</a> to confirm your e-mail address.<br/><br/>If no window opens you can use this link '<span style=\"color: #2f81f7;\">{callbackUrl}</span>' to confirm your e-mail address.";
+      var subject = "Email confirmation";
+
+      var body = template
+        .Replace("{title}", subject)
+        .Replace("{home-page-url}", frontendBaseUrl)
+        .Replace("{user}", $"{user.FirstName} {user.LastName}")
+        .Replace("{message}", message);
 
       // await _emailProvider.SendAsync(
-      //   users: new() { user },
-      //   subject: "Email confirmation",
-      //   body: emailBody,
+      //   recipients: new() { user },
+      //   subject: subject,
+      //   body: body,
       //   cancellationToken);
 
       return new MessageResult($"Your account been created. An email with a verification link has been send to {user.Email} to activate your account.");

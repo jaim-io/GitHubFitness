@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import LogoSvg from "../../assets/logo.svg";
+import LogoSvg from "../../../../../assets/logos/svgs/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import { ReactNode, useEffect, useState } from "react";
 import axios from "axios";
@@ -92,7 +92,7 @@ const ConfirmEmailPage = () => {
 
   return (
     <div className="flex justify-center pt-28 pb-2">
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mb-4">
         <div>
           <Link to={"/"}>
             <img
@@ -103,7 +103,7 @@ const ConfirmEmailPage = () => {
           </Link>
           {serverMessage !== undefined && (
             <div className="flex justify-center">
-              <p className="px-10 pt-5 pb-5 mb-4 border border-gray max-w-sm rounded-lg">
+              <p className="px-10 pt-5 pb-5 border border-gray max-w-sm rounded-lg">
                 <>
                   Sign in{" "}
                   <Link to="/login" className="text-blue">
@@ -115,34 +115,34 @@ const ConfirmEmailPage = () => {
             </div>
           )}
         </div>
-      </div>
 
-      <div className="w-full max-w-[34rem] bg-semi-black shadow-xl rounded-lg px-4 py-8 mb-4 ml-10 border border-gray relative">
-        Hi new Spartan,
-        <br />
-        <br />
-        {isLoading ? (
-          <>
-            Thank your for signing up at Spartan Fitness! Please standby while
-            we are confirming your e-mail address.
-            <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-8 h-8 absolute right-0 bottom-2" />
-          </>
-        ) : (
-          <span>{serverMessage || error}</span>
-        )}
-        <br />
-        <br />
-        Kind regards,
-        <br />
-        <br />
-        <span className="flex items-center">
-          The Spartan Fitness team
-          <img
-            src={LogoSvg}
-            className="w-[1rem] h-[1rem] ml-1"
-            alt={"SpartanFitness Logo"}
-          />
-        </span>
+        <div className="w-full max-w-[34rem] bg-semi-black shadow-xl rounded-lg px-4 py-4 ml-10 border border-gray relative">
+          Hi new Spartan,
+          <br />
+          <br />
+          {isLoading ? (
+            <>
+              Thank your for signing up at Spartan Fitness! Please standby while
+              we are confirming your e-mail address.
+              <LoadingIcon classNames="mr-2 animate-spin fill-blue text-gray w-8 h-8 absolute right-0 bottom-2" />
+            </>
+          ) : (
+            <span>{serverMessage || error}</span>
+          )}
+          <br />
+          <br />
+          Kind regards,
+          <br />
+          <br />
+          <span className="flex items-center">
+            The Spartan Fitness team
+            <img
+              src={LogoSvg}
+              className="w-[1rem] h-[1rem] ml-1"
+              alt={"SpartanFitness Logo"}
+            />
+          </span>
+        </div>
       </div>
     </div>
   );

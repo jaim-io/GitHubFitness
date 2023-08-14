@@ -21,7 +21,7 @@ public sealed class EmailProvider : IEmailProvider
   }
 
   public async Task SendAsync(
-    List<User> users,
+    List<User> recipients,
     string subject,
     string body,
     CancellationToken cancellationToken)
@@ -40,13 +40,18 @@ public sealed class EmailProvider : IEmailProvider
 
     request.AddParameter("from", $"Mailgun Sandbox <postmaster@{_emailSettings.MailGunDomain}>");
 
-    var recipients = string.Join(
+    var recipientsParam = string.Join(
       ",",
-      users.Select(u => $"{u.FirstName} {u.LastName} <{u.Email}>"));
-    request.AddParameter("to", recipients);
+      recipients.Select(u => $"{u.FirstName} {u.LastName} <{u.Email}>"));
+    request.AddParameter("to", recipientsParam);
 
     request.AddParameter("subject", subject);
-    request.AddParameter("text", body); // Html
+    request.AddParameter("html", body);
+
+    var assetsPath = Directory.GetCurrentDirectory() + $"{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}assets";
+    var logoPath = $"{assetsPath}{Path.DirectorySeparatorChar}logos{Path.DirectorySeparatorChar}pngs{Path.DirectorySeparatorChar}logo-no-background.png";
+    request.AddFile("attachment", logoPath);
+
     request.Method = Method.Post;
 
     var response = await client.PostAsync(request, cancellationToken);

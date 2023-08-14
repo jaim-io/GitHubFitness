@@ -3,7 +3,7 @@ import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LogoSvg from "../../assets/logo.svg";
+import LogoSvg from "../../../../../assets/logos/svgs/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import AuthContext from "../../contexts/AuthProvider";
 import AuthenticationResponse from "../../types/authentication/AuthenticationResponse";

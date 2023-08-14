@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import MainNavItem from "./MainNavItem";
 import UserNavItem from "./UserNavItem";
-import LogoWhiteNoCircle from "../../assets/logo-white-no-circle.svg";
+import LogoWhiteNoCircle from "../../../../../assets/logos/svgs/logo-white-no-circle.svg";
 import { useContext } from "react";
 import AuthContext from "../../contexts/AuthProvider";
 import AuthNavItem from "./AuthNavItem";
