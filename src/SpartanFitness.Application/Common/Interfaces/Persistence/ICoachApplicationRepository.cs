@@ -10,5 +10,6 @@ public interface ICoachApplicationRepository
   Task<bool> AreRelatedAsync(CoachApplicationId id, UserId userId);
   Task<bool> ExistsAsync(CoachApplicationId id);
   Task<bool> IsOpenAsync(CoachApplicationId id);
+  Task<bool> HasPendingApplications(UserId id);
   Task UpdateAsync(CoachApplication coachApplication);
 }

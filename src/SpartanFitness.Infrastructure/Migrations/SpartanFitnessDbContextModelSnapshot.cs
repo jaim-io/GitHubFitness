@@ -46,6 +46,11 @@ namespace SpartanFitness.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
@@ -301,6 +306,37 @@ namespace SpartanFitness.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Workouts", (string)null);
+                });
+
+            modelBuilder.Entity("SpartanFitness.Domain.Aggregates.Coach", b =>
+                {
+                    b.OwnsOne("SpartanFitness.Domain.ValueObjects.SocialMedia", "SocialMedia", b1 =>
+                        {
+                            b1.Property<Guid>("CoachId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("FacebookUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("InstagramUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("LinkedInUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("WebsiteUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("CoachId");
+
+                            b1.ToTable("Coaches");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoachId");
+                        });
+
+                    b.Navigation("SocialMedia")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SpartanFitness.Domain.Aggregates.Exercise", b =>

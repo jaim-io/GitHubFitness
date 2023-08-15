@@ -42,6 +42,11 @@ public class CoachApplicationRepository : ICoachApplicationRepository
     return await _dbContext.CoachApplications.AnyAsync(ca => ca.Id == id && ca.Status == Status.Pending);
   }
 
+  public async Task<bool> HasPendingApplications(UserId id)
+  {
+    return await _dbContext.CoachApplications.AnyAsync(ca => ca.UserId == id && ca.Status == Status.Pending);
+  }
+
   public async Task UpdateAsync(CoachApplication coachApplication)
   {
     _dbContext.Update(coachApplication);

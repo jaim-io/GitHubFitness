@@ -15,22 +15,19 @@ public class ExerciseDeletedDomainEventHandler : INotificationHandler<ExerciseDe
   private readonly ICoachRepository _coachRepository;
   private readonly IUserRepository _userRepository;
   private readonly IEmailProvider _emailProvider;
-  private readonly IFrontendProvider _frontendProvider;
 
   public ExerciseDeletedDomainEventHandler(
     IExerciseRepository exerciseRepository,
     IWorkoutRepository workoutRepository,
     ICoachRepository coachRepository,
     IUserRepository userRepository,
-    IEmailProvider emailProvider,
-    IFrontendProvider frontendProvider)
+    IEmailProvider emailProvider)
   {
     _exerciseRepository = exerciseRepository;
     _workoutRepository = workoutRepository;
     _coachRepository = coachRepository;
     _userRepository = userRepository;
     _emailProvider = emailProvider;
-    _frontendProvider = frontendProvider;
   }
 
   public async Task Handle(ExerciseDeleted notification, CancellationToken cancellationToken)
@@ -67,7 +64,6 @@ public class ExerciseDeletedDomainEventHandler : INotificationHandler<ExerciseDe
       }
     }
 
-    var frontendBaseUrl = _frontendProvider.GetApplicationUrl();
     try
     {
       var assetsPath = Directory.GetCurrentDirectory() + $"{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}assets";
@@ -82,7 +78,6 @@ public class ExerciseDeletedDomainEventHandler : INotificationHandler<ExerciseDe
 
       var body = template
         .Replace("{title}", subject)
-        .Replace("{home-page-url}", frontendBaseUrl)
         .Replace("{user}", "Spartan")
         .Replace("{message}", message);
 

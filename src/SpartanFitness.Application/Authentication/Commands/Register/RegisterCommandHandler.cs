@@ -80,7 +80,6 @@ public class RegisterCommandHandler
 
       var body = template
         .Replace("{title}", subject)
-        .Replace("{home-page-url}", frontendBaseUrl)
         .Replace("{user}", $"{user.FirstName} {user.LastName}")
         .Replace("{message}", message);
 

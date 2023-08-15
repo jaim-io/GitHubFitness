@@ -1,26 +1,11 @@
-import { Tab } from "@headlessui/react";
 import moment from "moment";
 import { AiOutlineUser } from "react-icons/ai";
-import { BiDumbbell } from "react-icons/bi";
-import { IoFitnessSharp } from "react-icons/io5";
-import { MdFitbit } from "react-icons/md";
-import { SiElectron } from "react-icons/si";
-import UserSavesTabPanel, {
-  PageState,
-} from "../../components/UserSaveTabContent";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import useAdmin from "../../hooks/useAdmin";
 import useAuth from "../../hooks/useAuth";
 import useCoach from "../../hooks/useCoach";
-import useExercisesPage from "../../hooks/useExercisesPage";
-import useMuscleGroupsPage from "../../hooks/useMuscleGroupsPage";
-import useMusclesPage from "../../hooks/useMusclesPage";
-import useWorkoutsPage from "../../hooks/useWorkoutsPage";
 import Administrator from "../../types/domain/Administrator";
 import Coach from "../../types/domain/Coach";
-import { useState } from "react";
-
-const TABS = ["Muscles", "Muscle Groups", "Exercises", "Workouts"];
 
 const dateToString = (date: Date) =>
   moment(date).format("MMMM Do YYYY, h:mm:ss a");

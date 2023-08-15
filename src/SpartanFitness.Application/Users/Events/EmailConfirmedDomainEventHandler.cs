@@ -7,18 +7,15 @@ namespace SpartanFitness.Application.Users.Events;
 
 public class EmailConfirmedDomainEventHandler : INotificationHandler<EmailConfirmed>
 {
-  private readonly IFrontendProvider _frontendProvider;
   private readonly IEmailProvider _emailProvider;
 
-  public EmailConfirmedDomainEventHandler(IFrontendProvider frontendProvider, IEmailProvider emailProvider)
+  public EmailConfirmedDomainEventHandler(IEmailProvider emailProvider)
   {
-    _frontendProvider = frontendProvider;
     _emailProvider = emailProvider;
   }
 
   public async Task Handle(EmailConfirmed notification, CancellationToken cancellationToken)
   {
-    var frontendBaseUrl = _frontendProvider.GetApplicationUrl();
     try
     {
       var assetsPath = Directory.GetCurrentDirectory() +
@@ -30,14 +27,13 @@ public class EmailConfirmedDomainEventHandler : INotificationHandler<EmailConfir
         throw new Exception($"[ExerciseDeletedDomainEventHandler] Email template not found, path: {templatePath}");
       }
 
-      string subject = "Account created";
+      var subject = "Account created";
       var template = await File.ReadAllTextAsync(templatePath, cancellationToken);
       var message =
         $"Your email has been confirmed and your account has successfully been created. Welcome to the Spartan Fitness crew!";
 
       var body = template
         .Replace("{title}", subject)
-        .Replace("{home-page-url}", frontendBaseUrl)
         .Replace("{user}", $"{notification.User.FirstName} {notification.User.LastName}")
         .Replace("{message}", message);
 

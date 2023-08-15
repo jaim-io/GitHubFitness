@@ -17,5 +17,9 @@ public static partial class Errors
         public static Error NotRelated => Error.Conflict(
             code: "CoachApplication.NotRelated",
             description: "User and coach application are not related");
+        
+        public static Error UserHasPendingApplication => Error.Conflict(
+          code: "CoachApplication.UserHasPendingApplication",
+          description: "User has a pending coach application.");
     }
 }
