@@ -5,6 +5,7 @@ using SpartanFitness.Application.Users.Commands.SaveExercise;
 using SpartanFitness.Application.Users.Commands.SaveMuscle;
 using SpartanFitness.Application.Users.Commands.SaveMuscleGroup;
 using SpartanFitness.Application.Users.Commands.SaveWorkout;
+using SpartanFitness.Application.Users.Commands.UpdateUser;
 using SpartanFitness.Application.Users.Queries.GetSavedExercisePage;
 using SpartanFitness.Application.Users.Queries.GetSavedMuscleGroupPage;
 using SpartanFitness.Application.Users.Queries.GetSavedMusclePage;
@@ -27,6 +28,9 @@ public class UserMappingConfig : IRegister
       .Map(dest => dest.SavedMuscleIds, src => src.SavedMuscleIds.Select(id => id.Value.ToString()))
       .Map(dest => dest.SavedMuscleGroupIds, src => src.SavedMuscleGroupIds.Select(id => id.Value.ToString()))
       .Map(dest => dest.SavedWorkoutIds, src => src.SavedWorkoutIds.Select(id => id.Value.ToString()))
+      .Map(dest => dest, src => src);
+
+    config.NewConfig<UpdateUserRequest, UpdateUserCommand>()
       .Map(dest => dest, src => src);
 
     config.NewConfig<(SaveExerciseRequest Request, string UserId), SaveExerciseCommand>()
@@ -83,7 +87,7 @@ public class UserMappingConfig : IRegister
       .Map(dest => dest.PageSize, src => src.Request.Size)
       .Map(dest => dest.SearchQuery, src => src.Request.Query)
       .Map(dest => dest, src => src.Request);
-    
+
     config.NewConfig<(PagingRequest Request, string UserId), GetSavedWorkoutPageQuery>()
       .Map(dest => dest.UserId, src => src.UserId)
       .Map(dest => dest.PageNumber, src => src.Request.Page)

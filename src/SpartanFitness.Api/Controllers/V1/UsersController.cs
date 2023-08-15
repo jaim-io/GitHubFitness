@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using SpartanFitness.Application.Users.Commands.UpdateUser;
 using SpartanFitness.Application.Users.Queries.GetUserById;
 using SpartanFitness.Contracts.Users;
 using SpartanFitness.Domain.Aggregates;
@@ -32,6 +33,30 @@ public class UsersController : ApiController
   {
     var query = new GetUserByIdQuery(id);
     ErrorOr<User> result = await _mediator.Send(query);
+
+    return result.Match(
+      user => Ok(_mapper.Map<UserResponse>(user)),
+      Problem);
+  }
+
+  [HttpPatch("{id}")]
+  public async Task<IActionResult> UpdateUser([FromRoute] string id, [FromBody] UpdateUserRequest request)
+  {
+    var isUser = Authorization.UserIdMatchesClaim(HttpContext, id);
+    var isAdmin = Authorization.IsAdmin(HttpContext);
+
+    if (!(isUser || isAdmin))
+    {
+      return Unauthorized();
+    }
+
+    if (id != request.Id)
+    {
+      return BadRequest("Route id and request body id are not the same");
+    }
+
+    var command = _mapper.Map<UpdateUserCommand>(request);
+    ErrorOr<User> result = await _mediator.Send(command);
 
     return result.Match(
       user => Ok(_mapper.Map<UserResponse>(user)),

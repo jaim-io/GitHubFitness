@@ -151,4 +151,9 @@ public sealed class User : AggregateRoot<UserId, Guid>
 
   public void UnSaveWorkoutRange(List<WorkoutId> ids)
     => _savedWorkoutIds.RemoveAll(ids.Contains);
+
+  public void SetFirstName(string firstName) => FirstName = firstName;
+  public void SetLastName(string lastName) => LastName = lastName;
+  public void SetProfileImage(string profileImage) => ProfileImage = profileImage;
+  public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
 }
