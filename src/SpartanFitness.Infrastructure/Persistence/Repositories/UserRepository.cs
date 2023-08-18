@@ -51,6 +51,22 @@ public class UserRepository : IUserRepository
       .ToListAsync();
   }
 
+  public async Task<User?> GetByCoachIdAsync(CoachId id)
+  {
+    var parameter = new SqlParameter("@p{0}", id.Value);
+    var query = @"
+      SELECT u.*
+      FROM Users as u
+      JOIN Coaches as c
+        on u.Id = c.UserId
+      WHERE c.Id = @p{0}
+    ";
+
+    return await _dbContext.Users
+      .FromSqlRaw(query, parameter)
+      .FirstOrDefaultAsync();
+  }
+
   public async Task<List<User>> GetByCoachIdAsync(List<CoachId> ids)
   {
     if (ids.Count() == 0)

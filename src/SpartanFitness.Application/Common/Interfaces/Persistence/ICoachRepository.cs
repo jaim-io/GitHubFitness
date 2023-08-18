@@ -9,4 +9,5 @@ public interface ICoachRepository
   Task<List<Coach>> GetByIdAsync(List<CoachId> ids);
   Task<Coach?> GetByUserIdAsync(UserId id);
   Task AddAsync(Coach coach);
+  Task UpdateAsync(Coach coach);
 }

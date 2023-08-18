@@ -1,6 +1,7 @@
 using Mapster;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
+using SpartanFitness.Application.Coaches.Commands.UpdateCoach;
 using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Contracts.Coaches;
 using SpartanFitness.Domain.ValueObjects;
@@ -12,6 +13,8 @@ public class CoachMappingConfig : IRegister
   public void Register(TypeAdapterConfig config)
   {
     config.NewConfig<CreateCoachRequest, CreateCoachCommand>();
+
+    config.NewConfig<UpdateCoachRequest, UpdateCoachCommand>();
 
     config.NewConfig<CoachResult, CoachResponse>()
       .Map(dest => dest.Id, src => src.Coach.Id.Value.ToString())

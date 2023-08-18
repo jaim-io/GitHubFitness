@@ -22,6 +22,12 @@ public class CoachRepository : ICoachRepository
     await _dbContext.SaveChangesAsync();
   }
 
+  public async Task UpdateAsync(Coach coach)
+  {
+    _dbContext.Update(coach);
+    await _dbContext.SaveChangesAsync();
+  }
+
   public async Task<Coach?> GetByIdAsync(CoachId id)
   {
     return await _dbContext.Coaches.FirstOrDefaultAsync(c => c.Id == id);

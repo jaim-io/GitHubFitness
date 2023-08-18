@@ -1,14 +1,14 @@
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace SpartanFitness.Application.Coaches.Commands.CreateCoach;
+namespace SpartanFitness.Application.Coaches.Commands.UpdateCoach;
 
-public class CreateCoachCommandValidator : AbstractValidator<CreateCoachCommand>
+public class UpdateCoachCommandValidator : AbstractValidator<UpdateCoachCommand>
 {
-  public CreateCoachCommandValidator()
+  public UpdateCoachCommandValidator()
   {
-    RuleFor(x => x.UserId)
+    RuleFor(x => x.CoachId)
       .Must(x => Guid.TryParse(x, out _))
-      .WithMessage("The user ID must be a valid GUID");
+      .WithMessage("The coach ID must be a valid GUID");
 
     RuleFor(x => x.Biography)
       .NotEmpty()

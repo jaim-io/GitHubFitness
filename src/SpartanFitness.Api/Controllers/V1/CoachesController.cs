@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
+using SpartanFitness.Application.Coaches.Commands.UpdateCoach;
 using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Application.Coaches.Queries.GetCoachById;
 using SpartanFitness.Contracts.Coaches;
@@ -53,6 +54,29 @@ public class CoachesController : ApiController
         nameof(GetCoach),
         new { coachId = result.Coach.Id.Value },
         _mapper.Map<CoachResponse>(result)),
+      Problem);
+  }
+
+  [HttpPatch("{coachId}")]
+  public async Task<IActionResult> UpdateCoach(string coachId, UpdateCoachRequest request)
+  {
+    var isVerifiedCoach = Authorization.CoachIdMatchesClaim(HttpContext, coachId);
+    var isAdmin = Authorization.IsAdmin(HttpContext);
+    if (!(isVerifiedCoach || isAdmin))
+    {
+      return Unauthorized();
+    }
+
+    if (coachId != request.CoachId)
+    {
+      return BadRequest("Route coachId & request coachId do not match.");
+    }
+
+    var command = _mapper.Map<UpdateCoachCommand>(request);
+    ErrorOr<CoachResult> result = await _mediator.Send(command);
+
+    return result.Match(
+      coachResult => Ok(_mapper.Map<CoachResponse>(coachResult)),
       Problem);
   }
 }

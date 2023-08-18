@@ -46,4 +46,14 @@ public sealed class Coach : AggregateRoot<CoachId, Guid>
       DateTime.UtcNow,
       DateTime.UtcNow);
   }
+
+  public void SetBiography(string biography)
+  {
+    Biography = biography;
+  }
+
+  public void SetSocialMedia(SocialMedia socialMedia)
+  {
+    SocialMedia = socialMedia;
+  }
 }
