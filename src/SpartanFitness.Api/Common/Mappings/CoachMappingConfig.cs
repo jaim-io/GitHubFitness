@@ -1,3 +1,5 @@
+using Azure.Core;
+
 using Mapster;
 
 using SpartanFitness.Application.Coaches.Commands.CreateCoach;
@@ -12,7 +14,9 @@ public class CoachMappingConfig : IRegister
 {
   public void Register(TypeAdapterConfig config)
   {
-    config.NewConfig<CreateCoachRequest, CreateCoachCommand>();
+    config.NewConfig<(CreateCoachRequest Request, string Token), CreateCoachCommand>()
+      .Map(dest => dest.Token, src => src.Token)
+      .Map(dest => dest, src => src.Token);
 
     config.NewConfig<UpdateCoachRequest, UpdateCoachCommand>();
 

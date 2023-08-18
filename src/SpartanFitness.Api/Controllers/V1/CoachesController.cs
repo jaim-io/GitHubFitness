@@ -44,9 +44,9 @@ public class CoachesController : ApiController
 
   [HttpPost]
   [Authorize(Roles = RoleTypes.Administrator)]
-  public async Task<IActionResult> CreateCoach(CreateCoachRequest request)
+  public async Task<IActionResult> CreateCoach(CreateCoachRequest request, string token)
   {
-    var command = _mapper.Map<CreateCoachCommand>(request);
+    var command = _mapper.Map<CreateCoachCommand>((request, token));
     ErrorOr<CoachResult> createdCoachResult = await _mediator.Send(command);
 
     return createdCoachResult.Match(

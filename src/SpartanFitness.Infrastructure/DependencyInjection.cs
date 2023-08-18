@@ -31,8 +31,8 @@ public static class DependencyInjection
   /// Adds the Infrastructure layer [Clean Architecture Layers].
   /// </summary>
   public static IServiceCollection AddInfrastructure(
-      this IServiceCollection services,
-      ConfigurationManager configuration)
+    this IServiceCollection services,
+    ConfigurationManager configuration)
   {
     services
       .AddAuth(configuration)
@@ -67,13 +67,20 @@ public static class DependencyInjection
     this IServiceCollection services,
     ConfigurationManager configuration)
   {
+    services.AddSingleton<IEmailConfirmationTokenProvider, EmailConfirmationTokenProvider>();
+
+    var coachSettings = new CoachSettings();
+    configuration.Bind(CoachSettings.SectionName, coachSettings);
+
+    services.AddSingleton(Options.Create(coachSettings));
+    services.AddSingleton<ICoachCreationTokenProvider, CoachCreationTokenProvider>();
+
     var jwtSettings = new JwtSettings();
     configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
     services.AddSingleton(Options.Create(jwtSettings));
     services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
     services.AddSingleton<IPasswordHasher, PasswordHasher>();
-    services.AddSingleton<IEmailConfirmationTokenProvider, EmailConfirmationTokenProvider>();
 
     var tokenValidationParameters = new TokenValidationParameters
     {
@@ -90,7 +97,7 @@ public static class DependencyInjection
     services.AddSingleton(tokenValidationParameters);
 
     services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
+      .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
 
     services.ConfigureSwaggerGen(options =>
     {

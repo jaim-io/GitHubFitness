@@ -1,5 +1,6 @@
 using MediatR;
 
+using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
@@ -13,15 +14,18 @@ public sealed class CoachApplicationApprovedDomainEventHandler
   private readonly IUserRepository _userRepository;
   private readonly IFrontendProvider _frontendProvider;
   private readonly IEmailProvider _emailProvider;
+  private readonly ICoachCreationTokenProvider _coachCreationTokenProvider;
 
   public CoachApplicationApprovedDomainEventHandler(
     IUserRepository userRepository,
     IFrontendProvider frontendProvider,
-    IEmailProvider emailProvider)
+    IEmailProvider emailProvider,
+    ICoachCreationTokenProvider coachCreationTokenProvider)
   {
     _userRepository = userRepository;
     _frontendProvider = frontendProvider;
     _emailProvider = emailProvider;
+    _coachCreationTokenProvider = coachCreationTokenProvider;
   }
 
   public async Task Handle(
@@ -49,14 +53,17 @@ public sealed class CoachApplicationApprovedDomainEventHandler
     var subject = "Your coach application has been approved";
 
     var frontendBaseUrl = _frontendProvider.GetApplicationUrl();
-    var callbackUrl = $"{frontendBaseUrl}/user/complete-coach-profile";
-    var message = $"Your coach application has been approved by one of our administrators. Click <a href=\"{callbackUrl}\" style=\"color: #2f81f7;\">here</a> to complete your coach profile. After your coach profile has been created you will get access to all coach-functionality.<br/><br/>If no window opens follow this link '<span style=\"color: #2f81f7;\">{callbackUrl}</span>'.";
+    var creationToken = _coachCreationTokenProvider.GenerateToken(user.Email);
+    var callbackUrl = $"{frontendBaseUrl}/user/complete-coach-profile?token={creationToken}";
+
+    var message =
+      $"Your coach application has been approved by one of our administrators. Click <a href=\"{callbackUrl}\" style=\"color: #2f81f7;\">here</a> to complete your coach profile. After your coach profile has been created you will get access to all coach-functionality.<br/><br/>If no window opens follow this link '<span style=\"color: #2f81f7;\">{callbackUrl}</span>'.";
 
     var body = template
       .Replace("{title}", subject)
       .Replace("{user}", $"{user.FirstName} {user.LastName}")
       .Replace("{message}", message);
-    
+
     // await _emailProvider.SendAsync(
     //   recipients: new() { user },
     //   subject: subject,

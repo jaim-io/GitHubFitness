@@ -5,6 +5,7 @@ using MediatR;
 using SpartanFitness.Application.Coaches.Common;
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
+using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Domain.Aggregates;
 using SpartanFitness.Domain.Common.Errors;
 using SpartanFitness.Domain.ValueObjects;
@@ -16,16 +17,16 @@ public class CreateCoachCommandHandler
 {
   private readonly IUserRepository _userRepository;
   private readonly ICoachRepository _coachRepository;
-  private readonly IRoleRepository _roleRepository;
+  private readonly ICoachCreationTokenProvider _creationTokenProvider;
 
   public CreateCoachCommandHandler(
     IUserRepository userRepository,
     ICoachRepository coachRepository,
-    IRoleRepository roleRepository)
+    ICoachCreationTokenProvider creationTokenProvider)
   {
     _userRepository = userRepository;
     _coachRepository = coachRepository;
-    _roleRepository = roleRepository;
+    _creationTokenProvider = creationTokenProvider;
   }
 
   public async Task<ErrorOr<CoachResult>> Handle(
@@ -36,7 +37,13 @@ public class CreateCoachCommandHandler
 
     if (await _userRepository.GetByIdAsync(userId) is not User user)
     {
-      return Errors.User.NotFound;
+      return Errors.Authentication.InvalidParameters;
+    }
+
+    var isValid = _creationTokenProvider.ValidateToken(token: command.Token, email: user.Email);
+    if (!isValid)
+    {
+      return Errors.Authentication.InvalidParameters;
     }
 
     if (await _coachRepository.GetByUserIdAsync(userId) is Coach)

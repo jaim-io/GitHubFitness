@@ -10,6 +10,7 @@ namespace SpartanFitness.Application.Coaches.Commands.CreateCoach;
 public record CreateCoachCommand(
   string UserId,
   string Biography,
+  string Token,
   string? LinkedInUrl,
   string? WebsiteUrl,
   string? InstagramUrl,
