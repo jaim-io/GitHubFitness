@@ -44,4 +44,15 @@ public class RefreshTokenRepository
     _dbContext.UpdateRange(tokens);
     await _dbContext.SaveChangesAsync();
   }
+
+  public async Task InvalidateAllAsync()
+  {
+    await _dbContext.RefreshTokens
+      .Where(rt => !rt.Used && !rt.Invalidated)
+      .ExecuteUpdateAsync(setter => setter.SetProperty(
+        rt => rt.Invalidated,
+        true));
+
+    await _dbContext.SaveChangesAsync();
+  }
 }

@@ -10,16 +10,16 @@ namespace SpartanFitness.Infrastructure.Authentication;
 
 public class CoachCreationTokenProvider : ICoachCreationTokenProvider
 {
-  private readonly CoachSettings _coachSettings;
+  private readonly CoachCreationSettings _coachCreationSettings;
 
-  public CoachCreationTokenProvider(IOptions<CoachSettings> coachSettings)
+  public CoachCreationTokenProvider(IOptions<CoachCreationSettings> coachCreationSettings)
   {
-    _coachSettings = coachSettings.Value;
+    _coachCreationSettings = coachCreationSettings.Value;
   }
 
   public string GenerateToken(string emailAddress)
   {
-    var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_coachSettings.Secret));
+    var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_coachCreationSettings.Secret));
     byte[] bytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(emailAddress));
     string digest = EncodeToHex(bytes);
 

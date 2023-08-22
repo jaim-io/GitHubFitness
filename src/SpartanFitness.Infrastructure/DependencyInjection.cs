@@ -59,6 +59,7 @@ public static class DependencyInjection
     services.AddScoped<IWorkoutRepository, WorkoutRepository>();
     services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
     services.AddScoped<IMuscleRepository, MuscleRepository>();
+    services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
     return services;
   }
@@ -67,18 +68,22 @@ public static class DependencyInjection
     this IServiceCollection services,
     ConfigurationManager configuration)
   {
-    services.AddSingleton<IEmailConfirmationTokenProvider, EmailConfirmationTokenProvider>();
+    var coachSettings = new CoachCreationSettings();
+    configuration.Bind(CoachCreationSettings.SectionName, coachSettings);
 
-    var coachSettings = new CoachSettings();
-    configuration.Bind(CoachSettings.SectionName, coachSettings);
-
-    services.AddSingleton(Options.Create(coachSettings));
-    services.AddSingleton<ICoachCreationTokenProvider, CoachCreationTokenProvider>();
+    var passwordResetSettings = new PasswordResetSettings();
+    configuration.Bind(PasswordResetSettings.SectionName, passwordResetSettings);
 
     var jwtSettings = new JwtSettings();
     configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
+    services.AddSingleton(Options.Create(coachSettings));
+    services.AddSingleton(Options.Create(passwordResetSettings));
     services.AddSingleton(Options.Create(jwtSettings));
+
+    services.AddSingleton<IEmailConfirmationTokenProvider, EmailConfirmationTokenProvider>();
+    services.AddSingleton<ICoachCreationTokenProvider, CoachCreationTokenProvider>();
+    services.AddSingleton<IPasswordResetTokenProvider, PasswordResetTokenProvider>();
     services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
     services.AddSingleton<IPasswordHasher, PasswordHasher>();
 

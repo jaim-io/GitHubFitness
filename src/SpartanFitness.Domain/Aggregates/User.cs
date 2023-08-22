@@ -156,4 +156,11 @@ public sealed class User : AggregateRoot<UserId, Guid>
   public void SetLastName(string lastName) => LastName = lastName;
   public void SetProfileImage(string profileImage) => ProfileImage = profileImage;
   public void SetUpdatedDateTime() => UpdatedDateTime = DateTime.UtcNow;
+
+  public void SetPassword(string password, byte[] salt)
+  {
+    Password = password;
+    Salt = salt;
+    // TODO: Password change domain event -> send email;
+  }
 }

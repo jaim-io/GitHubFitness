@@ -10,4 +10,5 @@ public interface IRefreshTokenRepository
   Task AddAsync(RefreshToken token);
   Task UpdateAsync(RefreshToken token);
   Task UpdateRangeAsync(List<RefreshToken> tokens);
+  Task InvalidateAllAsync();
 }

@@ -18,6 +18,7 @@ public class SpartanFitnessDbContext : DbContext
   public DbSet<Exercise> Exercises { get; set; } = null!;
   public DbSet<Workout> Workouts { get; set; } = null!;
   public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+  public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
   public DbSet<Muscle> Muscles { get; set; } = null!;
 
   public SpartanFitnessDbContext(
@@ -40,12 +41,12 @@ public class SpartanFitnessDbContext : DbContext
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     optionsBuilder.AddInterceptors(_publishDomainEventsInterceptor);
-    
+
     if (!optionsBuilder.IsConfigured)
     {
       optionsBuilder.UseSqlServer("Name=ConnectionStrings:SpartanFitness");
     }
-    
+
     base.OnConfiguring(optionsBuilder);
   }
 }

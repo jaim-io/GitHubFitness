@@ -73,6 +73,13 @@ The `appsettings.json`, `appsettings.Development.json` or `appsettings.Productio
   },
   "FrontendSettings": {
     "ApplicationUrl": "<APPLICATION_URL>"
+  },
+  "PasswordResetSettings": {
+    "Secret": "<SUPER-SECRET-KEY>",
+    "ExpiryMinutes": 60
+  },
+  "CoachCreationSettings" : {
+    "Secret": "<SUPER-SECRET-KEY>"
   }
 }
 ```

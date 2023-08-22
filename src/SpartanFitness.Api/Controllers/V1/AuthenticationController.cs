@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SpartanFitness.Application.Authentication.Commands.ConfirmEmail;
+using SpartanFitness.Application.Authentication.Commands.ForgotPassword;
 using SpartanFitness.Application.Authentication.Commands.RefreshJwtToken;
 using SpartanFitness.Application.Authentication.Commands.Register;
+using SpartanFitness.Application.Authentication.Commands.RequestPasswordReset;
+using SpartanFitness.Application.Authentication.Commands.ResetPassword;
 using SpartanFitness.Application.Authentication.Common;
 using SpartanFitness.Application.Authentication.Queries.Login;
 using SpartanFitness.Application.Common.Results;
@@ -88,6 +91,43 @@ public class AuthenticationController : ApiController
     [FromQuery] string token)
   {
     var command = new ConfirmEmailCommand(UserId: userId, Token: token);
+
+    ErrorOr<MessageResult> result = await _mediator.Send(command);
+    return result.Match(
+      Ok,
+      Problem);
+  }
+
+  [HttpPost("forgot-password")]
+  public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+  {
+    var command = _mapper.Map<ForgotPasswordCommand>(request);
+
+    ErrorOr<MessageResult> result = await _mediator.Send(command);
+    return result.Match(
+      Ok,
+      Problem);
+  }
+
+  [HttpGet("reset-password")]
+  [Authorize]
+  public async Task<IActionResult> RequestPasswordReset()
+  {
+    var userId = Authorization.GetUserId(HttpContext);
+    var query = new RequestPasswordResetCommand(userId);
+
+    ErrorOr<MessageResult> result = await _mediator.Send(query);
+    return result.Match(
+      Ok,
+      Problem);
+  }
+
+  [HttpPost("reset-password")]
+  public async Task<IActionResult> ResetPassword(
+    [FromQuery(Name = "id")] string userId,
+    [FromQuery] string token)
+  {
+    var command = _mapper.Map<ResetPasswordCommand>((userId, token));
 
     ErrorOr<MessageResult> result = await _mediator.Send(command);
     return result.Match(

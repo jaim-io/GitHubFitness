@@ -1,7 +1,7 @@
 ﻿namespace SpartanFitness.Infrastructure.Authentication;
 
-public class CoachSettings
+public class CoachCreationSettings
 {
-  public const string SectionName = "CoachSettings";
+  public const string SectionName = "CoachCreationSettings";
   public string Secret { get; init; } = null!;
 }
