@@ -41,8 +41,7 @@ public class AuthenticationMappingConfig : IRegister
     config.NewConfig<ForgotPasswordRequest, ForgotPasswordCommand>()
       .Map(dest => dest, src => src);
 
-    config.NewConfig<(string UserId, string Token), ResetPasswordCommand>()
-      .Map(dest => dest.Token, src => src.Token)
-      .Map(dest => dest.UserId, src => src.UserId);
+    config.NewConfig<ResetPasswordRequest, ResetPasswordCommand>()
+      .Map(dest => dest, src => src);
   }
 }

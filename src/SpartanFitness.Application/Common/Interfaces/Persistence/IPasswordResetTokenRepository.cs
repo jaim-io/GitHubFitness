@@ -9,4 +9,5 @@ public interface IPasswordResetTokenRepository
   Task<List<PasswordResetToken>> GetByUserIdAsync(UserId id);
   Task UpdateAsync(PasswordResetToken token);
   Task InvalidateAllAsync();
+  Task<PasswordResetToken?> GetByValueAsync(string value);
 }

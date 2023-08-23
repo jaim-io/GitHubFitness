@@ -46,39 +46,27 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
       return Errors.Authentication.InvalidParameters;
     }
 
-    var tokens = await _passwordResetTokenRepository.GetByUserIdAsync(userId);
-    if (tokens.Count == 0)
+    var isValidToken = _passwordResetTokenProvider.ValidateToken(tokenValue: command.Token, user: user);
+    if (!isValidToken)
     {
-      // No tokens found
+      // Invalid token
       return Errors.Authentication.InvalidParameters;
     }
 
-    var now = _dateTimeProvider.UtcNow;
-    PasswordResetToken? validToken = null;
-    foreach (var token in tokens)
+    if (await _passwordResetTokenRepository.GetByValueAsync(command.Token) is not PasswordResetToken resetToken)
     {
-      if (token.Used || token.Invalidated || token.ExpiryDateTime < now)
-      {
-        continue;
-      }
-
-      var isValidToken = _passwordResetTokenProvider.ValidateToken(token: token, user: user);
-      if (!isValidToken)
-      {
-        continue;
-      }
-
-      validToken = token;
-      break;
+      // Token not found
+      return Errors.Authentication.InvalidParameters;
     }
-
-    if (validToken is null)
+    
+    if (resetToken.Used || resetToken.Invalidated || resetToken.ExpiryDateTime <= _dateTimeProvider.UtcNow)
     {
+      // Token used, invalidated or expired
       return Errors.Authentication.InvalidParameters;
     }
 
-    validToken.Use();
-    await _passwordResetTokenRepository.UpdateAsync(validToken);
+    resetToken.Use();
+    await _passwordResetTokenRepository.UpdateAsync(resetToken);
 
     // Invalidate all other 'active' tokens;
     await _passwordResetTokenRepository.InvalidateAllAsync();
@@ -93,6 +81,6 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
     await _userRepository.UpdateAsync(user);
 
     // TODO: Change messageResult
-    return new MessageResult("Some message");
+    return new MessageResult("Your password has been changed.");
   }
 }

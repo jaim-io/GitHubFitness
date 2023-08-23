@@ -44,4 +44,9 @@ public class PasswordResetTokenRepository : IPasswordResetTokenRepository
 
     await _dbContext.SaveChangesAsync();
   }
+
+  public async Task<PasswordResetToken?> GetByValueAsync(string value)
+  {
+    return await _dbContext.PasswordResetTokens.FirstOrDefaultAsync(pwrt => pwrt.Value == value);
+  }
 }

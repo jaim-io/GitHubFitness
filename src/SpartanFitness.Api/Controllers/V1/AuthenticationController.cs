@@ -24,7 +24,6 @@ namespace SpartanFitness.Api.Controllers.V1;
 /// This controller handles the authentication and registration.
 /// </summary>
 [Route("api/v{version:apiVersion}/auth")]
-[AllowAnonymous]
 public class AuthenticationController : ApiController
 {
   private readonly ISender _mediator;
@@ -45,6 +44,7 @@ public class AuthenticationController : ApiController
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status409Conflict)]
+  [AllowAnonymous]
   public async Task<IActionResult> Register(RegisterRequest request)
   {
     var command = _mapper.Map<RegisterCommand>(request);
@@ -64,6 +64,7 @@ public class AuthenticationController : ApiController
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status409Conflict)]
+  [AllowAnonymous]
   public async Task<IActionResult> Login(LoginRequest request)
   {
     var query = _mapper.Map<LoginQuery>(request);
@@ -75,6 +76,7 @@ public class AuthenticationController : ApiController
   }
 
   [HttpPost("refresh")]
+  [AllowAnonymous]
   public async Task<IActionResult> Refresh(RefreshTokenRequest request)
   {
     var command = _mapper.Map<RefreshJwtTokenCommand>(request);
@@ -86,6 +88,7 @@ public class AuthenticationController : ApiController
   }
 
   [HttpGet("confirm-email")]
+  [AllowAnonymous]
   public async Task<IActionResult> ConfirmEmail(
     [FromQuery(Name = "id")] string userId,
     [FromQuery] string token)
@@ -99,6 +102,7 @@ public class AuthenticationController : ApiController
   }
 
   [HttpPost("forgot-password")]
+  [AllowAnonymous]
   public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
   {
     var command = _mapper.Map<ForgotPasswordCommand>(request);
@@ -110,7 +114,6 @@ public class AuthenticationController : ApiController
   }
 
   [HttpGet("reset-password")]
-  [Authorize]
   public async Task<IActionResult> RequestPasswordReset()
   {
     var userId = Authorization.GetUserId(HttpContext);
@@ -123,11 +126,10 @@ public class AuthenticationController : ApiController
   }
 
   [HttpPost("reset-password")]
-  public async Task<IActionResult> ResetPassword(
-    [FromQuery(Name = "id")] string userId,
-    [FromQuery] string token)
+  [AllowAnonymous]
+  public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
   {
-    var command = _mapper.Map<ResetPasswordCommand>((userId, token));
+    var command = _mapper.Map<ResetPasswordCommand>(request);
 
     ErrorOr<MessageResult> result = await _mediator.Send(command);
     return result.Match(

@@ -33,11 +33,10 @@ public class PasswordResetTokenProvider : IPasswordResetTokenProvider
       userId: (UserId)user.Id);
   }
 
-  public bool ValidateToken(PasswordResetToken token, User user)
+  public bool ValidateToken(string tokenValue, User user)
   {
     var valueToMatch = GenerateTokenValue(user.Email);
-    return token.Value == valueToMatch
-           && token.UserId == user.Id;
+    return tokenValue == valueToMatch;
   }
 
   private string EncodeToHex(byte[] bytes) => BitConverter.ToString(bytes).Replace("-", string.Empty);
