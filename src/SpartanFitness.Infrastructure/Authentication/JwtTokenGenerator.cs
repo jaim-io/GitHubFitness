@@ -74,7 +74,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
   {
     return RefreshToken.Create(
       jwtId: jti ?? Guid.NewGuid().ToString(),
-      expiryDateTime: DateTime.Now.AddMonths(_jwtSettings.RefreshTokenExpiryMonths),
+      expiryDateTime: DateTime.UtcNow.AddMonths(_jwtSettings.RefreshTokenExpiryMonths),
       userId: UserId.Create(user.Id.Value));
   }
 

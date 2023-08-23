@@ -44,7 +44,7 @@ public class PasswordResetToken : AggregateRoot<PasswordResetTokenId, Guid>
     return new PasswordResetToken(
       PasswordResetTokenId.CreateUnique(),
       value,
-      DateTime.Now,
+      DateTime.UtcNow,
       expires,
       false,
       false,

@@ -44,7 +44,7 @@ public class RefreshToken : AggregateRoot<RefreshTokenId, Guid>
     return new RefreshToken(
       RefreshTokenId.CreateUnique(),
       jwtId,
-      DateTime.Now,
+      DateTime.UtcNow,
       expiryDateTime,
       false,
       false,
