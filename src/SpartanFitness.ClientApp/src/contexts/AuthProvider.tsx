@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from "react";
 import Authentication from "../types/authentication/Authentication";
 import User from "../types/domain/User";
-import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
+import AuthenticationResponse from "../types/responses/AuthenticationResponse";
 
 type AuthContextType = {
   auth: Authentication;

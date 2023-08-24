@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LogoSvg from "../../../../../assets/logos/svgs/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import AuthContext from "../../contexts/AuthProvider";
-import AuthenticationResponse from "../../types/authentication/AuthenticationResponse";
+import AuthenticationResponse from "../../types/responses/AuthenticationResponse";
 import { extractErrors } from "../../utils/ExtractErrors";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
@@ -101,7 +101,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="flex justify-center pt-28 pb-10">
-        <div>
+        <div className="text-center">
           <Link to={"/"}>
             <img
               src={LogoSvg}
@@ -135,7 +135,10 @@ const LoginPage = () => {
           <div className="">
             <div className="relative">
               <label className="block text-white mb-2 ml-1">Password</label>
-              <NavLink to="/temp" className="absolute top-0 right-0 text-blue">
+              <NavLink
+                to="/forgot-password"
+                className="absolute top-0 right-0 text-blue"
+              >
                 Forgot Password?
               </NavLink>
             </div>

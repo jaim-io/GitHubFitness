@@ -43,6 +43,7 @@ import LoginRequired from "./components/LoginRequired";
 import SignUpPage from "./pages/auth/SignUp";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
 import UserSavesPage from "./pages/users/UserSaves";
+import ForgotPasswordPage from "./pages/auth/ForgotPassword";
 
 const router = createBrowserRouter([
   {
@@ -206,6 +207,7 @@ const router = createBrowserRouter([
           { path: "login", element: <LoginPage /> },
           { path: "signup", element: <SignUpPage /> },
           { path: "confirm-email", element: <ConfirmEmailPage /> },
+          { path: "forgot-password", element: <ForgotPasswordPage /> },
         ],
       },
     ],

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import Exception from "../types/domain/Exception";
 import axios from "axios";
 import { toast } from "react-toastify";
-import UserSavesResult from "../types/results/UserSavesResult";
+import UserSavesResponse from "../types/responses/UserSavesResponse";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
 const useUserSaves = (
   userId: string,
-): [UserSavesResult | undefined, Exception | undefined, boolean] => {
-  const [userSaves, setUserSaves] = useState<UserSavesResult>();
+): [UserSavesResponse | undefined, Exception | undefined, boolean] => {
+  const [userSaves, setUserSaves] = useState<UserSavesResponse>();
   const [error, setError] = useState<Exception>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,7 +19,7 @@ const useUserSaves = (
 
       try {
         await axios
-          .get<UserSavesResult>(`${USER_ENDPOINT}/${userId}/saves`, {
+          .get<UserSavesResponse>(`${USER_ENDPOINT}/${userId}/saves`, {
             headers: {
               Accept: "application/json",
               Authorization: `bearer ${localStorage.getItem("token")}`,

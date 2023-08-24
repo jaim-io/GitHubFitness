@@ -14,7 +14,7 @@ import {
   validateName,
   validatePassword,
 } from "../../utils/StringValidations";
-import { MessageResult } from "../../types/results/MessageResult";
+import { MessageResponse } from "../../types/responses/MessageResponse";
 
 const REGISTER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/register`;
 
@@ -65,7 +65,7 @@ const SignUpPage = () => {
 
     try {
       await axios
-        .post<MessageResult>(
+        .post<MessageResponse>(
           REGISTER_ENDPOINT,
           {
             email: email,

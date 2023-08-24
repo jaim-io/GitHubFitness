@@ -76,7 +76,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
       await _passwordResetTokenRepository.AddAsync(passwordResetToken);
 
       return new MessageResult(
-        $"An email with a reset-password link has been send to {user.Email} to reset your password.");
+        $"An email with a link to reset your password has been send to {user.Email}.");
     }
     catch
     {

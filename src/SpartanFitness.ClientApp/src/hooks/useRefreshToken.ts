@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import AuthenticationResponse from "../types/authentication/AuthenticationResponse";
+import AuthenticationResponse from "../types/responses/AuthenticationResponse";
 import Exception from "../types/domain/Exception";
 import useAuth from "./useAuth";
 

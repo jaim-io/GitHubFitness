@@ -3,7 +3,7 @@ import LogoSvg from "../../../../../assets/logos/svgs/logo.svg";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import { ReactNode, useEffect, useState } from "react";
 import axios from "axios";
-import { MessageResult } from "../../types/results/MessageResult";
+import { MessageResponse } from "../../types/responses/MessageResponse";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 
@@ -31,7 +31,7 @@ const ConfirmEmailPage = () => {
       setIsLoading(true);
 
       await axios
-        .get<MessageResult>(
+        .get<MessageResponse>(
           `${CONFIRM_EMAIL_ENDPOINT}?id=${id}&token=${token}`,
           {
             headers: {
