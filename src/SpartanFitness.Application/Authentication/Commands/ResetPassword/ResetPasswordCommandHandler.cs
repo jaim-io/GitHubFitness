@@ -72,7 +72,6 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
     await _passwordResetTokenRepository.InvalidateAllAsync();
 
     // TODO: Invalidate all JWT tokens
-    // Find out how
 
     await _refreshTokenRepository.InvalidateAllAsync();
 
@@ -80,7 +79,6 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
     user.SetPassword(hashedPassword, salt);
     await _userRepository.UpdateAsync(user);
 
-    // TODO: Change messageResult
     return new MessageResult("Your password has been changed.");
   }
 }

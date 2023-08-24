@@ -213,9 +213,6 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  // TODO: Create a popup where the user can choose to perist their login or not
-  // TODO: Loading bar
-
   return (
     <>
       <RouterProvider router={router} />{" "}

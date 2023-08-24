@@ -161,6 +161,6 @@ public sealed class User : AggregateRoot<UserId, Guid>
   {
     Password = password;
     Salt = salt;
-    // TODO: Password change domain event -> send email;
+    AddDomainEvent(new PasswordChanged(this));
   }
 }
