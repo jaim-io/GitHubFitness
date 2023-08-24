@@ -22,14 +22,11 @@ const ForgotPasswordPage = () => {
 
   const [serverMessage, setServerMessage] = useState<string>();
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    if (emailIsValid) {
-      await handleRequest(e);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    if (!emailIsValid) {
       return;
     }
-  };
 
-  const handleRequest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsLoading(true);
@@ -115,7 +112,7 @@ const ForgotPasswordPage = () => {
           <form
             id="forgot-password-form"
             className="w-full max-w-sm m-auto bg-semi-black shadow-xl rounded-lg px-8 pt-6 pb-5 mb-4 border border-gray"
-            onSubmit={(e) => onSubmit(e)}
+            onSubmit={(e) => handleSubmit(e)}
           >
             <div className="mb-4">
               <InputField

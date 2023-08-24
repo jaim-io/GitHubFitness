@@ -44,6 +44,7 @@ import SignUpPage from "./pages/auth/SignUp";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
 import UserSavesPage from "./pages/users/UserSaves";
 import ForgotPasswordPage from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -208,6 +209,7 @@ const router = createBrowserRouter([
           { path: "signup", element: <SignUpPage /> },
           { path: "confirm-email", element: <ConfirmEmailPage /> },
           { path: "forgot-password", element: <ForgotPasswordPage /> },
+          { path: "reset-password", element: <ResetPassword /> },
         ],
       },
     ],

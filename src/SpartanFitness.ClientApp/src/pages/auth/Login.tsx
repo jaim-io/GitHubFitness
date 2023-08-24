@@ -8,6 +8,7 @@ import LoadingIcon from "../../components/icons/LoadingIcon";
 import AuthContext from "../../contexts/AuthProvider";
 import AuthenticationResponse from "../../types/responses/AuthenticationResponse";
 import { extractErrors } from "../../utils/ExtractErrors";
+import { BsFillEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 
 const LOGIN_ENDPOINT = `${import.meta.env.VITE_API_BASE}/auth/login`;
 
@@ -23,6 +24,8 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [persist, setPersist] = useState<boolean>(
     JSON.parse(localStorage.getItem("persist") ?? "false") || false,
@@ -134,7 +137,15 @@ const LoginPage = () => {
           </div>
           <div className="">
             <div className="relative">
-              <label className="block text-white mb-2 ml-1">Password</label>
+              <label className="text-white mb-2 ml-1 flex items-center">
+                Password *{" "}
+                <span
+                  className="ml-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
+                </span>
+              </label>
               <NavLink
                 to="/forgot-password"
                 className="absolute top-0 right-0 text-blue"
@@ -145,7 +156,7 @@ const LoginPage = () => {
             <input
               className="shadow appearance-none border border-gray rounded-lg w-full py-1.5 px-3 text-white mb-3 leading-tight focus:outline focus:outline-blue focus:shadow-outline bg-black"
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="******************"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
