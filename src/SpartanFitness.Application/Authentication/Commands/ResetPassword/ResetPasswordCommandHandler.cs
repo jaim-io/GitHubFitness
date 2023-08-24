@@ -46,19 +46,22 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
       return Errors.Authentication.InvalidParameters;
     }
 
-    var isValidToken = _passwordResetTokenProvider.ValidateToken(tokenValue: command.Token, user: user);
+    if (await _passwordResetTokenRepository.GetByValueAsync(command.Token) is not PasswordResetToken resetToken)
+    {
+      // Token not found
+      return Errors.Authentication.InvalidParameters;
+    }
+
+    var isValidToken = _passwordResetTokenProvider.ValidateToken(
+      token: resetToken,
+      valueToMatch: command.Token,
+      user: user);
     if (!isValidToken)
     {
       // Invalid token
       return Errors.Authentication.InvalidParameters;
     }
 
-    if (await _passwordResetTokenRepository.GetByValueAsync(command.Token) is not PasswordResetToken resetToken)
-    {
-      // Token not found
-      return Errors.Authentication.InvalidParameters;
-    }
-    
     if (resetToken.Used || resetToken.Invalidated || resetToken.ExpiryDateTime <= _dateTimeProvider.UtcNow)
     {
       // Token used, invalidated or expired

@@ -22,6 +22,9 @@ public class PasswordResetTokenConfiguration : IEntityTypeConfiguration<Password
     builder.Property(prt => prt.Value)
       .ValueGeneratedNever();
 
+    builder.Property(prt => prt.UniqueCode)
+      .ValueGeneratedNever();
+
     builder.Property(prt => prt.Id)
       .ValueGeneratedNever()
       .HasConversion(

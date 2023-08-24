@@ -25,26 +25,29 @@ public class PasswordResetTokenProvider : IPasswordResetTokenProvider
 
   public PasswordResetToken GenerateToken(User user)
   {
-    var value = GenerateTokenValue(user.Email);
+    var uniqueCode = Guid.NewGuid();
+    var value = GenerateTokenValue(user.Email, uniqueCode);
 
     return PasswordResetToken.Create(
       value: value,
+      uniqueCode: uniqueCode,
       expires: _dateTimeProvider.UtcNow.AddMinutes(_passwordResetSettings.ExpiryMinutes),
       userId: (UserId)user.Id);
   }
 
-  public bool ValidateToken(string tokenValue, User user)
+  public bool ValidateToken(PasswordResetToken token, string valueToMatch, User user)
   {
-    var valueToMatch = GenerateTokenValue(user.Email);
-    return tokenValue == valueToMatch;
+    var controlValue = GenerateTokenValue(user.Email, token.UniqueCode);
+    return controlValue == valueToMatch
+      && token.UserId == user.Id;
   }
 
   private string EncodeToHex(byte[] bytes) => BitConverter.ToString(bytes).Replace("-", string.Empty);
 
-  private string GenerateTokenValue(string emailAddress)
+  private string GenerateTokenValue(string emailAddress, Guid uniqueCode)
   {
     var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_passwordResetSettings.Secret));
-    byte[] bytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(emailAddress));
+    byte[] bytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(emailAddress + uniqueCode));
     string digest = EncodeToHex(bytes);
 
     var token = $"{digest}{EncodeToHex(Encoding.UTF8.GetBytes(emailAddress))}";

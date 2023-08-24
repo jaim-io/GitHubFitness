@@ -6,6 +6,7 @@ namespace SpartanFitness.Domain.Aggregates;
 public class PasswordResetToken : AggregateRoot<PasswordResetTokenId, Guid>
 {
   public string Value { get; private set; }
+  public Guid UniqueCode { get; private set; }
   public DateTime CreationDateTime { get; private set; }
   public DateTime ExpiryDateTime { get; private set; }
   public bool Used { get; private set; }
@@ -15,6 +16,7 @@ public class PasswordResetToken : AggregateRoot<PasswordResetTokenId, Guid>
   private PasswordResetToken(
     PasswordResetTokenId id,
     string value,
+    Guid uniqueCode,
     DateTime creationDateTime,
     DateTime expiryDateTime,
     bool used,
@@ -23,6 +25,7 @@ public class PasswordResetToken : AggregateRoot<PasswordResetTokenId, Guid>
     : base(id)
   {
     Value = value;
+    UniqueCode = uniqueCode;
     CreationDateTime = creationDateTime;
     ExpiryDateTime = expiryDateTime;
     Used = used;
@@ -38,12 +41,14 @@ public class PasswordResetToken : AggregateRoot<PasswordResetTokenId, Guid>
 
   public static PasswordResetToken Create(
     string value,
+    Guid uniqueCode,
     DateTime expires,
     UserId userId)
   {
     return new PasswordResetToken(
       PasswordResetTokenId.CreateUnique(),
       value,
+      uniqueCode,
       DateTime.UtcNow,
       expires,
       false,
