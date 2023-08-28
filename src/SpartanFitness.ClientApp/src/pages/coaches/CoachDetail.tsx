@@ -38,8 +38,9 @@ const CoachDetailPage = () => {
               </span>
             </h1>
             <div className="self-stretch border border-gray mt-4 h-[1px] rounded-lg" />
-            <p className="pt-4 whitespace-pre-line">TEMP</p>
+            <p className="pt-4 whitespace-pre-line">{coach.biography}</p>
           </div>
+          <div className="border border-gray w-[40rem] h-fit rounded-lg px-6 py-6 mt-4"></div>
 
           <div className="mt-4">
             <div className="absolute left-0 w-[30%] flex items-start">

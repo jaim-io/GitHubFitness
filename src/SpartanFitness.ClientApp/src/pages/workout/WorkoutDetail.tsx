@@ -27,6 +27,7 @@ import WorkoutExerciseTable from "../../components/WorkoutExerciseTable";
 import moment from "moment";
 import LoadingIcon from "../../components/icons/LoadingIcon";
 import useUserSavedIds from "../../hooks/useUserSavedIds";
+import useCoach from "../../hooks/useCoach";
 
 const USER_ENDPOINT = `${import.meta.env.VITE_API_BASE}/users`;
 
@@ -103,6 +104,8 @@ const WorkoutDetailPage = () => {
   } else {
     workoutExercises = [];
   }
+
+  const [coach] = useCoach(workout.coachId);
 
   const onError = (err: AxiosError) =>
     toast.error(
@@ -332,9 +335,22 @@ const WorkoutDetailPage = () => {
                 </Link>
               )}
             </div>
+
             <div className="absolute right-0 py-1 px-3 border border-gray rounded-lg flex items-center text-light-gray ml-2 justify-center">
-              Last updated:{" "}
-              <span className="text-blue ml-1">{updatedDateTime}</span>
+              {coach ? (
+                <>
+                  Created by:{" "}
+                  <Link
+                    to={`/coaches/${coach.id}`}
+                    className="text-blue ml-1"
+                  >{`${coach.firstName} ${coach.lastName}`}</Link>
+                </>
+              ) : (
+                <>
+                  Last updated:{" "}
+                  <span className="text-blue ml-1">{updatedDateTime}</span>
+                </>
+              )}
             </div>
           </div>
         </div>

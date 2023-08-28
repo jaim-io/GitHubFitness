@@ -55,8 +55,8 @@ const HomePage = () => {
                 workoutsPageIsLoading ? "opacity-60 animate-pulse" : ""
               }`}
             >
-              {workoutsPage && workoutsPage.workouts.length > 0 ? (
-                workoutsPage.workouts.map((w) => (
+              {workoutsPage && workoutsPage.values.length > 0 ? (
+                workoutsPage.values.map((w) => (
                   <WorkoutCard workout={w} key={w.id} />
                 ))
               ) : (
@@ -95,8 +95,8 @@ const HomePage = () => {
                 exercisesPageIsLoading ? "opacity-60 animate-pulse" : ""
               }`}
             >
-              {exercisesPage && exercisesPage.exercises.length > 0 ? (
-                exercisesPage.exercises.map((e) => (
+              {exercisesPage && exercisesPage.values.length > 0 ? (
+                exercisesPage.values.map((e) => (
                   <ExerciseCard exercise={e} key={e.id} />
                 ))
               ) : (
