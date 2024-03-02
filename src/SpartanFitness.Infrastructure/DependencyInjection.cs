@@ -8,11 +8,14 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using Quartz;
+
 using SpartanFitness.Application.Common.Interfaces.Authentication;
 using SpartanFitness.Application.Common.Interfaces.Persistence;
 using SpartanFitness.Application.Common.Interfaces.Services;
 using SpartanFitness.Infrastructure.Authentication;
 using SpartanFitness.Infrastructure.Common.Frontend;
+using SpartanFitness.Infrastructure.Configuration.BackgroundJobs;
 using SpartanFitness.Infrastructure.Persistence;
 using SpartanFitness.Infrastructure.Persistence.Interceptors;
 using SpartanFitness.Infrastructure.Persistence.Repositories;
@@ -37,7 +40,8 @@ public static class DependencyInjection
     services
       .AddAuth(configuration)
       .AddPersistence()
-      .AddServices(configuration);
+      .AddServices(configuration)
+      .AddJobs();
 
     return services;
   }
@@ -135,6 +139,20 @@ public static class DependencyInjection
     services.AddSingleton<IEmailProvider, EmailProvider>();
     services.AddSingleton<IFrontendProvider, FrontendProvider>();
     services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+    return services;
+  }
+
+  public static IServiceCollection AddJobs(
+    this IServiceCollection services)
+  {
+    services.AddQuartz();
+    services.AddQuartzHostedService(options =>
+    {
+      options.WaitForJobsToComplete = true;
+    });
+
+    services.ConfigureOptions<SpartanFitnessDbCleanupBackgroundJobConfiguration>();
 
     return services;
   }
