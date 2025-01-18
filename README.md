@@ -97,7 +97,7 @@ VITE_API_BASE=<API-BASE> // Example: http://localhost:8001/api/v1
 
 When using docker compose the `~/.db.env` file should also be specified.
 
-```env
+```env 
 ACCEPT_EULA=Y
 <UID>_PASSWORD=<PWD>
 ```
