@@ -101,3 +101,4 @@ When using docker compose the `~/.db.env` file should also be specified.
 ACCEPT_EULA=Y
 <UID>_PASSWORD=<PWD>
 ```
+# testing something
